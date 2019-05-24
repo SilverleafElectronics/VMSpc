@@ -33,7 +33,8 @@ namespace VMSpc
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
-        {  
+        {
+            
             ShowSplashScreen();
             VMSpcStart();
         }

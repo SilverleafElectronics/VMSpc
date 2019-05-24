@@ -69,10 +69,29 @@ namespace VMSpc.CustomSettings
     }
 
     //PictureSettings
+    [TypeConverter(typeof(PanelSettingsConverter<PictureSettings>))]
+    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
+    public class PictureSettings : PanelSettings
+    {
+        public string BMP_File_Name;
+    }
 
     //DiagnosticGaugeSettings
+    [TypeConverter(typeof(PanelSettingsConverter<DiagnosticGaugeSettings>))]
+    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
+    public class DiagnosticGaugeSettings : PanelSettings
+    {
+        public PanelColor Warning_Color;
+    }
 
     //TextGaugeSettings
+    [TypeConverter(typeof(PanelSettingsConverter<TextGaugeSettings>))]
+    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
+    public class TextGaugeSettings : PanelSettings
+    {
+        public int Text_Length;
+        public string Text;
+    }
 
     //TransmissionGaugeSettings
     [TypeConverter(typeof(PanelSettingsConverter<TransmissionGaugeSettings>))]

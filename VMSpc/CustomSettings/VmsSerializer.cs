@@ -42,16 +42,15 @@ namespace VMSpc.CustomSettings
             }
         }
 
-        public ClassType DeserializeObject(string xmlOfAnObject)
+        public ClassType DeserializeObject(string XmlString)
         {
             ClassType myObject = new ClassType();
-            System.IO.StringReader read = new StringReader(xmlOfAnObject);
+            System.IO.StringReader read = new StringReader(XmlString);
             System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(myObject.GetType());
             System.Xml.XmlReader reader = new XmlTextReader(read);
             try
             {
                 myObject = (ClassType)serializer.Deserialize(reader);
-
                 return myObject;
             }
             catch
