@@ -1,0 +1,13 @@
+<!--DO NOT MODIFY THE CONTENTS OF THIS FILE UNLESS YOU KNOW WHAT YOU ARE DOING!!!-->
+<Root>
+    <Version>V4.0</Version>
+    <Alarms>
+        <Alarm Name="TEMP">
+            <Pid>110</Pid>
+            <Relation>0</Relation>
+            <Repetition>2</Repetition>
+            <Value>300</Value>
+            <File-Name>ayam_rock.mp3</File-Name>
+        </Alarm>
+    </Alarms>
+</Root>

@@ -1,0 +1,31 @@
+<!--DO NOT MODIFY THE CONTENTS OF THIS FILE UNLESS YOU KNOW WHAT YOU ARE DOING!!!-->
+<Root>
+    <Version>V4.0</Version>
+    <Settings>
+        <Port>COM10</Port>
+        <Comm-Databus>0</Comm-Databus>
+        <Scrn-File-Name>default.scr.xml</Scrn-File-Name>
+        <Gauge-Lock>0</Gauge-Lock>
+        <Window-Placement Length="44" Flags="0" showCmd="1" Point-MinX="-1" Point-MinY="-1" Point-MaxX="-1" Point-MaxY="-1" rcNP-top-leftX="429" rcNP-top-leftY="116" rcNP-bottom-rightX="1654" rcNP-bottom-rightY="958"/>
+        <DataLog-Settings>
+            <Frequency>60</Frequency>
+            <Num-Pids>0</Num-Pids>
+            <File-Name>datatestlog.txt</File-Name>
+        </DataLog-Settings>
+        <Auto-Restart-Flag>1</Auto-Restart-Flag>
+        <Rolling-Buff-Size>100</Rolling-Buff-Size>
+        <Engine-Name></Engine-Name>
+        <Odometer-PID>245</Odometer-PID>
+        <Auto-Data-Log-Flag>0</Auto-Data-Log-Flag>
+        <Log-When-Engine-Off>0</Log-When-Engine-Off>
+        <Jib-Type>1</Jib-Type>
+        <Usb-Delay>0</Usb-Delay>
+        <TPMS-Type>0</TPMS-Type>
+        <Rqst-Fuelmeter>1</Rqst-Fuelmeter>
+        <Rqst-Odometer>1</Rqst-Odometer>
+        <IP-Address>169.254.0.2</IP-Address>
+        <IP-Port>51966</IP-Port>
+        <CFG-Engine-Model>0</CFG-Engine-Model>
+		<Show-Splashscreen>0</Show-Splashscreen>
+    </Settings>
+</Root>

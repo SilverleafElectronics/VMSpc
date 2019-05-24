@@ -1,0 +1,37 @@
+﻿RELEASING A NEW VERSION
+-----------------------
+
+In target.cs, add release notes and change the version string.
+
+
+
+KNOWN AND COMMON ISSUES
+-----------------------
+
+Error:     
+            when creating a custom command: "the name [...] does not exist in the namespace clr-namespace:VMSpc"
+Solution: 
+            close Visual Studio, run as admin, and build the project, which normally fixes the issue. This appears to be a bug in WPF with no known solution yet.
+            see https://stackoverflow.com/questions/15051121/the-name-does-not-exist-in-the-namespace-clr-namespace.
+            this may be resolved in VS2019
+
+
+
+ADDING CONFIGURATION ITEMS
+--------------------------
+
+
+
+ADDING CUSTOM COMMAND HANDLERS
+------------------------------
+
+
+
+
+
+ADDING NEW ENGINE COMPONENTS FOR PARSING AND DISPLAY
+----------------------------------------------------
+
+
+ADDING NEW GAUGE TYPES
+----------------------
