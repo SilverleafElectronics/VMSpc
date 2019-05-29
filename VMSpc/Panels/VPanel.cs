@@ -23,7 +23,7 @@ namespace VMSpc.Panels
         public char cID;
         private PanelSettings panelSettings;
         private MainWindow parent;
-        private System.Windows.Controls.Border border;
+        private Border border;
         private Canvas canvas;
 
         public VPanel(MainWindow parent, PanelSettings panelSettings)
@@ -31,10 +31,8 @@ namespace VMSpc.Panels
             cID = Constants.PanelIDs.SIMPLE_GAUGE_ID;
             this.panelSettings = panelSettings;
             this.parent = parent;
-            border = new System.Windows.Controls.Border();
-            ApplyBorderDimensions();
-            canvas = new VMSCanvas(border);
-            ApplyCanvasDimensions();
+            border = new Border();
+            canvas = new VMSCanvas(border, panelSettings);
             border.Child = canvas;
             cID = panelSettings.ID;
         }
@@ -44,20 +42,6 @@ namespace VMSpc.Panels
         {
             parent.PanelGrid.Children.Add(border);
             //GeneratePanel();
-        }
-
-        private void ApplyBorderDimensions()
-        {
-            border.Width = panelSettings.rectCord.bottomRightX - panelSettings.rectCord.topLeftX;
-            border.Height = panelSettings.rectCord.bottomRightY - panelSettings.rectCord.topLeftY;
-        }
-
-        private void ApplyCanvasDimensions()
-        {
-            //Canvas.SetTop(canvas, panelSettings.rectCord.topLeftY);
-            //Canvas.SetLeft(canvas, panelSettings.rectCord.topLeftX);
-            canvas.SetValue(Canvas.LeftProperty, (Double)panelSettings.rectCord.topLeftX);
-            canvas.SetValue(Canvas.TopProperty, (Double)panelSettings.rectCord.topLeftY);
         }
 
         protected abstract void GeneratePanel();

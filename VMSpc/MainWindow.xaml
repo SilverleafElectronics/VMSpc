@@ -36,15 +36,13 @@
         <Canvas Name="PanelGrid">
             <Canvas.Resources>
                 <Style TargetType="cs:VMSCanvas">
-                    <Setter Property="Background" Value="White" />
+                    <Setter Property="Background" Value="Crimson" />
                 </Style>
                 <Style TargetType="Border">
                     <Setter Property="BorderThickness" Value="2" />
                     <Setter Property="BorderBrush" Value="Black" />
                     <Setter Property="Width" Value="100" />
                     <Setter Property="Height" Value="100" />
-                    <Setter Property="Canvas.Top" Value="20" />
-                    <Setter Property="Canvas.Left" Value="20" />
                 </Style>
             </Canvas.Resources>
             <!--<Border>

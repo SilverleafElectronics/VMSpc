@@ -21,13 +21,16 @@ namespace VMSpc.Panels
 {
     public class VMSCanvas : Canvas
     {
-        private Border ParentComponent;
+        private Border border;
+        private PanelSettings panelSettings;
         private bool MouseHeld;
 
 
-        public VMSCanvas(Border parentComponent) : base()
+        public VMSCanvas(Border border, PanelSettings panelSettings) : base()
         {
-            ParentComponent = parentComponent;
+            this.border = border;
+            this.panelSettings = panelSettings;
+            ApplyBorderDimensions();
             MouseHeld = false;
         }
         //static VMSCanvas()
@@ -37,8 +40,15 @@ namespace VMSpc.Panels
         {
             base.OnMouseDown(e);
             SetBottom(this, (GetBottom(this) + 1));
-            ParentComponent.Height++;
             MouseHeld = true;
+        }
+
+        private void ApplyBorderDimensions()
+        {
+            border.Width = panelSettings.rectCord.bottomRightX - panelSettings.rectCord.topLeftX;
+            border.Height = panelSettings.rectCord.bottomRightY - panelSettings.rectCord.topLeftY;
+            SetTop(border, panelSettings.rectCord.topLeftY);
+            SetLeft(border, panelSettings.rectCord.topLeftX);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
