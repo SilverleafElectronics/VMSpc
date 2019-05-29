@@ -31,25 +31,14 @@ Methods:
                   "USAGE_ERR"
             getAllNodesByTagName(string tagname)
                 - returns the list of nodes with the specified tag name
+
+NOTE: all child classes of XmlFileManager are implemented as singletons. This
+      allows them to be globally accessed. See https://csharpindepth.com/articles/singleton
+      for a walkthrough on implementing singleton classes.
 ********************************************************************************/
 
 namespace VMSpc.XmlFileManagers
 {
-    public struct WindowPlacement
-    {
-        public int Length;
-        public int flags;
-        public int showCmd;
-        public int pointMinX;
-        public int pointMinY;
-        public int pointMaxX;
-        public int pointMaxY;
-        public int rcnpTopLeftX;
-        public int rcnpTopLeftY;
-        public int rcnpBottomRightX;
-        public int rcnpBottomRightY;
-    }
-
     public abstract class XmlFileManager
     {
         //Protected Properties
@@ -93,6 +82,19 @@ namespace VMSpc.XmlFileManagers
                 return null;
             else
                 return node[0];
+        }
+
+        protected XmlNode getNodeByTagAndAttr(string tagname, string attrName, string attrVal)
+        {
+            XmlNodeList nodes = xmlDoc.GetElementsByTagName(tagname);
+            foreach (XmlNode node in nodes)
+            {
+                if (node.Attributes[attrName].Value == attrVal)
+                {
+                    return node;
+                }
+            }
+            return null;
         }
 
         protected XmlNodeList getAllNodesByTagName(string tagname)

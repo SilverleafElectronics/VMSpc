@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VMSpc.XmlFileManagers;
 using VMSpc.DlgWindows;
+using VMSpc.Panels;
 
 namespace VMSpc
 {
@@ -22,24 +23,27 @@ namespace VMSpc
     /// </summary>
     public partial class MainWindow : Window
     {
-        Configuration configuration;
         VMSComm commreader;
         
 
         //constructor
-        public MainWindow(Configuration config, VMSComm comm)
+        public MainWindow()
         {
-            configuration = config;
-            commreader = comm;
             InitializePanels();
             var settings = Properties.Settings.Default;
             InitializeComponent();
+            GeneratePanels();
         }
 
 
         private void InitializePanels()
         {
 
+        }
+
+        private void GeneratePanels()
+        {
+            PanelManager panelManager = new PanelManager(this);
         }
 
         //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -63,7 +67,7 @@ namespace VMSpc
 
         private void CommSettingsCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            CommDlg commdlg = new CommDlg(configuration);
+            CommDlg commdlg = new CommDlg();
             commdlg.ShowDialog();
         }
 

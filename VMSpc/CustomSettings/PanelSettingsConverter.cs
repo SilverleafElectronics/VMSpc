@@ -5,6 +5,11 @@ using System.Xml;
 
 namespace VMSpc.CustomSettings
 {
+    public class PanelSettings
+    {
+
+    }
+    /*
     public class PanelSettingsConverter<ClassType> : TypeConverter where ClassType : new()
     {
         protected XmlDocument doc;
@@ -39,4 +44,5 @@ namespace VMSpc.CustomSettings
             return base.ConvertTo(context, culture, value, destinationType);
         }
     }
+    */
 }

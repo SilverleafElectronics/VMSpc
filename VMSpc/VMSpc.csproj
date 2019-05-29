@@ -67,6 +67,9 @@
     </Compile>
     <Compile Include="Managers\EngineManager.cs" />
     <Compile Include="Managers\PanelManager.cs" />
+    <Compile Include="Panels\PanelManager.cs" />
+    <Compile Include="Panels\VMSCanvas.cs" />
+    <Compile Include="Panels\VSimpleGauge.cs" />
     <Compile Include="Resources\Configuration.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -75,6 +78,8 @@
     <Compile Include="target.cs" />
     <Compile Include="Panels\VPanel.cs" />
     <Compile Include="XmlFileManagers\AlarmDataManager.cs" />
+    <Compile Include="XmlFileManagers\ConfigurationStructs.cs" />
+    <Compile Include="XmlFileManagers\DefaultScrnManager.cs" />
     <Compile Include="XmlFileManagers\MessagesManager.cs" />
     <Compile Include="XmlFileManagers\OdometerManager.cs" />
     <Compile Include="XmlFileManagers\ParamDataManager.cs" />

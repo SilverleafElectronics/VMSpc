@@ -9,11 +9,9 @@ namespace VMSpc.XmlFileManagers
 {
     public class SettingsManager : XmlFileManager
     {
-
         //Constructor
         public SettingsManager() : base("Settings.xml")
         {
-            
         }
         //GETTERS
         public string get_version()
@@ -125,5 +123,8 @@ namespace VMSpc.XmlFileManagers
         {
             return Int32.Parse(getNodeValueByTagName("Show-Splashscreen"));
         }
+
+        //SETTERS
+
     }
 }

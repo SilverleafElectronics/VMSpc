@@ -17,6 +17,7 @@ using System.IO;
  */
 namespace VMSpc.CustomSettings
 { 
+    /*
     public class VmsSerializer<ClassType> where ClassType : new()
     {
         public string serializeObject(object obj)
@@ -65,4 +66,5 @@ namespace VMSpc.CustomSettings
             }
         }
     }
+    */
 }

@@ -19,10 +19,8 @@ namespace VMSpc.DlgWindows
     /// </summary>
     public partial class CommDlg : Window
     {
-        Configuration configuration;
-        public CommDlg(Configuration config)
+        public CommDlg()
         {
-            configuration = config;
             InitializeComponent();
             this.Owner = App.Current.MainWindow;
         }

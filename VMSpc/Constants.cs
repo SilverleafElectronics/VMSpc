@@ -58,11 +58,29 @@ namespace VMSpc
         public const int J1939 = 0;
         public const int J1708 = 1;
 
-    //-----------------------------------------------------------------------------------------
-    //
-    //-----------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------
+        //Panel IDs
+        //-----------------------------------------------------------------------------------------
 
-
+        public struct PanelIDs
+        {
+            public const char VPANEL_ID        = '0';
+            public const char SIMPLE_GAUGE_ID  = '1';
+            public const char SCAN_GAUGE_ID    = '2';
+            public const char ODOMOTER_ID      = '3';
+            public const char TRANSMISSION_ID  = '4';
+            public const char MULTIBAR_ID      = '5';
+            public const char HISTOGRAM_ID     = '6';
+            public const char CLOCK_PANEL_ID   = '7';
+            public const char IMG_PANEL_ID     = '8';
+            public const char TEXT_PANEL_ID    = '9';
+            public const char TANK_MINDER_ID   = 'A';
+            public const char TIRE_PANEL_ID    = 'B';
+            public const char MESSAGE_PANEL_ID = 'C';
+            public const char RESERVED_ID      = 'D';
+            public const char DIAG_ALARM_ID    = 'E';
+            public const char RADIAL_GAUGE_ID  = 'F';
+        }
 
     //-----------------------------------------------------------------------------------------
     //

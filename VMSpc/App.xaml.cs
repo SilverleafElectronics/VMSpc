@@ -18,11 +18,9 @@ namespace VMSpc
      */
     public partial class App : Application
     {
-
-        private Configuration configuration;
-        private VMSComm commreader;
-        private EngineManager enginemanager;
-        private PanelManager panelmanager;
+        //private VMSComm commreader;
+        //private EngineManager enginemanager;
+        //private PanelManager panelmanager;
         DateTime appstart;
         public long startcounter;
         public App()
@@ -41,16 +39,16 @@ namespace VMSpc
 
         private void Initialize()
         {
-            configuration = new Configuration();
-            commreader = new VMSComm();
-            enginemanager = new EngineManager();
-            panelmanager = new PanelManager();
+            //configuration = new Configuration();
+            //commreader = new VMSComm();
+            //enginemanager = new EngineManager();
+            //panelmanager = new PanelManager();
             appstart = DateTime.Now;
         }
 
         private void ShowSplashScreen()
         {
-            if (configuration.settings.get_showSplashscreen() == 1)
+            if (false) //CHANGEME - to if (SettingsManager.showSplashScreen == true)
             {
                 SplashScreen splashScreen = new SplashScreen("./Resources/silverleaf_300x200.bmp");
                 splashScreen.Show(true);
@@ -64,7 +62,7 @@ namespace VMSpc
 
         private void VMSpcStart()
         {
-            MainWindow wnd = new MainWindow(configuration, commreader);
+            MainWindow wnd = new MainWindow();
             wnd.Show();
         }
     }

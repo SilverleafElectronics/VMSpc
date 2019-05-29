@@ -11,6 +11,7 @@ using System.IO;
 
 namespace VMSpc.CustomSettings
 {
+    /*
     public struct PanelCoordinates
     {
         public int TopLeft_X;
@@ -172,4 +173,5 @@ namespace VMSpc.CustomSettings
         public PanelColor Gauge_Color;
         public PanelColor Fill_Color;
     }
+    */
 }

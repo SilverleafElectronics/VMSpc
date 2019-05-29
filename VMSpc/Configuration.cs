@@ -8,6 +8,7 @@ using VMSpc.XmlFileManagers;
 
 namespace VMSpc
 {
+    /*
     //This structure-like class contains all of the XmlFileManagers. It is initialized in MainWindow.xaml.cs and passed to all child elements that need it
     public class Configuration
     {
@@ -28,5 +29,5 @@ namespace VMSpc
             tireSettings = new TireSettingsManager();
         }
     }
-
+    */
 }
