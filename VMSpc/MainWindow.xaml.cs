@@ -16,6 +16,7 @@ using VMSpc.XmlFileManagers;
 using VMSpc.DlgWindows;
 using VMSpc.Panels;
 using VMSpc.DevHelpers;
+using VMSpc.CustomComponents;
 
 namespace VMSpc
 {
@@ -25,29 +26,24 @@ namespace VMSpc
     public partial class MainWindow : Window
     {
         VMSComm commreader;
-        
+        //PanelGrid panelGrid;
 
         //constructor
         public MainWindow()
         {
-            InitializePanels();
-            var settings = Properties.Settings.Default;
             InitializeComponent();
             GeneratePanels();
-#if (DEBUG)
-            VMSConsole.AddConsoleToWindow(PanelGrid);
-#endif
-        }
-
-
-        private void InitializePanels()
-        {
-
+            Application.Current.MainWindow = this;
+            //Application.Current.MainWindow
         }
 
         private void GeneratePanels()
         {
-            PanelManager panelManager = new PanelManager(this);
+            ContentGrid.InitPanels(this);
+            ContentGrid.LoadPanels();
+#if (DEBUG)
+            VMSConsole.AddConsoleToWindow(this.ContentGrid);
+#endif
         }
 
         #region EVENT HANDLERS
@@ -82,6 +78,12 @@ namespace VMSpc
         {
             AboutDlg aboutdlg = new AboutDlg();
             aboutdlg.ShowDialog();
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            ContentGrid.ProcessMouseMove(this, e);
         }
 
         #endregion //EVENT HANDLERS

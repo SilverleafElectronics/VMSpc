@@ -9,15 +9,15 @@ namespace VMSpc.Panels
 {
     class VSimpleGauge : VPanel
     {
-        private MainWindow parent;
+        private MainWindow mainWindow;
 
-        public VSimpleGauge(MainWindow parent, PanelSettings panelSettings, PanelManager panelManager) 
-            : base(parent, panelSettings, panelManager)
+        public VSimpleGauge(MainWindow mainWindow, PanelSettings panelSettings) 
+            : base(mainWindow, panelSettings)
         {
-            this.parent = parent;
+            this.mainWindow = mainWindow;
         }
 
-        protected override void GeneratePanel()
+        public override void GeneratePanel()
         {
 
         }

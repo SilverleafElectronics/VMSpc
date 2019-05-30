@@ -15,36 +15,28 @@ using System.Windows.Shapes;
 using VMSpc.XmlFileManagers;
 using VMSpc.DlgWindows;
 using VMSpc.Panels;
+using VMSpc.CustomComponents;
 
 namespace VMSpc.Panels
 {
     public abstract class VPanel
     {
         public char cID;
+        private MainWindow mainWindow;
         private PanelSettings panelSettings;
-        private MainWindow parent;
-        private Border border;
-        private Canvas canvas;
+        public Border border;
+        public VMSCanvas canvas;
 
-        public VPanel(MainWindow parent, PanelSettings panelSettings, PanelManager panelManager)
+        public VPanel(MainWindow mainWindow, PanelSettings panelSettings)
         {
-            cID = Constants.PanelIDs.SIMPLE_GAUGE_ID;
+            this.mainWindow = mainWindow;
             this.panelSettings = panelSettings;
-            this.parent = parent;
             border = new Border();
-            canvas = new VMSCanvas(border, panelSettings, panelManager, parent);
+            canvas = new VMSCanvas(mainWindow, border, panelSettings);
             border.Child = canvas;
-            cID = panelSettings.ID;
         }
 
-
-        public void Show()
-        {
-            parent.PanelGrid.Children.Add(border);
-            //GeneratePanel();
-        }
-
-        protected abstract void GeneratePanel();
+        public abstract void GeneratePanel();
 
     }
 }

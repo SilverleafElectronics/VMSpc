@@ -2,7 +2,7 @@
 <Window x:Class="VMSpc.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:cs="clr-namespace:VMSpc.Panels"
+        xmlns:cs="clr-namespace:VMSpc.CustomComponents"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VMSpc"
@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Title="VMSpc" Height="450" Width="800">
     <Grid>
-        <DockPanel>
+        <DockPanel Name="DockMenu">
             <DockPanel.CommandBindings>
                 <CommandBinding Command="Close" CanExecute="CloseCommand_CanExecute" Executed="CloseCommand_Executed" />
                 <CommandBinding Command="self:MainCommands.CommSettings" CanExecute="CommSettingsCommand_CanExecute" Executed="CommSettingsCommand_Executed" />
@@ -33,23 +33,16 @@
                 </MenuItem>
             </Menu>
         </DockPanel>
-        <Canvas Name="PanelGrid">
-            <Canvas.Resources>
+        <cs:PanelGrid x:Name="ContentGrid">
+            <cs:PanelGrid.Resources>
                 <Style TargetType="cs:VMSCanvas">
                     <Setter Property="Background" Value="Crimson" />
                 </Style>
                 <Style TargetType="Border">
                     <Setter Property="BorderThickness" Value="2" />
                     <Setter Property="BorderBrush" Value="Black" />
-                    <Setter Property="Width" Value="100" />
-                    <Setter Property="Height" Value="100" />
                 </Style>
-            </Canvas.Resources>
-            <!--<Border>
-                <Canvas>
-
-                </Canvas>
-            </Border>-->
-        </Canvas>
+            </cs:PanelGrid.Resources>
+        </cs:PanelGrid>
     </Grid>
 </Window>
