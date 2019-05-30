@@ -59,6 +59,7 @@
     <Compile Include="CustomSettings\PanelSettingsConverter.cs" />
     <Compile Include="CustomSettings\ScreenElements.cs" />
     <Compile Include="CustomSettings\VmsSerializer.cs" />
+    <Compile Include="DevHelpers\VmsConsole.cs" />
     <Compile Include="DlgWindows\AboutDlg.xaml.cs">
       <DependentUpon>AboutDlg.xaml</DependentUpon>
     </Compile>

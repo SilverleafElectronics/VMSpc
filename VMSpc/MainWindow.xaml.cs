@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using VMSpc.XmlFileManagers;
 using VMSpc.DlgWindows;
 using VMSpc.Panels;
+using VMSpc.DevHelpers;
 
 namespace VMSpc
 {
@@ -33,6 +34,9 @@ namespace VMSpc
             var settings = Properties.Settings.Default;
             InitializeComponent();
             GeneratePanels();
+#if (DEBUG)
+            VMSConsole.AddConsoleToWindow(PanelGrid);
+#endif
         }
 
 
@@ -46,9 +50,7 @@ namespace VMSpc
             PanelManager panelManager = new PanelManager(this);
         }
 
-        //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        //EVENT HANDLERS 
-        //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        #region EVENT HANDLERS
 
         private void CloseCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -82,7 +84,7 @@ namespace VMSpc
             aboutdlg.ShowDialog();
         }
 
-
+        #endregion //EVENT HANDLERS
     }
 
 
@@ -100,6 +102,5 @@ namespace VMSpc
             "About",
             typeof(MainCommands)
         );
-
     }
 }

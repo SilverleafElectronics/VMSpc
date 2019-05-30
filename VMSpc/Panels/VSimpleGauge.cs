@@ -11,7 +11,8 @@ namespace VMSpc.Panels
     {
         private MainWindow parent;
 
-        public VSimpleGauge(MainWindow parent, PanelSettings panelSettings) : base(parent, panelSettings)
+        public VSimpleGauge(MainWindow parent, PanelSettings panelSettings, PanelManager panelManager) 
+            : base(parent, panelSettings, panelManager)
         {
             this.parent = parent;
         }

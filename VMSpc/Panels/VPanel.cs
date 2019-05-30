@@ -18,7 +18,7 @@ using VMSpc.Panels;
 
 namespace VMSpc.Panels
 {
-    abstract class VPanel
+    public abstract class VPanel
     {
         public char cID;
         private PanelSettings panelSettings;
@@ -26,13 +26,13 @@ namespace VMSpc.Panels
         private Border border;
         private Canvas canvas;
 
-        public VPanel(MainWindow parent, PanelSettings panelSettings)
+        public VPanel(MainWindow parent, PanelSettings panelSettings, PanelManager panelManager)
         {
             cID = Constants.PanelIDs.SIMPLE_GAUGE_ID;
             this.panelSettings = panelSettings;
             this.parent = parent;
             border = new Border();
-            canvas = new VMSCanvas(border, panelSettings);
+            canvas = new VMSCanvas(border, panelSettings, panelManager, parent);
             border.Child = canvas;
             cID = panelSettings.ID;
         }

@@ -7,7 +7,7 @@ using VMSpc.XmlFileManagers;
 
 namespace VMSpc.Panels
 {
-    class PanelManager
+    public class PanelManager
     {
         public List<VPanel> PanelList = new List<VPanel>();
         private MainWindow parent;
@@ -28,7 +28,7 @@ namespace VMSpc.Panels
                 switch (panelSettings.ID)
                 {
                     case Constants.PanelIDs.SIMPLE_GAUGE_ID:
-                        panel = new VSimpleGauge(parent, panelSettings);
+                        panel = new VSimpleGauge(parent, panelSettings, this);
                         break;
                     case Constants.PanelIDs.SCAN_GAUGE_ID:
                         break;
@@ -72,5 +72,12 @@ namespace VMSpc.Panels
             }
         }
 
+        public void UpdateAllZIndices(VMSCanvas topObject)
+        {
+            foreach (VPanel panel in PanelList)
+            {
+
+            }
+        }
     }
 }
