@@ -25,24 +25,11 @@ namespace VMSpc.CustomComponents
         private MainWindow mainWindow;
         private Border border;
         private PanelSettings panelSettings;
-        public bool leftMoveAllowed;
-        public bool rightMoveAllowed;
-        public bool upMoveAllowed;
-        public bool downMoveAllowed;
-
-        public Double leftLimit;
-        public Double rightLimit;
-        public Double topLimit;
-        public Double bottomLimit;
 
 
         public VMSCanvas(MainWindow mainWindow, Border border, PanelSettings panelSettings) 
             : base()
         {
-            leftMoveAllowed = false;
-            rightMoveAllowed = false;
-            upMoveAllowed = false;
-            downMoveAllowed = false;
             this.mainWindow = mainWindow;
             this.border = border;
             this.panelSettings = panelSettings;
@@ -55,6 +42,8 @@ namespace VMSpc.CustomComponents
             border.Height = panelSettings.rectCord.bottomRightY - panelSettings.rectCord.topLeftY;
             SetTop(border, panelSettings.rectCord.topLeftY);
             SetLeft(border, panelSettings.rectCord.topLeftX);
+            SetRight(border, Canvas.GetLeft(border) + border.Width);
+            SetBottom(border, Canvas.GetTop(border) + border.Height);
         }
     }
 }

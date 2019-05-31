@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:VMSpc"
         xmlns:self="clr-namespace:VMSpc"
         mc:Ignorable="d"
-        Title="VMSpc" Height="450" Width="800">
+        Title="VMSpc" Height="800" Width="1500">
     <Grid>
         <DockPanel Name="DockMenu">
             <DockPanel.CommandBindings>

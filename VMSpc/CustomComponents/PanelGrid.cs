@@ -146,9 +146,6 @@ namespace VMSpc.CustomComponents
                 }
                 if (panel.canvas == source)
                 {
-#if (Debug)
-                    VMSConsole.PrintLine("Found");
-#endif
                     selectedChild = panel;
                 }
             }
@@ -164,41 +161,61 @@ namespace VMSpc.CustomComponents
         {
             if (!isDragging)
                 return;
-            SetDirectionalLimits();
+            SetNearestNeighbors(selectedChild);
             double newTop, newLeft;
             Point newCursorPoint = e.GetPosition(src);
             double cursorXDiff = newCursorPoint.X - cursorStartPoint.X;
             double cursorYDiff = newCursorPoint.Y - cursorStartPoint.Y;
             newTop = canvasStartTop + cursorYDiff;
             newLeft = canvasStartLeft + cursorXDiff;
-            SetTop(selectedChild.border, newTop);
-            SetLeft(selectedChild.border, newLeft);
+            MovePanel(selectedChild, newTop, newLeft, newCursorPoint);
         }
 
-        private void SetDirectionalLimits()
+        private void MovePanel(VPanel panel, double newTop, double newLeft, Point newCursorPoint)
         {
-            selectedChild.canvas.leftLimit = 0;
-            selectedChild.canvas.rightLimit = mainWindow.Width;
-            selectedChild.canvas.topLimit = mainWindow.Height;
-            selectedChild.canvas.bottomLimit = 0;
-            VMSConsole.PrintLine("Left limit: " + mainWindow.Width);
-            VMSConsole.PrintLine("Current Left Position: " + GetLeft(selectedChild.border));
-            VMSConsole.PrintLine("Current Right Position: " + GetRight(selectedChild.border));
+            if (panel.CanMove(GetVerticalDirection(newCursorPoint.Y)))
+            {
+                SetTop(panel.border, newTop);
+                SetBottom(panel.border, newTop + selectedChild.border.Height);
+            }
+            if (panel.CanMove(GetHorizontalDirection(newCursorPoint.X)))
+            {
+                SetLeft(panel.border, newLeft);
+                SetRight(panel.border, newLeft + selectedChild.border.Width);
+            }
+        }
+
+        private void SetNearestNeighbors(VPanel panel)
+        {
+            panel.InitLimits();
+            foreach (VPanel neighbor in PanelList)
+            {
+                if (neighbor != panel)
+                    panel.SetDirectionalLimits(neighbor);
+            }
         }
 
         #endregion
 
-        private int GetVerticalDirection(double difference)
+        private int GetVerticalDirection(double newYPoint)
         {
-            if (difference > lastCursorY)
-                return Constants.DOWN;
-            return Constants.UP;
+            int direction;
+            if (newYPoint > lastCursorY)
+                direction = Constants.DOWN;
+            else
+                direction = Constants.UP;
+            lastCursorY = newYPoint;
+            return direction;
         }
-        private int GetHorizontalDirection(double difference)
+        private int GetHorizontalDirection(double newXPoint)
         {
-            if (difference > lastCursorX)
-                return Constants.RIGHT;
-            return Constants.LEFT;
+            int direction;
+            if (newXPoint > lastCursorX)
+                direction = Constants.RIGHT;
+            else
+                direction = Constants.LEFT;
+            lastCursorX = newXPoint;
+            return direction;
         }
     }
 }
