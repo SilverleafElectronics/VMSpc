@@ -69,7 +69,6 @@
       <DependentUpon>CommDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Managers\EngineManager.cs" />
-    <Compile Include="Managers\PanelManager.cs" />
     <Compile Include="CustomComponents\VMSCanvas.cs" />
     <Compile Include="Panels\VSimpleGauge.cs" />
     <Compile Include="Resources\Configuration.Designer.cs">

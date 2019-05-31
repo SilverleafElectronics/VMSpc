@@ -14,7 +14,7 @@ namespace VMSpc.DevHelpers
         private static Canvas Wrapper;
         static VMSConsole()
         {
-
+            
         }
         public static void AddConsoleToWindow(Canvas wrapper)
         {
