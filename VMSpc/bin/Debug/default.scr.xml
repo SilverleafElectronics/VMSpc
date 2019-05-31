@@ -5,7 +5,7 @@
         <File-Name>default.scr.xml</File-Name>
         <Panel Number="1">
             <ID>1</ID>
-            <Rect-Cord Top-LeftX="0" Top-LeftY="0" Bottom-RightX="160" Bottom-RightY="160"/>
+            <Rect-Cord Top-LeftX="160" Top-LeftY="160" Bottom-RightX="300" Bottom-RightY="300"/>
             <BackGround-Color Red="163" Green="82" Blue="0"/>
             <Base-Color Red="255" Green="255" Blue="255"/>
             <Explicit-Color Red="255" Green="255" Blue="255"/>
@@ -24,7 +24,7 @@
         </Panel>
         <Panel Number="2">
             <ID>1</ID>
-            <Rect-Cord Top-LeftX="320" Top-LeftY="320" Bottom-RightX="480" Bottom-RightY="480"/>
+            <Rect-Cord Top-LeftX="480" Top-LeftY="320" Bottom-RightX="640" Bottom-RightY="440"/>
             <BackGround-Color Red="163" Green="82" Blue="0"/>
             <Base-Color Red="255" Green="255" Blue="255"/>
             <Explicit-Color Red="255" Green="255" Blue="255"/>
@@ -41,7 +41,26 @@
             <Use-Static-Color>false</Use-Static-Color>
             <Format>1</Format>
         </Panel>
-        <Panel Number="3">
+		<Panel Number="3">
+            <ID>1</ID>
+            <Rect-Cord Top-LeftX="480" Top-LeftY="480" Bottom-RightX="640" Bottom-RightY="640"/>
+            <BackGround-Color Red="163" Green="82" Blue="0"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Gauge-Color Red="211" Green="211" Blue="211"/>
+            <Explicit-Fill-Color Red="0" Green="0" Blue="0"/>
+            <PID>601</PID>
+            <Show-Spot>false</Show-Spot>
+            <Show-Name>true</Show-Name>
+            <Show-Value>true</Show-Value>
+            <Show-Unit>true</Show-Unit>
+            <Show-Graph>true</Show-Graph>
+            <Show-Abbreviation>false</Show-Abbreviation>
+            <Show-In-Metric>false</Show-In-Metric>
+            <Use-Static-Color>false</Use-Static-Color>
+            <Format>1</Format>
+        </Panel>
+        <Panel Number="4">
             <ID>E</ID>
             <Rect-Cord Top-LeftX="456" Top-LeftY="288" Bottom-RightX="1016" Bottom-RightY="388"/>
             <BackGround-Color Red="163" Green="82" Blue="0"/>

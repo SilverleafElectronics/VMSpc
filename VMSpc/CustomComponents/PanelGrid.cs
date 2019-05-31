@@ -173,16 +173,8 @@ namespace VMSpc.CustomComponents
 
         private void MovePanel(VPanel panel, double newTop, double newLeft, Point newCursorPoint)
         {
-            if (panel.CanMove(GetVerticalDirection(newCursorPoint.Y)))
-            {
-                SetTop(panel.border, newTop);
-                SetBottom(panel.border, newTop + selectedChild.border.Height);
-            }
-            if (panel.CanMove(GetHorizontalDirection(newCursorPoint.X)))
-            {
-                SetLeft(panel.border, newLeft);
-                SetRight(panel.border, newLeft + selectedChild.border.Width);
-            }
+            panel.SetHorizontal(newLeft, newCursorPoint);
+            panel.SetVertical(newTop, newCursorPoint);
         }
 
         private void SetNearestNeighbors(VPanel panel)
@@ -196,26 +188,5 @@ namespace VMSpc.CustomComponents
         }
 
         #endregion
-
-        private int GetVerticalDirection(double newYPoint)
-        {
-            int direction;
-            if (newYPoint > lastCursorY)
-                direction = Constants.DOWN;
-            else
-                direction = Constants.UP;
-            lastCursorY = newYPoint;
-            return direction;
-        }
-        private int GetHorizontalDirection(double newXPoint)
-        {
-            int direction;
-            if (newXPoint > lastCursorX)
-                direction = Constants.RIGHT;
-            else
-                direction = Constants.LEFT;
-            lastCursorX = newXPoint;
-            return direction;
-        }
     }
 }

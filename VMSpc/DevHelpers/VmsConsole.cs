@@ -38,6 +38,27 @@ namespace VMSpc.DevHelpers
             Console.Children.Add(line);
             ConsoleScroller.ScrollToBottom();
         }
+        public static void PrintSide(double side)
+        {
+            switch (side)
+            {
+                case Constants.LEFT:
+                    PrintLine("Left");
+                    break;
+                case Constants.UP:
+                    PrintLine("Up");
+                    break;
+                case Constants.RIGHT:
+                    PrintLine("Right");
+                    break;
+                case Constants.DOWN:
+                    PrintLine("Down");
+                    break;
+                default:
+                    PrintLine("Not a side");
+                    break;
+            }
+        }
     }
 #endif //DEBUG
 }

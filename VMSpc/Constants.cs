@@ -90,10 +90,33 @@ namespace VMSpc
         public const int RIGHT = 0;
         public const int UP = 2;
         public const int DOWN = 3;
+        public const int HORIZONTAL = 0;
+        public const int VERTICAL = 1;
 
 
-    //-----------------------------------------------------------------------------------------
-    //
-    //-----------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------
+        //RV-C Helpers
+        //-----------------------------------------------------------------------------------------
+
+        public static byte RVC_BYTE(uint val)
+        {
+            return ((byte)(val & 0x000000FF));
+        }
+        public static ushort RVC_WORD(uint val)
+        {
+            return ((ushort)(val & 0x0000FFFF));
+        }
+        public static uint RVC_LONG(uint val)
+        {
+            return val;
+        }
+        public static bool PGN_IS_PROPRIETARY(uint pgn)
+        {
+            return ((pgn & 0x1FF00) == 0xEF00);
+        }
+
+        public const uint RVC_MAXVAL = 0xFFFFFFFD;
+        public const uint RVC_NODATA = 0xFFFFFFFF;
+
     }
 }

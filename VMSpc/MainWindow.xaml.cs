@@ -42,7 +42,7 @@ namespace VMSpc
             ContentGrid.InitPanels(this);
             ContentGrid.LoadPanels();
 #if (DEBUG)
-            VMSConsole.AddConsoleToWindow(this.ContentGrid);
+            //VMSConsole.AddConsoleToWindow(this.ContentGrid);
 #endif
         }
 
