@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Media;
 using System.Xml;
 
@@ -49,54 +50,40 @@ namespace VMSpc.XmlFileManagers
         public Color baseColor;
         public Color explicitColor;
         public Color explicitGaugeColor;
-        public Color explicitFillColor;
-        public int PID;
-        public int[] PIDList;
-        public bool showSpot;
-        public bool showName;
-        public bool showValue;
-        public bool showUnit;
-        public bool showGraph;
-        public bool showAbbreviation;
-        public bool showInMetric;
-        public bool useStaticColor;
-        public int format;
+        public int Text_Position;
+        public int Use_Static_Color;
+
         public PanelSettings()
         {
 
         }
 
-        /// <summary>
-        /// Stores the xml value in the specified propName. Only pass propNames
-        /// of type Color to this method
-        /// </summary>
-        /// <param name="propName"></param>
-        /// <param name="node"></param>
-        public void StoreColorFromXml(string propName, XmlNode node)
+        public virtual void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
-            switch (propName)
+            switch (nodeName)
             {
-                case "backgroundColor":
-                    backgroundColor = GetColorFromXml(node);
+                case "ID":
+                    ID = Char.Parse(val);
                     break;
-                case "baseColor":
-                    baseColor = GetColorFromXml(node);
+                case "Rect-Cord":
+                    rectCord.GetCordsFromXml(panelNode);
                     break;
-                case "explicitColor":
-                    explicitColor = GetColorFromXml(node);
+                case "BackGround-Color":
+                    GetColorFromXml(panelNode);
                     break;
-                case "explicitGaugeColor":
-                    explicitGaugeColor = GetColorFromXml(node);
+                case "Base-Color":
+                    GetColorFromXml(panelNode);
                     break;
-                case "explicitFillColor":
-                    explicitFillColor = GetColorFromXml(node);
+                case "Explicit-Color":
+                    GetColorFromXml(panelNode);
                     break;
-                default:
+                case "Explicit-Gauge-Color":
+                    GetColorFromXml(panelNode);
                     break;
             }
         }
 
-        private Color GetColorFromXml(XmlNode node)
+        protected Color GetColorFromXml(XmlNode node)
         {
             Color color = Color.FromRgb(
                 Byte.Parse(node.Attributes["Red"].Value),
@@ -109,6 +96,312 @@ namespace VMSpc.XmlFileManagers
         public void SaveColorToXml(string propName, XmlNode node)
         {
 
+        }
+    }
+
+    public class ClockSettings : PanelSettings
+    {
+        public bool showDate;
+        public bool showAMPM;
+
+        public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
+        {
+            switch (nodeName)
+            {
+                case "Show-Date":
+                    showDate = Boolean.Parse(val);
+                    break;
+                case "Show-AMPM":
+                    showAMPM = Boolean.Parse(val);
+                    break;
+                default:
+                    base.StoreSettings(nodeName, val, panelNode);
+                    break;
+            }
+        }
+    }
+    public class MessageBoxSettings : PanelSettings
+    {
+        public int numLines;
+        public int PID;
+        public int PIDLimited;
+        public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
+        {
+            switch (nodeName)
+            {
+                case "Num-Lines":
+                    numLines = Int32.Parse(val);
+                    break;
+                case "PID":
+                    PID = Int32.Parse(val);
+                    break;
+                case "PID-Limited":
+                    PIDLimited = Int32.Parse(val);
+                    break;
+                default:
+                    base.StoreSettings(nodeName, val, panelNode);
+                    break;
+            }
+        }
+    }
+    public class PictureSettings : PanelSettings
+    {
+        public string BMPFileName;
+        public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
+        {
+            switch (nodeName)
+            {
+                case "BMP-File-Name":
+                    BMPFileName = val;
+                    break;
+                default:
+                    base.StoreSettings(nodeName, val, panelNode);
+                    break;
+            }
+        }
+    }
+    public class DiagnosticGaugeSettings : PanelSettings
+    {
+        public Color WarningColor;
+        public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
+        {
+            switch (nodeName)
+            {
+                case "Warning-Color":
+                    WarningColor = GetColorFromXml(panelNode);
+                    break;
+                default:
+                    base.StoreSettings(nodeName, val, panelNode);
+                    break;
+            }
+        }
+    }
+    public class TextGaugeSettings : PanelSettings
+    {
+        public int textLength;
+        public string text;
+        public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
+        {
+            switch (nodeName)
+            {
+                case "Text-Length":
+                    textLength = Int32.Parse(val);
+                    break;
+                case "Text":
+                    text = val;
+                    break;
+                default:
+                    base.StoreSettings(nodeName, val, panelNode);
+                    break;
+            }
+        }
+    }
+    public class TransmissionGaugeSettings : PanelSettings
+    {
+        public bool showAttained;
+        public bool showSelected;
+        public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
+        {
+            switch (nodeName)
+            {
+                case "Show-Attained":
+                    showAttained = Boolean.Parse(val);
+                    break;
+                case "Show-Selected":
+                    showSelected = Boolean.Parse(val);
+                    break;
+                default:
+                    base.StoreSettings(nodeName, val, panelNode);
+                    break;
+            }
+        }
+    }
+    public class RecordedSettings : PanelSettings
+    {
+        public bool showMPG;
+        public bool showCaptions;
+        public bool showUnits;
+        public bool showInMetric;
+        public string fileName;
+        public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
+        {
+            switch (nodeName)
+            {
+                case "Show-MPG":
+                    showMPG = Boolean.Parse(val);
+                    break;
+                case "Show-Captions":
+                    showCaptions = Boolean.Parse(val);
+                    break;
+                case "Show-Units":
+                    showUnits = Boolean.Parse(val);
+                    break;
+                case "Show-In-Metric":
+                    showInMetric = Boolean.Parse(val);
+                    break;
+                case "FileName":
+                    fileName = val;
+                    break;
+                default:
+                    base.StoreSettings(nodeName, val, panelNode);
+                    break;
+            }
+        }
+    }
+    public class TankMinderSettings : RecordedSettings
+    {
+        public bool showFuel;
+        public bool showMilesToEmpty;
+        public bool useRollingMPG;
+        public bool layoutHorizontal;
+        public int tankSize;
+        public int tankSizeMetric;
+        public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
+        {
+            switch (nodeName)
+            {
+                case "Show-Fuel":
+                    showFuel = Boolean.Parse(val);
+                    break;
+                case "Show-Miles-To-Empty":
+                    showMilesToEmpty = Boolean.Parse(val);
+                    break;
+                case "Use-Rolling-MPG":
+                    useRollingMPG = Boolean.Parse(val);
+                    break;
+                case "Layout-Horizontal":
+                    layoutHorizontal = Boolean.Parse(val);
+                    break;
+                case "Tank-Size":
+                    tankSize = Int32.Parse(val);
+                    break;
+                case "Tank-Size-Metric":
+                    tankSizeMetric = Int32.Parse(val);
+                    break;
+                default:
+                    base.StoreSettings(nodeName, val, panelNode);
+                    break;
+            }
+        }
+    }
+    public class OdometerSettings : RecordedSettings
+    {
+        public bool showFuelLocked;
+        public bool showHours;
+        public bool showMiles;
+        public bool showSpeed;
+        public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
+        {
+            switch (nodeName)
+            {
+                case "Show-Fuel-Locked":
+                    showFuelLocked = Boolean.Parse(val);
+                    break;
+                case "Show-Hours":
+                    showHours = Boolean.Parse(val);
+                    break;
+                case "Show-Miles":
+                    showMiles = Boolean.Parse(val);
+                    break;
+                case "Show-Speed":
+                    showSpeed = Boolean.Parse(val);
+                    break;
+                default:
+                    base.StoreSettings(nodeName, val, panelNode);
+                    break;
+            }
+        }
+    }
+    public class GaugeSettings : PanelSettings
+    {
+        public bool showSpot;
+        public bool showName;
+        public bool showValue;
+        public bool showUnit;
+        public bool showGraph;
+        public bool showAbbreviation;
+        public bool showInMetric;
+        public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
+        {
+            switch (nodeName)
+            {
+                case "Show-Spot":
+                    showSpot = Boolean.Parse(val);
+                    break;
+                case "Show-Name":
+                    showName = Boolean.Parse(val);
+                    break;
+                case "Show-Value":
+                    showValue = Boolean.Parse(val);
+                    break;
+                case "Show-Unit":
+                    showUnit = Boolean.Parse(val);
+                    break;
+                case "Show-Graph":
+                    showGraph = Boolean.Parse(val);
+                    break;
+                case "Show-Abbreviation":
+                    showAbbreviation = Boolean.Parse(val);
+                    break;
+                case "Show-In-Metric":
+                    showInMetric = Boolean.Parse(val);
+                    break;
+                default:
+                    base.StoreSettings(nodeName, val, panelNode);
+                    break;
+            }
+        }
+    }
+    public class ScanGaugeSettings : GaugeSettings
+    {
+        public List<int> PIDList;
+        public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
+        {
+            switch (nodeName)
+            {
+                case "PID":
+                    PIDList.Add(Int32.Parse(val));
+                    break;
+                default:
+                    base.StoreSettings(nodeName, val, panelNode);
+                    break;
+            }
+        }
+    }
+    public class SimpleGaugeSettings : GaugeSettings
+    {
+        public int PID;
+        public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
+        {
+            switch (nodeName)
+            {
+                case "PID":
+                    PID = Int32.Parse(val);
+                    break;
+                default:
+                    base.StoreSettings(nodeName, val, panelNode);
+                    break;
+            }
+        }
+    }
+    public class RoundGaugeSettings : SimpleGaugeSettings
+    {
+        public Color gaugeColor;
+        public Color fillColor;
+        public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
+        {
+            switch (nodeName)
+            {
+                case "Gauge-Color":
+                    gaugeColor = GetColorFromXml(panelNode);
+                    break;
+                case "Fill-Color":
+                    fillColor = GetColorFromXml(panelNode);
+                    break;
+                default:
+                    base.StoreSettings(nodeName, val, panelNode);
+                    break;
+            }
         }
     }
 }

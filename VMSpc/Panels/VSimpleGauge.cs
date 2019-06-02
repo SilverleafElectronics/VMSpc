@@ -7,7 +7,7 @@ using VMSpc.XmlFileManagers;
 
 namespace VMSpc.Panels
 {
-    class VSimpleGauge : VPanel
+    class VSimpleGauge : VBarGauge
     {
         private MainWindow mainWindow;
 
@@ -15,6 +15,7 @@ namespace VMSpc.Panels
             : base(mainWindow, panelSettings)
         {
             this.mainWindow = mainWindow;
+            panelSettings = (SimpleGaugeSettings)panelSettings;
         }
 
         public override void GeneratePanel()

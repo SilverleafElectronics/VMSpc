@@ -20,6 +20,9 @@ using VMSpc.DevHelpers;
 
 namespace VMSpc.Panels
 {
+    /// <summary>
+    /// base class of all panel elements
+    /// </summary>
     public abstract class VPanel
     {
         public char cID;
@@ -37,8 +40,6 @@ namespace VMSpc.Panels
         private bool isTopClipped;
         private bool isRightClipped;
         private bool isBottomClipped;
-
-        private int counter;
 
         public VPanel(MainWindow mainWindow, PanelSettings panelSettings)
         {
@@ -217,7 +218,7 @@ namespace VMSpc.Panels
         }
 
         /// <summary>
-        /// Determines which vertical side needs to be clipped to the bounding neighbor.
+        /// Determines which horizontal side needs to be clipped to the bounding neighbor.
         /// </summary>
         /// <param name="newTop"></param>
         /// <returns>The side to be clipped. NaN, if no clipping should occur</returns>

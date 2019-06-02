@@ -1,4 +1,4 @@
-﻿//#define DEBUG //comment out for release builds   
+﻿//#define DEBUG_CONSOLE //comment out for release builds   
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace VMSpc.DevHelpers
 {
-#if(DEBUG)
+#if(DEBUG_CONSOLE)
     static class VMSConsole
     {
         private static ScrollViewer ConsoleScroller;
@@ -60,5 +60,5 @@ namespace VMSpc.DevHelpers
             }
         }
     }
-#endif //DEBUG
+#endif //DEBUG_CONSOLE
 }

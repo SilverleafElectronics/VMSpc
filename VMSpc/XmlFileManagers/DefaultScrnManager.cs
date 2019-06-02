@@ -36,71 +36,57 @@ namespace VMSpc.XmlFileManagers
         {
             XmlNode parentNode = getNodeByTagAndAttr("Panel", "Number", number.ToString());
             XmlNode panelNode = parentNode.FirstChild;
-            PanelSettings panel = new PanelSettings();
+            PanelSettings panel = GetPanelType(Char.Parse(parentNode.SelectSingleNode("ID").InnerText));
             do
             {
                 string val = panelNode.InnerText;
-                switch (panelNode.Name)
-                {
-                    case "ID":
-                        panel.ID = Char.Parse(val);
-                        break;
-                    case "Rect-Cord":
-                        panel.rectCord.GetCordsFromXml(panelNode);
-                        break;
-                    case "BackGround-Color":
-                        panel.StoreColorFromXml("backgroundColor", panelNode);
-                        break;
-                    case "Base-Color":
-                        panel.StoreColorFromXml("baseColor", panelNode);
-                        break;
-                    case "Explicit-Color":
-                        panel.StoreColorFromXml("explicitColor", panelNode);
-                        break;
-                    case "Explicit-Gauge-Color":
-                        panel.StoreColorFromXml("explicitGaugeColor", panelNode);
-                        break;
-                    case "Explicit-Fill-Color":
-                        panel.StoreColorFromXml("explicitFillColor", panelNode);
-                        break;
-                    case "PID":
-                        panel.PID = Int32.Parse(val);
-                        break;
-                    case "Show-Spot":
-                        panel.showSpot = Boolean.Parse(val);
-                        break;
-                    case "Show-Name":
-                        panel.showName = Boolean.Parse(val);
-                        break;
-                    case "Show-Value":
-                        panel.showValue = Boolean.Parse(val);
-                        break;
-                    case "Show-Unit":
-                        panel.showUnit = Boolean.Parse(val);
-                        break;
-                    case "Show-Graph":
-                        panel.showGraph = Boolean.Parse(val);
-                        break;
-                    case "Show-Abbreviation":
-                        panel.showAbbreviation = Boolean.Parse(val);
-                        break;
-                    case "Show-In-Metric":
-                        panel.showInMetric = Boolean.Parse(val);
-                        break;
-                    case "Use-Static-Color":
-                        panel.useStaticColor = Boolean.Parse(val);
-                        break;
-                    case "Format":
-                        panel.format = Int32.Parse(val);
-                        break;
-                    default:
-                        break;
-                }
+ //               if (panelNode.Name = "ID")
+ //                   CastPanelToChild(panel, Char.Parse(panelNode.InnerText))
+                panel.StoreSettings(panelNode.Name, val, panelNode);
                 panelNode = panelNode.NextSibling;
             } while (panelNode != null);
-
             return panel;
+        }
+        public void SavePanelSettings(PanelSettings settings)
+        {
 
+        }
+        private PanelSettings GetPanelType(char cid)
+        {
+            switch (cid)
+            {
+                case Constants.PanelIDs.SIMPLE_GAUGE_ID:
+                    return new SimpleGaugeSettings();
+                case Constants.PanelIDs.SCAN_GAUGE_ID:
+                    return new ScanGaugeSettings();
+                case Constants.PanelIDs.RADIAL_GAUGE_ID:
+                    return new RoundGaugeSettings();
+                case Constants.PanelIDs.TANK_MINDER_ID:
+                    return new TankMinderSettings();
+                case Constants.PanelIDs.TEXT_PANEL_ID:
+                    return new TextGaugeSettings();
+                case Constants.PanelIDs.TIRE_PANEL_ID:
+                    break;
+                case Constants.PanelIDs.TRANSMISSION_ID:
+                    return new TransmissionGaugeSettings();
+                case Constants.PanelIDs.CLOCK_PANEL_ID:
+                    return new ClockSettings();
+                case Constants.PanelIDs.DIAG_ALARM_ID:
+                    return new DiagnosticGaugeSettings();
+                case Constants.PanelIDs.HISTOGRAM_ID:
+                    break;
+                case Constants.PanelIDs.IMG_PANEL_ID:
+                    return new PictureSettings();
+                case Constants.PanelIDs.MESSAGE_PANEL_ID:
+                    return new MessageBoxSettings();
+                case Constants.PanelIDs.MULTIBAR_ID:
+                    break;
+                case Constants.PanelIDs.ODOMOTER_ID:
+                    return new OdometerSettings();
+                default:
+                    return new PanelSettings();
+            }
+            return new PanelSettings();
         }
     }
 }
