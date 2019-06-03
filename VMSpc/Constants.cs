@@ -114,7 +114,6 @@ namespace VMSpc
         {
             return ((pgn & 0x1FF00) == 0xEF00);
         }
-
         public const uint RVC_MAXVAL = 0xFFFFFFFD;
         public const uint RVC_NODATA = 0xFFFFFFFF;
 

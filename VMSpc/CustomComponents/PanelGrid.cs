@@ -195,6 +195,7 @@ namespace VMSpc.CustomComponents
             }
         }
 
+        //should this be moved to VPanel to update each panel on individual threads?
         private void SetTimer()
         {
             panelTimer = new Timer(50);

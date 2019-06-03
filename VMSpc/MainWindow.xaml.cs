@@ -18,6 +18,8 @@ using VMSpc.DlgWindows;
 using VMSpc.Panels;
 using VMSpc.DevHelpers;
 using VMSpc.CustomComponents;
+using System.Threading;
+using VMSpc.Communication;
 
 namespace VMSpc
 {
@@ -35,7 +37,15 @@ namespace VMSpc
             InitializeComponent();
             GeneratePanels();
             Application.Current.MainWindow = this;
+            InitializeComm();
             //Application.Current.MainWindow
+        }
+
+        private void InitializeComm()
+        {
+            commreader = new VMSComm();
+            Thread commThread = new Thread(commreader.StartComm);
+            commThread.Start();
         }
 
         private void GeneratePanels()

@@ -61,11 +61,6 @@ namespace VMSpc.CustomComponents
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);
-            VMSConsole.PrintLine("Width: " + Width);
-            VMSConsole.PrintLine("Height: " + Height);
-            VMSConsole.PrintLine(border.BorderThickness.ToString());
-            VMSConsole.PrintLine("Border Width: " + border.Width);
-            VMSConsole.PrintLine("Border Height: " + border.Height);
         }
     }
 }

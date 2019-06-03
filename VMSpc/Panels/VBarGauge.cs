@@ -43,7 +43,7 @@ namespace VMSpc.Panels
 
         public override void UpdatePanel()
         {
-            UpdateFillBar(getrandom.Next(0, (int)canvas.Width)); //CHANGEME - get value from corresponding parser
+           // UpdateFillBar(getrandom.Next(0, (int)canvas.Width)); //CHANGEME - get value from corresponding parser
         }
 
         private void DrawBar()
