@@ -17,6 +17,7 @@ using VMSpc.DlgWindows;
 using VMSpc.Panels;
 using VMSpc.CustomComponents;
 using VMSpc.DevHelpers;
+using System.Timers;
 
 namespace VMSpc.Panels
 {
@@ -40,6 +41,8 @@ namespace VMSpc.Panels
         private bool isTopClipped;
         private bool isRightClipped;
         private bool isBottomClipped;
+
+        private Timer panelTimer;
 
         public VPanel(MainWindow mainWindow, PanelSettings panelSettings)
         {
@@ -265,6 +268,8 @@ namespace VMSpc.Panels
         }
 
         public abstract void GeneratePanel();
+
+        public abstract void UpdatePanel();
 
     }
 }

@@ -25,7 +25,7 @@ namespace VMSpc.CustomComponents
         private MainWindow mainWindow;
         private Border border;
         private PanelSettings panelSettings;
-
+        private double BorderThickness;
 
         public VMSCanvas(MainWindow mainWindow, Border border, PanelSettings panelSettings) 
             : base()
@@ -33,7 +33,9 @@ namespace VMSpc.CustomComponents
             this.mainWindow = mainWindow;
             this.border = border;
             this.panelSettings = panelSettings;
+            BorderThickness = 2;
             ApplyBorderDimensions();
+            ApplyCanvasDimensions();
         }
 
         private void ApplyBorderDimensions()
@@ -44,6 +46,26 @@ namespace VMSpc.CustomComponents
             SetLeft(border, panelSettings.rectCord.topLeftX);
             SetRight(border, Canvas.GetLeft(border) + border.Width);
             SetBottom(border, Canvas.GetTop(border) + border.Height);
+        }
+
+        private void ApplyCanvasDimensions()
+        {
+            Width = border.Width - (BorderThickness * 2);
+            Height = border.Height - (BorderThickness * 2);
+            SetTop(this, GetTop(border) - BorderThickness);
+            SetLeft(this, GetLeft(border) - BorderThickness);
+            SetRight(this, GetRight(border) - BorderThickness);
+            SetBottom(this, GetBottom(border) - BorderThickness);
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+            VMSConsole.PrintLine("Width: " + Width);
+            VMSConsole.PrintLine("Height: " + Height);
+            VMSConsole.PrintLine(border.BorderThickness.ToString());
+            VMSConsole.PrintLine("Border Width: " + border.Width);
+            VMSConsole.PrintLine("Border Height: " + border.Height);
         }
     }
 }

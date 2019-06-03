@@ -20,7 +20,7 @@ namespace VMSpc.Panels
 
         public override void GeneratePanel()
         {
-
+            base.GeneratePanel();
         }
     }
 }

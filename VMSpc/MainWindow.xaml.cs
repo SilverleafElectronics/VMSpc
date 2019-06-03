@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define DEBUG_CONSOLE
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,11 +40,11 @@ namespace VMSpc
 
         private void GeneratePanels()
         {
+#if (DEBUG_CONSOLE)
+            VMSConsole.AddConsoleToWindow(ContentGrid);
+#endif
             ContentGrid.InitPanels(this);
             ContentGrid.LoadPanels();
-#if (DEBUG_CONSOLE)
-            VMSConsole.AddConsoleToWindow(this.ContentGrid);
-#endif
         }
 
         #region EVENT HANDLERS

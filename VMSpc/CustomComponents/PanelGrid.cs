@@ -16,9 +16,13 @@ using VMSpc.XmlFileManagers;
 using VMSpc.DlgWindows;
 using VMSpc.Panels;
 using VMSpc.DevHelpers;
+using System.Timers;
 
 namespace VMSpc.CustomComponents
 {
+    /// <summary>
+    /// Acts as manager of all child panels in the UI
+    /// </summary>
     public class PanelGrid : Canvas
     {
         private MainWindow mainWindow;
@@ -31,13 +35,15 @@ namespace VMSpc.CustomComponents
         private Double canvasStartTop;
         private Double canvasStartLeft;
         private VPanel selectedChild;
-        
+
+        private Timer panelTimer;
 
         public PanelGrid()
             : base ()
         {
             selectedChild = null;
             Init();
+            SetTimer();
         }
 
         private void Init()
@@ -58,7 +64,7 @@ namespace VMSpc.CustomComponents
                 switch (panelSettings.ID)
                 {
                     case Constants.PanelIDs.SIMPLE_GAUGE_ID:
-                        panel = new VSimpleGauge(mainWindow, panelSettings);
+                        panel = new VBarGauge(mainWindow, panelSettings); //CHANGEME - to new VSimpleGauge
                         break;
                     case Constants.PanelIDs.SCAN_GAUGE_ID:
                         break;
@@ -98,7 +104,6 @@ namespace VMSpc.CustomComponents
         {
             foreach (VPanel panel in PanelList)
             {
-                panel.GeneratePanel();
                 Children.Add(panel.border);
             }
         }
@@ -137,7 +142,10 @@ namespace VMSpc.CustomComponents
                 VMSCanvas source;
                 try
                 {
-                    source = (VMSCanvas)src;
+                    //user has clicked directly inside the canvas
+                    try { source = (VMSCanvas)src; }
+                    //user has clicked inside a subcomponent of the canvas
+                    catch { source = (VMSCanvas)VisualTreeHelper.GetParent((Rectangle)src); }
                 }
                 catch //indicates the user has clicked outside of a panel
                 {
@@ -187,6 +195,24 @@ namespace VMSpc.CustomComponents
             }
         }
 
+        private void SetTimer()
+        {
+            panelTimer = new Timer(50);
+            panelTimer.Elapsed += OnTimedEvent;
+            panelTimer.AutoReset = true;
+            panelTimer.Enabled = true;
+        }
+
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            //allows new thread to access object from the parent UI thread
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                foreach (VPanel panel in PanelList)
+                    panel.UpdatePanel();
+            }
+            );
+        }
         #endregion
     }
 }
