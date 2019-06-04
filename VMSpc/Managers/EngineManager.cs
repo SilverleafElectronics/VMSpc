@@ -8,7 +8,7 @@ namespace VMSpc.Managers
 {
     public class EngineManager
     {
-        private int _engineType { get; }
+        public readonly int engineType;
         public EngineManager()
         {
 

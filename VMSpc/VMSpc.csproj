@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="Managers\EngineManager.cs" />
     <Compile Include="CustomComponents\VMSCanvas.cs" />
+    <Compile Include="Managers\J1939Parser.cs" />
     <Compile Include="Panels\VBarGauge.cs" />
     <Compile Include="Panels\VSimpleGauge.cs" />
     <Compile Include="Resources\Configuration.Designer.cs">
