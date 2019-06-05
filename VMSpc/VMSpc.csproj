@@ -56,6 +56,7 @@
     </ApplicationDefinition>
     <None Include="README" />
     <Compile Include="Communication\CommStructs.cs" />
+    <Compile Include="Communication\MessageExtractor.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="CustomComponents\PanelGrid.cs" />
     <Compile Include="CustomSettings\PanelSettingsConverter.cs" />

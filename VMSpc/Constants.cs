@@ -146,13 +146,29 @@ namespace VMSpc
         //-----------------------------------------------------------------------------------------
         //Misc Helpers
         //-----------------------------------------------------------------------------------------
-        public static void CreateTimer(Timer timer, ElapsedEventHandler callback, int interval)
+
+        /// <summary>
+        /// Attaches the specified callback method and interval to a timer object. Returns the timer object
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="interval"></param>
+        /// <returns></returns>
+        public static Timer CreateTimer(ElapsedEventHandler callback, int interval)
         {
-            timer = new Timer(interval);
+            Timer timer = new Timer(interval);
             timer.Elapsed += callback;
             timer.AutoReset = true;
             timer.Enabled = true;
+            return timer;
         }
+
+        //-----------------------------------------------------------------------------------------
+        //Communications Types
+        //-----------------------------------------------------------------------------------------
+        public const int USB = 0;
+        public const int SERIAL = 1;
+        public const int WIFI = 2;
+        public const int LOGPLAYER = 3;
 
 
     }
