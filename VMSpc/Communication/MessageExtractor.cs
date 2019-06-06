@@ -16,31 +16,48 @@ namespace VMSpc.Communication
 
         }
 
+        /// <summary>
+        /// Accepts a string representing a CAN message and returns a new J1939Message or J1708Message, with the fields extracted from the message
+        /// </summary>
         public CanMessage GetMessage(string message)
         {
+            
             CanMessage canMessage = FromString(message);
-
             return canMessage;
         }
 
         /// <summary>
-        /// Determines the message type and calls the appropriate method for extracting the message properties from the provided string. Returns true if the message was successfully extracted
+        /// Determines the message type and calls the appropriate method for extracting the message properties from the provided string. Returns the CanMessage object
         /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
         public CanMessage FromString(string message)
         {
-            switch (message[0])
+            try
             {
-                case Constants.J1939_HEADER:
-                    return new J1939Message();
-                case Constants.J1939_STATUS_HEADER:
-                    return new J1939Message();
-                case Constants.J1708_HEADER:
-                    return new J1939Message();
-                default:
-                    return null;
+                switch (message[0])
+                {
+                    case Constants.J1939_HEADER:
+                        return new J1939Message(message);
+                    case Constants.J1939_STATUS_HEADER:
+                        return new J1939Message(message);
+                    case Constants.J1708_HEADER:
+                        return new J1708Message(RemoveControlCharacters(message));
+                    default:
+                        return null;
+                }
             }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Removes the carriage return/line feed from the end of the message
+        /// </summary>
+        /// <param name="message"></param>
+        private string RemoveControlCharacters(string message)
+        {
+            return message.Replace("\r", "").Replace("\n", "");
         }
     }
 }

@@ -11,9 +11,9 @@ namespace VMSpc
 {
     public static class Constants
     {
-    //-----------------------------------------------------------------------------------------
-    //ERRORS
-    //-----------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------
+        //ERRORS
+        //-----------------------------------------------------------------------------------------
         //string errors
         public const string STR_NODATA = "NODATA";
         public const string STR_USAGEERR = "USAGEERR";
@@ -59,7 +59,7 @@ namespace VMSpc
         //Engine values, for use internally
         public const byte J1939 = 1;
         public const byte J1708 = 2;
-        public const byte INVALID_ENGINE = 0xFF;
+        public const byte INVALID_CAN_MESSAGE = 0xFF;
         //Engine header values: Messages from the JIB open with these characters
         public const char J1939_HEADER = 'R';
         public const char J1939_STATUS_HEADER = 'I';
@@ -73,22 +73,22 @@ namespace VMSpc
 
         public struct PanelIDs
         {
-            public const char VPANEL_ID        = '0';
-            public const char SIMPLE_GAUGE_ID  = '1';
-            public const char SCAN_GAUGE_ID    = '2';
-            public const char ODOMOTER_ID      = '3';
-            public const char TRANSMISSION_ID  = '4';
-            public const char MULTIBAR_ID      = '5';
-            public const char HISTOGRAM_ID     = '6';
-            public const char CLOCK_PANEL_ID   = '7';
-            public const char IMG_PANEL_ID     = '8';
-            public const char TEXT_PANEL_ID    = '9';
-            public const char TANK_MINDER_ID   = 'A';
-            public const char TIRE_PANEL_ID    = 'B';
+            public const char VPANEL_ID = '0';
+            public const char SIMPLE_GAUGE_ID = '1';
+            public const char SCAN_GAUGE_ID = '2';
+            public const char ODOMOTER_ID = '3';
+            public const char TRANSMISSION_ID = '4';
+            public const char MULTIBAR_ID = '5';
+            public const char HISTOGRAM_ID = '6';
+            public const char CLOCK_PANEL_ID = '7';
+            public const char IMG_PANEL_ID = '8';
+            public const char TEXT_PANEL_ID = '9';
+            public const char TANK_MINDER_ID = 'A';
+            public const char TIRE_PANEL_ID = 'B';
             public const char MESSAGE_PANEL_ID = 'C';
-            public const char RESERVED_ID      = 'D';
-            public const char DIAG_ALARM_ID    = 'E';
-            public const char RADIAL_GAUGE_ID  = 'F';
+            public const char RESERVED_ID = 'D';
+            public const char DIAG_ALARM_ID = 'E';
+            public const char RADIAL_GAUGE_ID = 'F';
         }
 
         //-----------------------------------------------------------------------------------------
@@ -129,9 +129,6 @@ namespace VMSpc
         /// <summary>
         /// Converts a string representation of bytes into an actual byte array. E.g.: "FAFB" becomes [0xFA, 0xFB]
         /// </summary>
-        /// <param name="byteArr"></param>
-        /// <param name="byteString"></param>
-        /// <param name="length"></param>
         /// <returns>False if the length is not divisible by 2. True otherwise</returns>
         public static bool ByteStringToByteArray(ref byte[] byteArr, string byteString, int length)
         {
@@ -140,6 +137,20 @@ namespace VMSpc
                 return false;
             for (int i = 0; i < arrLength; i++)
                 byteArr[i] = Convert.ToByte(byteString.Substring((i * 2), 2));
+            return true;
+        }
+
+        /// <summary>
+        /// Converts a string representation of bytes into an actual byte array (or List). E.g.: "FAFB" becomes [0xFA, 0xFB]
+        /// </summary>
+        /// <returns>False if the length is not divisible by 2. True otherwise</returns>
+        public static bool ByteStringToByteArray(ref List<byte> byteArr, string byteString, int length)
+        {
+            int arrLength = length / 2;
+            if (length % 2 != 0)
+                return false;
+            for (int i = 0; i < arrLength; i++)
+                byteArr.Add(Convert.ToByte(byteString.Substring((i * 2), 2)));
             return true;
         }
 
@@ -162,6 +173,49 @@ namespace VMSpc
             return timer;
         }
 
+        /// <summary>
+        /// Returns the string representation of the provided pid
+        /// </summary>
+        /// <param name="pid"></param>
+        /// <returns></returns>
+        public static string PidToString(this byte pid)
+        {
+            switch (pid)
+            {
+                case PIDs.retarderSwitch: return "Retarder Switch";
+                case PIDs.retarderOilPressure: return "Retarder Oil Pressure";
+                case PIDs.retarderOilTemp: return "Retarder Oil Temperature";
+                case PIDs.retarderStatus: return "Retarder Status";
+                case PIDs.percentAcceleratorPosition: return "Accelerator Position";
+                case PIDs.voltage: return "Voltage";
+                case PIDs.cruiseSpeed: return "Cruise Speed";
+                case PIDs.coolantTemp: return "Coolant Temperature";
+                case PIDs.engineLoad: return "Engine Load";
+                case PIDs.fuelRate: return "Fuel Rate";
+                case PIDs.fuelTemp: return "Fuel Temperature";
+                case PIDs.instantMPG: return "Instant MPG";
+                case PIDs.airInletTemp: return "Air Inlet Temperature";
+                case PIDs.intakeTemp: return "Intake Temperature";
+                case PIDs.oilPSI: return "Oil PSI";
+                case PIDs.retarderPercent: return "Retarder Percent";
+                case PIDs.oilTemp: return "Oil Temperature";
+                case PIDs.roadSpeed: return "Road Speed";
+                case PIDs.cruiseSetStatus: return "Cruise Set Status";
+                case PIDs.engineSpeed: return "Engine Speed";
+                case PIDs.transmissionTemp: return "Transmission Temperature";
+                case PIDs.transmissionSpeed: return "Transmission Speed";
+                case PIDs.turboBoost: return "Turbo Boost";
+                case PIDs.rangeSelected: return "Range Selected";
+                case PIDs.rangeAttained: return "Range Attained";
+                case PIDs.totalMilesCummins: return "Total Miles (Cummins)";
+                case PIDs.totalMiles: return "Total Miles";
+                case PIDs.engineHours: return "Engine Hours";
+                case PIDs.totalFuel: return "Total Fuel";
+                case PIDs.diagnosticsPID: return "Diagnostic PID";
+                default: return "Unkown(" + pid + ")";
+            }
+        }
+
         //-----------------------------------------------------------------------------------------
         //Communications Types
         //-----------------------------------------------------------------------------------------
@@ -170,7 +224,7 @@ namespace VMSpc
         public const int WIFI = 2;
         public const int LOGPLAYER = 3;
 
-
+        
     }
 
     //*************************************************************************************
@@ -178,36 +232,36 @@ namespace VMSpc
     //*************************************************************************************
     public static class PIDs
     {
-        public const byte retarderSwitch = 47;
-        public const byte retarderOilPressur = 119;
-        public const byte retarderOilTemp = 120;
-        public const byte retarderOilStatus = 121;
-        public const byte percentAcceleratorPosition = 91;
-        public const byte voltage = 168;
-        public const byte cruiseSpeed = 86;
-        public const byte coolantTemp = 110;
-        public const byte engineLoad = 92;
-        public const byte fuelRate = 183;
-        public const byte fuelTemp = 174;
-        public const byte instantMPG = 184;
-        public const byte airInletTemp = 172;
-        public const byte intakeTemp = 105;
-        public const byte oilPSI = 100;
-        public const byte retarderPercent = 122;
-        public const byte oilTemp = 175;
-        public const byte roadSpeed = 84;
-        public const byte cruiseSetStatus = 85;
-        public const byte engineSpeed = 190;
-        public const byte transmissionTemp = 177;
-        public const byte transmissionSpeed = 191;
-        public const byte turboBoost = 102;
-        public const byte rangeSelected = 162;
-        public const byte rangeAttained = 163;
-        public const byte totalMilesCummins = 244;
-        public const byte totalMiles = 245;
-        public const byte engineHours = 247;
-        public const byte totalFuel = 250;
-        public const byte diagnosticsPID = 0xC2;
-        public const byte multipartMessage = 0xC0;
+        public const byte retarderSwitch                = 47;
+        public const byte retarderOilPressure           = 119;
+        public const byte retarderOilTemp               = 120;
+        public const byte retarderStatus                = 121;
+        public const byte percentAcceleratorPosition    = 91;
+        public const byte voltage                       = 168;
+        public const byte cruiseSpeed                   = 86;
+        public const byte coolantTemp                   = 110;
+        public const byte engineLoad                    = 92;
+        public const byte fuelRate                      = 183;
+        public const byte fuelTemp                      = 174;
+        public const byte instantMPG                    = 184;
+        public const byte airInletTemp                  = 172;
+        public const byte intakeTemp                    = 105;
+        public const byte oilPSI                        = 100;
+        public const byte retarderPercent               = 122;
+        public const byte oilTemp                       = 175;
+        public const byte roadSpeed                     = 84;
+        public const byte cruiseSetStatus               = 85;
+        public const byte engineSpeed                   = 190;
+        public const byte transmissionTemp              = 177;
+        public const byte transmissionSpeed             = 191;
+        public const byte turboBoost                    = 102;
+        public const byte rangeSelected                 = 162;
+        public const byte rangeAttained                 = 163;
+        public const byte totalMilesCummins             = 244;
+        public const byte totalMiles                    = 245;
+        public const byte engineHours                   = 247;
+        public const byte totalFuel                     = 250;
+        public const byte diagnosticsPID                = 0xC2;
+        public const byte multipartMessage              = 0xC0;
     }
 }

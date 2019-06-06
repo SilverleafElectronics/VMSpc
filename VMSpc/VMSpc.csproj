@@ -55,7 +55,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <None Include="README" />
-    <Compile Include="Communication\CommStructs.cs" />
+    <Compile Include="Communication\CanMessage.cs" />
     <Compile Include="Communication\MessageExtractor.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="CustomComponents\PanelGrid.cs" />
@@ -70,8 +70,8 @@
     <Compile Include="DlgWindows\CommDlg.xaml.cs">
       <DependentUpon>CommDlg.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Managers\EngineManager.cs" />
     <Compile Include="CustomComponents\VMSCanvas.cs" />
+    <Compile Include="Managers\J1708Parser.cs" />
     <Compile Include="Managers\J1939Parser.cs" />
     <Compile Include="Panels\VBarGauge.cs" />
     <Compile Include="Panels\VSimpleGauge.cs" />
@@ -146,7 +146,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Managers\J1708ParseHelpers\" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\silverleaf_300x200.bmp" />
   </ItemGroup>

@@ -9,6 +9,7 @@ using System.Windows;
 using System.Timers;
 using System.IO;
 using System.Net.Sockets;
+using System.Text.RegularExpressions;
 
 namespace VMSpc.Communication
 {
@@ -62,7 +63,7 @@ namespace VMSpc.Communication
             CloseDataReader();
         }
 
-        /// <summary>   Initializes all communications activity. Begins the ReadData() thread and sends messages to the JIB to keep it in VMS mode  </summary>
+        /// <summary>   Initializes all communications activity. Begins the InitializeDataReader() thread and sends messages to the JIB to keep it in VMS mode  </summary>
         public void StartComm()
         {
             try
@@ -76,27 +77,20 @@ namespace VMSpc.Communication
         }
 
         /// <summary>
-        /// Receives the message from the data reader, creates a new CanMessage, and unboxes the values into the CanMessage struct
+        /// Receives the message from the data reader, gets the message as a CanMessage from the MessageExtractor, and passes the parsed message to the appropriate parser
         /// </summary>
         private void ProcessData(string message)
         {
-            VMSConsole.PrintLine("Message: " + message);
             CanMessage canMessage = extractor.GetMessage(message);
-            if (canMessage == null)
+            if (canMessage == null || canMessage.messageType == Constants.INVALID_CAN_MESSAGE)
             {
                 badMessageCount++;
                 return;
             }
+            canMessage = (J1708Message)canMessage;
+            if (messageCount < 50)
+                VMSConsole.PrintLine(canMessage.ToString());
             messageCount++;
-        }
-
-        /// <summary>
-        /// Removes the carriage return/line feed from the end of the message
-        /// </summary>
-        /// <param name="message"></param>
-        private void RemoveControlCharacters(ref string message)
-        {
-
         }
 
         #region Communication Settings
