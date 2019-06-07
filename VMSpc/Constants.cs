@@ -249,50 +249,7 @@ namespace VMSpc
         public const int WIFI = 2;
         public const int LOGPLAYER = 3;
 
-        public struct PIDStruct
-        {
-            byte PID;
-            string FriendlyName;
-            int NumDataBytes;
-            public PIDStruct(byte pid, int numDataBytes, string friendlyName)
-            {
-                PID = pid;
-                NumDataBytes = numDataBytes;
-                FriendlyName = friendlyName;
-            }
-        }
-        //                                                              PID  NumDataBytes       FriendlyName   
-        public static PIDStruct retarderSwitch          = new PIDStruct(47,     2,          "Retarder Switch");
-        public static PIDStruct retarderOilPressure     = new PIDStruct(119,    2,          "Retarder Oil Pressure");
-        public static PIDStruct retarderOilTemp         = new PIDStruct(120,    2,          "Retarder Oil Temperature");
-        public static PIDStruct retarderStatus          = new PIDStruct(121,    2,          "Retarder Status");
-        public static PIDStruct acceleratorPosition     = new PIDStruct(91,     2,          "Accelerator Position");
-        public static PIDStruct voltage                 = new PIDStruct(168,    3,          "Voltage");
-        public static PIDStruct cruiseSpeed             = new PIDStruct(86,     2,          "Cruise Speed");
-        public static PIDStruct coolantTemp             = new PIDStruct(110,    2,          "Coolant Temperature");
-        public static PIDStruct engineLoad              = new PIDStruct(92,     2,          "Engine Load");
-        public static PIDStruct fuelRate                = new PIDStruct(183,    3,          "Fuel Rate");
-        public static PIDStruct fuelTemp                = new PIDStruct(174,    3,          "Fuel Temperature");
-        public static PIDStruct instantMPG              = new PIDStruct(184,    3,          "Instantaneous MPG");
-        public static PIDStruct airInletTemp            = new PIDStruct(172,    3,          "Air Inlet Temperature");
-        public static PIDStruct intakeTemp              = new PIDStruct(105,    2,          "Intake Temperature");
-        public static PIDStruct oilPSI                  = new PIDStruct(100,    2,          "Oil PSI");
-        public static PIDStruct retarderPercent         = new PIDStruct(122,    2,          "Retarder Percent");
-        public static PIDStruct oilTemp                 = new PIDStruct(175,    3,          "Oil Temperature");
-        public static PIDStruct roadSpeed               = new PIDStruct(84,     2,          "Road Speed");
-        public static PIDStruct cruiseSetStatus         = new PIDStruct(85,     2,          "Cruise Set Status");
-        public static PIDStruct engineSpeed             = new PIDStruct(190,    3,          "Engine Speed");
-        public static PIDStruct transmissionTemp        = new PIDStruct(177,    3,          "Transmission Temperature");
-        public static PIDStruct transmissionSpeed       = new PIDStruct(191,    3,          "Transmission Speed");
-        public static PIDStruct turboBoost              = new PIDStruct(102,    2,          "Turbo Boost");
-        public static PIDStruct rangeSelected           = new PIDStruct(162,    3,          "Range Selected");
-        public static PIDStruct rangeAttained           = new PIDStruct(163,    3,          "Range Attained");
-        public static PIDStruct totalMilesCummins       = new PIDStruct(244,    6,          "Total Miles");
-        public static PIDStruct totalMiles              = new PIDStruct(245,    6,          "Total Miles");
-        public static PIDStruct engineHours             = new PIDStruct(247,    6,          "Engine Hours");
-        public static PIDStruct totalFuel               = new PIDStruct(250,    6,          "Total Fuel");
-        public static PIDStruct diagnosticPid           = new PIDStruct(0xC2,   1000,       "Diagnostic");
-        public static PIDStruct multipartPid            = new PIDStruct(0xC0,   1000,       "Multipart");
+
     }
 
     //*************************************************************************************
@@ -300,36 +257,107 @@ namespace VMSpc
     //*************************************************************************************
     public static class PIDs
     {
-        public const byte retarderSwitch                = 47;
-        public const byte retarderOilPressure           = 119;
-        public const byte retarderOilTemp               = 120;
-        public const byte retarderStatus                = 121;
-        public const byte percentAcceleratorPosition    = 91;
-        public const byte voltage                       = 168;
-        public const byte cruiseSpeed                   = 86;
-        public const byte coolantTemp                   = 110;
-        public const byte engineLoad                    = 92;
-        public const byte fuelRate                      = 183;
-        public const byte fuelTemp                      = 174;
-        public const byte instantMPG                    = 184;
-        public const byte airInletTemp                  = 172;
-        public const byte intakeTemp                    = 105;
-        public const byte oilPSI                        = 100;
-        public const byte retarderPercent               = 122;
-        public const byte oilTemp                       = 175;
-        public const byte roadSpeed                     = 84;
-        public const byte cruiseSetStatus               = 85;
-        public const byte engineSpeed                   = 190;
-        public const byte transmissionTemp              = 177;
-        public const byte transmissionSpeed             = 191;
-        public const byte turboBoost                    = 102;
-        public const byte rangeSelected                 = 162;
-        public const byte rangeAttained                 = 163;
-        public const byte totalMilesCummins             = 244;
-        public const byte totalMiles                    = 245;
-        public const byte engineHours                   = 247;
-        public const byte totalFuel                     = 250;
-        public const byte diagnosticsPID                = 0xC2;
-        public const byte multipartMessage              = 0xC0;
+
+        public const byte SINGLE_BYTE = 0;
+        public const byte DOUBLE_BYTE = 1;
+        public const byte NON_STANDARD = 0xFF;
+
+        public struct PIDStruct
+        {
+            public byte PID;
+            public string FriendlyName;
+            public int NumDataBytes;
+            public double StandardOffset;
+            public double StandardMultiplier;
+            public double MetricOffset;
+            public double MetricMultiplier;
+            public byte ParserType;
+            public PIDStruct(byte pid, int numDataBytes, string friendlyName)
+            {
+                PID = pid;
+                NumDataBytes = numDataBytes;
+                FriendlyName = friendlyName;
+                StandardOffset = 0;
+                StandardMultiplier = 1;
+                MetricOffset = 0;
+                MetricMultiplier = 1;
+                ParserType = NON_STANDARD;
+            }
+        }
+
+        public const byte retarderSwitch = 47;
+        public const byte retarderOilPressure = 119;
+        public const byte retarderOilTemp = 120;
+        public const byte retarderStatus = 121;
+        public const byte percentAcceleratorPosition = 91;
+        public const byte voltage = 168;
+        public const byte cruiseSpeed = 86;
+        public const byte coolantTemp = 110;
+        public const byte engineLoad = 92;
+        public const byte fuelRate = 183;
+        public const byte fuelTemp = 174;
+        public const byte instantMPG = 184;
+        public const byte airInletTemp = 172;
+        public const byte intakeTemp = 105;
+        public const byte oilPSI = 100;
+        public const byte retarderPercent = 122;
+        public const byte oilTemp = 175;
+        public const byte roadSpeed = 84;
+        public const byte cruiseSetStatus = 85;
+        public const byte engineSpeed = 190;
+        public const byte transmissionTemp = 177;
+        public const byte transmissionSpeed = 191;
+        public const byte turboBoost = 102;
+        public const byte rangeSelected = 162;
+        public const byte rangeAttained = 163;
+        public const byte totalMilesCummins = 244;
+        public const byte totalMiles = 245;
+        public const byte engineHours = 247;
+        public const byte totalFuel = 250;
+        public const byte diagnosticsPID = 0xC2;
+        public const byte multipartMessage = 0xC0;
+
+        public static Dictionary<byte, PIDStruct> PIDList = new Dictionary<byte, PIDStruct>();
+
+        static PIDs()
+        {
+            //                             PID  NumDataBytes       FriendlyName   
+            PIDList.Add(47  , new PIDStruct(47, 2, "Retarder Switch"));
+            PIDList.Add(119 , new PIDStruct(119, 2, "Retarder Oil Pressure"));
+            PIDList.Add(120 , new PIDStruct(120, 2, "Retarder Oil Temperature"));
+            PIDList.Add(121 , new PIDStruct(121, 2, "Retarder Status"));
+            PIDList.Add(91  , new PIDStruct(91, 2, "Accelerator Position"));
+            PIDList.Add(168 , new PIDStruct(168, 3, "Voltage"));
+            PIDList.Add(86  , new PIDStruct(86, 2, "Cruise Speed"));
+            PIDList.Add(110 , new PIDStruct(110, 2, "Coolant Temperature"));
+            PIDList.Add(92  , new PIDStruct(92, 2, "Engine Load"));
+            PIDList.Add(183 , new PIDStruct(183, 3, "Fuel Rate"));
+            PIDList.Add(174 , new PIDStruct(174, 3, "Fuel Temperature"));
+            PIDList.Add(184 , new PIDStruct(184, 3, "Instantaneous MPG"));
+            PIDList.Add(172 , new PIDStruct(172, 3, "Air Inlet Temperature"));
+            PIDList.Add(105 , new PIDStruct(105, 2, "Intake Temperature"));
+            PIDList.Add(100 , new PIDStruct(100, 2, "Oil PSI"));
+            PIDList.Add(122 , new PIDStruct(122, 2, "Retarder Percent"));
+            PIDList.Add(175 , new PIDStruct(175, 3, "Oil Temperature"));
+            PIDList.Add(84  , new PIDStruct(84, 2, "Road Speed"));
+            PIDList.Add(85  , new PIDStruct(85, 2, "Cruise Set Status"));
+            PIDList.Add(190 , new PIDStruct(190, 3, "Engine Speed"));
+            PIDList.Add(177 , new PIDStruct(177, 3, "Transmission Temperature"));
+            PIDList.Add(191 , new PIDStruct(191, 3, "Transmission Speed"));
+            PIDList.Add(102 , new PIDStruct(102, 2, "Turbo Boost"));
+            PIDList.Add(162 , new PIDStruct(162, 3, "Range Selected"));
+            PIDList.Add(163 , new PIDStruct(163, 3, "Range Attained"));
+            PIDList.Add(244 , new PIDStruct(244, 6, "Total Miles"));
+            PIDList.Add(245 , new PIDStruct(245, 6, "Total Miles"));
+            PIDList.Add(247 , new PIDStruct(247, 6, "Engine Hours"));
+            PIDList.Add(250 , new PIDStruct(250, 6, "Total Fuel"));
+            PIDList.Add(0xC2, new PIDStruct(0xC2, 1000, "Diagnostic"));
+            PIDList.Add(0xC0, new PIDStruct(0xC0, 1000, "Multipart"));
+        }
+    }
+
+    public static class PGN_Constants
+    {
+
     }
 }

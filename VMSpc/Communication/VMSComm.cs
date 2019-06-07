@@ -94,8 +94,9 @@ namespace VMSpc.Communication
                 badMessageCount++;
                 return;
             }
-            if (messageCount < 50)
-            //    VMSConsole.PrintLine(canMessage.ToString());
+            if (canMessage.messageType == Constants.J1939)
+                j1939Parser.Parse(canMessage);
+            else if (canMessage.messageType == Constants.J1708)
                 j1708Parser.Parse((J1708Message)canMessage);
             messageCount++;
         }

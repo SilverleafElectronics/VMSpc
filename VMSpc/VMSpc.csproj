@@ -71,10 +71,11 @@
       <DependentUpon>CommDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomComponents\VMSCanvas.cs" />
-    <Compile Include="Managers\J1708Parser.cs" />
-    <Compile Include="Managers\J1939Parser.cs" />
+    <Compile Include="Parsers\J1708Parser.cs" />
+    <Compile Include="Parsers\J1939Parser.cs" />
     <Compile Include="Panels\VBarGauge.cs" />
     <Compile Include="Panels\VSimpleGauge.cs" />
+    <Compile Include="Parsers\RVC_Parser.cs" />
     <Compile Include="Resources\Configuration.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -147,7 +148,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Managers\J1708ParseHelpers\" />
+    <Folder Include="Managers\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\silverleaf_300x200.bmp" />

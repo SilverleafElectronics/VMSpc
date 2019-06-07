@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VMSpc.Communication;
 
 namespace VMSpc.Managers
 {
-    abstract class J1939Parser
+    class J1939Parser
     {
         public readonly int spn;
         public J1939Parser()
@@ -14,7 +15,10 @@ namespace VMSpc.Managers
 
         }
 
-        public abstract void Parse();
+        public void Parse(CanMessage canMessage)
+        {
+            
+        }
 
         private void ConvertAndStore()
         {

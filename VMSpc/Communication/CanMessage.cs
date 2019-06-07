@@ -27,7 +27,6 @@ namespace VMSpc.Communication
 
         public abstract void ExtractMessage(string message);
         public override abstract string ToString();
-        public abstract void PrintMessage();
 
     }
 
@@ -69,11 +68,6 @@ namespace VMSpc.Communication
             message = "";
             return message;
         }
-
-        public override void PrintMessage()
-        {
-
-        }
     }
 
     public class J1708Message : CanMessage
@@ -96,7 +90,7 @@ namespace VMSpc.Communication
                 messageType = Constants.J1708;
                 bool dataStored = Constants.ByteStringToByteArray(ref rawData, rawMessage, messageLength);
                 if (dataStored)
-                    data = SplitMessageByPID(rawData);
+                    data = SplitMessageByPID();
                 else
                     messageType = Constants.INVALID_CAN_MESSAGE;
             }
@@ -106,7 +100,10 @@ namespace VMSpc.Communication
             }
         }
 
-        public Dictionary<byte, byte[]> SplitMessageByPID(List<byte> data)
+        /// <summary>
+        /// Splits a J1708 Message into a Dictionary of PIDs and their corresponding data segments (stored as a byte array)
+        /// </summary>
+        public Dictionary<byte, byte[]> SplitMessageByPID()
         {
             Dictionary<byte, byte[]> MessageList = new Dictionary<byte, byte[]>();
             int pos = 1;
@@ -114,98 +111,61 @@ namespace VMSpc.Communication
             bool done = false;
             while (!done)
             {
-                try
+                int indexToCopyTo = 0;
+                if (pos >= rawData.Count)
+                    break;
+                byte pid = rawData[pos];
+                bool continueFlag = false;
+                if (PIDs.PIDList.ContainsKey(pid))
+                    indexToCopyTo = PIDs.PIDList[pid].NumDataBytes;
+                else
                 {
-                    int indexToCopyTo = 0;
-                    byte pid = data[pos];
-                    bool continueFlag = false;
-                    switch (pid)
+                    if (pid < 0x80 && bytesUnprocessed > 1)
                     {
-                        case PIDs.retarderSwitch:
-                        case PIDs.retarderOilPressure:
-                        case PIDs.retarderOilTemp:
-                        case PIDs.retarderStatus:
-                        case PIDs.percentAcceleratorPosition:
-                        case PIDs.voltage:
-                        case PIDs.cruiseSpeed:
-                        case PIDs.coolantTemp:
-                        case PIDs.engineLoad:
-                        case PIDs.intakeTemp:
-                        case PIDs.oilPSI:
-                        case PIDs.retarderPercent:
-                        case PIDs.roadSpeed:
-                        case PIDs.turboBoost:
-                        case PIDs.cruiseSetStatus:
-                            indexToCopyTo = 2;
-                            break;
-
-                        case PIDs.oilTemp:
-                        case PIDs.engineSpeed:
-                        case PIDs.transmissionTemp:
-                        case PIDs.transmissionSpeed:
-                        case PIDs.fuelRate:
-                        case PIDs.fuelTemp:
-                        case PIDs.instantMPG:
-                        case PIDs.airInletTemp:
-                        case PIDs.rangeSelected:
-                        case PIDs.rangeAttained:
-                            indexToCopyTo = 3;
-                            break;
-
-                        case PIDs.totalMiles:
-                        case PIDs.totalMilesCummins:
-                        case PIDs.engineHours:
-                        case PIDs.totalFuel:
-                            indexToCopyTo = 6;
-                            break;
-
-                        case PIDs.multipartMessage:
-                            done = true;
-                            break;
-                        default:
-                            if (pid < 0x80 && bytesUnprocessed > 1)
-                            {
-                                indexToCopyTo = 2;
-                                continueFlag = true;
-                            }
-                            else if (pid < 0xC0 && bytesUnprocessed > 2)
-                            {
-                                indexToCopyTo = 3;
-                                continueFlag = true;
-                            }
-                            else
-                                done = true;
-                            break;
+                        indexToCopyTo = 2;
+                        continueFlag = true;
                     }
-                    byte[] pidData = new byte[6];
-                    int j = 0;
-                    int i = pos + 1;
-                    if (!continueFlag)
+                    else if (pid < 0xC0 && bytesUnprocessed > 2)
                     {
-                        while (i < (pos + indexToCopyTo))
-                        {
-                            pidData[j] = data[i];
-                            i++;
-                            j++;
-                        }
+                        indexToCopyTo = 3;
+                        continueFlag = true;
                     }
-                    pos += indexToCopyTo;
-                    bytesUnprocessed -= indexToCopyTo;
-
-                    if (j > 0)
-                        MessageList.Add(pid, pidData);
-                    if (bytesUnprocessed < 2 || bytesUnprocessed > 22)
+                    else
                         done = true;
                 }
-                catch (Exception ex)
-                {
-                    messageType = Constants.INVALID_CAN_MESSAGE;
-                    return null;
-                }
+                SavePid(MessageList, pid, continueFlag, pos, indexToCopyTo);
+                pos += indexToCopyTo;
+                bytesUnprocessed -= indexToCopyTo;
+                if (bytesUnprocessed < 2 || bytesUnprocessed > 22)
+                    done = true;
             }
             return MessageList;
         }
 
+        /// <summary>
+        /// Saves a key/value pair (pid/data[]) to the MessageList Dictionary. Ignores an element if the data is empty
+        /// </summary>
+        private void SavePid(Dictionary<byte, byte[]> MessageList, byte pid, bool continueFlag, int pos, int indexToCopyTo)
+        {
+            byte[] pidData = new byte[6];
+            int j = 0;
+            int i = pos + 1;
+            if (!continueFlag)
+            {
+                while (i < (pos + indexToCopyTo))
+                {
+                    pidData[j] = rawData[i];
+                    i++;
+                    j++;
+                }
+            }
+            if (j > 0)
+                MessageList.Add(pid, pidData);
+        }
+
+        /// <summary>
+        /// Returns a stringified CanMessage in the format "`Raw Message`:\n\t`PID[i-n]`:\t`data`". Each Raw Message will display `n` PID/data pairs"
+        /// </summary>
         public override string ToString()
         {
             string message = String.Copy(rawMessage);
@@ -218,20 +178,6 @@ namespace VMSpc.Communication
                 message += "\n\t" + pidItem.Key.PidToString() + ":\t" + byteString;
             }
             return message;
-        }
-
-        public override void PrintMessage()
-        {
-            string message = String.Copy(rawMessage);
-            message += ":";
-            VMSConsole.PrintLine(message);
-            foreach (var pidItem in data)
-            {
-                string byteString = "";
-                foreach (var item in pidItem.Value)
-                    byteString += item;
-                VMSConsole.PrintLine("\t" + pidItem.Key.PidToString() + ":\t" + byteString);
-            }
         }
     }
 }
