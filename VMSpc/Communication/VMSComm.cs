@@ -10,6 +10,7 @@ using System.Timers;
 using System.IO;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
+using VMSpc.Managers;
 
 namespace VMSpc.Communication
 {
@@ -34,6 +35,9 @@ namespace VMSpc.Communication
 
         private MessageExtractor extractor;
 
+        private J1708Parser j1708Parser;
+        private J1939Parser j1939Parser;
+
         private string COMMPort;
         private string LogFile;
 
@@ -54,6 +58,9 @@ namespace VMSpc.Communication
 
             COMMPort = "COM10"; //CHANGEME - port should be inferred at runtime. User should also be able to override
             LogFile = "J1939log.vms";   //CHANGEME - should rely on user input
+
+            //j1939Parser = new J1939Parser();
+            j1708Parser = new J1708Parser();
 
             SetDataReader();
         }
@@ -87,9 +94,9 @@ namespace VMSpc.Communication
                 badMessageCount++;
                 return;
             }
-            canMessage = (J1708Message)canMessage;
             if (messageCount < 50)
-                VMSConsole.PrintLine(canMessage.ToString());
+            //    VMSConsole.PrintLine(canMessage.ToString());
+                j1708Parser.Parse((J1708Message)canMessage);
             messageCount++;
         }
 

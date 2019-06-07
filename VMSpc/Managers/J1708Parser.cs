@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VMSpc.Communication;
+using VMSpc.DevHelpers;
 
 namespace VMSpc.Managers
 {
@@ -36,15 +37,17 @@ namespace VMSpc.Managers
             rawValue = data[0];
             standardValue = data[0] * conversionStruct.standardMultiplier + conversionStruct.standardOffset;
             metricValue = standardValue * conversionStruct.metricMultiplier + conversionStruct.metricOffset;
+            VMSConsole.PrintLine(PID.PidToString() + ": " + standardValue);
         }
 
         private void DoubleConverter(byte PID, byte[] data, J1708ParsingHelper conversionStruct)
         {
             double rawValue, metricValue, standardValue;
-            rawValue = data[1] + data[2];
-            standardValue = data[1] * conversionStruct.standardMultiplier + conversionStruct.standardOffset;
-            standardValue += (standardValue * conversionStruct.secondByteMultiplier);
+            rawValue = data[0] + data[1];
+            standardValue = data[0] * conversionStruct.standardMultiplier + conversionStruct.standardOffset;
+            standardValue += (data[1] * conversionStruct.secondByteMultiplier);
             metricValue = standardValue * conversionStruct.metricMultiplier + conversionStruct.metricOffset;
+            VMSConsole.PrintLine(PID.PidToString() + ": " + standardValue);
         }
 
         #endregion
@@ -160,8 +163,8 @@ namespace VMSpc.Managers
             J1708ParseMethodMap.Add(PIDs.engineSpeed,                   new J1708ParsingHelper(DoubleConverter, 0, 0,      0.25,        1,     64));
             J1708ParseMethodMap.Add(PIDs.transmissionTemp,              new J1708ParsingHelper(DoubleConverter, 0, -17.77, 0.25,        0.555, 64));
             J1708ParseMethodMap.Add(PIDs.transmissionSpeed,             new J1708ParsingHelper(DoubleConverter, 0, 0,      0.25,        1,     64));
-            J1708ParseMethodMap.Add(PIDs.fuelRate,                      new J1708ParsingHelper(DoubleConverter, 0, 0,      0,           0,     4));
-            J1708ParseMethodMap.Add(PIDs.fuelTemp,                      new J1708ParsingHelper(DoubleConverter, 0, 0,      0,           0,     64));
+            J1708ParseMethodMap.Add(PIDs.fuelRate,                      new J1708ParsingHelper(DoubleConverter, 0, 0,      1,           1,     4));
+            J1708ParseMethodMap.Add(PIDs.fuelTemp,                      new J1708ParsingHelper(DoubleConverter, 0, 0,      1,           1,     64));
             J1708ParseMethodMap.Add(PIDs.instantMPG,                    new J1708ParsingHelper(DoubleConverter, 0, 0,      0.00390625,  0.425, 1));
             J1708ParseMethodMap.Add(PIDs.airInletTemp,                  new J1708ParsingHelper(DoubleConverter, 0, -17.77, 0.25,        0.555, 64));
 

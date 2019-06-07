@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using VMSpc.DevHelpers;
 
 //These are global constants. For global variables, see Globals.cs
 
@@ -141,17 +142,41 @@ namespace VMSpc
         }
 
         /// <summary>
+        /// Converts 2 characters from a string representation of a hexadecimal byte and converts them to a byte
+        /// </summary>
+        public static byte BinConvert(char c1, char c2)
+        {
+            byte r = 0;
+            if (c1 <= '9')
+                r += (byte)(0x10 * (c1 - '0'));
+            else
+                r += (byte)(0x10 * (10 + c1 - 'A'));
+            if (c2 <= '9')
+                r += (byte)((c2 - '0'));
+            else
+                r += (byte)((10 + c2 - 'A'));
+            return r;
+        }
+
+        /// <summary>
         /// Converts a string representation of bytes into an actual byte array (or List). E.g.: "FAFB" becomes [0xFA, 0xFB]
         /// </summary>
         /// <returns>False if the length is not divisible by 2. True otherwise</returns>
         public static bool ByteStringToByteArray(ref List<byte> byteArr, string byteString, int length)
         {
-            int arrLength = length / 2;
-            if (length % 2 != 0)
+            try
+            {
+                if (length % 2 != 0)
+                    return false;
+                for (int i = 0; i < (length - 2); i += 2)
+                    byteArr.Add(BinConvert(byteString[i], byteString[i+1]));
+                return true;
+            }
+            catch(Exception ex)
+            {
+                VMSConsole.PrintLine(ex.Message);
                 return false;
-            for (int i = 0; i < arrLength; i++)
-                byteArr.Add(Convert.ToByte(byteString.Substring((i * 2), 2)));
-            return true;
+            }
         }
 
         //-----------------------------------------------------------------------------------------
