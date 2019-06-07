@@ -249,7 +249,50 @@ namespace VMSpc
         public const int WIFI = 2;
         public const int LOGPLAYER = 3;
 
-        
+        public struct PIDStruct
+        {
+            byte PID;
+            string FriendlyName;
+            int NumDataBytes;
+            public PIDStruct(byte pid, int numDataBytes, string friendlyName)
+            {
+                PID = pid;
+                NumDataBytes = numDataBytes;
+                FriendlyName = friendlyName;
+            }
+        }
+        //                                                              PID  NumDataBytes       FriendlyName   
+        public static PIDStruct retarderSwitch          = new PIDStruct(47,     2,          "Retarder Switch");
+        public static PIDStruct retarderOilPressure     = new PIDStruct(119,    2,          "Retarder Oil Pressure");
+        public static PIDStruct retarderOilTemp         = new PIDStruct(120,    2,          "Retarder Oil Temperature");
+        public static PIDStruct retarderStatus          = new PIDStruct(121,    2,          "Retarder Status");
+        public static PIDStruct acceleratorPosition     = new PIDStruct(91,     2,          "Accelerator Position");
+        public static PIDStruct voltage                 = new PIDStruct(168,    3,          "Voltage");
+        public static PIDStruct cruiseSpeed             = new PIDStruct(86,     2,          "Cruise Speed");
+        public static PIDStruct coolantTemp             = new PIDStruct(110,    2,          "Coolant Temperature");
+        public static PIDStruct engineLoad              = new PIDStruct(92,     2,          "Engine Load");
+        public static PIDStruct fuelRate                = new PIDStruct(183,    3,          "Fuel Rate");
+        public static PIDStruct fuelTemp                = new PIDStruct(174,    3,          "Fuel Temperature");
+        public static PIDStruct instantMPG              = new PIDStruct(184,    3,          "Instantaneous MPG");
+        public static PIDStruct airInletTemp            = new PIDStruct(172,    3,          "Air Inlet Temperature");
+        public static PIDStruct intakeTemp              = new PIDStruct(105,    2,          "Intake Temperature");
+        public static PIDStruct oilPSI                  = new PIDStruct(100,    2,          "Oil PSI");
+        public static PIDStruct retarderPercent         = new PIDStruct(122,    2,          "Retarder Percent");
+        public static PIDStruct oilTemp                 = new PIDStruct(175,    3,          "Oil Temperature");
+        public static PIDStruct roadSpeed               = new PIDStruct(84,     2,          "Road Speed");
+        public static PIDStruct cruiseSetStatus         = new PIDStruct(85,     2,          "Cruise Set Status");
+        public static PIDStruct engineSpeed             = new PIDStruct(190,    3,          "Engine Speed");
+        public static PIDStruct transmissionTemp        = new PIDStruct(177,    3,          "Transmission Temperature");
+        public static PIDStruct transmissionSpeed       = new PIDStruct(191,    3,          "Transmission Speed");
+        public static PIDStruct turboBoost              = new PIDStruct(102,    2,          "Turbo Boost");
+        public static PIDStruct rangeSelected           = new PIDStruct(162,    3,          "Range Selected");
+        public static PIDStruct rangeAttained           = new PIDStruct(163,    3,          "Range Attained");
+        public static PIDStruct totalMilesCummins       = new PIDStruct(244,    6,          "Total Miles");
+        public static PIDStruct totalMiles              = new PIDStruct(245,    6,          "Total Miles");
+        public static PIDStruct engineHours             = new PIDStruct(247,    6,          "Engine Hours");
+        public static PIDStruct totalFuel               = new PIDStruct(250,    6,          "Total Fuel");
+        public static PIDStruct diagnosticPid           = new PIDStruct(0xC2,   1000,       "Diagnostic");
+        public static PIDStruct multipartPid            = new PIDStruct(0xC0,   1000,       "Multipart");
     }
 
     //*************************************************************************************
