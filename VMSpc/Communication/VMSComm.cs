@@ -10,7 +10,7 @@ using System.Timers;
 using System.IO;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
-using VMSpc.Managers;
+using VMSpc.Parsers;
 
 namespace VMSpc.Communication
 {

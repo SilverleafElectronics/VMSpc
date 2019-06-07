@@ -272,6 +272,7 @@ namespace VMSpc
             public double MetricOffset;
             public double MetricMultiplier;
             public byte ParserType;
+            public bool Prioritize1708;
             public PIDStruct(byte pid, int numDataBytes, string friendlyName)
             {
                 PID = pid;
@@ -282,6 +283,7 @@ namespace VMSpc
                 MetricOffset = 0;
                 MetricMultiplier = 1;
                 ParserType = NON_STANDARD;
+                Prioritize1708 = false;
             }
         }
 
@@ -358,6 +360,5 @@ namespace VMSpc
 
     public static class PGN_Constants
     {
-
     }
 }

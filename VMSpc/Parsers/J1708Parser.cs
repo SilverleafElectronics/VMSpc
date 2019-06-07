@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using VMSpc.Communication;
 using VMSpc.DevHelpers;
 
-namespace VMSpc.Managers
+namespace VMSpc.Parsers
 {
     /// <summary>
     /// 
