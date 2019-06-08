@@ -12,9 +12,7 @@ using VMSpc.XmlFileManagers;
 
 namespace VMSpc.Panels
 {
-    /// <summary>
-    /// base class of VSimpleGauge, VScanGauge, and VRoundGauge
-    /// </summary>
+    /// <summary> Base class of VSimpleGauge, VScanGauge, and VRoundGauge </summary>
     class VBarGauge : VPanel
     {
         private Rectangle EmptyBar;

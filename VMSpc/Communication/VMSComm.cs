@@ -49,7 +49,7 @@ namespace VMSpc.Communication
             badMessageCount = 0;
             extractor = new MessageExtractor();
 
-            dataReaderType = Constants.USB;
+            dataReaderType = Constants.LOGPLAYER;
             dataReaderMap = new Dictionary<int, Action>();
             dataReaderMap.Add(Constants.USB, InitPortReader);
             dataReaderMap.Add(Constants.SERIAL, InitPortReader);
@@ -57,7 +57,7 @@ namespace VMSpc.Communication
             dataReaderMap.Add(Constants.LOGPLAYER, InitLogReader);
 
             COMMPort = "COM10"; //CHANGEME - port should be inferred at runtime. User should also be able to override
-            LogFile = "J1939log.vms";   //CHANGEME - should rely on user input
+            LogFile = "j1708log.vms";   //CHANGEME - should rely on user input
 
             //j1939Parser = new J1939Parser();
             j1708Parser = new J1708Parser();

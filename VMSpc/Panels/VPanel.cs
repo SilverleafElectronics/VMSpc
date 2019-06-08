@@ -67,7 +67,7 @@ namespace VMSpc.Panels
         }
 
         /// <summary>
-        /// compares limits against the dimensions of the provided VPanel. Changes the limits if the dimensions are closer to this panel's current offset
+        /// compares limits against the dimensions of the VPanel parameter. Changes the limits if the dimensions are closer to this panel's current offset
         /// </summary>
         /// <param name="panel"></param>
         public void SetDirectionalLimits(VPanel panel)
@@ -76,28 +76,39 @@ namespace VMSpc.Panels
             var panelTop = Canvas.GetTop(panel.border);
             var panelRight = Canvas.GetRight(panel.border);
             var panelBottom = Canvas.GetBottom(panel.border);
-            if (
-                (Canvas.GetTop(border) >= panelTop && Canvas.GetTop(border) <= panelBottom)
-                ||
-                (Canvas.GetBottom(border) <= panelBottom && Canvas.GetBottom(border) >= panelTop)
-            )
+            var thisPanelLeft = Canvas.GetLeft(border);
+            var thisPanelRight = Canvas.GetRight(border);
+            var thisPanelTop = Canvas.GetTop(border);
+            var thisPanelBottom = Canvas.GetBottom(border);
+            if (CollisionPossible(thisPanelTop, thisPanelBottom, panelTop, panelBottom))
             {
                 if ((panelRight > (leftLimit)) && (panelRight <= Canvas.GetLeft(border)))
                     leftLimit = panelRight;
                 if ((panelLeft < (rightLimit)) && (panelLeft >= Canvas.GetRight(border)))
                     rightLimit = panelLeft;
             }
-            if (
-                (Canvas.GetLeft(border) >= panelLeft && Canvas.GetLeft(border) <= panelRight)
-                ||
-                (Canvas.GetRight(border) <= panelRight && Canvas.GetRight(border) >= panelLeft)
-            )
+            if (CollisionPossible(thisPanelLeft, thisPanelRight, panelLeft, panelRight))
             {
                 if ((panelBottom > (topLimit)) && (panelBottom <= Canvas.GetTop(border)))
                     topLimit = panelBottom;
                 if ((panelTop < (bottomLimit)) && (panelTop >= Canvas.GetBottom(border)))
                     bottomLimit = panelTop;
             }
+        }
+
+        private bool CollisionPossible(double tPanelEdge1, double tPanelEdge2, double nPanelEdge1, double nPanelEdge2)
+        {
+            if (    //is this panel's top in between the parameter panel's vertical edges?
+                    (tPanelEdge1 >= nPanelEdge1 && tPanelEdge1 <= nPanelEdge2)
+                    ||  //is this panel's bottom in between the parameter panel's vertical edges?
+                    (tPanelEdge2 <= nPanelEdge2 && tPanelEdge2 >= nPanelEdge1)
+                    ||  //is the parameter panel's top in between this panel's vertical edges?
+                    (nPanelEdge1 >= tPanelEdge1 && nPanelEdge1 <= tPanelEdge2)
+                    ||  //is the parameter panel's bottom in between this panel's vertical edges?
+                    (nPanelEdge2 <= tPanelEdge2 && nPanelEdge2 >= tPanelEdge1)
+                )
+                return true;
+            return false;
         }
 
         /// <summary>
