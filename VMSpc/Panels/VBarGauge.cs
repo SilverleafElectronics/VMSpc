@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -26,7 +27,6 @@ namespace VMSpc.Panels
             FillBar = new Rectangle();
             FillBar.Stroke = new SolidColorBrush(Colors.Black);
             FillBar.Fill = new SolidColorBrush(Colors.Green);
-
             GeneratePanel();
         }
 
@@ -41,7 +41,7 @@ namespace VMSpc.Panels
 
         public override void UpdatePanel()
         {
-           // UpdateFillBar(getrandom.Next(0, (int)canvas.Width)); //CHANGEME - get value from corresponding parser
+           
         }
 
         private void DrawBar()
@@ -59,12 +59,12 @@ namespace VMSpc.Panels
             canvas.Children.Add(FillBar);
         }
 
-        private void UpdateFillBar(double value)
+        protected void UpdateFillBar(double value)
         {
             FillBar.Width = value;
         }
 
-        private void UpdateText(double value)
+        protected void UpdateText(double value)
         {
 
         }

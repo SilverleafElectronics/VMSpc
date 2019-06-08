@@ -255,14 +255,14 @@ namespace VMSpc
     //*************************************************************************************
     //PID definitions
     //*************************************************************************************
-    public static class PIDs
+    public sealed class PIDs
     {
 
         public const byte SINGLE_BYTE = 0;
         public const byte DOUBLE_BYTE = 1;
         public const byte NON_STANDARD = 0xFF;
 
-        public struct PIDStruct
+        public class PIDStruct
         {
             public byte PID;
             public string FriendlyName;
@@ -273,6 +273,10 @@ namespace VMSpc
             public double MetricMultiplier;
             public byte ParserType;
             public bool Prioritize1708;
+
+            public double standardValue;
+            public double rawValue;
+            public double metricValue;
             public PIDStruct(byte pid, int numDataBytes, string friendlyName)
             {
                 PID = pid;
@@ -284,6 +288,23 @@ namespace VMSpc
                 MetricMultiplier = 1;
                 ParserType = NON_STANDARD;
                 Prioritize1708 = false;
+                standardValue = rawValue = metricValue = 0.0;
+            }
+            public void SetStandardValue(double val)
+            {
+                standardValue = val;
+            }
+            public void SetRawValue(double val)
+            {
+                rawValue = val;
+            }
+            public void SetMetricValue(double val)
+            {
+                metricValue = val;
+            }
+            public double GetStandardValue()
+            {
+                return standardValue;
             }
         }
 
@@ -319,40 +340,46 @@ namespace VMSpc
         public const byte diagnosticsPID = 0xC2;
         public const byte multipartMessage = 0xC0;
 
-        public static Dictionary<byte, PIDStruct> PIDList = new Dictionary<byte, PIDStruct>();
+        public Dictionary<byte, PIDStruct> PIDList = new Dictionary<byte, PIDStruct>();
 
-        static PIDs()
+        static PIDs() { }
+        public static PIDs PIDManager { get; set; } = new PIDs();
+        public PIDs()
+        {
+        }
+
+        public void InitializePIDs()
         {
             //                             PID  NumDataBytes       FriendlyName   
-            PIDList.Add(47  , new PIDStruct(47, 2, "Retarder Switch"));
-            PIDList.Add(119 , new PIDStruct(119, 2, "Retarder Oil Pressure"));
-            PIDList.Add(120 , new PIDStruct(120, 2, "Retarder Oil Temperature"));
-            PIDList.Add(121 , new PIDStruct(121, 2, "Retarder Status"));
-            PIDList.Add(91  , new PIDStruct(91, 2, "Accelerator Position"));
-            PIDList.Add(168 , new PIDStruct(168, 3, "Voltage"));
-            PIDList.Add(86  , new PIDStruct(86, 2, "Cruise Speed"));
-            PIDList.Add(110 , new PIDStruct(110, 2, "Coolant Temperature"));
-            PIDList.Add(92  , new PIDStruct(92, 2, "Engine Load"));
-            PIDList.Add(183 , new PIDStruct(183, 3, "Fuel Rate"));
-            PIDList.Add(174 , new PIDStruct(174, 3, "Fuel Temperature"));
-            PIDList.Add(184 , new PIDStruct(184, 3, "Instantaneous MPG"));
-            PIDList.Add(172 , new PIDStruct(172, 3, "Air Inlet Temperature"));
-            PIDList.Add(105 , new PIDStruct(105, 2, "Intake Temperature"));
-            PIDList.Add(100 , new PIDStruct(100, 2, "Oil PSI"));
-            PIDList.Add(122 , new PIDStruct(122, 2, "Retarder Percent"));
-            PIDList.Add(175 , new PIDStruct(175, 3, "Oil Temperature"));
-            PIDList.Add(84  , new PIDStruct(84, 2, "Road Speed"));
-            PIDList.Add(85  , new PIDStruct(85, 2, "Cruise Set Status"));
-            PIDList.Add(190 , new PIDStruct(190, 3, "Engine Speed"));
-            PIDList.Add(177 , new PIDStruct(177, 3, "Transmission Temperature"));
-            PIDList.Add(191 , new PIDStruct(191, 3, "Transmission Speed"));
-            PIDList.Add(102 , new PIDStruct(102, 2, "Turbo Boost"));
-            PIDList.Add(162 , new PIDStruct(162, 3, "Range Selected"));
-            PIDList.Add(163 , new PIDStruct(163, 3, "Range Attained"));
-            PIDList.Add(244 , new PIDStruct(244, 6, "Total Miles"));
-            PIDList.Add(245 , new PIDStruct(245, 6, "Total Miles"));
-            PIDList.Add(247 , new PIDStruct(247, 6, "Engine Hours"));
-            PIDList.Add(250 , new PIDStruct(250, 6, "Total Fuel"));
+            PIDList.Add(47, new PIDStruct(47, 2, "Retarder Switch"));
+            PIDList.Add(119, new PIDStruct(119, 2, "Retarder Oil Pressure"));
+            PIDList.Add(120, new PIDStruct(120, 2, "Retarder Oil Temperature"));
+            PIDList.Add(121, new PIDStruct(121, 2, "Retarder Status"));
+            PIDList.Add(91, new PIDStruct(91, 2, "Accelerator Position"));
+            PIDList.Add(168, new PIDStruct(168, 3, "Voltage"));
+            PIDList.Add(86, new PIDStruct(86, 2, "Cruise Speed"));
+            PIDList.Add(110, new PIDStruct(110, 2, "Coolant Temperature"));
+            PIDList.Add(92, new PIDStruct(92, 2, "Engine Load"));
+            PIDList.Add(183, new PIDStruct(183, 3, "Fuel Rate"));
+            PIDList.Add(174, new PIDStruct(174, 3, "Fuel Temperature"));
+            PIDList.Add(184, new PIDStruct(184, 3, "Instantaneous MPG"));
+            PIDList.Add(172, new PIDStruct(172, 3, "Air Inlet Temperature"));
+            PIDList.Add(105, new PIDStruct(105, 2, "Intake Temperature"));
+            PIDList.Add(100, new PIDStruct(100, 2, "Oil PSI"));
+            PIDList.Add(122, new PIDStruct(122, 2, "Retarder Percent"));
+            PIDList.Add(175, new PIDStruct(175, 3, "Oil Temperature"));
+            PIDList.Add(84, new PIDStruct(84, 2, "Road Speed"));
+            PIDList.Add(85, new PIDStruct(85, 2, "Cruise Set Status"));
+            PIDList.Add(190, new PIDStruct(190, 3, "Engine Speed"));
+            PIDList.Add(177, new PIDStruct(177, 3, "Transmission Temperature"));
+            PIDList.Add(191, new PIDStruct(191, 3, "Transmission Speed"));
+            PIDList.Add(102, new PIDStruct(102, 2, "Turbo Boost"));
+            PIDList.Add(162, new PIDStruct(162, 3, "Range Selected"));
+            PIDList.Add(163, new PIDStruct(163, 3, "Range Attained"));
+            PIDList.Add(244, new PIDStruct(244, 6, "Total Miles"));
+            PIDList.Add(245, new PIDStruct(245, 6, "Total Miles"));
+            PIDList.Add(247, new PIDStruct(247, 6, "Engine Hours"));
+            PIDList.Add(250, new PIDStruct(250, 6, "Total Fuel"));
             PIDList.Add(0xC2, new PIDStruct(0xC2, 1000, "Diagnostic"));
             PIDList.Add(0xC0, new PIDStruct(0xC0, 1000, "Multipart"));
         }

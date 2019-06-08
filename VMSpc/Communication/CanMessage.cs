@@ -7,6 +7,7 @@ using System.IO.Ports;
 using VMSpc.DevHelpers;
 using System.Windows;
 using System.Timers;
+using static VMSpc.PIDs;
 
 namespace VMSpc.Communication
 {
@@ -116,8 +117,8 @@ namespace VMSpc.Communication
                     break;
                 byte pid = rawData[pos];
                 bool continueFlag = false;
-                if (PIDs.PIDList.ContainsKey(pid))
-                    indexToCopyTo = PIDs.PIDList[pid].NumDataBytes;
+                if (PIDManager.PIDList.ContainsKey(pid))
+                    indexToCopyTo = PIDManager.PIDList[pid].NumDataBytes;
                 else
                 {
                     if (pid < 0x80 && bytesUnprocessed > 1)

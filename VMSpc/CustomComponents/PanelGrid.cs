@@ -64,7 +64,7 @@ namespace VMSpc.CustomComponents
                 switch (panelSettings.ID)
                 {
                     case Constants.PanelIDs.SIMPLE_GAUGE_ID:
-                        panel = new VBarGauge(mainWindow, panelSettings); //CHANGEME - to new VSimpleGauge
+                        panel = new VSimpleGauge(mainWindow, (SimpleGaugeSettings)panelSettings); //CHANGEME - to new VSimpleGauge
                         break;
                     case Constants.PanelIDs.SCAN_GAUGE_ID:
                         break;

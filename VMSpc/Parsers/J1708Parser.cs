@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VMSpc.Communication;
 using VMSpc.DevHelpers;
+using static VMSpc.PIDs;
 
 namespace VMSpc.Parsers
 {
@@ -33,11 +34,14 @@ namespace VMSpc.Parsers
 
         private void ByteConverter(byte PID, byte[] data, J1708ParsingHelper conversionStruct)
         {
-            double rawValue, metricValue, standardValue;
-            rawValue = data[0];
-            standardValue = data[0] * conversionStruct.standardMultiplier + conversionStruct.standardOffset;
-            metricValue = standardValue * conversionStruct.metricMultiplier + conversionStruct.metricOffset;
-            VMSConsole.PrintLine(PID.PidToString() + ": " + standardValue);
+            double rVal, mVal, stdVal;
+            rVal = data[0];
+            stdVal = data[0] * conversionStruct.standardMultiplier + conversionStruct.standardOffset;
+            mVal = stdVal * conversionStruct.metricMultiplier + conversionStruct.metricOffset;
+            //VMSConsole.PrintLine(PID.PidToString() + ": " + stdVal);
+            PIDManager.PIDList[PID].standardValue = stdVal;
+            PIDManager.PIDList[PID].rawValue = rVal;
+            PIDManager.PIDList[PID].metricValue = mVal;
         }
 
         private void DoubleConverter(byte PID, byte[] data, J1708ParsingHelper conversionStruct)
@@ -47,7 +51,7 @@ namespace VMSpc.Parsers
             standardValue = data[0] * conversionStruct.standardMultiplier + conversionStruct.standardOffset;
             standardValue += (data[1] * conversionStruct.secondByteMultiplier);
             metricValue = standardValue * conversionStruct.metricMultiplier + conversionStruct.metricOffset;
-            VMSConsole.PrintLine(PID.PidToString() + ": " + standardValue);
+            //VMSConsole.PrintLine(PID.PidToString() + ": " + standardValue);
         }
 
         #endregion

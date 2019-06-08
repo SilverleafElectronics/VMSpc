@@ -33,7 +33,7 @@ namespace VMSpc.Parsers
 
         public void SetValueSPN(uint pid, uint raw, float v_metric, float v_standard, byte src)
         {
-            PIDStruct temp = PIDList[(byte)pid];
+            PIDStruct temp = PIDManager.PIDList[(byte)pid];
             if (src == Constants.J1708)
                 temp.Prioritize1708 = true;
             if (temp.Prioritize1708 && (src != Constants.J1708))

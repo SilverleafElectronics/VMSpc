@@ -20,6 +20,7 @@ using VMSpc.DevHelpers;
 using VMSpc.CustomComponents;
 using System.Threading;
 using VMSpc.Communication;
+using static VMSpc.PIDs;
 
 namespace VMSpc
 {
@@ -35,6 +36,7 @@ namespace VMSpc
         public MainWindow()
         {
             InitializeComponent();
+            PIDManager.InitializePIDs();
             GeneratePanels();
             Application.Current.MainWindow = this;
             InitializeComm();

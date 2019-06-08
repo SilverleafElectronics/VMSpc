@@ -42,7 +42,7 @@ namespace VMSpc.Panels
         private bool isRightClipped;
         private bool isBottomClipped;
 
-        private Timer panelTimer;
+        private Timer updateTimer;
 
         public VPanel(MainWindow mainWindow, PanelSettings panelSettings)
         {
