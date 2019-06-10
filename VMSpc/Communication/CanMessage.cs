@@ -7,7 +7,8 @@ using System.IO.Ports;
 using VMSpc.DevHelpers;
 using System.Windows;
 using System.Timers;
-using static VMSpc.PIDs;
+using static VMSpc.Parsers.PIDWrapper;
+using static VMSpc.Constants;
 
 namespace VMSpc.Communication
 {
@@ -36,10 +37,7 @@ namespace VMSpc.Communication
         public byte address;
         public uint pgn;
 
-        public J1939Message(string message) : base(message)
-        {
-
-        }
+        public J1939Message(string message) : base(message){}
 
         /// <summary>
         /// Extracts the address, pgn, and array of data bytes from the message and stores the results in the J1939Message instance
@@ -49,17 +47,17 @@ namespace VMSpc.Communication
             try
             {
                 //J1939 Message comes in the format "R[SA:2 (index 1-2)][PGN:6 (index 3-8)][Data:16 (index 9-24)][cr][lf]"
-                messageType = Constants.J1939;
+                messageType = J1939;
                 address = Convert.ToByte(rawMessage.Substring(0, 2));
                 pgn = Convert.ToUInt32(rawMessage.Substring(2, 6));
                 string dataSection = rawMessage.Substring(8, 16);
-                bool dataStored = Constants.ByteStringToByteArray(ref rawData, dataSection, dataSection.Length);
+                bool dataStored = BYTE_STRING_TO_BYTE_ARRAY(ref rawData, dataSection, dataSection.Length);
                 if (!dataStored)
-                    messageType = Constants.INVALID_CAN_MESSAGE;
+                    messageType = INVALID_CAN_MESSAGE;
             }
             catch
             {
-                messageType = Constants.INVALID_CAN_MESSAGE;
+                messageType = INVALID_CAN_MESSAGE;
             }
         }
 
@@ -88,16 +86,16 @@ namespace VMSpc.Communication
             try
             {
                 //J1708 Message comes in the format "J[data:2n][checksum:2][cr][lf]"
-                messageType = Constants.J1708;
-                bool dataStored = Constants.ByteStringToByteArray(ref rawData, rawMessage, messageLength);
+                messageType = J1708;
+                bool dataStored = BYTE_STRING_TO_BYTE_ARRAY(ref rawData, rawMessage, messageLength);
                 if (dataStored)
                     data = SplitMessageByPID();
                 else
-                    messageType = Constants.INVALID_CAN_MESSAGE;
+                    messageType = INVALID_CAN_MESSAGE;
             }
             catch (Exception ex)
             {
-                messageType = Constants.INVALID_CAN_MESSAGE;
+                messageType = INVALID_CAN_MESSAGE;
             }
         }
 

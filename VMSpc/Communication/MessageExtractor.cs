@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static VMSpc.Constants;
 
 namespace VMSpc.Communication
 {
@@ -11,10 +12,7 @@ namespace VMSpc.Communication
     /// </summary>
     internal class MessageExtractor
     {
-        public MessageExtractor()
-        {
-
-        }
+        public MessageExtractor(){}
 
         /// <summary>
         /// Accepts a string representing a CAN message and returns a new J1939Message or J1708Message, with the fields extracted from the message
@@ -35,11 +33,11 @@ namespace VMSpc.Communication
             {
                 switch (message[0])
                 {
-                    case Constants.J1939_HEADER:
+                    case J1939_HEADER:
                         return new J1939Message(message);
-                    case Constants.J1939_STATUS_HEADER:
+                    case J1939_STATUS_HEADER:
                         return new J1939Message(message);
-                    case Constants.J1708_HEADER:
+                    case J1708_HEADER:
                         return new J1708Message(RemoveControlCharacters(message));
                     default:
                         return null;

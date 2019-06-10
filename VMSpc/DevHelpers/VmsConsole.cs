@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using static VMSpc.Constants;
 
 
 namespace VMSpc.DevHelpers
@@ -42,16 +43,16 @@ namespace VMSpc.DevHelpers
         {
             switch (side)
             {
-                case Constants.LEFT:
+                case LEFT:
                     PrintLine("Left");
                     break;
-                case Constants.UP:
+                case UP:
                     PrintLine("Up");
                     break;
-                case Constants.RIGHT:
+                case RIGHT:
                     PrintLine("Right");
                     break;
-                case Constants.DOWN:
+                case DOWN:
                     PrintLine("Down");
                     break;
                 default:

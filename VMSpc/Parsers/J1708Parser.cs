@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VMSpc.Communication;
 using VMSpc.DevHelpers;
-using static VMSpc.PIDs;
+using static VMSpc.Parsers.PIDWrapper;
 
 namespace VMSpc.Parsers
 {
@@ -38,7 +38,6 @@ namespace VMSpc.Parsers
             rVal = data[0];
             stdVal = data[0] * conversionStruct.standardMultiplier + conversionStruct.standardOffset;
             mVal = stdVal * conversionStruct.metricMultiplier + conversionStruct.metricOffset;
-            //VMSConsole.PrintLine(PID.PidToString() + ": " + stdVal);
             PIDManager.PIDList[PID].standardValue = stdVal;
             PIDManager.PIDList[PID].rawValue = rVal;
             PIDManager.PIDList[PID].metricValue = mVal;
@@ -51,7 +50,6 @@ namespace VMSpc.Parsers
             standardValue = data[0] * conversionStruct.standardMultiplier + conversionStruct.standardOffset;
             standardValue += (data[1] * conversionStruct.secondByteMultiplier);
             metricValue = standardValue * conversionStruct.metricMultiplier + conversionStruct.metricOffset;
-            //VMSConsole.PrintLine(PID.PidToString() + ": " + standardValue);
         }
 
         #endregion
@@ -62,29 +60,29 @@ namespace VMSpc.Parsers
         {
             switch (PID)
             {
-                case PIDs.rangeSelected:
+                case PIDWrapper.rangeSelected:
                     SetRangeSelected(data);
                     break;
-                case PIDs.rangeAttained:
+                case PIDWrapper.rangeAttained:
                     SetRangeAttained(data);
                     break;
-                case PIDs.cruiseSetStatus:
+                case PIDWrapper.cruiseSetStatus:
                     SetCruiseSetStatus(data);
                     break;
-                case PIDs.totalMilesCummins:
-                case PIDs.totalMiles:
+                case PIDWrapper.totalMilesCummins:
+                case PIDWrapper.totalMiles:
                     SetTotalMiles(data);
                     break;
-                case PIDs.engineHours:
+                case PIDWrapper.engineHours:
                     SetEngineHours(data);
                     break;
-                case PIDs.totalFuel:
+                case PIDWrapper.totalFuel:
                     SetTotalFuel(data);
                     break;
-                case PIDs.diagnosticsPID:
+                case PIDWrapper.diagnosticsPID:
                     Parse1708Diagnostics(data);
                     break;
-                case PIDs.multipartMessage:
+                case PIDWrapper.multipartMessage:
                     ParseMultipartMessage(data);
                     break;
                 default:
@@ -147,41 +145,41 @@ namespace VMSpc.Parsers
         {
             /*-------------------------   These fit standard conversion formats ---------------- */
             //Single Byte Converters
-            J1708ParseMethodMap.Add(PIDs.retarderSwitch,                new J1708ParsingHelper(ByteConverter,   0, 0,      1,     1    ));
-            J1708ParseMethodMap.Add(PIDs.retarderOilPressure,           new J1708ParsingHelper(ByteConverter,   0, 0,      0.6,   6.895));
-            J1708ParseMethodMap.Add(PIDs.retarderOilTemp,               new J1708ParsingHelper(ByteConverter,   0, -17.77, 2.0,   0.555));
-            J1708ParseMethodMap.Add(PIDs.retarderStatus,                new J1708ParsingHelper(ByteConverter,   0, 0,      1,     1    ));
-            J1708ParseMethodMap.Add(PIDs.percentAcceleratorPosition,    new J1708ParsingHelper(ByteConverter,   0, 0,      0.4,   1    ));
-            J1708ParseMethodMap.Add(PIDs.voltage,                       new J1708ParsingHelper(ByteConverter,   0, 0,      0.4,   1    ));
-            J1708ParseMethodMap.Add(PIDs.cruiseSpeed,                   new J1708ParsingHelper(ByteConverter,   0, 0,      0.5,   1.609));
-            J1708ParseMethodMap.Add(PIDs.coolantTemp,                   new J1708ParsingHelper(ByteConverter,   0, -17.7,  1,     0.555));
-            J1708ParseMethodMap.Add(PIDs.engineLoad,                    new J1708ParsingHelper(ByteConverter,   0, 0,      0.5,   1    ));
-            J1708ParseMethodMap.Add(PIDs.intakeTemp,                    new J1708ParsingHelper(ByteConverter,   0, -17.77, 1,     0.555));
-            J1708ParseMethodMap.Add(PIDs.oilPSI,                        new J1708ParsingHelper(ByteConverter,   0, 0,      0.5,   6.895));
-            J1708ParseMethodMap.Add(PIDs.retarderPercent,               new J1708ParsingHelper(ByteConverter,   0, 0,      0.5,   1    ));
-            J1708ParseMethodMap.Add(PIDs.roadSpeed,                     new J1708ParsingHelper(ByteConverter,   0, 0,      0.5,   1.609));
-            J1708ParseMethodMap.Add(PIDs.turboBoost,                    new J1708ParsingHelper(ByteConverter,   0, 0,      0.125, 6.895));
+            J1708ParseMethodMap.Add(retarderSwitch,                new J1708ParsingHelper(ByteConverter,   0, 0,      1,     1    ));
+            J1708ParseMethodMap.Add(retarderOilPressure,           new J1708ParsingHelper(ByteConverter,   0, 0,      0.6,   6.895));
+            J1708ParseMethodMap.Add(retarderOilTemp,               new J1708ParsingHelper(ByteConverter,   0, -17.77, 2.0,   0.555));
+            J1708ParseMethodMap.Add(retarderStatus,                new J1708ParsingHelper(ByteConverter,   0, 0,      1,     1    ));
+            J1708ParseMethodMap.Add(percentAcceleratorPosition,    new J1708ParsingHelper(ByteConverter,   0, 0,      0.4,   1    ));
+            J1708ParseMethodMap.Add(voltage,                       new J1708ParsingHelper(ByteConverter,   0, 0,      0.4,   1    ));
+            J1708ParseMethodMap.Add(cruiseSpeed,                   new J1708ParsingHelper(ByteConverter,   0, 0,      0.5,   1.609));
+            J1708ParseMethodMap.Add(coolantTemp,                   new J1708ParsingHelper(ByteConverter,   0, -17.7,  1,     0.555));
+            J1708ParseMethodMap.Add(engineLoad,                    new J1708ParsingHelper(ByteConverter,   0, 0,      0.5,   1    ));
+            J1708ParseMethodMap.Add(intakeTemp,                    new J1708ParsingHelper(ByteConverter,   0, -17.77, 1,     0.555));
+            J1708ParseMethodMap.Add(oilPSI,                        new J1708ParsingHelper(ByteConverter,   0, 0,      0.5,   6.895));
+            J1708ParseMethodMap.Add(retarderPercent,               new J1708ParsingHelper(ByteConverter,   0, 0,      0.5,   1    ));
+            J1708ParseMethodMap.Add(roadSpeed,                     new J1708ParsingHelper(ByteConverter,   0, 0,      0.5,   1.609));
+            J1708ParseMethodMap.Add(turboBoost,                    new J1708ParsingHelper(ByteConverter,   0, 0,      0.125, 6.895));
 
             //Double Byte Converters
-            J1708ParseMethodMap.Add(PIDs.oilTemp,                       new J1708ParsingHelper(DoubleConverter, 0, -17.77, 0.25,        0.555, 64));
-            J1708ParseMethodMap.Add(PIDs.engineSpeed,                   new J1708ParsingHelper(DoubleConverter, 0, 0,      0.25,        1,     64));
-            J1708ParseMethodMap.Add(PIDs.transmissionTemp,              new J1708ParsingHelper(DoubleConverter, 0, -17.77, 0.25,        0.555, 64));
-            J1708ParseMethodMap.Add(PIDs.transmissionSpeed,             new J1708ParsingHelper(DoubleConverter, 0, 0,      0.25,        1,     64));
-            J1708ParseMethodMap.Add(PIDs.fuelRate,                      new J1708ParsingHelper(DoubleConverter, 0, 0,      1,           1,     4));
-            J1708ParseMethodMap.Add(PIDs.fuelTemp,                      new J1708ParsingHelper(DoubleConverter, 0, 0,      1,           1,     64));
-            J1708ParseMethodMap.Add(PIDs.instantMPG,                    new J1708ParsingHelper(DoubleConverter, 0, 0,      0.00390625,  0.425, 1));
-            J1708ParseMethodMap.Add(PIDs.airInletTemp,                  new J1708ParsingHelper(DoubleConverter, 0, -17.77, 0.25,        0.555, 64));
+            J1708ParseMethodMap.Add(oilTemp,                       new J1708ParsingHelper(DoubleConverter, 0, -17.77, 0.25,        0.555, 64));
+            J1708ParseMethodMap.Add(engineSpeed,                   new J1708ParsingHelper(DoubleConverter, 0, 0,      0.25,        1,     64));
+            J1708ParseMethodMap.Add(transmissionTemp,              new J1708ParsingHelper(DoubleConverter, 0, -17.77, 0.25,        0.555, 64));
+            J1708ParseMethodMap.Add(transmissionSpeed,             new J1708ParsingHelper(DoubleConverter, 0, 0,      0.25,        1,     64));
+            J1708ParseMethodMap.Add(fuelRate,                      new J1708ParsingHelper(DoubleConverter, 0, 0,      1,           1,     4));
+            J1708ParseMethodMap.Add(fuelTemp,                      new J1708ParsingHelper(DoubleConverter, 0, 0,      1,           1,     64));
+            J1708ParseMethodMap.Add(instantMPG,                    new J1708ParsingHelper(DoubleConverter, 0, 0,      0.00390625,  0.425, 1));
+            J1708ParseMethodMap.Add(airInletTemp,                  new J1708ParsingHelper(DoubleConverter, 0, -17.77, 0.25,        0.555, 64));
 
             /*-------------------------   These require custom conversions ---------------- */
-            J1708ParseMethodMap.Add(PIDs.rangeSelected,                 new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
-            J1708ParseMethodMap.Add(PIDs.rangeAttained,                 new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
-            J1708ParseMethodMap.Add(PIDs.cruiseSetStatus,               new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
-            J1708ParseMethodMap.Add(PIDs.totalMilesCummins,             new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
-            J1708ParseMethodMap.Add(PIDs.totalMiles,                    new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
-            J1708ParseMethodMap.Add(PIDs.engineHours,                   new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
-            J1708ParseMethodMap.Add(PIDs.totalFuel,                     new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
-            J1708ParseMethodMap.Add(PIDs.diagnosticsPID,                new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
-            J1708ParseMethodMap.Add(PIDs.multipartMessage,              new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
+            J1708ParseMethodMap.Add(rangeSelected,                 new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
+            J1708ParseMethodMap.Add(rangeAttained,                 new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
+            J1708ParseMethodMap.Add(cruiseSetStatus,               new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
+            J1708ParseMethodMap.Add(totalMilesCummins,             new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
+            J1708ParseMethodMap.Add(totalMiles,                    new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
+            J1708ParseMethodMap.Add(engineHours,                   new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
+            J1708ParseMethodMap.Add(totalFuel,                     new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
+            J1708ParseMethodMap.Add(diagnosticsPID,                new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
+            J1708ParseMethodMap.Add(multipartMessage,              new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
         }
 
         #endregion //Map Definition Methods

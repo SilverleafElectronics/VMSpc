@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VMSpc.XmlFileManagers;
 using VMSpc.DevHelpers;
-using static VMSpc.PIDs;
+using static VMSpc.Parsers.PIDWrapper;
 
 namespace VMSpc.Panels
 {
@@ -29,7 +29,6 @@ namespace VMSpc.Panels
         public override void UpdatePanel()
         {
             double newValue = PIDManager.PIDList[(byte)pid].standardValue;
-            VMSConsole.PrintLine("New Value: " + newValue);
             UpdateFillBar(newValue);
         }
     }

@@ -20,7 +20,7 @@ using VMSpc.DevHelpers;
 using VMSpc.CustomComponents;
 using System.Threading;
 using VMSpc.Communication;
-using static VMSpc.PIDs;
+using static VMSpc.Parsers.PIDWrapper;
 
 namespace VMSpc
 {

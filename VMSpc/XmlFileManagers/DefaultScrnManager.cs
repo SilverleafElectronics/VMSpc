@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Xml;
+using static VMSpc.Constants;
 
 
 namespace VMSpc.XmlFileManagers
@@ -55,33 +56,33 @@ namespace VMSpc.XmlFileManagers
         {
             switch (cid)
             {
-                case Constants.PanelIDs.SIMPLE_GAUGE_ID:
+                case PanelIDs.SIMPLE_GAUGE_ID:
                     return new SimpleGaugeSettings();
-                case Constants.PanelIDs.SCAN_GAUGE_ID:
+                case PanelIDs.SCAN_GAUGE_ID:
                     return new ScanGaugeSettings();
-                case Constants.PanelIDs.RADIAL_GAUGE_ID:
+                case PanelIDs.RADIAL_GAUGE_ID:
                     return new RoundGaugeSettings();
-                case Constants.PanelIDs.TANK_MINDER_ID:
+                case PanelIDs.TANK_MINDER_ID:
                     return new TankMinderSettings();
-                case Constants.PanelIDs.TEXT_PANEL_ID:
+                case PanelIDs.TEXT_PANEL_ID:
                     return new TextGaugeSettings();
-                case Constants.PanelIDs.TIRE_PANEL_ID:
+                case PanelIDs.TIRE_PANEL_ID:
                     break;
-                case Constants.PanelIDs.TRANSMISSION_ID:
+                case PanelIDs.TRANSMISSION_ID:
                     return new TransmissionGaugeSettings();
-                case Constants.PanelIDs.CLOCK_PANEL_ID:
+                case PanelIDs.CLOCK_PANEL_ID:
                     return new ClockSettings();
-                case Constants.PanelIDs.DIAG_ALARM_ID:
+                case PanelIDs.DIAG_ALARM_ID:
                     return new DiagnosticGaugeSettings();
-                case Constants.PanelIDs.HISTOGRAM_ID:
+                case PanelIDs.HISTOGRAM_ID:
                     break;
-                case Constants.PanelIDs.IMG_PANEL_ID:
+                case PanelIDs.IMG_PANEL_ID:
                     return new PictureSettings();
-                case Constants.PanelIDs.MESSAGE_PANEL_ID:
+                case PanelIDs.MESSAGE_PANEL_ID:
                     return new MessageBoxSettings();
-                case Constants.PanelIDs.MULTIBAR_ID:
+                case PanelIDs.MULTIBAR_ID:
                     break;
-                case Constants.PanelIDs.ODOMOTER_ID:
+                case PanelIDs.ODOMOTER_ID:
                     return new OdometerSettings();
                 default:
                     return new PanelSettings();

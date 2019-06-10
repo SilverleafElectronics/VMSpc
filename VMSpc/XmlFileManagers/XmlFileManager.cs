@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
+using static VMSpc.Constants;
 
 /**********************************************************************************
                        XmlFileManager Class
@@ -16,8 +17,8 @@ Description:
             more custom behavior, add it to one of the child classes.
 
 Usage:      Instantiate a new XmlFileManager object with the name
-            of the xml configuration file. A new Configuration 
-            object is to be instantiated for each config file
+            of the xml configuration file. A new Configuration inherited
+            class should be designed for each config file
 
 Methods:
             initialize()
@@ -64,9 +65,9 @@ namespace VMSpc.XmlFileManagers
         {
             XmlNodeList node = xmlDoc.GetElementsByTagName(tagname);
             if (node.Count > 1)
-                return Constants.STR_USAGEERR;
+                return STR_USAGEERR;
             if (node.Count == 0)
-                return Constants.STR_NODATA;
+                return STR_NODATA;
             else
             {
                 return node[0].InnerXml;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VMSpc.XmlFileManagers;
+using static VMSpc.Constants;
 
 //These are global variables. For global constants, see Constants.cs
 
@@ -74,12 +75,12 @@ namespace VMSpc
 
             public byte UpdateByte(ref byte dest, ref byte src)
             {
-                if (src <= Constants.RVC_BYTE(Constants.RVC_MAXVAL))
+                if (src <= RVC_BYTE(RVC_MAXVAL))
                 {
                     dest = src;
                     return 1;
                 }
-                if (src != Constants.RVC_BYTE(Constants.RVC_NODATA))
+                if (src != RVC_BYTE(RVC_NODATA))
                 {
                     dest = 0;
                     return 2;

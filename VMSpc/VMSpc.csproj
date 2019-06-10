@@ -75,7 +75,11 @@
     <Compile Include="Parsers\J1939Parser.cs" />
     <Compile Include="Panels\VBarGauge.cs" />
     <Compile Include="Panels\VSimpleGauge.cs" />
+    <Compile Include="Parsers\PGNMapper.cs" />
+    <Compile Include="Parsers\PIDWrapper.cs" />
     <Compile Include="Parsers\RVC_Parser.cs" />
+    <Compile Include="Parsers\TSPNDatum.cs" />
+    <Compile Include="Parsers\TSPNPresenter.cs" />
     <Compile Include="Resources\Configuration.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

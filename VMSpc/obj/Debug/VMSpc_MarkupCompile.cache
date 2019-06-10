@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Projects\SilverLeaf\vmspc5\VMSpc\VMSpc\obj\Debug\
+C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\
 VMSpc
 none
 false
 DEBUG;TRACE
-C:\Projects\SilverLeaf\vmspc5\VMSpc\VMSpc\App.xaml
+C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\App.xaml
 3-1502793279
 
-38-1065452824
+42-1699631467
 131569487696
 DlgWindows\AboutDlg.xaml;DlgWindows\CommDlg.xaml;MainWindow.xaml;
 
-False
+True
 

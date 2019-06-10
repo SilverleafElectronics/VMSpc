@@ -17,6 +17,7 @@ using VMSpc.DlgWindows;
 using VMSpc.Panels;
 using VMSpc.DevHelpers;
 using System.Timers;
+using static VMSpc.Constants;
 
 namespace VMSpc.CustomComponents
 {
@@ -63,34 +64,34 @@ namespace VMSpc.CustomComponents
                 VPanel panel = null;
                 switch (panelSettings.ID)
                 {
-                    case Constants.PanelIDs.SIMPLE_GAUGE_ID:
+                    case PanelIDs.SIMPLE_GAUGE_ID:
                         panel = new VSimpleGauge(mainWindow, (SimpleGaugeSettings)panelSettings); //CHANGEME - to new VSimpleGauge
                         break;
-                    case Constants.PanelIDs.SCAN_GAUGE_ID:
+                    case PanelIDs.SCAN_GAUGE_ID:
                         break;
-                    case Constants.PanelIDs.ODOMOTER_ID:
+                    case PanelIDs.ODOMOTER_ID:
                         break;
-                    case Constants.PanelIDs.TRANSMISSION_ID:
+                    case PanelIDs.TRANSMISSION_ID:
                         break;
-                    case Constants.PanelIDs.MULTIBAR_ID:
+                    case PanelIDs.MULTIBAR_ID:
                         break;
-                    case Constants.PanelIDs.HISTOGRAM_ID:
+                    case PanelIDs.HISTOGRAM_ID:
                         break;
-                    case Constants.PanelIDs.CLOCK_PANEL_ID:
+                    case PanelIDs.CLOCK_PANEL_ID:
                         break;
-                    case Constants.PanelIDs.IMG_PANEL_ID:
+                    case PanelIDs.IMG_PANEL_ID:
                         break;
-                    case Constants.PanelIDs.TEXT_PANEL_ID:
+                    case PanelIDs.TEXT_PANEL_ID:
                         break;
-                    case Constants.PanelIDs.TANK_MINDER_ID:
+                    case PanelIDs.TANK_MINDER_ID:
                         break;
-                    case Constants.PanelIDs.TIRE_PANEL_ID:
+                    case PanelIDs.TIRE_PANEL_ID:
                         break;
-                    case Constants.PanelIDs.MESSAGE_PANEL_ID:
+                    case PanelIDs.MESSAGE_PANEL_ID:
                         break;
-                    case Constants.PanelIDs.DIAG_ALARM_ID:
+                    case PanelIDs.DIAG_ALARM_ID:
                         break;
-                    case Constants.PanelIDs.RADIAL_GAUGE_ID:
+                    case PanelIDs.RADIAL_GAUGE_ID:
                         break;
                     default:
                         break;

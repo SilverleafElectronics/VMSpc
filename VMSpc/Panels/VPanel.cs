@@ -18,6 +18,7 @@ using VMSpc.Panels;
 using VMSpc.CustomComponents;
 using VMSpc.DevHelpers;
 using System.Timers;
+using static VMSpc.Constants;
 
 namespace VMSpc.Panels
 {
@@ -123,9 +124,9 @@ namespace VMSpc.Panels
                 return false;
             switch (direction)
             {
-                case Constants.HORIZONTAL:
+                case HORIZONTAL:
                     return (newVal > leftLimit && (newVal + border.Width) < rightLimit);
-                case Constants.VERTICAL:
+                case VERTICAL:
                     return (newVal > topLimit && (newVal + border.Height) < bottomLimit);
                 default:
                     return false;
@@ -135,7 +136,7 @@ namespace VMSpc.Panels
         private bool BreaksClip(int direction, double newVal)
         {
             bool allowed = true;
-            if (direction == Constants.VERTICAL)
+            if (direction == VERTICAL)
             {
                 if (isTopClipped)
                 {
@@ -162,7 +163,7 @@ namespace VMSpc.Panels
                     }
                 }
             }
-            if (direction == Constants.HORIZONTAL)
+            if (direction == HORIZONTAL)
             {
                 if (isLeftClipped)
                 {
@@ -187,7 +188,7 @@ namespace VMSpc.Panels
         public void SetVertical(double newTop, Point newCursorPoint)
         {
             double clipSide;
-            if (CanMove(Constants.VERTICAL, newTop))
+            if (CanMove(VERTICAL, newTop))
             {
                 clipSide = GetVerticalClipSide(newTop);
                 if (!Double.IsNaN(clipSide))
@@ -203,7 +204,7 @@ namespace VMSpc.Panels
         public void SetHorizontal(double newLeft, Point newCursorPoint)
         {
             double clipSide;
-            if (CanMove(Constants.HORIZONTAL, newLeft))
+            if (CanMove(HORIZONTAL, newLeft))
             {
                 clipSide = GetHorizontalClipSide(newLeft);
                 if (!Double.IsNaN(clipSide))
@@ -225,9 +226,9 @@ namespace VMSpc.Panels
         {
             double newBottom = newTop + border.Height;
             if (newTop <= (topLimit + 20))
-                return Constants.UP;
+                return UP;
             else if (newBottom >= (bottomLimit - 20))
-                return Constants.DOWN;
+                return DOWN;
             return Double.NaN;
         }
 
@@ -240,21 +241,21 @@ namespace VMSpc.Panels
         {
             double newRight = newLeft + border.Width;
             if (newLeft <= (leftLimit + 20))
-                return Constants.LEFT;
+                return LEFT;
             else if (newRight >= (rightLimit - 20))
-                return Constants.RIGHT;
+                return RIGHT;
             return Double.NaN;
         }
 
         private void ClipVertical(double side)
         {
-            if (side == Constants.UP)
+            if (side == UP)
             {
                 Canvas.SetTop(border, topLimit);
                 Canvas.SetBottom(border, topLimit + border.Height);
                 isTopClipped = true;
             }
-            else if (side == Constants.DOWN)
+            else if (side == DOWN)
             {
                 Canvas.SetTop(border, bottomLimit - border.Height);
                 Canvas.SetBottom(border, bottomLimit);
@@ -264,13 +265,13 @@ namespace VMSpc.Panels
 
         private void ClipHorizontal(double side)
         {
-            if (side == Constants.LEFT)
+            if (side == LEFT)
             {
                 Canvas.SetLeft(border, leftLimit);
                 Canvas.SetRight(border, leftLimit + border.Width);
                 isLeftClipped = true;
             }
-            else if (side == Constants.RIGHT)
+            else if (side == RIGHT)
             {
                 Canvas.SetLeft(border, rightLimit - border.Width);
                 Canvas.SetRight(border, rightLimit);

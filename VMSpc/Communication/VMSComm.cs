@@ -11,6 +11,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using VMSpc.Parsers;
+using static VMSpc.Constants;
 
 namespace VMSpc.Communication
 {
@@ -49,12 +50,14 @@ namespace VMSpc.Communication
             badMessageCount = 0;
             extractor = new MessageExtractor();
 
-            dataReaderType = Constants.LOGPLAYER;
-            dataReaderMap = new Dictionary<int, Action>();
-            dataReaderMap.Add(Constants.USB, InitPortReader);
-            dataReaderMap.Add(Constants.SERIAL, InitPortReader);
-            dataReaderMap.Add(Constants.WIFI, null);
-            dataReaderMap.Add(Constants.LOGPLAYER, InitLogReader);
+            dataReaderType = USB;
+            dataReaderMap = new Dictionary<int, Action>
+            {
+                { USB, InitPortReader },
+                { SERIAL, InitPortReader },
+                { WIFI, null },
+                { LOGPLAYER, InitLogReader }
+            };
 
             COMMPort = "COM10"; //CHANGEME - port should be inferred at runtime. User should also be able to override
             LogFile = "j1708log.vms";   //CHANGEME - should rely on user input
@@ -78,7 +81,7 @@ namespace VMSpc.Communication
                 InitializeDataReader();
                 //InitLogReader();
                 KeepJibAwake(null, null);
-                keepJibAwakeTimer = Constants.CreateTimer(KeepJibAwake, 10000);
+                keepJibAwakeTimer = CREATE_TIMER(KeepJibAwake, 10000);
             }
             catch { } // CHANGEME - put something useful here
         }
@@ -89,14 +92,14 @@ namespace VMSpc.Communication
         private void ProcessData(string message)
         {
             CanMessage canMessage = extractor.GetMessage(message);
-            if (canMessage == null || canMessage.messageType == Constants.INVALID_CAN_MESSAGE)
+            if (canMessage == null || canMessage.messageType == INVALID_CAN_MESSAGE)
             {
                 badMessageCount++;
                 return;
             }
-            if (canMessage.messageType == Constants.J1939)
+            if (canMessage.messageType == J1939)
                 j1939Parser.Parse(canMessage);
-            else if (canMessage.messageType == Constants.J1708)
+            else if (canMessage.messageType == J1708)
                 j1708Parser.Parse((J1708Message)canMessage);
             messageCount++;
         }
@@ -158,7 +161,7 @@ namespace VMSpc.Communication
             portReader = new SerialPort(COMMPort, 9600, Parity.None, 8, StopBits.One);   
             portReader.DataReceived += new SerialDataReceivedEventHandler(HandleCommPortData);
             portReader.Open(); // Begin communications 
-            portCheckTimer = Constants.CreateTimer(CheckPort, 5000);
+            portCheckTimer = CREATE_TIMER(CheckPort, 5000);
         }
 
         /// <summary>
@@ -188,7 +191,7 @@ namespace VMSpc.Communication
         private void InitLogReader()
         {
             logReader = new StreamReader(LogFile);
-            logReadTimer = Constants.CreateTimer(ReadLogEntry, 100);
+            logReadTimer = CREATE_TIMER(ReadLogEntry, 100);
 
         }
 
