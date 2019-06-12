@@ -50,7 +50,7 @@ namespace VMSpc.Parsers
         ///    10 = sets datum to 0, returns 2 for error (not allowed in RV-C standard)
         ///    11 = no change,       returns 0
         /// </summary>
-        protected unsafe byte UpdateFlag(out byte dest, byte src, byte pos)
+        protected byte UpdateFlag(ref byte dest, byte src, byte pos)
         {
             byte f = (byte)(((src) >> pos) & 0x03);
             if ((f & 0x02) == 0)
@@ -67,10 +67,9 @@ namespace VMSpc.Parsers
             return 0;
         }
 
-        protected unsafe byte UpdateBits(out byte dest, byte src, byte pos, byte numbits)
+        protected byte UpdateBits(ref byte dest, byte src, byte pos, byte numbits)
         {
-            byte temp = src;
-            byte f = *(&temp);
+            byte f = src;
             byte mask = (byte)((1 << numbits) - 1);
             f >>= pos;
             f &= mask;
@@ -88,7 +87,7 @@ namespace VMSpc.Parsers
             return 0;
         }
 
-        protected unsafe byte UpdateByte(ref byte dest, byte src)
+        protected byte UpdateByte(ref byte dest, byte src)
         {
             if (src <= RVC_BYTE(RVC_MAXVAL))
             {
@@ -103,11 +102,9 @@ namespace VMSpc.Parsers
             return 0;
         }
 
-        protected unsafe byte UpdateWord(out ushort dest, byte src)
+        protected byte UpdateWord(ref ushort dest, List<byte> data, byte pos)
         {
-            ushort s;
-            byte temp = src;
-            VMSmemcpy(&s, (byte *)temp, 2);
+            ushort s = (ushort)((data[pos] << 8) | (data[pos + 1]));
             if (s <= RVC_WORD(RVC_MAXVAL))
             {
                 dest = s;
@@ -118,15 +115,13 @@ namespace VMSpc.Parsers
                 dest = 0;
                 return 2;
             }
-            dest = 0xFFFF;
+            dest = s;
             return 0;
         }
 
-        protected unsafe byte UpdateUint(out uint dest, byte src)
+        protected byte UpdateUint(ref uint dest, List<byte> data, byte pos)
         {
-            uint s;
-            byte temp = src;
-            VMSmemcpy(&s, (byte *)src, 4);
+            uint s = (uint)((data[pos] << 24) | (data[pos + 1] << 16) | (data[pos + 2] << 8) | (data[pos + 3]));
             if (s <= RVC_LONG(RVC_MAXVAL))
             {
                 dest = s;
@@ -137,7 +132,7 @@ namespace VMSpc.Parsers
                 dest = 0;
                 return 2;
             }
-            dest = 0xFFFFFFFF;
+            dest = s;
             return 0;
         }
 
@@ -157,7 +152,8 @@ namespace VMSpc.Parsers
 
         public override void Parse(byte address, List<byte> data)
         {
-            if (UpdateByte(out byte b, data[byteIndex]) != 0)
+            byte b = 0;
+            if (UpdateByte(ref b, data[byteIndex]) != 0)
             {
                 b >>= byteIndex;
                 rawValue = (byte)(b & 0x03);
@@ -189,7 +185,8 @@ namespace VMSpc.Parsers
 
         public override void Parse(byte address, List<byte> data)
         {
-            if (UpdateBits(out byte b, data[byteIndex], bitIndex, length) != 0)
+            byte b = 0;
+            if (UpdateBits(ref b, data[byteIndex], bitIndex, length) != 0)
             {
                 rawValue = (uint)(b & bitmask[length]);
                 ConvertAndStore();
@@ -219,12 +216,12 @@ namespace VMSpc.Parsers
             metricOffset = metric_offset;
         }
 
-        unsafe public override void Parse(byte address, List<byte> data)
+        public override void Parse(byte address, List<byte> data)
         {
             byte b = 0;
             if (UpdateByte(ref b, data[byteIndex]) != 0)
             {
-                rawValue = (uint)b;
+                rawValue = b;
                 ConvertAndStore();
             }
         }
@@ -263,11 +260,13 @@ namespace VMSpc.Parsers
             recipNum = recip_numerator;
         }
 
-        unsafe public override void Parse(byte address, List<byte> data)
+        public override void Parse(byte address, List<byte> data)
         {
-            if (UpdateWord(rawValue, data, byteIndex))
+            ushort temp = 0;
+            if (UpdateWord(ref temp, data, byteIndex) != 1)
             {
-
+                rawValue = temp;
+                ConvertAndStore();
             }
         }
     }
@@ -277,10 +276,19 @@ namespace VMSpc.Parsers
     public class TSPNUint : TSPNByte
     {
         public TSPNUint(byte byte_index, double scale, double offset, double metric_scale, double metric_offset)
-             : base(byte_index, scale, offset, metric_scale, metric_offset)
-        {
+             : base(byte_index, scale, offset, metric_scale, metric_offset) { }
 
+        public override void Parse(byte address, List<byte> data)
+        {
+            uint temp = 0;
+            if (UpdateUint(ref temp, data, byteIndex) != 1)
+            {
+                rawValue = temp;
+                ConvertAndStore();
+            }
         }
     }
     #endregion //TSPNUint
+
+    #region TSPNOdometer
 }

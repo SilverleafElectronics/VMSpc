@@ -47,7 +47,7 @@ namespace VMSpc.Parsers
         public const byte torquePercent = 92;
         public const byte rpms = 190;
 
-        public Dictionary<byte, PID> PIDList = new Dictionary<byte, PID>();
+        public Dictionary<ushort, PID> PIDList = new Dictionary<ushort, PID>();
 
         static PIDWrapper() { }
         public static PIDWrapper PIDManager { get; set; } = new PIDWrapper();

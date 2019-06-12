@@ -24,9 +24,9 @@ namespace VMSpc.Parsers
                 datum.Parse(canMessage.address, canMessage.rawData);
         }
 
-        public void SetValueSPN(uint pid, uint raw, float v_metric, float v_standard, byte src)
+        public void SetValueSPN(ushort pid, uint raw, float v_metric, float v_standard, byte src)
         {
-            PID temp = PIDManager.PIDList[(byte)pid];
+            PID temp = PIDManager.PIDList[pid];
             if (src == J1708)
                 temp.Prioritize1708 = true;
             if (temp.Prioritize1708 && (src != J1708))

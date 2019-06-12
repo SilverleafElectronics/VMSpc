@@ -79,6 +79,7 @@
     <Compile Include="Parsers\PGNMapper.cs" />
     <Compile Include="Parsers\PIDWrapper.cs" />
     <Compile Include="Parsers\RVC_Parser.cs" />
+    <Compile Include="Parsers\SPNWrapper.cs" />
     <Compile Include="Parsers\TSPNDatum.cs" />
     <Compile Include="Parsers\TSPNPresenter.cs" />
     <Compile Include="Resources\Configuration.Designer.cs">

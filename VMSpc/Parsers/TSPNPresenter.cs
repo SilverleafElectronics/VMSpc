@@ -28,5 +28,5 @@ namespace VMSpc.Parsers
         }
     }
 
-    class 
+    
 }

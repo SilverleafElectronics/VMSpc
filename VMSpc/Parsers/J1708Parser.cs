@@ -41,6 +41,7 @@ namespace VMSpc.Parsers
             PIDManager.PIDList[PID].standardValue = stdVal;
             PIDManager.PIDList[PID].rawValue = rVal;
             PIDManager.PIDList[PID].metricValue = mVal;
+            //set value spn here
         }
 
         private void DoubleConverter(byte PID, byte[] data, J1708ParsingHelper conversionStruct)
@@ -50,6 +51,7 @@ namespace VMSpc.Parsers
             standardValue = data[0] * conversionStruct.standardMultiplier + conversionStruct.standardOffset;
             standardValue += (data[1] * conversionStruct.secondByteMultiplier);
             metricValue = standardValue * conversionStruct.metricMultiplier + conversionStruct.metricOffset;
+            //set value spn here
         }
 
         #endregion
