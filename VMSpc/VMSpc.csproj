@@ -72,6 +72,7 @@
       <DependentUpon>CommDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomComponents\VMSCanvas.cs" />
+    <Compile Include="Parsers\ChassisParameter.cs" />
     <Compile Include="Parsers\J1708Parser.cs" />
     <Compile Include="Parsers\J1939Parser.cs" />
     <Compile Include="Panels\VBarGauge.cs" />

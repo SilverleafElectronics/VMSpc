@@ -139,7 +139,6 @@ namespace VMSpc.Parsers
         public static TSPNWord spn_acceleration = new TSPNWord(0, 1.0, 0.0, 1.0, 0.0);
         public static TSPNWord spn_braking = new TSPNWord(0, 1.0, 0.0, 1.0, 0.0);
         public static TSPNWord spn_peakAcceleration = new TSPNWord(0, 1.0, 0.0, 1.0, 0.0);
-        public static TSPNWord spn_transMode = new TSPNWord(0, 1.0, 0.0, 1.0, 0.0);
 
         public static TSPNUint spn_hours = new TSPNUint(0, 0.05f, 0.0f, 0.05f, 0.0f);
         public static TSPNUint spn_idleFuel = new TSPNUint(0, 0.132086f, 0.0f, 0.5f, 0.0f);
@@ -147,6 +146,11 @@ namespace VMSpc.Parsers
         public static TSPNUint spn_fuel = new TSPNUint(4, 0.132086f, 0.0f, 0.5f, 0.0f);
         public static TSPNUint spn_odometer = new TSPNUint(0, 0.003106856f, 0.0f, 0.005f, 0);
         public static TSPNUint spn_odometerALT = new TSPNUint(0, 0.003106856f, 0.0f, 0.005f, 0);
+
+        //special parsing types
+        public static TSPNRange spn_range = new TSPNRange();
+        public static TSPNTransMode spn_transMode = new TSPNTransMode();
+
 
 
         static SPNWrapper() { }

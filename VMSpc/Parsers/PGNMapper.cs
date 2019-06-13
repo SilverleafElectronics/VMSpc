@@ -18,7 +18,7 @@ namespace VMSpc.Parsers
         {
             PGNMap = new Dictionary<uint, TSPNDatum[]>
             {
-                { 0x0F005, new TSPNDatum[] { spn_rangeSelected, spn_rangeAttained } },
+                { 0x0F005, new TSPNDatum[] { spn_range, spn_transMode } },
                 { 0x0F004, new TSPNDatum[] { spn_torquePercent, spn_rpms } },
                 { 0x0F003, new TSPNDatum[] { spn_accelPos, spn_loadPercent }  },
                 { 0x0F000, new TSPNDatum[] { spn_retarderPct } },

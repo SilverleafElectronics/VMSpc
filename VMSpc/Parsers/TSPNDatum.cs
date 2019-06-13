@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static VMSpc.Constants;
+using static VMSpc.Parsers.ChassisParameter;
 
 /// <summary>
 /// Update Notes:
@@ -138,6 +139,8 @@ namespace VMSpc.Parsers
 
         #endregion //Update Methods
     }
+
+    //Standard, flexible Datum types
 
     #region TSPNFlag
     public class TSPNFlag : TSPNDatum
@@ -290,5 +293,187 @@ namespace VMSpc.Parsers
     }
     #endregion //TSPNUint
 
+    //Special Datum types
+
+    #region TSPNRange
+
+    public class TSPNRange : TSPNDatum
+    {
+        public TSPNRange() : base() {}
+
+        public override void Parse(byte address, List<byte> data)
+        {
+            if (data[4] < 250)
+                ChassisParam.rangeSelected = "" + (char)data[4];
+            if (data[3] < 125)
+                ChassisParam.rangeAttained = "R";
+            else if (data[3] == 125)
+                ChassisParam.rangeAttained = "N";
+            else if (data[3] < 135)
+                ChassisParam.rangeAttained = (char)(data[3] - 125) + "0";
+            else if (data[3] < 161)
+                ChassisParam.rangeAttained = (char)(data[3] - 135) + "a";
+        }
+    }
+    #endregion TSPNRange
+
+    #region TSPNTransMode
+
+    public class TSPNTransMode : TSPNDatum
+    {
+        public TSPNTransMode() : base() { }
+
+        public override void Parse(byte address, List<byte> data)
+        {
+            byte temp = data[5];
+            if (temp == 16 || temp == 21 || temp == 32)
+            {
+                rawValue = 1;
+                ChassisParam.mode = 1;
+                ConvertAndStore();
+                seen = true;
+            }
+            else if (temp == 5 || temp == 26 || temp == 31)
+            {
+                rawValue = 2;
+                ConvertAndStore();
+                seen = true;
+            }
+        }
+    }
+
+    #endregion //TSPNTransMode
+
+    #region TSPNRetarder
+
+    public class TSPNRetarder : TSPNDatum
+    {
+        public TSPNRetarder() : base() { }
+
+        public override void Parse(byte address, List<byte> data)
+        {
+            byte b = 0;
+            if (UpdateByte(ref b, data[1]) != 0)
+            {
+                if (b < 125)
+                    rawValue = (uint)(250 - b);
+                else
+                    rawValue = b;
+                ConvertAndStore();
+            }
+        }
+    }
+
+    #endregion
+
+    #region TSPNCruise (Cruise status)
+
+    public class TSPNCruise : TSPNDatum
+    {
+        public byte cruiseStatus;
+        public byte cruiseAdjust;
+        public string cruiseStat;
+
+        public TSPNCruise() : base() { }
+
+        public override void Parse(byte address, List<byte> data)
+        {
+            byte b = 0;
+            ChassisParam.cruiseAdjust = 0;
+            if (UpdateFlag(ref b, data[3], 0) != 0)
+            {
+                cruiseStatus = (byte)((cruiseStatus & 0x01) | ((b != 0) ? 2 : 0));
+                if (b == 0)
+                    ChassisParam.cruiseStat = "Off";
+                else
+                    ChassisParam.cruiseStat = "On";
+            }
+            if (UpdateFlag(ref b, data[3], 2) != 0)
+            {
+                ChassisParam.cruiseStatus = (byte)((ChassisParam.cruiseStatus & 0x02) | ((b != 0) ? 1 : 0));
+                ChassisParam.cruiseStat = "Set";
+            }
+            for (byte i = 0; i < 8; i += 2)
+            {
+                if (UpdateFlag(ref b, data[4], i) != 0)
+                    ChassisParam.cruiseAdjust |= b;
+            }
+        }
+    }
+
+    #endregion
+
+    //TSPNOdometer, TSPNHourMeter, and TSPNFuelMeter inherit from this datum
+    #region TSPNInferred (inferred values that get stored in the ChassisParam)
+
+    public class TSPNInferred : TSPNDatum
+    {
+        public double lastVal;
+        protected double floatMultiplier;
+        protected uint maxVal;
+        private double structVal;
+        private uint rawStructVal;
+
+        public TSPNInferred() : base()
+        {
+            lastVal = 0.0;
+        }
+
+        public override void Parse(byte address, List<byte> data)
+        {
+            uint b = 0;
+            if (UpdateUint(ref b, data, 0) != 0)
+            {
+                rawStructVal = b;
+                structVal = rawStructVal * floatMultiplier;
+                if ((structVal > lastVal) && (structVal < maxVal))
+                {
+                    rawValue = b;
+                    ConvertAndStore();
+                    lastVal = structVal;
+                }
+            }
+        }
+
+        protected void ApplyParse(byte address, List<byte> data, ref uint rawStructVal, ref double structVal)
+        { 
+            Parse(address, data);
+            rawStructVal = this.rawStructVal;
+            structVal = this.structVal;
+        }
+    }
+
+    #endregion //TSPNInferred
+
     #region TSPNOdometer
+
+    public class TSPNOdometer : TSPNInferred
+    {
+        public TSPNOdometer() : base() { }
+
+    }
+
+    #endregion
+
+    #region TSPNHourMeter
+    
+    public class TSPNHourMeter : TSPNInferred
+    {
+        public TSPNHourMeter() : base()
+        {
+
+        }
+    }
+
+    #endregion
+
+    #region TSPNFuelMeter
+
+    public class TSPNFuelMeter : TSPNInferred
+    {
+
+    }
+
+    #endregion
+
 }
