@@ -24,10 +24,11 @@ namespace VMSpc.Communication
             rawData = new List<byte>();
             //messageLength and rawMessage account for dropping the J or R from the message
             messageLength = message.Length - 1;
-            rawMessage = message.Substring(1, messageLength - 2);
+            rawMessage = message;
+            ExtractMessage();
         }
 
-        public abstract void ExtractMessage(string message);
+        public abstract void ExtractMessage();
         public override abstract string ToString();
 
     }
@@ -42,21 +43,22 @@ namespace VMSpc.Communication
         /// <summary>
         /// Extracts the address, pgn, and array of data bytes from the message and stores the results in the J1939Message instance
         /// </summary>
-        public override void ExtractMessage(string message)
+        public override void ExtractMessage()
         {
             try
             {
                 //J1939 Message comes in the format "R[SA:2 (index 1-2)][PGN:6 (index 3-8)][Data:16 (index 9-24)][cr][lf]"
                 messageType = J1939;
                 address = Convert.ToByte(rawMessage.Substring(0, 2));
-                pgn = Convert.ToUInt32(rawMessage.Substring(2, 6));
+                pgn = Convert.ToUInt32(rawMessage.Substring(2, 6), 16);
                 string dataSection = rawMessage.Substring(8, 16);
                 bool dataStored = BYTE_STRING_TO_BYTE_ARRAY(ref rawData, dataSection, dataSection.Length);
                 if (!dataStored)
                     messageType = INVALID_CAN_MESSAGE;
             }
-            catch
+            catch (Exception ex)
             {
+                VMSConsole.PrintLine("ERROR: " + ex.Message);
                 messageType = INVALID_CAN_MESSAGE;
             }
         }
@@ -64,7 +66,10 @@ namespace VMSpc.Communication
         public override string ToString()
         {
             string message;
-            message = "";
+            message = ((messageType == J1939) ? "J1939 Message: " : "INVALID MESSAGE: ") 
+                      + "\nAddress - " + address 
+                      + "\nPGN - " + pgn 
+                      + "\nMessage - " + rawData.ToString();
             return message;
         }
     }
@@ -72,16 +77,13 @@ namespace VMSpc.Communication
     public class J1708Message : CanMessage
     {
         public Dictionary<byte, byte[]> data; 
-        public J1708Message(string message) : base(message)
-        {
-            ExtractMessage(message);
-        }
+        public J1708Message(string message) : base(message){}
 
         /// <summary>
         /// Extracts the array of data bytes and stores them in the J1708Message instance
         /// </summary>
         /// <param name="message"></param>
-        public override void ExtractMessage(string message)
+        public override void ExtractMessage()
         {
             try
             {

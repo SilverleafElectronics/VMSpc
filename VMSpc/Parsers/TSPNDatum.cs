@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VMSpc.DevHelpers;
 using static VMSpc.Constants;
 using static VMSpc.Parsers.ChassisParameter;
 
 /// <summary>
 /// Update Notes:
-///     removed pareter index from TSPNDatum. It appeared to have no effect
+///     - Removed parameter index from TSPNDatum. It appeared to have no effect
+///     - Removed parselong() from original source. It was never called in 
+///       previous versions. Be sure to implement in accordance with the parsers
+///       below if necessary.
 /// </summary>
 
 namespace VMSpc.Parsers
@@ -266,7 +270,7 @@ namespace VMSpc.Parsers
         public override void Parse(byte address, List<byte> data)
         {
             ushort temp = 0;
-            if (UpdateWord(ref temp, data, byteIndex) != 1)
+            if (UpdateWord(ref temp, data, byteIndex) != 0)
             {
                 rawValue = temp;
                 ConvertAndStore();
@@ -284,10 +288,11 @@ namespace VMSpc.Parsers
         public override void Parse(byte address, List<byte> data)
         {
             uint temp = 0;
-            if (UpdateUint(ref temp, data, byteIndex) != 1)
+            if (UpdateUint(ref temp, data, byteIndex) != 0)
             {
                 rawValue = temp;
                 ConvertAndStore();
+                VMSConsole.PrintLine("" + value);
             }
         }
     }
@@ -406,17 +411,16 @@ namespace VMSpc.Parsers
     //TSPNOdometer, TSPNHourMeter, and TSPNFuelMeter inherit from this datum
     #region TSPNInferred (inferred values that get stored in the ChassisParam)
 
-    public class TSPNInferred : TSPNDatum
+    public class TSPNInferred : TSPNUint
     {
         public double lastVal;
-        protected double floatMultiplier;
         protected uint maxVal;
-        private double structVal;
-        private uint rawStructVal;
 
-        public TSPNInferred() : base()
+        public TSPNInferred(byte byte_index, double scale, double offset, double metric_scale, double metric_offset, uint max_val) 
+            : base(byte_index, scale, offset, metric_scale, metric_offset)
         {
             lastVal = 0.0;
+            maxVal = max_val;
         }
 
         public override void Parse(byte address, List<byte> data)
@@ -424,56 +428,29 @@ namespace VMSpc.Parsers
             uint b = 0;
             if (UpdateUint(ref b, data, 0) != 0)
             {
-                rawStructVal = b;
-                structVal = rawStructVal * floatMultiplier;
-                if ((structVal > lastVal) && (structVal < maxVal))
+                double temp = b * scale;
+                if ((temp > lastVal) && (temp < maxVal))
                 {
                     rawValue = b;
                     ConvertAndStore();
-                    lastVal = structVal;
+                    lastVal = value;
                 }
             }
-        }
-
-        protected void ApplyParse(byte address, List<byte> data, ref uint rawStructVal, ref double structVal)
-        { 
-            Parse(address, data);
-            rawStructVal = this.rawStructVal;
-            structVal = this.structVal;
         }
     }
 
     #endregion //TSPNInferred
 
-    #region TSPNOdometer
+    //TODO
+    #region TSPNDiag (diagnostics)
 
-    public class TSPNOdometer : TSPNInferred
-    {
-        public TSPNOdometer() : base() { }
-
-    }
-
-    #endregion
-
-    #region TSPNHourMeter
-    
-    public class TSPNHourMeter : TSPNInferred
-    {
-        public TSPNHourMeter() : base()
-        {
-
-        }
-    }
-
-    #endregion
-
-    #region TSPNFuelMeter
-
-    public class TSPNFuelMeter : TSPNInferred
+    public class TSPNDiag : TSPNDatum
     {
 
     }
 
-    #endregion
+    #endregion //TSPNDiag (diagnostics)
+
+
 
 }

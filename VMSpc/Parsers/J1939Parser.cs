@@ -7,6 +7,7 @@ using VMSpc.Communication;
 using static VMSpc.Parsers.PIDWrapper;
 using static VMSpc.Constants;
 using static VMSpc.Parsers.PGNMapper;
+using VMSpc.DevHelpers;
 
 namespace VMSpc.Parsers
 {
@@ -20,6 +21,7 @@ namespace VMSpc.Parsers
 
         public void Parse(J1939Message canMessage)
         {
+            VMSConsole.PrintLine("PGN: " + canMessage.pgn);
             foreach (TSPNDatum datum in PGNMap[canMessage.pgn])
                 datum.Parse(canMessage.address, canMessage.rawData);
         }

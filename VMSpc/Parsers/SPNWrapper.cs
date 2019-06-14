@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VMSpc.Parsers
 {
-    public static class SPNWrapper
+    public static class SPNDefinitions
     {
         /*
         public const ushort fanSpeed = 986;
@@ -112,7 +112,7 @@ namespace VMSpc.Parsers
         public static TSPNWord spn_exhaustTemp3241 = new TSPNWord(0, 0.05625f, -459.4f, 0.03125f, -273.0f);
         public static TSPNWord spn_dpfIntakeTemp = new TSPNWord(2, 0.05625f, -459.4f, 0.03125f, -273.0f);
         public static TSPNWord spn_dpfOutletTemp = new TSPNWord(2, 0.05625f, -459.4f, 0.03125f, -273.0f);
-        public static TSPNWord spn_roadSpeed = new TSPNWord(1, 0.0000242775f * 100 /**cfg_speed_multiplier*/, 0.0f, 0.0000390625f * 100 /**cfg_speed_multiplier*/, 0.0f);  // note *speed_multiplier is x100 SAME THING
+        public static TSPNWord spn_roadSpeed = new TSPNWord(1, 0.0000242775f * 100, 0.0f, 0.0000390625f * 100, 0.0f);
         public static TSPNWord spn_ambientTemp = new TSPNWord(3, 0.05625f, -459.4f, 0.03125f, -273.0f);
         public static TSPNWord spn_rpms = new TSPNWord(3, 0.125, 0.0, 0.125, 0.0);
         public static TSPNWord spn_crankCasePressure = new TSPNWord(4, 0.0011331073f, -36.2594344f, 0.0078125f, -250.0f);
@@ -140,12 +140,15 @@ namespace VMSpc.Parsers
         public static TSPNWord spn_braking = new TSPNWord(0, 1.0, 0.0, 1.0, 0.0);
         public static TSPNWord spn_peakAcceleration = new TSPNWord(0, 1.0, 0.0, 1.0, 0.0);
 
-        public static TSPNUint spn_hours = new TSPNUint(0, 0.05f, 0.0f, 0.05f, 0.0f);
         public static TSPNUint spn_idleFuel = new TSPNUint(0, 0.132086f, 0.0f, 0.5f, 0.0f);
         public static TSPNUint spn_idleHours = new TSPNUint(4, 0.05f, 0.0f, 0.05f, 0.0f);
-        public static TSPNUint spn_fuel = new TSPNUint(4, 0.132086f, 0.0f, 0.5f, 0.0f);
-        public static TSPNUint spn_odometer = new TSPNUint(0, 0.003106856f, 0.0f, 0.005f, 0);
-        public static TSPNUint spn_odometerALT = new TSPNUint(0, 0.003106856f, 0.0f, 0.005f, 0);
+        
+        public static TSPNInferred spn_odometer = new TSPNInferred(0, 0.003106856f, 0.0f, 0.005f, 0, 2000000);
+        public static TSPNInferred spn_odometerALT = new TSPNInferred(0, 0.003106856f, 0.0f, 0.005f, 0, 2000000);
+        public static TSPNInferred spn_hours = new TSPNInferred(0, 0.05f, 0.0f, 0.05f, 0.0f, 50000);
+        public static TSPNInferred spn_fuel = new TSPNInferred(4, 0.132086f, 0.0f, 0.5f, 0.0f, 250000);
+
+        public static TSPNDiag spn_diagnostic1939 = new TSPNDiag();
 
         //special parsing types
         public static TSPNRange spn_range = new TSPNRange();
@@ -153,7 +156,7 @@ namespace VMSpc.Parsers
 
 
 
-        static SPNWrapper() { }
+        static SPNDefinitions() { }
  //       public static SPNWrapper SPNManager { get; set; } = new SPNWrapper();
  //       public SPNWrapper() { }
 

@@ -98,9 +98,11 @@ namespace VMSpc.Communication
                 return;
             }
             if (canMessage.messageType == J1939)
-                j1939Parser.Parse(canMessage);
+                j1939Parser.Parse((J1939Message)canMessage);
             else if (canMessage.messageType == J1708)
                 j1708Parser.Parse((J1708Message)canMessage);
+            if (messageCount < 100)
+                VMSConsole.PrintLine(canMessage.ToString());
             messageCount++;
         }
 

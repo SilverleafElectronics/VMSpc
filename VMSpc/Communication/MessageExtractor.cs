@@ -20,7 +20,7 @@ namespace VMSpc.Communication
         public CanMessage GetMessage(string message)
         {
             
-            CanMessage canMessage = FromString(message);
+            CanMessage canMessage = FromString(RemoveControlCharacters(message));
             return canMessage;
         }
 
@@ -36,9 +36,9 @@ namespace VMSpc.Communication
                     case J1939_HEADER:
                         return new J1939Message(message);
                     case J1939_STATUS_HEADER:
-                        return new J1939Message(message);
+                        return null;//new J1939Message(message);
                     case J1708_HEADER:
-                        return new J1708Message(RemoveControlCharacters(message));
+                        return new J1708Message(message);
                     default:
                         return null;
                 }

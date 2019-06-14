@@ -181,6 +181,16 @@ namespace VMSpc
             return true;
         }
 
+        /// <summary>
+        /// converts a string representation of a 
+        /// </summary>
+        /// <param name="hex_message"></param>
+        /// <returns></returns>
+        public static uint STRING_TO_UINT(string hex_message)
+        {
+            return 0;
+        }
+
         //-----------------------------------------------------------------------------------------
         //Misc Helpers
         //-----------------------------------------------------------------------------------------

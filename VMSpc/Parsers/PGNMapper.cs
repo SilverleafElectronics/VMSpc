@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static VMSpc.Parsers.PIDWrapper;
-using static VMSpc.Parsers.SPNWrapper;
+using static VMSpc.Parsers.SPNDefinitions;
 
 namespace VMSpc.Parsers
 {
@@ -42,17 +42,23 @@ namespace VMSpc.Parsers
                 { 0xFEA4,  new TSPNDatum[] { spn_ecuTemp, spn_egrDiffPressure, spn_egrTemp } },
                 { 0xFEDD,  new TSPNDatum[] { spn_turboSpeed } },
                 { 0xFEFF,  new TSPNDatum[] { spn_waterInFuel } },
-                { 0xFECA,  new TSPNDatum[] { spn_diagnostic1939 } },
                 { 0x0F002, new TSPNDatum[] { spn_outputShaftSpeed, spn_clutchSlipPercent, spn_inputShaftSpeed } },
-                { 0x0FEF8, new TSPNDatum[] { spn_transmissionTemp } },
-                { 0x0FE4A, new TSPNDatum[] { spn_chassisIdleHours } },
-                { 0xFEEB,  new TSPNDatum[] { spn_chassisComponentID } },
-                { 0xFEEC,  new TSPNDatum[] { spn_chassisVehicleID } },
-                { 0xFEDA,  new TSPNDatum[] { spn_chassisSoftwareID } },
+                { 0x0FEF8, new TSPNDatum[] { spn_transTemp } },
+                { 0xFECA,  new TSPNDatum[] { spn_diagnostic1939 } },
                 { 0xFD7C,  new TSPNDatum[] { spn_dpfLamp, spn_dpfActiveStatus, spn_dpfInhibitClutch, spn_dpfInhibitSwitch, spn_dpfInhibitStatus, spn_dpfInhibitSpeed, spn_dpfInhibitOffidle,
                                              spn_dpfInhibitPTO, spn_dpfInhibitParkbrake, spn_dpfHighTempLamp } },
                 { 0x0FEFB, null },
                 { 0x0FEDF, null },
+
+                /*
+                 * TODO - These all fell under the updatelong() method in 4.1 and previous versions, which was never called.
+                 *        Find whether or not they actually need to be implemented
+                { 0x0FE4A, new TSPNDatum[] { spn_chassisIdleHours } },
+                { 0xFEEB,  new TSPNDatum[] { spn_chassisComponentID } },
+                { 0xFEEC,  new TSPNDatum[] { spn_chassisVehicleID } },
+                { 0xFEDA,  new TSPNDatum[] { spn_chassisSoftwareID } },
+
+                */
             };
         }
     }
