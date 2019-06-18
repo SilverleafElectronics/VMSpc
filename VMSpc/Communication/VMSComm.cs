@@ -32,7 +32,7 @@ namespace VMSpc.Communication
 
         private Action InitializeDataReader;
         private Dictionary<int, Action> dataReaderMap;
-        private int dataReaderType;
+        public int dataReaderType;
 
         private MessageExtractor extractor;
 
@@ -62,7 +62,7 @@ namespace VMSpc.Communication
             COMMPort = "COM10"; //CHANGEME - port should be inferred at runtime. User should also be able to override
             LogFile = "j1708log.vms";   //CHANGEME - should rely on user input
 
-            //j1939Parser = new J1939Parser();
+            j1939Parser = new J1939Parser();
             j1708Parser = new J1708Parser();
 
             SetDataReader();
@@ -101,8 +101,6 @@ namespace VMSpc.Communication
                 j1939Parser.Parse((J1939Message)canMessage);
             else if (canMessage.messageType == J1708)
                 j1708Parser.Parse((J1708Message)canMessage);
-            if (messageCount < 100)
-                VMSConsole.PrintLine(canMessage.ToString());
             messageCount++;
         }
 
@@ -136,6 +134,7 @@ namespace VMSpc.Communication
         {
             if (newType == dataReaderType)
                 return;
+            CloseDataReader();
             dataReaderType = newType;
             SetDataReader();
             StartComm();

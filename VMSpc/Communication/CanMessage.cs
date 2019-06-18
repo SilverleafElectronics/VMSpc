@@ -24,8 +24,7 @@ namespace VMSpc.Communication
             rawData = new List<byte>();
             //messageLength and rawMessage account for dropping the J or R from the message
             messageLength = message.Length - 1;
-            rawMessage = message;
-            ExtractMessage();
+            rawMessage = message.Substring(1, messageLength - 2);
         }
 
         public abstract void ExtractMessage();
@@ -37,8 +36,14 @@ namespace VMSpc.Communication
     {
         public byte address;
         public uint pgn;
+        public byte[] data;
 
-        public J1939Message(string message) : base(message){}
+        public J1939Message(string message)
+            : base(message)
+        {
+            data = new byte[8];
+            ExtractMessage();
+        }
 
         /// <summary>
         /// Extracts the address, pgn, and array of data bytes from the message and stores the results in the J1939Message instance
@@ -52,13 +57,14 @@ namespace VMSpc.Communication
                 address = Convert.ToByte(rawMessage.Substring(0, 2));
                 pgn = Convert.ToUInt32(rawMessage.Substring(2, 6), 16);
                 string dataSection = rawMessage.Substring(8, 16);
-                bool dataStored = BYTE_STRING_TO_BYTE_ARRAY(ref rawData, dataSection, dataSection.Length);
+                bool dataStored = BYTE_STRING_TO_BYTE_ARRAY(data, dataSection, dataSection.Length);
                 if (!dataStored)
                     messageType = INVALID_CAN_MESSAGE;
             }
             catch (Exception ex)
             {
-                VMSConsole.PrintLine("ERROR: " + ex.Message);
+                //VMSConsole.PrintLine("ERROR: " + ex.Message);
+                //VMSConsole.PrintLine(rawMessage);
                 messageType = INVALID_CAN_MESSAGE;
             }
         }
@@ -77,7 +83,10 @@ namespace VMSpc.Communication
     public class J1708Message : CanMessage
     {
         public Dictionary<byte, byte[]> data; 
-        public J1708Message(string message) : base(message){}
+        public J1708Message(string message) : base(message)
+        {
+            ExtractMessage();
+        }
 
         /// <summary>
         /// Extracts the array of data bytes and stores them in the J1708Message instance

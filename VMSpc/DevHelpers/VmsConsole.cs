@@ -1,4 +1,4 @@
-﻿#define DEBUG_CONSOLE //comment out for release builds   
+﻿//#define DEBUG_CONSOLE //comment out for release builds   
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -7,7 +7,7 @@ using static VMSpc.Constants;
 
 namespace VMSpc.DevHelpers
 {
-#if(DEBUG_CONSOLE)
+#if (DEBUG_CONSOLE)
     static class VMSConsole
     {
         private static ScrollViewer ConsoleScroller;
@@ -30,6 +30,7 @@ namespace VMSpc.DevHelpers
             Console.Background = Brushes.Black;
             ConsoleScroller.Content = Console;
             Wrapper.Children.Add(ConsoleScroller);
+            Canvas.SetTop(ConsoleScroller, Canvas.GetTop(wrapper) - 50);
         }
         public static void PrintLine(string logItem)
         {
@@ -61,5 +62,16 @@ namespace VMSpc.DevHelpers
             }
         }
     }
+
+#else
+
+    static class VMSConsole
+    {
+        static VMSConsole(){ }
+        public static void AddConsoleToWindow(Canvas wrapper){}
+        public static void PrintLine(string logItem) { }
+        public static void PrintSide(double side) { }
+    }
+
 #endif //DEBUG_CONSOLE
 }

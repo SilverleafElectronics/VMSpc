@@ -22,15 +22,17 @@ namespace VMSpc.Parsers
         public uint rawValue;
         public double value, valueMetric, recipNum;
         public bool seen;
+        public bool prioritize1708;
 
         public TSPNDatum()
         {
             rawValue = 0;
             value = valueMetric = 0.0;
             seen = false;
+            prioritize1708 = false;
         }
 
-        public virtual void Parse(byte address, List<byte> data) { }
+        public virtual void Parse(byte address, byte[] data) { }
 
         protected virtual void ConvertAndStore()
         {
@@ -107,9 +109,9 @@ namespace VMSpc.Parsers
             return 0;
         }
 
-        protected byte UpdateWord(ref ushort dest, List<byte> data, byte pos)
+        protected byte UpdateWord(ref ushort dest, byte[] data, byte pos)
         {
-            ushort s = (ushort)((data[pos] << 8) | (data[pos + 1]));
+            ushort s = (ushort)((data[pos + 1] << 8) | (data[pos]));
             if (s <= RVC_WORD(RVC_MAXVAL))
             {
                 dest = s;
@@ -124,9 +126,9 @@ namespace VMSpc.Parsers
             return 0;
         }
 
-        protected byte UpdateUint(ref uint dest, List<byte> data, byte pos)
+        protected byte UpdateUint(ref uint dest, byte[] data, byte pos)
         {
-            uint s = (uint)((data[pos] << 24) | (data[pos + 1] << 16) | (data[pos + 2] << 8) | (data[pos + 3]));
+            uint s = (uint)((data[pos + 3] << 24) | (data[pos + 2] << 16) | (data[pos + 1] << 8) | (data[pos]));
             if (s <= RVC_LONG(RVC_MAXVAL))
             {
                 dest = s;
@@ -157,7 +159,7 @@ namespace VMSpc.Parsers
             bitIndex = bit_index;
         }
 
-        public override void Parse(byte address, List<byte> data)
+        public override void Parse(byte address, byte[] data)
         {
             byte b = 0;
             if (UpdateByte(ref b, data[byteIndex]) != 0)
@@ -190,7 +192,7 @@ namespace VMSpc.Parsers
             length = bit_length;
         }
 
-        public override void Parse(byte address, List<byte> data)
+        public override void Parse(byte address, byte[] data)
         {
             byte b = 0;
             if (UpdateBits(ref b, data[byteIndex], bitIndex, length) != 0)
@@ -223,7 +225,7 @@ namespace VMSpc.Parsers
             metricOffset = metric_offset;
         }
 
-        public override void Parse(byte address, List<byte> data)
+        public override void Parse(byte address, byte[] data)
         {
             byte b = 0;
             if (UpdateByte(ref b, data[byteIndex]) != 0)
@@ -267,7 +269,7 @@ namespace VMSpc.Parsers
             recipNum = recip_numerator;
         }
 
-        public override void Parse(byte address, List<byte> data)
+        public override void Parse(byte address, byte[] data)
         {
             ushort temp = 0;
             if (UpdateWord(ref temp, data, byteIndex) != 0)
@@ -285,14 +287,13 @@ namespace VMSpc.Parsers
         public TSPNUint(byte byte_index, double scale, double offset, double metric_scale, double metric_offset)
              : base(byte_index, scale, offset, metric_scale, metric_offset) { }
 
-        public override void Parse(byte address, List<byte> data)
+        public override void Parse(byte address, byte[] data)
         {
             uint temp = 0;
             if (UpdateUint(ref temp, data, byteIndex) != 0)
             {
                 rawValue = temp;
                 ConvertAndStore();
-                VMSConsole.PrintLine("" + value);
             }
         }
     }
@@ -306,7 +307,7 @@ namespace VMSpc.Parsers
     {
         public TSPNRange() : base() {}
 
-        public override void Parse(byte address, List<byte> data)
+        public override void Parse(byte address, byte[] data)
         {
             if (data[4] < 250)
                 ChassisParam.rangeSelected = "" + (char)data[4];
@@ -328,7 +329,7 @@ namespace VMSpc.Parsers
     {
         public TSPNTransMode() : base() { }
 
-        public override void Parse(byte address, List<byte> data)
+        public override void Parse(byte address, byte[] data)
         {
             byte temp = data[5];
             if (temp == 16 || temp == 21 || temp == 32)
@@ -355,7 +356,7 @@ namespace VMSpc.Parsers
     {
         public TSPNRetarder() : base() { }
 
-        public override void Parse(byte address, List<byte> data)
+        public override void Parse(byte address, byte[] data)
         {
             byte b = 0;
             if (UpdateByte(ref b, data[1]) != 0)
@@ -381,7 +382,7 @@ namespace VMSpc.Parsers
 
         public TSPNCruise() : base() { }
 
-        public override void Parse(byte address, List<byte> data)
+        public override void Parse(byte address, byte[] data)
         {
             byte b = 0;
             ChassisParam.cruiseAdjust = 0;
@@ -423,7 +424,7 @@ namespace VMSpc.Parsers
             maxVal = max_val;
         }
 
-        public override void Parse(byte address, List<byte> data)
+        public override void Parse(byte address, byte[] data)
         {
             uint b = 0;
             if (UpdateUint(ref b, data, 0) != 0)

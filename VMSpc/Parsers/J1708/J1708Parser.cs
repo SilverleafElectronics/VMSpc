@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using VMSpc.Communication;
 using VMSpc.DevHelpers;
 using static VMSpc.Parsers.PIDWrapper;
+using static VMSpc.Parsers.PresenterWrapper;
+using static VMSpc.Constants;
 
 namespace VMSpc.Parsers
 {
@@ -34,27 +36,25 @@ namespace VMSpc.Parsers
 
         private void ByteConverter(byte PID, byte[] data, J1708ParsingHelper conversionStruct)
         {
-            double rVal, mVal, stdVal;
-            rVal = data[0];
-            stdVal = data[0] * conversionStruct.standardMultiplier + conversionStruct.standardOffset;
-            mVal = stdVal * conversionStruct.metricMultiplier + conversionStruct.metricOffset;
-            PIDManager.PIDList[PID].standardValue = stdVal;
-            PIDManager.PIDList[PID].rawValue = rVal;
-            PIDManager.PIDList[PID].metricValue = mVal;
-            //set value spn here
+            double metricValue, standardValue;
+            uint rawValue;
+            rawValue = data[0];
+            standardValue = data[0] * conversionStruct.standardMultiplier + conversionStruct.standardOffset;
+            metricValue = standardValue * conversionStruct.metricMultiplier + conversionStruct.metricOffset;
+            SetValueSPN(PID, rawValue, metricValue, standardValue, J1708);
         }
 
         private void DoubleConverter(byte PID, byte[] data, J1708ParsingHelper conversionStruct)
         {
-            double rawValue, metricValue, standardValue;
-            rawValue = data[0] + data[1];
+            double metricValue, standardValue;
+            uint rawValue = (uint)(data[0] + data[1]);
             standardValue = data[0] * conversionStruct.standardMultiplier + conversionStruct.standardOffset;
             standardValue += (data[1] * conversionStruct.secondByteMultiplier);
             metricValue = standardValue * conversionStruct.metricMultiplier + conversionStruct.metricOffset;
-            //set value spn here
+            SetValueSPN(PID, rawValue, metricValue, standardValue, J1708);
         }
 
-        #endregion
+        #endregion //Standard Converters
 
         #region Custom Converters
 
@@ -62,29 +62,29 @@ namespace VMSpc.Parsers
         {
             switch (PID)
             {
-                case PIDWrapper.rangeSelected:
+                case rangeSelected:
                     SetRangeSelected(data);
                     break;
-                case PIDWrapper.rangeAttained:
+                case rangeAttained:
                     SetRangeAttained(data);
                     break;
-                case PIDWrapper.cruiseSetStatus:
+                case cruiseSetStatus:
                     SetCruiseSetStatus(data);
                     break;
-                case PIDWrapper.totalMilesCummins:
-                case PIDWrapper.totalMiles:
+                case totalMilesCummins:
+                case totalMiles:
                     SetTotalMiles(data);
                     break;
-                case PIDWrapper.engineHours:
+                case engineHours:
                     SetEngineHours(data);
                     break;
-                case PIDWrapper.totalFuel:
+                case totalFuel:
                     SetTotalFuel(data);
                     break;
-                case PIDWrapper.diagnosticsPID:
+                case diagnosticsPID:
                     Parse1708Diagnostics(data);
                     break;
-                case PIDWrapper.multipartMessage:
+                case multipartMessage:
                     ParseMultipartMessage(data);
                     break;
                 default:
@@ -134,12 +134,6 @@ namespace VMSpc.Parsers
 
         #endregion //Custom Converters
 
-        //CHANGEME - move to CanMessage.cs
-        private void SplitByPID(Dictionary<byte, List<byte>> PIDDataPair, J1708Message canMessage)
-        {
-            byte pos = 1;
-            int bytes_unprocessed = canMessage.messageLength;
-        }
 
         #region Map Definition Methods
 

@@ -104,9 +104,9 @@ namespace VMSpc.Parsers
         public byte ParserType;
         public bool Prioritize1708;
 
-        public double standardValue;
-        public double rawValue;
-        public double metricValue;
+        //public double standardValue;
+       // public double rawValue;
+        //public double metricValue;
         public PID(byte pid, int numDataBytes, string title)
         {
             pidNumber = pid;
@@ -118,23 +118,7 @@ namespace VMSpc.Parsers
             MetricMultiplier = 1;
             ParserType = NON_STANDARD;
             Prioritize1708 = false;
-            standardValue = rawValue = metricValue = 0.0;
-        }
-        public void SetStandardValue(double val)
-        {
-            standardValue = val;
-        }
-        public void SetRawValue(double val)
-        {
-            rawValue = val;
-        }
-        public void SetMetricValue(double val)
-        {
-            metricValue = val;
-        }
-        public double GetStandardValue()
-        {
-            return standardValue;
+            //standardValue = rawValue = metricValue = 0.0;
         }
     }
 }

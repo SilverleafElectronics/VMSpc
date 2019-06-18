@@ -162,7 +162,7 @@ namespace VMSpc
             }
             catch (Exception ex)
             {
-                VMSConsole.PrintLine(ex.Message);
+                //VMSConsole.PrintLine(ex.Message);
                 return false;
             }
         }
@@ -171,13 +171,13 @@ namespace VMSpc
         /// Converts a string representation of bytes into an actual byte array. E.g.: "FAFB" becomes [0xFA, 0xFB]
         /// </summary>
         /// <returns>False if the length is not divisible by 2. True otherwise</returns>
-        public static bool BYTE_STRING_TO_BYTE_ARRAY(ref byte[] byteArr, string byteString, int length)
+        public static bool BYTE_STRING_TO_BYTE_ARRAY(byte[] byteArr, string byteString, int length)
         {
             int arrLength = length / 2;
             if (length % 2 != 0)
                 return false;
             for (int i = 0; i < arrLength; i++)
-                byteArr[i] = Convert.ToByte(byteString.Substring((i * 2), 2));
+                byteArr[i] = Convert.ToByte(byteString.Substring((i * 2), 2), 16);
             return true;
         }
 

@@ -83,7 +83,6 @@ namespace VMSpc.Parsers
         public static TSPNByte spn_cruiseSetSpeed = new TSPNByte(5, 0.006215f * 100, 0.0f, 0.01f * 100, 0.0f);
         public static TSPNByte spn_inletTemp = new TSPNByte(5, 1.8f, -40.0f, 1.0f, -40.0f);
         public static TSPNByte spn_accelPos = new TSPNByte(1, 0.4f, 0.0f, 0.4f, 0.0f);
-        public static TSPNByte spn_loadPercent = new TSPNByte(2, 1.0, 0.0, 1.0, 0.0);
         public static TSPNByte spn_fuelPressure = new TSPNByte(0, 0.580151f, 0.0f, 4.0f, 0.0f);
         public static TSPNByte spn_oilLevel = new TSPNByte(2, 0.4f, 0.0f, 0.4f, 0.0f);
         public static TSPNByte spn_oilPressure = new TSPNByte(3, 0.580151f, 0.0f, 4.0f, 0.0f);
@@ -97,6 +96,7 @@ namespace VMSpc.Parsers
         public static TSPNByte spn_interCoolerTemp = new TSPNByte(6, 1.8f, -40.0f, 1.0f, -40.0f);
         public static TSPNByte spn_fuelLevel = new TSPNByte(1, 0.4f, 0.0f, 0.4f, 0.0f);
         public static TSPNByte spn_torquePercent = new TSPNByte(2, 1.0, -125.0, 1.0, -125.0);
+        public static TSPNByte spn_loadPercent = new TSPNByte(2, 1.0, 0.0, 1.0, 0.0);
         public static TSPNByte spn_turboBoostPressure = new TSPNByte(1, 0.2900755f, 0.0f, 2.0f, 0.0f);
         public static TSPNByte spn_intakeManifoldTemp = new TSPNByte(2, 1.8f, -40.0f, 1.0f, -40.0f);
         public static TSPNByte spn_airInletPressure = new TSPNByte(3, 0.2900755f, 0.0f, 2.0f, 0.0f);
@@ -112,7 +112,7 @@ namespace VMSpc.Parsers
         public static TSPNWord spn_exhaustTemp3241 = new TSPNWord(0, 0.05625f, -459.4f, 0.03125f, -273.0f);
         public static TSPNWord spn_dpfIntakeTemp = new TSPNWord(2, 0.05625f, -459.4f, 0.03125f, -273.0f);
         public static TSPNWord spn_dpfOutletTemp = new TSPNWord(2, 0.05625f, -459.4f, 0.03125f, -273.0f);
-        public static TSPNWord spn_roadSpeed = new TSPNWord(1, 0.0000242775f * 100, 0.0f, 0.0000390625f * 100, 0.0f);
+        public static TSPNWord spn_roadSpeed = new TSPNWord(1, 0.00242775f, 0.0f, 0.00390625f, 0.0f);
         public static TSPNWord spn_ambientTemp = new TSPNWord(3, 0.05625f, -459.4f, 0.03125f, -273.0f);
         public static TSPNWord spn_rpms = new TSPNWord(3, 0.125, 0.0, 0.125, 0.0);
         public static TSPNWord spn_crankCasePressure = new TSPNWord(4, 0.0011331073f, -36.2594344f, 0.0078125f, -250.0f);

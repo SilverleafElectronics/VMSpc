@@ -1,4 +1,4 @@
-﻿#define DEBUG_CONSOLE
+﻿//#define DEBUG_CONSOLE
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +21,7 @@ using VMSpc.CustomComponents;
 using System.Threading;
 using VMSpc.Communication;
 using static VMSpc.Parsers.PIDWrapper;
+using VMSpc.Parsers;
 
 namespace VMSpc
 {
@@ -29,7 +30,7 @@ namespace VMSpc
     /// </summary>
     public partial class MainWindow : Window
     {
-        VMSComm commreader;
+        public VMSComm commreader;
         //PanelGrid panelGrid;
 
         //constructor
@@ -37,6 +38,7 @@ namespace VMSpc
         {
             InitializeComponent();
             PIDManager.InitializePIDs();
+            PresenterWrapper.InitializePresenterList();
             GeneratePanels();
             Application.Current.MainWindow = this;
             InitializeComm();
@@ -52,9 +54,7 @@ namespace VMSpc
 
         private void GeneratePanels()
         {
-#if (DEBUG_CONSOLE)
             VMSConsole.AddConsoleToWindow(ContentGrid);
-#endif
             ContentGrid.InitPanels(this);
             ContentGrid.LoadPanels();
         }
@@ -78,7 +78,7 @@ namespace VMSpc
 
         private void CommSettingsCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            CommDlg commdlg = new CommDlg();
+            CommDlg commdlg = new CommDlg(commreader);
             commdlg.ShowDialog();
         }
 
