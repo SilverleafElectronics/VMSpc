@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using VMSpc.Parsers;
 using static VMSpc.Constants;
 
+
 namespace VMSpc.Communication
 {
     public class VMSComm
@@ -109,16 +110,21 @@ namespace VMSpc.Communication
         /// <summary>   Closes any existing connections and sets portReader, logReader, and wifiReader to null  </summary>
         private void CloseDataReader()
         {
+            System.Threading.Thread ClosingThread = null;
             if (portReader != null && portReader.IsOpen)
-                portReader.Close();
+                ClosingThread = new System.Threading.Thread(ClosePortReader);
             if (logReader != null)
+            {
+                logReadTimer.Dispose();
                 logReader.Close();
+            }
             if (wifiReader != null)
             {
                 wifiReader.Shutdown(SocketShutdown.Both);
                 wifiReader.Close();
             }
-            portReader = null;
+            if (ClosingThread != null)
+                ClosingThread.Start();
             logReader = null;
             wifiReader = null;
         }
@@ -170,18 +176,29 @@ namespace VMSpc.Communication
         /// </summary>
         private void HandleCommPortData(object sender, SerialDataReceivedEventArgs e)
         {
-            try
+            Application.Current.Dispatcher.Invoke(delegate
             {
-                Application.Current.Dispatcher.Invoke(delegate
+                //break all of the buffer into an array of messages and process them individually
+                //each valid, individual message in the buffer ends in a newline character
+                try
                 {
-                    //break all of the buffer into an array of messages and process them individually
-                    //each valid, individual message in the buffer ends in a newline character
                     string buffer = portReader.ReadExisting();
                     foreach (string message in buffer.Split('\n'))
                         ProcessData(message);
-                });
-            }
-            catch { }
+                }
+                catch
+                {
+                }
+            });
+        }
+
+        private void ClosePortReader()
+        {
+            keepJibAwakeTimer.Dispose();
+            portCheckTimer.Dispose();
+            portReader.Close();
+            portReader = null;
+            System.Threading.Thread.CurrentThread.Abort();
         }
         #endregion //Port Reader
 

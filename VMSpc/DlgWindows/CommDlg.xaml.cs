@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,31 +13,29 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using VMSpc.Communication;
 using static VMSpc.Constants;
+using VMSpc.DevHelpers;
 
 namespace VMSpc.DlgWindows
 {
     /// <summary>
     /// Interaction logic for CommDlg.xaml
     /// </summary>
-    public partial class CommDlg : Window
+    public partial class CommDlg : VMSDialog
     {
         private VMSComm commreader;
-        Timer bindingTimer;
+        private bool CommTypeSelectionInProgress;
+        
         public CommDlg(VMSComm commreader)
         {
             this.commreader = commreader;
             InitializeComponent();
             Owner = Application.Current.MainWindow;
-            bindingTimer = CREATE_TIMER(ApplyDataBindings, 5000);
-            ApplyDataBindings(null, null);
+            CommTypeSelectionInProgress = false;
         }
 
-        private void ApplyDataBindings(Object source, ElapsedEventArgs e)
+        protected override void BindData()
         {
-            Application.Current.Dispatcher.Invoke(delegate
-            {
-                CommSelection.SelectedIndex = commreader.dataReaderType;
-            });
+            //CommSelection.SelectedIndex = commreader.DataReaderType;
         }
 
         private void ComboBox_SelectionChanged_PORT(object sender, SelectionChangedEventArgs e)
@@ -48,7 +45,21 @@ namespace VMSpc.DlgWindows
 
         private void ComboBox_SelectionChanged_COMTYPE(object sender, SelectionChangedEventArgs e)
         {
-            commreader.ChangeDataReader(CommSelection.SelectedIndex);
+            if (CommTypeSelectionInProgress)
+            {
+                commreader.ChangeDataReader(CommSelection.SelectedIndex);
+                CommTypeSelectionInProgress = false;
+            }
+        }
+
+        private void ComboBox_DropDownOpened(object sender, EventArgs e)
+        {
+            CommTypeSelectionInProgress = true;
+        }
+
+        private void ComboBox_DropDownClosed(object sender, EventArgs e)
+        {
+            CommTypeSelectionInProgress = false;
         }
     }
 }

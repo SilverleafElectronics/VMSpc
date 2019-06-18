@@ -30,7 +30,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Shell;
 using VMSpc;
+using VMSpc.Communication;
 using VMSpc.CustomComponents;
+using VMSpc.DlgWindows;
 
 
 namespace VMSpc {
