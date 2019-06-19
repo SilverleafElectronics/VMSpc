@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using VMSpc.Communication;
 using static VMSpc.Constants;
 using VMSpc.DevHelpers;
+using Microsoft.Win32;
+using System.IO;
 
 namespace VMSpc.DlgWindows
 {
@@ -23,43 +25,42 @@ namespace VMSpc.DlgWindows
     public partial class CommDlg : VMSDialog
     {
         private VMSComm commreader;
-        private bool CommTypeSelectionInProgress;
+        public int testSelection;
         
-        public CommDlg(VMSComm commreader)
+        public CommDlg(VMSComm commreader) : base()
         {
             this.commreader = commreader;
-            InitializeComponent();
             Owner = Application.Current.MainWindow;
-            CommTypeSelectionInProgress = false;
+            InitializeComponent();
+            ApplyBindings();
         }
 
-        protected override void BindData()
+        protected override void ApplyBindings()
         {
-            //CommSelection.SelectedIndex = commreader.DataReaderType;
+            base.ApplyBindings();
+            CreateBinding("DataReaderType", commreader, BindingMode.TwoWay, CommSelection, ComboBox.SelectedIndexProperty);
+            CreateBinding("ComPort", commreader, BindingMode.TwoWay, PortSelection, ComboBox.SelectedIndexProperty);
+            CreateBinding("MessageCount", commreader, BindingMode.OneWay, GoodPacketCount, Label.ContentProperty);
+            CreateBinding("BadMessageCount", commreader, BindingMode.OneWay, BadPacketCount, Label.ContentProperty);
+            CreateBinding("ParseBehavior", commreader, BindingMode.TwoWay, ParsingBehavior, ComboBox.SelectedIndexProperty);
+            CreateBinding("LogFile", commreader, BindingMode.OneWay, LogPlayerFileName, TextBox.TextProperty);
         }
 
-        private void ComboBox_SelectionChanged_PORT(object sender, SelectionChangedEventArgs e)
+        private void ChangeLogPlayerFile_Click(object sender, RoutedEventArgs e)
         {
-            
-        }
-
-        private void ComboBox_SelectionChanged_COMTYPE(object sender, SelectionChangedEventArgs e)
-        {
-            if (CommTypeSelectionInProgress)
+            OpenFileDialog dlg = new OpenFileDialog
             {
-                commreader.ChangeDataReader(CommSelection.SelectedIndex);
-                CommTypeSelectionInProgress = false;
+                DefaultExt = ".vms",
+                Filter = "VMS Log Files (*.vms)|*.vms",
+                InitialDirectory = Directory.GetCurrentDirectory()
+            };
+
+            bool? result = dlg.ShowDialog();
+            if (result == true)
+            {
+                commreader.LogFile = dlg.FileName;
+                LogPlayerFileName.Text = dlg.FileName;
             }
-        }
-
-        private void ComboBox_DropDownOpened(object sender, EventArgs e)
-        {
-            CommTypeSelectionInProgress = true;
-        }
-
-        private void ComboBox_DropDownClosed(object sender, EventArgs e)
-        {
-            CommTypeSelectionInProgress = false;
         }
     }
 }

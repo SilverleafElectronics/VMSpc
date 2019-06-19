@@ -15,6 +15,7 @@
                 <CommandBinding Command="Close" CanExecute="CloseCommand_CanExecute" Executed="CloseCommand_Executed" />
                 <CommandBinding Command="self:MainCommands.CommSettings" CanExecute="CommSettingsCommand_CanExecute" Executed="CommSettingsCommand_Executed" />
                 <CommandBinding Command="self:MainCommands.About" CanExecute="AboutCommand_CanExecute" Executed="AboutCommand_Executed" />
+                <CommandBinding Command="self:MainCommands.RawLog" CanExecute="RawLogCommand_CanExecute" Executed="RawLogCommand_Executed" />
             </DockPanel.CommandBindings>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
@@ -27,6 +28,7 @@
                 </MenuItem>
                 <MenuItem Header="_Advanced">
                     <MenuItem Header="_Communications" Command="self:MainCommands.CommSettings" />
+                    <MenuItem Header="_Raw Log" Command="self:MainCommands.RawLog" />
                 </MenuItem>
                 <MenuItem Header="_Help">
                     <MenuItem Command="self:MainCommands.About" />

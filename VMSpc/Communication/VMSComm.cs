@@ -23,25 +23,45 @@ namespace VMSpc.Communication
         private Socket wifiReader;
         private StreamReader logReader;
 
-        private ulong messageCount;
-        private ulong lastMessageCount;
-        private ulong badMessageCount;
-
         private Timer portCheckTimer;
         private Timer logReadTimer;
         private Timer keepJibAwakeTimer;
 
         private Action InitializeDataReader;
         private Dictionary<int, Action> dataReaderMap;
-        public int dataReaderType;
+
+        private int dataReaderType;
+        public int DataReaderType
+        {
+            get { return dataReaderType; }
+            set { ChangeDataReader(value); }
+        }
+
+        private string portString;
+        private int comPort;
+        public int ComPort
+        {
+            get { return comPort; }
+            set { ChangeComPort(value); }
+        }
+
+        private ulong messageCount;
+        public string MessageCount { get { return ("" + messageCount); } }
+        private ulong lastMessageCount;
+        private ulong badMessageCount;
+        public string BadMessageCount { get { return ("" + badMessageCount); } }
+        private int parseBehavior;
+        public int ParseBehavior { get { return parseBehavior; } set { ChangeParseBehavior(value); } }
+
 
         private MessageExtractor extractor;
 
         private J1708Parser j1708Parser;
         private J1939Parser j1939Parser;
 
-        private string COMMPort;
-        private string LogFile;
+
+        private string logFile;
+        public string LogFile { get { return logFile; } set { ChangeLogPlayerFile(value); } }
 
 
         public VMSComm()
@@ -60,8 +80,10 @@ namespace VMSpc.Communication
                 { LOGPLAYER, InitLogReader }
             };
 
-            COMMPort = "COM10"; //CHANGEME - port should be inferred at runtime. User should also be able to override
-            LogFile = "j1708log.vms";   //CHANGEME - should rely on user input
+            comPort = 9;
+            portString = "COM10"; //CHANGEME - port should be retrieved from config or inferred. User should also be able to override
+            logFile = "j1939log.vms";   //CHANGEME - should rely on user input
+            parseBehavior = PARSE_ALL;  //CHANGEME - should initially come from config
 
             j1939Parser = new J1939Parser();
             j1708Parser = new J1708Parser();
@@ -73,6 +95,8 @@ namespace VMSpc.Communication
         {
             CloseDataReader();
         }
+
+        #region Business Logic
 
         /// <summary>   Initializes all communications activity. Begins the InitializeDataReader() thread and sends messages to the JIB to keep it in VMS mode  </summary>
         public void StartComm()
@@ -98,12 +122,14 @@ namespace VMSpc.Communication
                 badMessageCount++;
                 return;
             }
-            if (canMessage.messageType == J1939)
+            if (canMessage.messageType == J1939 && parseBehavior != IGNORE_1939)
                 j1939Parser.Parse((J1939Message)canMessage);
-            else if (canMessage.messageType == J1708)
+            else if (canMessage.messageType == J1708 && parseBehavior != IGNORE_1708)
                 j1708Parser.Parse((J1708Message)canMessage);
             messageCount++;
         }
+
+        #endregion //Business Logic
 
         #region Communication Settings
 
@@ -135,6 +161,28 @@ namespace VMSpc.Communication
             InitializeDataReader = dataReaderMap[dataReaderType];
         }
 
+        private void ChangeComPort(int newPort)
+        {
+            if (newPort == comPort || dataReaderType != USB)
+                return;
+            CloseDataReader();
+            comPort = newPort;
+            //newPort + 1, because it comes in from a dropdown (0-indexed), but first value is "COM1"
+            portString = "COM" + (newPort + 1);
+            StartComm();
+        }
+
+        private void ChangeLogPlayerFile(string filename)
+        {
+            logFile = filename;
+            if (dataReaderType == LOGPLAYER)
+            {
+                CloseDataReader();
+                SetDataReader();
+                StartComm();
+            }
+        }
+
         /// <summary>   Changes the I/O channel to either Wifi, RS-232, USB, or Logplayer   </summary>
         public void ChangeDataReader(int newType)
         {
@@ -144,6 +192,12 @@ namespace VMSpc.Communication
             dataReaderType = newType;
             SetDataReader();
             StartComm();
+        }
+
+        private void ChangeParseBehavior(int newBehavior)
+        {
+            parseBehavior = newBehavior;
+            //TODO - implement favoring parse behaviors in J1708Parser and J1939Parser
         }
 
         #endregion //Communication Settings
@@ -165,7 +219,7 @@ namespace VMSpc.Communication
         /// </summary>
         private void InitPortReader()
         {
-            portReader = new SerialPort(COMMPort, 9600, Parity.None, 8, StopBits.One);   
+            portReader = new SerialPort(portString, 9600, Parity.None, 8, StopBits.One);   
             portReader.DataReceived += new SerialDataReceivedEventHandler(HandleCommPortData);
             portReader.Open(); // Begin communications 
             portCheckTimer = CREATE_TIMER(CheckPort, 5000);
@@ -208,7 +262,7 @@ namespace VMSpc.Communication
         /// </summary>
         private void InitLogReader()
         {
-            logReader = new StreamReader(LogFile);
+            logReader = new StreamReader(logFile);
             logReadTimer = CREATE_TIMER(ReadLogEntry, 100);
 
         }

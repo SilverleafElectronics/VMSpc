@@ -93,6 +93,17 @@ namespace VMSpc
             aboutdlg.ShowDialog();
         }
 
+        private void RawLogCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void RawLogCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            RawLogDlg rawlogdlg = new RawLogDlg();
+            rawlogdlg.ShowDialog();
+        }
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -115,6 +126,12 @@ namespace VMSpc
         public static readonly RoutedUICommand About = new RoutedUICommand(
             "About VMSpc...",
             "About",
+            typeof(MainCommands)
+        );
+
+        public static readonly RoutedUICommand RawLog = new RoutedUICommand(
+            "Raw Log",
+            "RawLog",
             typeof(MainCommands)
         );
     }

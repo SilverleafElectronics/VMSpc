@@ -4,30 +4,44 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Timers;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using VMSpc.Communication;
 using static VMSpc.Constants;
+using VMSpc.DevHelpers;
 
 namespace VMSpc.DlgWindows
 {
     public class VMSDialog : Window
     {
-        Timer bindingTimer;
-        public VMSDialog()
+        protected virtual void ApplyBindings()
         {
-            bindingTimer = CREATE_TIMER(ApplyDataBindings, 5000);
+            DataContext = this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private void ApplyDataBindings(Object source, ElapsedEventArgs e)
+        protected void CreateBinding(string sourcePropName, object sourceObject, BindingMode mode, FrameworkElement UIElement, DependencyProperty UIElementProp)
         {
-            Application.Current.Dispatcher.Invoke(delegate
+            Binding newBind = new Binding(sourcePropName)
             {
-                BindData();
-            });
+                Mode = mode,
+                Source = sourceObject
+            };
+            UIElement.SetBinding(UIElementProp, newBind);
         }
 
-        protected virtual void BindData() { }
+        protected void CreateBinding(string sourcePropName, object sourceObject, BindingMode mode, FrameworkElement UIElement, DependencyProperty UIElementProp, int ConditionalValue)
+        {
+            Binding newBind = new Binding(sourcePropName)
+            {
+                Mode = mode,
+                Source = sourceObject
+            };
+            UIElement.SetBinding(UIElementProp, newBind);
+        }
     }
 }

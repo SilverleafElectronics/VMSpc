@@ -265,6 +265,11 @@ namespace VMSpc
         public const int WIFI = 2;
         public const int LOGPLAYER = 3;
 
+        public const int PARSE_ALL = 0;
+        public const int IGNORE_1939 = 1;
+        public const int IGNORE_1708 = 2;
+        public const int FAVOR_1939 = 3;
+        public const int FAVOR_1708 = 4;
 
     }
 }

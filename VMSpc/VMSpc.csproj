@@ -72,6 +72,9 @@
       <DependentUpon>CommDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomComponents\VMSCanvas.cs" />
+    <Compile Include="DlgWindows\RawLogDlg.xaml.cs">
+      <DependentUpon>RawLogDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DlgWindows\VMSDialog.cs" />
     <Compile Include="Parsers\ChassisParameter.cs" />
     <Compile Include="Parsers\J1708\J1708Parser.cs" />
@@ -112,6 +115,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DlgWindows\CommDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DlgWindows\RawLogDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
