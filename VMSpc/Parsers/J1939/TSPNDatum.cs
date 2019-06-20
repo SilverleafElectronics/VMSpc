@@ -23,13 +23,15 @@ namespace VMSpc.Parsers
         public double value, valueMetric, recipNum;
         public bool seen;
         public bool prioritize1708;
+        public ushort spn;
 
-        public TSPNDatum()
+        public TSPNDatum(ushort spn)
         {
             rawValue = 0;
             value = valueMetric = 0.0;
             seen = false;
             prioritize1708 = false;
+            this.spn = spn;
         }
 
         public virtual void Parse(byte address, byte[] data) { }
@@ -153,7 +155,7 @@ namespace VMSpc.Parsers
     {
         protected byte byteIndex, bitIndex;
 
-        public TSPNFlag(byte byte_index, byte bit_index) : base()
+        public TSPNFlag(ushort spn, byte byte_index, byte bit_index) : base(spn)
         {
             byteIndex = byte_index;
             bitIndex = bit_index;
@@ -185,7 +187,7 @@ namespace VMSpc.Parsers
         static readonly byte[] bitmask = { 0x00, 0x01, 0x03, 0x07, 0x0F, 0x1F, 0x3F };
         protected byte byteIndex, bitIndex;
 
-        public TSPNBits(byte byte_index, byte bit_index, byte bit_length) : base()
+        public TSPNBits(ushort spn, byte byte_index, byte bit_index, byte bit_length) : base(spn)
         {
             byteIndex = byte_index;
             bitIndex = bit_index;
@@ -216,7 +218,7 @@ namespace VMSpc.Parsers
         protected byte byteIndex;
         protected double scale, offset, metricScale, metricOffset;
 
-        public TSPNByte(byte byte_index, double scale, double offset, double metric_scale, double metric_offset) : base()
+        public TSPNByte(ushort spn, byte byte_index, double scale, double offset, double metric_scale, double metric_offset) : base(spn)
         {
             byteIndex = byte_index;
             this.scale = scale;
@@ -257,14 +259,14 @@ namespace VMSpc.Parsers
     public class TSPNWord : TSPNByte
     {
 
-        public TSPNWord(byte byte_index, double scale, double offset, double metric_scale, double metric_offset)
-            : base(byte_index, scale, offset, metric_scale, metric_offset)
+        public TSPNWord(ushort spn, byte byte_index, double scale, double offset, double metric_scale, double metric_offset)
+            : base(spn, byte_index, scale, offset, metric_scale, metric_offset)
         {
             recipNum = 0.0;
         }
 
-        public TSPNWord(byte byte_index, double scale, double offset, double metric_scale, double metric_offset, double recip_numerator)
-            : base(byte_index, scale, offset, metric_scale, metric_offset)
+        public TSPNWord(ushort spn, byte byte_index, double scale, double offset, double metric_scale, double metric_offset, double recip_numerator)
+            : base(spn, byte_index, scale, offset, metric_scale, metric_offset)
         {
             recipNum = recip_numerator;
         }
@@ -284,8 +286,8 @@ namespace VMSpc.Parsers
     #region TSPNUint
     public class TSPNUint : TSPNByte
     {
-        public TSPNUint(byte byte_index, double scale, double offset, double metric_scale, double metric_offset)
-             : base(byte_index, scale, offset, metric_scale, metric_offset) { }
+        public TSPNUint(ushort spn, byte byte_index, double scale, double offset, double metric_scale, double metric_offset)
+             : base(spn, byte_index, scale, offset, metric_scale, metric_offset) { }
 
         public override void Parse(byte address, byte[] data)
         {
@@ -305,7 +307,7 @@ namespace VMSpc.Parsers
 
     public class TSPNRange : TSPNDatum
     {
-        public TSPNRange() : base() {}
+        public TSPNRange(ushort spn) : base(spn) {}
 
         public override void Parse(byte address, byte[] data)
         {
@@ -327,7 +329,7 @@ namespace VMSpc.Parsers
 
     public class TSPNTransMode : TSPNDatum
     {
-        public TSPNTransMode() : base() { }
+        public TSPNTransMode(ushort spn) : base(spn) { }
 
         public override void Parse(byte address, byte[] data)
         {
@@ -354,7 +356,7 @@ namespace VMSpc.Parsers
 
     public class TSPNRetarder : TSPNDatum
     {
-        public TSPNRetarder() : base() { }
+        public TSPNRetarder(ushort spn) : base(spn) { }
 
         public override void Parse(byte address, byte[] data)
         {
@@ -380,7 +382,7 @@ namespace VMSpc.Parsers
         public byte cruiseAdjust;
         public string cruiseStat;
 
-        public TSPNCruise() : base() { }
+        public TSPNCruise(ushort spn) : base(spn) { }
 
         public override void Parse(byte address, byte[] data)
         {
@@ -417,8 +419,8 @@ namespace VMSpc.Parsers
         public double lastVal;
         protected uint maxVal;
 
-        public TSPNInferred(byte byte_index, double scale, double offset, double metric_scale, double metric_offset, uint max_val) 
-            : base(byte_index, scale, offset, metric_scale, metric_offset)
+        public TSPNInferred(ushort spn, byte byte_index, double scale, double offset, double metric_scale, double metric_offset, uint max_val) 
+            : base(spn, byte_index, scale, offset, metric_scale, metric_offset)
         {
             lastVal = 0.0;
             maxVal = max_val;
@@ -447,7 +449,10 @@ namespace VMSpc.Parsers
 
     public class TSPNDiag : TSPNDatum
     {
+        public TSPNDiag(ushort spn) : base(spn)
+        {
 
+        }
     }
 
     #endregion //TSPNDiag (diagnostics)

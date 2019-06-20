@@ -271,5 +271,9 @@ namespace VMSpc
         public const int FAVOR_1939 = 3;
         public const int FAVOR_1708 = 4;
 
+        public const byte LOGTYPE_RAWLOG = 0;
+        public const byte LOGTYPE_PARSEREADY = 1;
+        public const byte LOGTYPE_FULL = 2;
+
     }
 }

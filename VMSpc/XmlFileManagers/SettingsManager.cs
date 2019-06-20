@@ -65,7 +65,7 @@ namespace VMSpc.XmlFileManagers
         }
         public int get_autoRestartFlag()
         {
-            return Int32.Parse(getNodeValueByTagName("Auto-Restart_Flag"));
+            return Int32.Parse(getNodeValueByTagName("Auto-Restart-Flag"));
         }
         public int get_rollingBuffSize()
         {

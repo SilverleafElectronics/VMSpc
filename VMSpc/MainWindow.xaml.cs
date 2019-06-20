@@ -100,7 +100,7 @@ namespace VMSpc
 
         private void RawLogCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            RawLogDlg rawlogdlg = new RawLogDlg();
+            RawLogDlg rawlogdlg = new RawLogDlg(commreader);
             rawlogdlg.ShowDialog();
         }
 

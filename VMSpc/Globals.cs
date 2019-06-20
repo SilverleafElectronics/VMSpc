@@ -12,6 +12,12 @@ namespace VMSpc
 {
     public static class Globals
     {
+
+        static Globals()
+        {
+
+        }
+
         public struct MemoryHelpers
         {
             /// <summary>

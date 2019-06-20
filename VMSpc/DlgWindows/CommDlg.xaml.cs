@@ -58,7 +58,7 @@ namespace VMSpc.DlgWindows
             bool? result = dlg.ShowDialog();
             if (result == true)
             {
-                commreader.LogFile = dlg.FileName;
+                commreader.LogPlayerFile = dlg.FileName;
                 LogPlayerFileName.Text = dlg.FileName;
             }
         }

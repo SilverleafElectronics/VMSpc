@@ -30,6 +30,11 @@ namespace VMSpc.Parsers
         {
             return false;
         }
+
+        public override string ToString()
+        {
+            return (title + "(" + index + "):\n\tRaw Value - " + datum.rawValue + "\n\tValue - " + datum.value + "\n\tMetric Value - " + datum.valueMetric);
+        }
     }
 
     public class TSPNPresenterLongFloat : TSPNPresenter

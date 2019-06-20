@@ -60,8 +60,12 @@ namespace VMSpc.Communication
         private J1939Parser j1939Parser;
 
 
-        private string logFile;
-        public string LogFile { get { return logFile; } set { ChangeLogPlayerFile(value); } }
+        private string logPlayerFile;
+        public string LogPlayerFile { get { return logPlayerFile; } set { ChangeLogPlayerFile(value); } }
+
+        public string LogRecordingFile;
+        public bool LogRecordingEnabled;
+        public byte LogType;
 
 
         public VMSComm()
@@ -70,6 +74,10 @@ namespace VMSpc.Communication
             lastMessageCount = 0;
             badMessageCount = 0;
             extractor = new MessageExtractor();
+
+            LogRecordingEnabled = false;
+            LogType = LOGTYPE_RAWLOG;
+            LogRecordingFile = null; //CHANGEME - retrieve from config
 
             dataReaderType = USB;
             dataReaderMap = new Dictionary<int, Action>
@@ -82,7 +90,7 @@ namespace VMSpc.Communication
 
             comPort = 9;
             portString = "COM10"; //CHANGEME - port should be retrieved from config or inferred. User should also be able to override
-            logFile = "j1939log.vms";   //CHANGEME - should rely on user input
+            logPlayerFile = "j1939log.vms";   //CHANGEME - should rely on user input
             parseBehavior = PARSE_ALL;  //CHANGEME - should initially come from config
 
             j1939Parser = new J1939Parser();
@@ -117,6 +125,8 @@ namespace VMSpc.Communication
         private void ProcessData(string message)
         {
             CanMessage canMessage = extractor.GetMessage(message);
+            if (LogRecordingEnabled)
+                AddLogRecord(message, canMessage);
             if (canMessage == null || canMessage.messageType == INVALID_CAN_MESSAGE)
             {
                 badMessageCount++;
@@ -127,6 +137,23 @@ namespace VMSpc.Communication
             else if (canMessage.messageType == J1708 && parseBehavior != IGNORE_1708)
                 j1708Parser.Parse((J1708Message)canMessage);
             messageCount++;
+        }
+
+        private void AddLogRecord(string message, CanMessage canMessage)
+        {
+            string logEntry = "" + message;
+            if (LogType == LOGTYPE_PARSEREADY || LogType == LOGTYPE_FULL)
+                logEntry += canMessage.ToString();
+            if (LogType == LOGTYPE_FULL)
+            {
+                if (canMessage.messageType == J1939 && ParseBehavior != IGNORE_1939)
+                    logEntry += canMessage.ToParsedString(j1939Parser);
+                else if (canMessage.messageType == J1708 && ParseBehavior != IGNORE_1708)
+                    logEntry += canMessage.ToParsedString(j1708Parser);
+            }
+            logEntry += "\nEnd of Message\n\n";
+            using (StreamWriter logWriter = new StreamWriter(LogRecordingFile, true))
+                logWriter.WriteLine(logEntry);
         }
 
         #endregion //Business Logic
@@ -174,7 +201,7 @@ namespace VMSpc.Communication
 
         private void ChangeLogPlayerFile(string filename)
         {
-            logFile = filename;
+            logPlayerFile = filename;
             if (dataReaderType == LOGPLAYER)
             {
                 CloseDataReader();
@@ -262,7 +289,7 @@ namespace VMSpc.Communication
         /// </summary>
         private void InitLogReader()
         {
-            logReader = new StreamReader(logFile);
+            logReader = new StreamReader(logPlayerFile);
             logReadTimer = CREATE_TIMER(ReadLogEntry, 100);
 
         }

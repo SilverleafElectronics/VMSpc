@@ -61,104 +61,104 @@ namespace VMSpc.Parsers
         */
 
 
-        public static TSPNFlag spn_dpfActiveStatus = new TSPNFlag(1, 2);
-        public static TSPNFlag spn_dpfActiveError = new TSPNFlag(1, 2);  // set to 1 when dpf_active is 10b
-        public static TSPNFlag spn_dpfInhibitClutch = new TSPNFlag(2, 4);
-        public static TSPNFlag spn_dpfInhibitSwitch = new TSPNFlag(2, 2);
-        public static TSPNFlag spn_dpfInhibitStatus = new TSPNFlag(2, 0);
-        public static TSPNFlag spn_dpfInhibitSpeed = new TSPNFlag(3, 6);
-        public static TSPNFlag spn_dpfInhibitOffidle = new TSPNFlag(3, 2);
-        public static TSPNFlag spn_dpfInhibitPTO = new TSPNFlag(3, 0);
-        public static TSPNFlag spn_dpfInhibitParkbrake = new TSPNFlag(4, 0);
-        public static TSPNFlag spn_waitToStart = new TSPNFlag(3, 0);
-        public static TSPNFlag spn_engineShutdownApproaching = new TSPNFlag(4, 2);
-        public static TSPNFlag spn_engineShutdown = new TSPNFlag(4, 0);
-        public static TSPNFlag spn_waterInFuel = new TSPNFlag(0, 0);
-        public static TSPNFlag spn_absActive = new TSPNFlag(0, 2);
+        public static TSPNFlag spn_dpfActiveStatus = new TSPNFlag(0, 1, 2);
+        public static TSPNFlag spn_dpfActiveError = new TSPNFlag(0, 1, 2);  // set to 1 when dpf_active is 10b
+        public static TSPNFlag spn_dpfInhibitClutch = new TSPNFlag(0, 2, 4);
+        public static TSPNFlag spn_dpfInhibitSwitch = new TSPNFlag(0, 2, 2);
+        public static TSPNFlag spn_dpfInhibitStatus = new TSPNFlag(0, 2, 0);
+        public static TSPNFlag spn_dpfInhibitSpeed = new TSPNFlag(0, 3, 6);
+        public static TSPNFlag spn_dpfInhibitOffidle = new TSPNFlag(0, 3, 2);
+        public static TSPNFlag spn_dpfInhibitPTO = new TSPNFlag(0, 3, 0);
+        public static TSPNFlag spn_dpfInhibitParkbrake = new TSPNFlag(0, 4, 0);
+        public static TSPNFlag spn_waitToStart = new TSPNFlag(0, 3, 0);
+        public static TSPNFlag spn_engineShutdownApproaching = new TSPNFlag(0, 4, 2);
+        public static TSPNFlag spn_engineShutdown = new TSPNFlag(0, 4, 0);
+        public static TSPNFlag spn_waterInFuel = new TSPNFlag(0, 0, 0);
+        public static TSPNFlag spn_absActive = new TSPNFlag(0, 0, 2);
 
-        public static TSPNBits spn_fanState = new TSPNBits(1, 0, 4);
-        public static TSPNBits spn_dpfHighTempLamp = new TSPNBits(6, 2, 3);
-        public static TSPNBits spn_dpfLamp = new TSPNBits(0, 0, 3);
+        public static TSPNBits spn_fanState = new TSPNBits(0, 1, 0, 4);
+        public static TSPNBits spn_dpfHighTempLamp = new TSPNBits(0, 6, 2, 3);
+        public static TSPNBits spn_dpfLamp = new TSPNBits(0, 0, 0, 3);
 
-        public static TSPNByte spn_cruiseSetSpeed = new TSPNByte(5, 0.006215f * 100, 0.0f, 0.01f * 100, 0.0f);
-        public static TSPNByte spn_inletTemp = new TSPNByte(5, 1.8f, -40.0f, 1.0f, -40.0f);
-        public static TSPNByte spn_accelPos = new TSPNByte(1, 0.4f, 0.0f, 0.4f, 0.0f);
-        public static TSPNByte spn_fuelPressure = new TSPNByte(0, 0.580151f, 0.0f, 4.0f, 0.0f);
-        public static TSPNByte spn_oilLevel = new TSPNByte(2, 0.4f, 0.0f, 0.4f, 0.0f);
-        public static TSPNByte spn_oilPressure = new TSPNByte(3, 0.580151f, 0.0f, 4.0f, 0.0f);
-        public static TSPNByte spn_defTankLevel = new TSPNByte(0, 0.4f, 0.0f, 0.4f, 0.0f);
-        public static TSPNByte spn_defTankTemp = new TSPNByte(1, 1.8f, -40.0f, 1.0f, -40.0f);
-        public static TSPNByte spn_1708_RtdrSwtich = new TSPNByte(0, 1.0, 0.0, 1.0, 0.0);
-        public static TSPNByte spn_1708_RtdrStatus = new TSPNByte(0, 1.0, 0.0, 1.0, 0.0);
-        public static TSPNByte spn_1708_RtdrPressure = new TSPNByte(0, 1.0, 0.0, 1.0, 0.0);
-        public static TSPNByte spn_1708_RtdrOilTemp = new TSPNByte(0, 1.0, 0.0, 1.0, 0.0);
-        public static TSPNByte spn_baroPressure = new TSPNByte(0, 0.147649901f, 0.0f, 0.5f, 0.0f);
-        public static TSPNByte spn_interCoolerTemp = new TSPNByte(6, 1.8f, -40.0f, 1.0f, -40.0f);
-        public static TSPNByte spn_fuelLevel = new TSPNByte(1, 0.4f, 0.0f, 0.4f, 0.0f);
-        public static TSPNByte spn_torquePercent = new TSPNByte(2, 1.0, -125.0, 1.0, -125.0);
-        public static TSPNByte spn_loadPercent = new TSPNByte(2, 1.0, 0.0, 1.0, 0.0);
-        public static TSPNByte spn_turboBoostPressure = new TSPNByte(1, 0.2900755f, 0.0f, 2.0f, 0.0f);
-        public static TSPNByte spn_intakeManifoldTemp = new TSPNByte(2, 1.8f, -40.0f, 1.0f, -40.0f);
-        public static TSPNByte spn_airInletPressure = new TSPNByte(3, 0.2900755f, 0.0f, 2.0f, 0.0f);
-        public static TSPNByte spn_airFilterDiffPressure = new TSPNByte(4, 0.00725188689f, 0.0f, 0.05f, 0.0f);
-        public static TSPNByte spn_retarderPct = new TSPNByte(1, 1.0, -125.0, 1.0, -125.0);
-        public static TSPNByte spn_coolantTemp = new TSPNByte(0, 1.8f, -40.0f, 1.0f, -40.0f);
-        public static TSPNByte spn_fuelTemp = new TSPNByte(1, 1.8f, -40.0f, 1.0f, -40.0f);
-        public static TSPNByte spn_coolantPressure = new TSPNByte(6, 0.2900755f, 0.0f, 2.0f, 0.0f);
-        public static TSPNByte spn_coolantLevel = new TSPNByte(7, 0.4f, 0.0f, 0.4f, 0.0f);
-        public static TSPNByte spn_clutchSlipPercent = new TSPNByte(3, 0.4f, 0.0f, 0.4f, 0.0f);
-        public static TSPNByte spn_fanSpeed = new TSPNByte(0, 0.4f, 0.0f, 0.4f, 0.0f);
+        public static TSPNByte spn_cruiseSetSpeed = new TSPNByte(84, 5, 0.006215f * 100, 0.0f, 0.01f * 100, 0.0f);
+        public static TSPNByte spn_inletTemp = new TSPNByte(172, 5, 1.8f, -40.0f, 1.0f, -40.0f);
+        public static TSPNByte spn_accelPos = new TSPNByte(91, 1, 0.4f, 0.0f, 0.4f, 0.0f);
+        public static TSPNByte spn_fuelPressure = new TSPNByte(94, 0, 0.580151f, 0.0f, 4.0f, 0.0f);
+        public static TSPNByte spn_oilLevel = new TSPNByte(98, 2, 0.4f, 0.0f, 0.4f, 0.0f);
+        public static TSPNByte spn_oilPressure = new TSPNByte(100, 3, 0.580151f, 0.0f, 4.0f, 0.0f);
+        public static TSPNByte spn_defTankLevel = new TSPNByte(1761, 0, 0.4f, 0.0f, 0.4f, 0.0f);
+        public static TSPNByte spn_defTankTemp = new TSPNByte(3031, 1, 1.8f, -40.0f, 1.0f, -40.0f);
+        public static TSPNByte spn_1708_RtdrSwtich = new TSPNByte(47, 0, 1.0, 0.0, 1.0, 0.0);
+        public static TSPNByte spn_1708_RtdrStatus = new TSPNByte(121, 0, 1.0, 0.0, 1.0, 0.0);
+        public static TSPNByte spn_1708_RtdrPressure = new TSPNByte(119, 0, 1.0, 0.0, 1.0, 0.0);
+        public static TSPNByte spn_1708_RtdrOilTemp = new TSPNByte(120, 0, 1.0, 0.0, 1.0, 0.0);
+        public static TSPNByte spn_baroPressure = new TSPNByte(108, 0, 0.147649901f, 0.0f, 0.5f, 0.0f);
+        public static TSPNByte spn_interCoolerTemp = new TSPNByte(52, 6, 1.8f, -40.0f, 1.0f, -40.0f);
+        public static TSPNByte spn_fuelLevel = new TSPNByte(96, 1, 0.4f, 0.0f, 0.4f, 0.0f);
+        //public static TSPNByte spn_torquePercent = new TSPNByte(2, 1.0, -125.0, 1.0, -125.0);
+        public static TSPNByte spn_loadPercent = new TSPNByte(92, 2, 1.0, 0.0, 1.0, 0.0);
+        public static TSPNByte spn_turboBoostPressure = new TSPNByte(102, 1, 0.2900755f, 0.0f, 2.0f, 0.0f);
+        public static TSPNByte spn_intakeManifoldTemp = new TSPNByte(105, 2, 1.8f, -40.0f, 1.0f, -40.0f);
+        public static TSPNByte spn_airInletPressure = new TSPNByte(106, 3, 0.2900755f, 0.0f, 2.0f, 0.0f);
+        public static TSPNByte spn_airFilterDiffPressure = new TSPNByte(107, 4, 0.00725188689f, 0.0f, 0.05f, 0.0f);
+        public static TSPNByte spn_retarderPct = new TSPNByte(520, 1, 1.0, -125.0, 1.0, -125.0);
+        public static TSPNByte spn_coolantTemp = new TSPNByte(110, 0, 1.8f, -40.0f, 1.0f, -40.0f);
+        public static TSPNByte spn_fuelTemp = new TSPNByte(174, 1, 1.8f, -40.0f, 1.0f, -40.0f);
+        public static TSPNByte spn_coolantPressure = new TSPNByte(109, 6, 0.2900755f, 0.0f, 2.0f, 0.0f);
+        public static TSPNByte spn_coolantLevel = new TSPNByte(111, 7, 0.4f, 0.0f, 0.4f, 0.0f);
+        public static TSPNByte spn_clutchSlipPercent = new TSPNByte(522, 3, 0.4f, 0.0f, 0.4f, 0.0f);
+        public static TSPNByte spn_fanSpeed = new TSPNByte(986, 0, 0.4f, 0.0f, 0.4f, 0.0f);
 
-        public static TSPNWord spn_exhaustTemp3241 = new TSPNWord(0, 0.05625f, -459.4f, 0.03125f, -273.0f);
-        public static TSPNWord spn_dpfIntakeTemp = new TSPNWord(2, 0.05625f, -459.4f, 0.03125f, -273.0f);
-        public static TSPNWord spn_dpfOutletTemp = new TSPNWord(2, 0.05625f, -459.4f, 0.03125f, -273.0f);
-        public static TSPNWord spn_roadSpeed = new TSPNWord(1, 0.00242775f, 0.0f, 0.00390625f, 0.0f);
-        public static TSPNWord spn_ambientTemp = new TSPNWord(3, 0.05625f, -459.4f, 0.03125f, -273.0f);
-        public static TSPNWord spn_rpms = new TSPNWord(3, 0.125, 0.0, 0.125, 0.0);
-        public static TSPNWord spn_crankCasePressure = new TSPNWord(4, 0.0011331073f, -36.2594344f, 0.0078125f, -250.0f);
-        public static TSPNWord spn_injectorRailPressure = new TSPNWord(2, 0.001133107f, 0.0f, 0.0078125f, 0);
-        public static TSPNWord spn_oilTemp = new TSPNWord(2, 0.05625f, -459.4f, 0.03125f, -273.0f);
-        public static TSPNWord spn_ecuTemp = new TSPNWord(2, 0.05625f, -459.4f, 0.03125f, -273.0f);
-        public static TSPNWord spn_egrDiffPressure = new TSPNWord(4, 0.0011331073f, -36.2594344f, 0.0078125f, -250.0f);
-        public static TSPNWord spn_egrTemp = new TSPNWord(6, 0.05625f, -459.4f, 0.03125f, -273.0f);
-        public static TSPNWord spn_outputShaftSpeed = new TSPNWord(1, 0.125f, 0.0f, 0.125f, 0.0f);
-        public static TSPNWord spn_transTemp = new TSPNWord(4, 0.05625f, -459.4f, 0.03125f, -273.0f);
-        public static TSPNWord spn_inputShaftSpeed = new TSPNWord(1, 0.125f, 0.0f, 0.125f, 0.0f);
-        public static TSPNWord spn_exhaustTemp173 = new TSPNWord(5, 0.05625f, -459.4f, 0.03125f, -273.0f);
-        public static TSPNWord spn_instantMPG = new TSPNWord(2, 0.00000046f * 100 * 100, 0.0f, 0.0000001953125f * 100 * 100, 0.0f);
-        public static TSPNWord spn_turboSpeed = new TSPNWord(1, 4.0f, 0.0f, 4.0f, 0.0f);
-        public static TSPNWord spn_fuelRate = new TSPNWord(0, 1.320860255f / 100, 0.0f, 5.0f / 100, 0.0f);
-        public static TSPNWord spn_batteryVolts = new TSPNWord(4, 0.05f, 0.0f, 0.05f, 0.0f);
-        public static TSPNWord spn_rollingMPG = new TSPNWord(0, 0.01f, 0.0f, 0.00425143707f, 0.0f);
-        public static TSPNWord spn_recentMPG = new TSPNWord(0, 0.01f, 0.0f, 0.00425143707f, 0.0f);
-        public static TSPNWord spn_torque = new TSPNWord(0, 1.0f, 0.0f, 1.35581795f, 0.0f);
-        public static TSPNWord spn_horsepower = new TSPNWord(0, 1.0f, 0.0f, 0.745699872f, 0.0f);
-        public static TSPNWord spn_reciprocalMPG = new TSPNWord(2, 0.00000046f * 100 * 100, 0.0f, 0.0000001953125f * 100 * 100, 0.0f, 235.215f); //235.215 is conversion per gallon
-        public static TSPNWord spn_rollingLPK = new TSPNWord(0, 0.01f, 0.0f, 0.00425143707f, 0.0f, 235.215f);
-        public static TSPNWord spn_recentLPK = new TSPNWord(0, 0.01f, 0.0f, 0.00425143707f, 0.0f, 235.215f);
-        public static TSPNWord spn_acceleration = new TSPNWord(0, 1.0, 0.0, 1.0, 0.0);
-        public static TSPNWord spn_braking = new TSPNWord(0, 1.0, 0.0, 1.0, 0.0);
-        public static TSPNWord spn_peakAcceleration = new TSPNWord(0, 1.0, 0.0, 1.0, 0.0);
+        public static TSPNWord spn_exhaustTemp3241 = new TSPNWord(3241, 0, 0.05625f, -459.4f, 0.03125f, -273.0f);
+        public static TSPNWord spn_dpfIntakeTemp = new TSPNWord(3242, 2, 0.05625f, -459.4f, 0.03125f, -273.0f);
+        public static TSPNWord spn_dpfOutletTemp = new TSPNWord(3246, 2, 0.05625f, -459.4f, 0.03125f, -273.0f);
+        public static TSPNWord spn_roadSpeed = new TSPNWord(86, 1, 0.00242775f, 0.0f, 0.00390625f, 0.0f);
+        public static TSPNWord spn_ambientTemp = new TSPNWord(171, 3, 0.05625f, -459.4f, 0.03125f, -273.0f);
+        public static TSPNWord spn_rpms = new TSPNWord(190, 3, 0.125, 0.0, 0.125, 0.0);
+        public static TSPNWord spn_crankCasePressure = new TSPNWord(101, 4, 0.0011331073f, -36.2594344f, 0.0078125f, -250.0f);
+        public static TSPNWord spn_injectorRailPressure = new TSPNWord(157, 2, 0.001133107f, 0.0f, 0.0078125f, 0);
+        public static TSPNWord spn_oilTemp = new TSPNWord(175, 2, 0.05625f, -459.4f, 0.03125f, -273.0f);
+        public static TSPNWord spn_ecuTemp = new TSPNWord(1136, 2, 0.05625f, -459.4f, 0.03125f, -273.0f);
+        public static TSPNWord spn_egrDiffPressure = new TSPNWord(411, 4, 0.0011331073f, -36.2594344f, 0.0078125f, -250.0f);
+        public static TSPNWord spn_egrTemp = new TSPNWord(412, 6, 0.05625f, -459.4f, 0.03125f, -273.0f);
+        public static TSPNWord spn_outputShaftSpeed = new TSPNWord(191, 1, 0.125f, 0.0f, 0.125f, 0.0f);
+        public static TSPNWord spn_transTemp = new TSPNWord(177, 4, 0.05625f, -459.4f, 0.03125f, -273.0f);
+        public static TSPNWord spn_inputShaftSpeed = new TSPNWord(161, 1, 0.125f, 0.0f, 0.125f, 0.0f);
+        public static TSPNWord spn_exhaustTemp173 = new TSPNWord(173, 5, 0.05625f, -459.4f, 0.03125f, -273.0f);
+        public static TSPNWord spn_instantMPG = new TSPNWord(184, 2, 0.00000046f * 100 * 100, 0.0f, 0.0000001953125f * 100 * 100, 0.0f);
+        public static TSPNWord spn_turboSpeed = new TSPNWord(103, 1, 4.0f, 0.0f, 4.0f, 0.0f);
+        public static TSPNWord spn_fuelRate = new TSPNWord(183, 0, 1.320860255f / 100, 0.0f, 5.0f / 100, 0.0f);
+        public static TSPNWord spn_batteryVolts = new TSPNWord(168, 4, 0.05f, 0.0f, 0.05f, 0.0f);
+        public static TSPNWord spn_rollingMPG = new TSPNWord(9, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f);
+        public static TSPNWord spn_recentMPG = new TSPNWord(502, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f);
+        public static TSPNWord spn_torque = new TSPNWord(510, 0, 1.0f, 0.0f, 1.35581795f, 0.0f);
+        public static TSPNWord spn_horsepower = new TSPNWord(509, 0, 1.0f, 0.0f, 0.745699872f, 0.0f);
+        public static TSPNWord spn_reciprocalMPG = new TSPNWord(603, 2, 0.00000046f * 100 * 100, 0.0f, 0.0000001953125f * 100 * 100, 0.0f, 235.215f); //235.215 is conversion per gallon
+        public static TSPNWord spn_rollingLPK = new TSPNWord(601, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f, 235.215f);
+        public static TSPNWord spn_recentLPK = new TSPNWord(602, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f, 235.215f);
+        public static TSPNWord spn_acceleration = new TSPNWord(10, 0, 1.0, 0.0, 1.0, 0.0);
+        public static TSPNWord spn_braking = new TSPNWord(11, 0, 1.0, 0.0, 1.0, 0.0);
+        public static TSPNWord spn_peakAcceleration = new TSPNWord(12, 0, 1.0, 0.0, 1.0, 0.0);
 
-        public static TSPNUint spn_idleFuel = new TSPNUint(0, 0.132086f, 0.0f, 0.5f, 0.0f);
-        public static TSPNUint spn_idleHours = new TSPNUint(4, 0.05f, 0.0f, 0.05f, 0.0f);
+        public static TSPNUint spn_idleFuel = new TSPNUint(236, 0, 0.132086f, 0.0f, 0.5f, 0.0f);
+        public static TSPNUint spn_idleHours = new TSPNUint(235, 4, 0.05f, 0.0f, 0.05f, 0.0f);
         
-        public static TSPNInferred spn_odometer = new TSPNInferred(0, 0.003106856f, 0.0f, 0.005f, 0, 2000000);
-        public static TSPNInferred spn_odometerALT = new TSPNInferred(0, 0.003106856f, 0.0f, 0.005f, 0, 2000000);
-        public static TSPNInferred spn_hours = new TSPNInferred(0, 0.05f, 0.0f, 0.05f, 0.0f, 50000);
-        public static TSPNInferred spn_fuel = new TSPNInferred(4, 0.132086f, 0.0f, 0.5f, 0.0f, 250000);
+        public static TSPNInferred spn_odometer = new TSPNInferred(245, 0, 0.003106856f, 0.0f, 0.005f, 0, 2000000);
+        public static TSPNInferred spn_odometerALT = new TSPNInferred(244, 0, 0.003106856f, 0.0f, 0.005f, 0, 2000000);
+        public static TSPNInferred spn_hours = new TSPNInferred(247, 0, 0.05f, 0.0f, 0.05f, 0.0f, 50000);
+        public static TSPNInferred spn_fuel = new TSPNInferred(250, 4, 0.132086f, 0.0f, 0.5f, 0.0f, 250000);
 
-        public static TSPNDiag spn_diagnostic1939 = new TSPNDiag();
+        public static TSPNDiag spn_diagnostic1939 = new TSPNDiag(0); //TODO - implement once TSPNDiag is implemented
 
         //special parsing types
-        public static TSPNRange spn_range = new TSPNRange();
-        public static TSPNTransMode spn_transMode = new TSPNTransMode();
+        public static TSPNRange spn_range = new TSPNRange(0);
+        public static TSPNTransMode spn_transMode = new TSPNTransMode(0);
 
 
 
         static SPNDefinitions() { }
- //       public static SPNWrapper SPNManager { get; set; } = new SPNWrapper();
- //       public SPNWrapper() { }
+//        public static SPNWrapper SPNManager { get; set; } = new SPNWrapper();
+//        public SPNWrapper() { }
 
         public static void InitializeSPNs()
         {

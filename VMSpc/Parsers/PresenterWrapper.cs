@@ -28,7 +28,7 @@ namespace VMSpc.Parsers
         }
         public static void InitializePresenterList()
         {
-            PresenterList.Add(91, new TSPNPresenterFloat(spn_accelPos, "AACCEL-POS", 91, "pct", "pct", 0, false));
+            PresenterList.Add(91, new TSPNPresenterFloat(spn_accelPos, "ACCEL-POS", 91, "pct", "pct", 0, false));
             PresenterList.Add(171, new TSPNPresenterFloat(spn_ambientTemp, "AMB.-TEMP", 171, "degF", "degC", 0, false));
             PresenterList.Add(108, new TSPNPresenterFloat(spn_baroPressure, "BAROMETER", 108, "inHg", "kPa", 2, false));
             PresenterList.Add(522, new TSPNPresenterFloat(spn_clutchSlipPercent, "CLTCH-SLIP", 522, "pct", "pct", 0, false));

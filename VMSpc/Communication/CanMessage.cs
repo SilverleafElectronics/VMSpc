@@ -9,9 +9,13 @@ using System.Windows;
 using System.Timers;
 using static VMSpc.Parsers.PIDWrapper;
 using static VMSpc.Constants;
+using VMSpc.Parsers;
+using static VMSpc.Parsers.PGNMapper;
+using static VMSpc.Parsers.PresenterWrapper;
 
 namespace VMSpc.Communication
 {
+    #region CanMessage
     public abstract class CanMessage
     {
         public int messageLength;
@@ -24,14 +28,17 @@ namespace VMSpc.Communication
             rawData = new List<byte>();
             //messageLength and rawMessage account for dropping the J or R from the message
             messageLength = message.Length - 1;
-            rawMessage = message.Substring(1, messageLength - 2);
+            rawMessage = message.Substring(1, messageLength);
         }
 
         public abstract void ExtractMessage();
         public override abstract string ToString();
+        public abstract string ToParsedString(object parser);
 
     }
+    #endregion
 
+    #region J1939Message
     public class J1939Message : CanMessage
     {
         public byte address;
@@ -54,7 +61,7 @@ namespace VMSpc.Communication
             {
                 //J1939 Message comes in the format "R[SA:2 (index 1-2)][PGN:6 (index 3-8)][Data:16 (index 9-24)][cr][lf]"
                 messageType = J1939;
-                address = Convert.ToByte(rawMessage.Substring(0, 2));
+                address = Convert.ToByte(rawMessage.Substring(0, 2), 16);
                 pgn = Convert.ToUInt32(rawMessage.Substring(2, 6), 16);
                 string dataSection = rawMessage.Substring(8, 16);
                 bool dataStored = BYTE_STRING_TO_BYTE_ARRAY(data, dataSection, dataSection.Length);
@@ -72,14 +79,43 @@ namespace VMSpc.Communication
         public override string ToString()
         {
             string message;
-            message = ((messageType == J1939) ? "J1939 Message: " : "INVALID MESSAGE: ") 
-                      + "\nAddress - " + address 
-                      + "\nPGN - " + pgn 
-                      + "\nMessage - " + rawData.ToString();
+            message = ((messageType == J1939) ? "\nJ1939 Message:\n" : "\nINVALID J1939 MESSAGE:\n")
+                      + "Address - " + address.ToString("X2")
+                      + "\nPGN - " + pgn.ToString("X2")
+                      + "\nData - [" + BitConverter.ToString(data).Replace("-", ",") + "]\n";
             return message;
         }
-    }
 
+        public override string ToParsedString(object parser)
+        {
+            try
+            {
+                J1939Parser j1939 = (J1939Parser)parser;
+                j1939.Parse(this);
+                string message = "J1939 Parsed Message\n";
+                foreach (TSPNDatum datum in PGNMap[pgn])
+                {
+                    try
+                    {
+                        message += PresenterList[datum.spn].ToString() + "\n";
+                    }
+                    catch
+                    {
+                        message += "No definition for SPN " + datum.spn + "\n";
+                    }
+                }
+                    return message;
+            }
+            catch (Exception ex)
+            {
+                return "Error: " + ex.ToString();
+            }
+        }
+    }
+    #endregion //J1939Message
+
+
+    #region J1708Message
     public class J1708Message : CanMessage
     {
         public Dictionary<byte, byte[]> data; 
@@ -178,16 +214,35 @@ namespace VMSpc.Communication
         /// </summary>
         public override string ToString()
         {
-            string message = String.Copy(rawMessage);
-            message += ":";
+            string message = (messageType == J1708) ? "\nJ1708 Message:\n" : "\nINVALID J1708 MESSAGE\n";
             foreach (var pidItem in data)
             {
-                string byteString = "";
-                foreach (var item in pidItem.Value)
-                    byteString += item;
-                message += "\n\t" + pidItem.Key.PidToString() + ":\t" + byteString;
+                int tabCount = 6 - ((pidItem.Key.PidToString().Length + 1) / 4);
+                string tabs = "";
+                for (int i = 0; i < tabCount; i++) tabs += "\t";
+                message += ("\t" + pidItem.Key.PidToString() + ":" + tabs + "[" + BitConverter.ToString(pidItem.Value).Replace('-', ',') + "]\n");
             }
             return message;
         }
+
+        public override string ToParsedString(object parser)
+        {
+            try
+            {
+                J1708Parser j1708 = (J1708Parser)parser;
+                j1708.Parse(this);
+                string message = "J1708 Parsed Message\n";
+                foreach (var pidItem in data)
+                {
+                    message += PresenterList[pidItem.Key].ToString() + "\n";
+                }
+                return message;
+            }
+            catch (Exception ex)
+            {
+                return "Error: " + ex.ToString();
+            }
+        }
     }
+    #endregion //J1708Message
 }
