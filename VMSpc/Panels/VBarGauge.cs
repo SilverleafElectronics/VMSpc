@@ -16,57 +16,107 @@ namespace VMSpc.Panels
     /// <summary> Base class of VSimpleGauge, VScanGauge, and VRoundGauge </summary>
     class VBarGauge : VPanel
     {
-        private Rectangle EmptyBar;
-        private Rectangle FillBar;
+        protected Rectangle EmptyBar;
+        protected Rectangle FillBar;
+        protected TextBlock TitleText;
+        protected TextBlock ValueText;
 
         private static readonly Random getrandom = new Random();
 
         public VBarGauge(MainWindow mainWindow, PanelSettings panelSettings)
         : base(mainWindow, panelSettings)
         {
-            FillBar = new Rectangle();
-            FillBar.Stroke = new SolidColorBrush(Colors.Black);
-            FillBar.Fill = new SolidColorBrush(Colors.Green);
+            FillBar = new Rectangle
+            {
+                Stroke = new SolidColorBrush(Colors.Black),
+                Fill = new SolidColorBrush(Colors.Green)
+            };
             GeneratePanel();
         }
 
         public override void GeneratePanel()
         {
-            EmptyBar = new Rectangle();
-            EmptyBar.Stroke = new SolidColorBrush(Colors.Black);
-            EmptyBar.Fill = new SolidColorBrush(Colors.Black);
+            EmptyBar = new Rectangle
+            {
+                Stroke = new SolidColorBrush(Colors.Black),
+                Fill = new SolidColorBrush(Colors.Black)
+            };
+            DrawTitleText();
+            DrawValueText();
             DrawBar();
             DrawFillBar();
         }
 
-        public override void UpdatePanel()
+        //Move to VPanel?
+        protected virtual void DrawTitleText()
         {
-           
+            TitleText = new TextBlock();
+            TitleText.Text = "Turbo Boost Pressure - Extended";
+            TitleText.Background = new SolidColorBrush(Colors.Blue);
+            TitleText.Width = canvas.Width;
+            TitleText.Height = canvas.Height / 4;
+            TitleText.FontSize = MeasureFontSize(TitleText.Text, TitleText.Width, TitleText.Height); //TODO
+            TitleText.VerticalAlignment = VerticalAlignment.Center;
+            canvas.Children.Add(TitleText);
+            Canvas.SetTop(TitleText, 0);
+            ApplyRightBottomCoords(TitleText);
         }
 
-        private void DrawBar()
+        /// <summary>
+        /// Generates the rectangle for positioning the gauge's value text. This implementation is used by VSimpleGauge and VScanGauge, but is overridden by VRoundGauge
+        /// </summary>
+        protected virtual void DrawValueText()
         {
-            Canvas.SetTop(EmptyBar, 3 * (canvas.Height / 4));
+            ValueText = new TextBlock();
+            ValueText.Text = "" + border.Width;
+            ValueText.Background = new SolidColorBrush(Colors.Yellow);
+            ValueText.Width = canvas.Width;
+            ValueText.Height = canvas.Height / 4;
+            ValueText.FontSize = MeasureFontSize(ValueText.Text, ValueText.Width, ValueText.Height);
+            ValueText.FontWeight = FontWeights.Bold;
+            canvas.Children.Add(ValueText);
+            Canvas.SetTop(ValueText, Canvas.GetBottom(TitleText));
+            ApplyRightBottomCoords(ValueText);
+        }
+
+        /// <summary>
+        /// Draws the initial empty bar. This implementation is used by VSimpleGauge and VScanGauge, but is overridden by VRoundGauge
+        /// </summary>
+        protected virtual void DrawBar()
+        {
+            Canvas.SetTop(EmptyBar, 3 * (canvas.Height / 4));   //Generates a bar that fills the bottom 1/4 of the panel
             EmptyBar.Height = canvas.Height / 4;
             EmptyBar.Width = canvas.Width;
             canvas.Children.Add(EmptyBar);
         }
 
-        private void DrawFillBar()
+        /// <summary>
+        /// Generates the bar used for filling the bar with color. This implementation is used by VSimpleGauge and VScanGauge, but is overridden by VRoundGauge
+        /// </summary>
+        protected virtual void DrawFillBar()
         {
-            Canvas.SetTop(FillBar, 3 * (canvas.Height / 4));
+            Canvas.SetTop(FillBar, 3 * (canvas.Height / 4));    //Generates a bar that fills the bottom 1/4 of the panel
             FillBar.Height = canvas.Height / 4;
             canvas.Children.Add(FillBar);
         }
 
-        protected void UpdateFillBar(double value)
+        /// <summary>
+        /// Updates the fill bar with the specified value. This implementation is used by VSimpleGauge and VScanGauge, but is overridden by VRoundGauge
+        /// </summary>
+        protected virtual void UpdateFillBar(double value)
         {
             FillBar.Width = value;
         }
 
-        protected void UpdateText(double value)
+        /// <summary>
+        /// Draws the gauge's value text
+        /// </summary>
+        protected void UpdateValueText(double value)
         {
-
+            //ValueText.Text = "" + value;
         }
+
+        //implemented in child classes
+        public override void UpdatePanel() { }
     }
 }

@@ -38,6 +38,10 @@ namespace VMSpc.CustomComponents
             ApplyCanvasDimensions();
         }
 
+        ~VMSCanvas()
+        {
+        }
+
         private void ApplyBorderDimensions()
         {
             border.Width = panelSettings.rectCord.bottomRightX - panelSettings.rectCord.topLeftX;

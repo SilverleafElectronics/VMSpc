@@ -44,6 +44,7 @@ namespace VMSpc.XmlFileManagers
 
     public class PanelSettings
     {
+        public ushort number;
         public char ID;
         public PanelCoordinates rectCord;
         public Color backgroundColor;
@@ -53,9 +54,9 @@ namespace VMSpc.XmlFileManagers
         public int Text_Position;
         public int Use_Static_Color;
 
-        public PanelSettings()
+        public PanelSettings(ushort number)
         {
-
+            this.number = number;
         }
 
         public virtual void StoreSettings(string nodeName, string val, XmlNode panelNode)
@@ -83,6 +84,14 @@ namespace VMSpc.XmlFileManagers
             }
         }
 
+        public virtual void SaveSettings(XmlNode panelNode)
+        {
+            panelNode["Rect-Cord"].SetAttribute("Top-LeftX", rectCord.topLeftX.ToString());
+            panelNode["Rect-Cord"].SetAttribute("Top-LeftY", rectCord.topLeftY.ToString());
+            panelNode["Rect-Cord"].SetAttribute("Bottom-RightX", rectCord.bottomRightX.ToString());
+            panelNode["Rect-Cord"].SetAttribute("Bottom-RightY", rectCord.bottomRightY.ToString());
+        }
+
         protected Color GetColorFromXml(XmlNode node)
         {
             Color color = Color.FromRgb(
@@ -103,6 +112,8 @@ namespace VMSpc.XmlFileManagers
     {
         public bool showDate;
         public bool showAMPM;
+
+        public ClockSettings(ushort number) : base(number) { }
 
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
@@ -125,6 +136,9 @@ namespace VMSpc.XmlFileManagers
         public int numLines;
         public int PID;
         public int PIDLimited;
+
+        public MessageBoxSettings(ushort number) : base(number) { }
+
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
             switch (nodeName)
@@ -147,6 +161,8 @@ namespace VMSpc.XmlFileManagers
     public class PictureSettings : PanelSettings
     {
         public string BMPFileName;
+        public PictureSettings(ushort number) : base(number) { }
+
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
             switch (nodeName)
@@ -163,6 +179,8 @@ namespace VMSpc.XmlFileManagers
     public class DiagnosticGaugeSettings : PanelSettings
     {
         public Color WarningColor;
+        public DiagnosticGaugeSettings(ushort number) : base(number) { }
+
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
             switch (nodeName)
@@ -180,6 +198,8 @@ namespace VMSpc.XmlFileManagers
     {
         public int textLength;
         public string text;
+        public TextGaugeSettings(ushort number) : base(number) { }
+
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
             switch (nodeName)
@@ -200,6 +220,8 @@ namespace VMSpc.XmlFileManagers
     {
         public bool showAttained;
         public bool showSelected;
+        public TransmissionGaugeSettings(ushort number) : base(number) { }
+
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
             switch (nodeName)
@@ -223,6 +245,8 @@ namespace VMSpc.XmlFileManagers
         public bool showUnits;
         public bool showInMetric;
         public string fileName;
+        public RecordedSettings(ushort number) : base(number) { }
+
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
             switch (nodeName)
@@ -256,6 +280,8 @@ namespace VMSpc.XmlFileManagers
         public bool layoutHorizontal;
         public int tankSize;
         public int tankSizeMetric;
+        public TankMinderSettings(ushort number) : base(number) { }
+
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
             switch (nodeName)
@@ -290,6 +316,8 @@ namespace VMSpc.XmlFileManagers
         public bool showHours;
         public bool showMiles;
         public bool showSpeed;
+        public OdometerSettings(ushort number) : base(number) { }
+
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
             switch (nodeName)
@@ -321,6 +349,8 @@ namespace VMSpc.XmlFileManagers
         public bool showGraph;
         public bool showAbbreviation;
         public bool showInMetric;
+        public GaugeSettings(ushort number) : base(number) { }
+
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
             switch (nodeName)
@@ -355,6 +385,8 @@ namespace VMSpc.XmlFileManagers
     public class ScanGaugeSettings : GaugeSettings
     {
         public List<int> PIDList;
+        public ScanGaugeSettings(ushort number) : base(number) { }
+
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
             switch (nodeName)
@@ -371,6 +403,8 @@ namespace VMSpc.XmlFileManagers
     public class SimpleGaugeSettings : GaugeSettings
     {
         public int PID;
+        public SimpleGaugeSettings(ushort number) : base(number) { }
+
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
             switch (nodeName)
@@ -388,6 +422,8 @@ namespace VMSpc.XmlFileManagers
     {
         public Color gaugeColor;
         public Color fillColor;
+        public RoundGaugeSettings(ushort number) : base(number) { }
+
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
             switch (nodeName)

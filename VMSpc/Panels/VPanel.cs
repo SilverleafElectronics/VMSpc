@@ -19,6 +19,8 @@ using VMSpc.CustomComponents;
 using VMSpc.DevHelpers;
 using System.Timers;
 using static VMSpc.Constants;
+using static VMSpc.Parsers.PresenterWrapper;
+using System.Globalization;
 
 namespace VMSpc.Panels
 {
@@ -43,8 +45,6 @@ namespace VMSpc.Panels
         private bool isRightClipped;
         private bool isBottomClipped;
 
-        private Timer updateTimer;
-
         public VPanel(MainWindow mainWindow, PanelSettings panelSettings)
         {
             this.mainWindow = mainWindow;
@@ -54,6 +54,41 @@ namespace VMSpc.Panels
             border.Child = canvas;
             isLeftClipped = isTopClipped = isRightClipped = isBottomClipped = false;
             InitLimits();
+            GenerateEventHandlers();
+        }
+
+        ~VPanel()
+        {
+
+        }
+
+        private void GenerateEventHandlers()
+        {
+            border.MouseEnter += OnMouseOverBorder;
+            border.MouseLeave += OnMouseLeaveBorder;
+            canvas.MouseEnter += OnMouseLeaveBorder;
+        }
+
+        public void OnMouseOverBorder(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.SizeAll;
+        }
+
+        public void OnMouseLeaveBorder(object sender, MouseEventArgs e)
+        {
+            VMSConsole.PrintLine("XPosition: " + e.GetPosition(border).X);
+            if (
+                       (!IsWithinBoundary(0, 10, e.GetPosition(border).X))
+                    && (!IsWithinBoundary(border.Width, 10, e.GetPosition(border).X))
+                    && (!IsWithinBoundary(0, 10, e.GetPosition(border).Y))
+                    && (!IsWithinBoundary(border.Height, 10, e.GetPosition(border).Y))
+                )
+                Mouse.OverrideCursor = Cursors.Arrow;
+        }
+
+        private bool IsWithinBoundary(double targetPosition, double boundaryLimit, double value)
+        {
+            return ((targetPosition + boundaryLimit >= targetPosition) && (targetPosition - boundaryLimit <= targetPosition));
         }
 
         /// <summary>
@@ -120,69 +155,15 @@ namespace VMSpc.Panels
         /// <returns></returns>
         public bool CanMove(int direction, double newVal)
         {
-            if (!BreaksClip(direction, newVal))
-                return false;
             switch (direction)
             {
                 case HORIZONTAL:
-                    return (newVal > leftLimit && (newVal + border.Width) < rightLimit);
+                    return (newVal >= leftLimit && (newVal + border.Width) <= rightLimit);
                 case VERTICAL:
-                    return (newVal > topLimit && (newVal + border.Height) < bottomLimit);
+                    return (newVal >= topLimit && (newVal + border.Height) <= bottomLimit);
                 default:
                     return false;
             }
-        }
-
-        private bool BreaksClip(int direction, double newVal)
-        {
-            bool allowed = true;
-            if (direction == VERTICAL)
-            {
-                if (isTopClipped)
-                {
-                    if (newVal < (topLimit + 20))
-                    {
-                        allowed = false;
-                        isTopClipped = false;
-                    }
-                    else if (newVal >= topLimit)
-                    {
-
-                    }
-                }
-                if (isBottomClipped)
-                {
-                    if ((newVal + border.Height) > (bottomLimit - 20))
-                    {
-                        allowed = false;
-                        isBottomClipped = false;
-                    }
-                    else if ((newVal + border.Height) <= bottomLimit)
-                    {
-
-                    }
-                }
-            }
-            if (direction == HORIZONTAL)
-            {
-                if (isLeftClipped)
-                {
-                    if (newVal < (leftLimit + 20))
-                    {
-                        allowed = false;
-                        isLeftClipped = false;
-                    }
-                }
-                if (isRightClipped)
-                {
-                    if (newVal > (rightLimit - 20))
-                    {
-                        allowed = false;
-                        isRightClipped = false;
-                    }
-                }
-            }
-            return allowed;
         }
 
         public void SetVertical(double newTop, Point newCursorPoint)
@@ -279,9 +260,41 @@ namespace VMSpc.Panels
             }
         }
 
+        protected double GetPidValue(ushort pid)
+        {
+            return PresenterList[pid].datum.value;
+        }
+
+        protected double MeasureFontSize(string text, double maxWidth, double maxHeight)
+        {
+
+            return 12;
+        }
+
         public abstract void GeneratePanel();
 
         public abstract void UpdatePanel();
+
+        /// <summary>
+        /// Assigns the appropriate right and bottom coordinates of an element. The element's width and height must already be set before calling this method
+        /// </summary>
+        protected void ApplyRightBottomCoords(FrameworkElement element)
+        {
+            Canvas.SetBottom(element, Canvas.GetTop(element) + element.Height);
+            Canvas.SetRight(element, Canvas.GetLeft(element) + element.Width);
+        }
+
+        public void SaveSettings()
+        {
+            panelSettings.rectCord.bottomRightX = (int)Canvas.GetRight(border);
+            panelSettings.rectCord.bottomRightY = (int)Canvas.GetBottom(border);
+            panelSettings.rectCord.topLeftX = (int)Canvas.GetLeft(border);
+            panelSettings.rectCord.topLeftY = (int)Canvas.GetTop(border);
+            VMSConsole.PrintLine("Right: "+Canvas.GetRight(border));
+            VMSConsole.PrintLine("Left: " + Canvas.GetLeft(border));
+            VMSConsole.PrintLine("Top: " + Canvas.GetTop(border));
+            VMSConsole.PrintLine("Bottom: " + Canvas.GetBottom(border));
+        }
 
     }
 }

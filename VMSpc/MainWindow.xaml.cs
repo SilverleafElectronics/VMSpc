@@ -114,7 +114,7 @@ namespace VMSpc
     }
 
 
-    //Custom command binding for the main window
+    #region Custom Event Handlers
     public static class MainCommands
     {
         public static readonly RoutedUICommand CommSettings = new RoutedUICommand(
@@ -135,4 +135,5 @@ namespace VMSpc
             typeof(MainCommands)
         );
     }
+    #endregion //Custom Event Handlers
 }

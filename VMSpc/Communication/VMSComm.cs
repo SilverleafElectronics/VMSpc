@@ -259,7 +259,7 @@ namespace VMSpc.Communication
         {
             Application.Current.Dispatcher.Invoke(delegate
             {
-                //break all of the buffer into an array of messages and process them individually
+                //break the buffer into an array of messages and process them individually.
                 //each valid, individual message in the buffer ends in a newline character
                 try
                 {

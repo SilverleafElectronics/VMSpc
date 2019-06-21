@@ -18,6 +18,7 @@ using VMSpc.Panels;
 using VMSpc.DevHelpers;
 using System.Timers;
 using static VMSpc.Constants;
+using static VMSpc.XmlFileManagers.DefaultScrnManager;
 
 namespace VMSpc.CustomComponents
 {
@@ -57,15 +58,14 @@ namespace VMSpc.CustomComponents
         public void InitPanels(MainWindow mainWindow)
         {
             this.mainWindow = mainWindow;
-            int numPanels = DefaultScrnManager.scrnManager.GetPanelCount();
-            for (int i = 1; i <= numPanels; i++)
+            scrnManager.LoadPanels();
+            foreach(var panelSettings in scrnManager.configurationPanelList)
             {
-                PanelSettings panelSettings = DefaultScrnManager.scrnManager.GetPanel(i);
                 VPanel panel = null;
                 switch (panelSettings.ID)
                 {
                     case PanelIDs.SIMPLE_GAUGE_ID:
-                        panel = new VSimpleGauge(mainWindow, (SimpleGaugeSettings)panelSettings); //CHANGEME - to new VSimpleGauge
+                        panel = new VSimpleGauge(mainWindow, (SimpleGaugeSettings)panelSettings);
                         break;
                     case PanelIDs.SCAN_GAUGE_ID:
                         break;
@@ -115,6 +115,7 @@ namespace VMSpc.CustomComponents
         {
             base.OnMouseUp(e);
             Init();
+            SavePanelCoordinates();
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
@@ -146,7 +147,23 @@ namespace VMSpc.CustomComponents
                     //user has clicked directly inside the canvas
                     try { source = (VMSCanvas)src; }
                     //user has clicked inside a subcomponent of the canvas
-                    catch { source = (VMSCanvas)VisualTreeHelper.GetParent((Rectangle)src); }
+                    catch
+                    {
+                        switch (src.GetType().ToString())
+                        {
+                            case "System.Windows.Shapes.Rectangle":
+                                source = (VMSCanvas)VisualTreeHelper.GetParent((Rectangle)src);
+                                break;
+                            case "System.Windows.Controls.TextBlock":
+                                source = (VMSCanvas)VisualTreeHelper.GetParent((TextBlock)src);
+                                break;
+                            default:
+                                source = (VMSCanvas)VisualTreeHelper.GetParent((Control)src);
+                                source = null;
+                                selectedChild = null;
+                                break;
+                        }
+                    }
                 }
                 catch //indicates the user has clicked outside of a panel
                 {
@@ -216,5 +233,13 @@ namespace VMSpc.CustomComponents
             );
         }
         #endregion
+
+        protected void SavePanelCoordinates()
+        {
+            foreach (var panel in PanelList)
+                panel.SaveSettings();
+            scrnManager.SaveConfiguration();
+
+        }
     }
 }

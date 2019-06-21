@@ -1,118 +1,69 @@
 <!--DO NOT MODIFY THE CONTENTS OF THIS FILE UNLESS YOU KNOW WHAT YOU ARE DOING!!!-->
 <Root>
-    <Version>V4.0</Version>
-    <Screen-Elements>
-        <File-Name>default.scr.xml</File-Name>
-        <Panel Number="1">
-            <ID>1</ID>
-            <Rect-Cord Top-LeftX="160" Top-LeftY="160" Bottom-RightX="300" Bottom-RightY="300"/>
-            <BackGround-Color Red="163" Green="82" Blue="0"/>
-            <Base-Color Red="255" Green="255" Blue="255"/>
-            <Explicit-Color Red="255" Green="255" Blue="255"/>
-            <Explicit-Gauge-Color Red="211" Green="211" Blue="211"/>
-            <Explicit-Fill-Color Red="0" Green="0" Blue="0"/>
-            <PID>84</PID>
-            <Show-Spot>false</Show-Spot>
-            <Show-Name>true</Show-Name>
-            <Show-Value>true</Show-Value>
-            <Show-Unit>true</Show-Unit>
-            <Show-Graph>true</Show-Graph>
-            <Show-Abbreviation>false</Show-Abbreviation>
-            <Show-In-Metric>false</Show-In-Metric>
-            <Use-Static-Color>false</Use-Static-Color>
-            <Format>1</Format>
-        </Panel>
-        <Panel Number="2">
-            <ID>1</ID>
-            <Rect-Cord Top-LeftX="480" Top-LeftY="320" Bottom-RightX="640" Bottom-RightY="440"/>
-            <BackGround-Color Red="163" Green="82" Blue="0"/>
-            <Base-Color Red="255" Green="255" Blue="255"/>
-            <Explicit-Color Red="255" Green="255" Blue="255"/>
-            <Explicit-Gauge-Color Red="211" Green="211" Blue="211"/>
-            <Explicit-Fill-Color Red="0" Green="0" Blue="0"/>
-            <PID>84</PID>
-            <Show-Spot>false</Show-Spot>
-            <Show-Name>true</Show-Name>
-            <Show-Value>true</Show-Value>
-            <Show-Unit>true</Show-Unit>
-            <Show-Graph>true</Show-Graph>
-            <Show-Abbreviation>false</Show-Abbreviation>
-            <Show-In-Metric>false</Show-In-Metric>
-            <Use-Static-Color>false</Use-Static-Color>
-            <Format>1</Format>
-        </Panel>
-		<Panel Number="3">
-            <ID>1</ID>
-            <Rect-Cord Top-LeftX="480" Top-LeftY="480" Bottom-RightX="640" Bottom-RightY="640"/>
-            <BackGround-Color Red="163" Green="82" Blue="0"/>
-            <Base-Color Red="255" Green="255" Blue="255"/>
-            <Explicit-Color Red="255" Green="255" Blue="255"/>
-            <Explicit-Gauge-Color Red="211" Green="211" Blue="211"/>
-            <Explicit-Fill-Color Red="0" Green="0" Blue="0"/>
-            <PID>84</PID>
-            <Show-Spot>false</Show-Spot>
-            <Show-Name>true</Show-Name>
-            <Show-Value>true</Show-Value>
-            <Show-Unit>true</Show-Unit>
-            <Show-Graph>true</Show-Graph>
-            <Show-Abbreviation>false</Show-Abbreviation>
-            <Show-In-Metric>false</Show-In-Metric>
-            <Use-Static-Color>false</Use-Static-Color>
-            <Format>1</Format>
-        </Panel>
-        <Panel Number="4">
-            <ID>E</ID>
-            <Rect-Cord Top-LeftX="456" Top-LeftY="288" Bottom-RightX="1016" Bottom-RightY="388"/>
-            <BackGround-Color Red="163" Green="82" Blue="0"/>
-            <Base-Color Red="255" Green="255" Blue="255"/>
-            <Explicit-Color Red="255" Green="255" Blue="255"/>
-            <Explicit-Gauge-Color Red="211" Green="211" Blue="211"/>
-            <Explicit-Fill-Color Red="0" Green="0" Blue="0"/>
-            <PID>84</PID>
-            <Use-Static-Color>false</Use-Static-Color>
-            <Warning-Color Red="0" Green="0" Blue="0"/>
-        </Panel>
-        <Wallpaper-Filename></Wallpaper-Filename>
-        <Text-Color Red="255" Green="0" Blue="0"/>
-        <Panel-Count>3</Panel-Count>
-        <Shader-Position>4</Shader-Position>
-        <Day-Palette>1</Day-Palette>
-        <Night-Palette>0</Night-Palette>
-        <Use-Def-Pal>0</Use-Def-Pal>
-        <Use-Blu-Pal>0</Use-Blu-Pal>
-        <Use-Brn-Pal>1</Use-Brn-Pal>
-        <Use-White-Pal>0</Use-White-Pal>
-        <Use-Chrome-Pal>0</Use-Chrome-Pal>
-        <Use-Obsidian-Pal>0</Use-Obsidian-Pal>
-        <Use-Cus-Pal>0</Use-Cus-Pal>
-        <Use-Cus2-Pal>0</Use-Cus2-Pal>
-        <Base-Color Red="0" Green="65" Blue="140"/>
-        <Cust-Base-Color Red="0" Green="65" Blue="140"/>
-        <Cust1-Back-Color Red="160" Green="255" Blue="192"/>
-        <Cust1-Gauge-Color Red="160" Green="160" Blue="164"/>
-        <Cust1-Captions-Color Red="0" Green="0" Blue="255"/>
-        <Cust1-Data-Color Red="0" Green="0" Blue="0"/>
-        <Cust1-Green-Color Red="0" Green="192" Blue="0"/>
-        <Cust1-Yellow-Color Red="255" Green="255" Blue="87"/>
-        <Cust1-Red-Color Red="255" Green="0" Blue="0"/>
-        <Cust1-Blue-Color Red="0" Green="255" Blue="255"/>
-        <Cust2-Back-Color Red="255" Green="251" Blue="240"/>
-        <Cust2-Gauge-Color Red="255" Green="251" Blue="240"/>
-        <Cust2-Captions-Color Red="0" Green="75" Blue="192"/>
-        <Cust2-Data-Color Red="0" Green="0" Blue="0"/>
-        <Cust2-Green-Color Red="0" Green="255" Blue="0"/>
-        <Cust2-Yellow-Color Red="255" Green="255" Blue="87"/>
-        <Cust2-Red-Color Red="255" Green="0" Blue="255"/>
-        <Cust2-Blue-Color Red="0" Green="0" Blue="255"/>
-        <Day-On-Hour>6</Day-On-Hour>
-        <Day-On-Minute>0</Day-On-Minute>
-        <Day-On-AMPM>0</Day-On-AMPM>
-        <Night-On-Hour>8</Night-On-Hour>
-        <Night-On-Minute>0</Night-On-Minute>
-        <Night-On-AMPM>1</Night-On-AMPM>
-        <Use-Timer>0</Use-Timer>
-        <Use-Blue>0</Use-Blue>
-        <Saturation-Offset>0</Saturation-Offset>
-        <Value-Offset>0</Value-Offset>
-    </Screen-Elements>
+  <Version>V4.0</Version>
+  <Screen-Elements>
+    <File-Name>default.scr.xml</File-Name>
+    <Panel Number="1">
+      <ID>1</ID>
+      <Rect-Cord Top-LeftX="166" Top-LeftY="239" Bottom-RightX="306" Bottom-RightY="379" />
+      <BackGround-Color Red="163" Green="82" Blue="0" />
+      <Base-Color Red="255" Green="255" Blue="255" />
+      <Explicit-Color Red="255" Green="255" Blue="255" />
+      <Explicit-Gauge-Color Red="211" Green="211" Blue="211" />
+      <Explicit-Fill-Color Red="0" Green="0" Blue="0" />
+      <PID>84</PID>
+      <Show-Spot>false</Show-Spot>
+      <Show-Name>true</Show-Name>
+      <Show-Value>true</Show-Value>
+      <Show-Unit>true</Show-Unit>
+      <Show-Graph>true</Show-Graph>
+      <Show-Abbreviation>false</Show-Abbreviation>
+      <Show-In-Metric>false</Show-In-Metric>
+      <Use-Static-Color>false</Use-Static-Color>
+      <Format>1</Format>
+    </Panel>
+    <Wallpaper-Filename>
+    </Wallpaper-Filename>
+    <Text-Color Red="255" Green="0" Blue="0" />
+    <Panel-Count>1</Panel-Count>
+    <Shader-Position>4</Shader-Position>
+    <Day-Palette>1</Day-Palette>
+    <Night-Palette>0</Night-Palette>
+    <Use-Def-Pal>0</Use-Def-Pal>
+    <Use-Blu-Pal>0</Use-Blu-Pal>
+    <Use-Brn-Pal>1</Use-Brn-Pal>
+    <Use-White-Pal>0</Use-White-Pal>
+    <Use-Chrome-Pal>0</Use-Chrome-Pal>
+    <Use-Obsidian-Pal>0</Use-Obsidian-Pal>
+    <Use-Cus-Pal>0</Use-Cus-Pal>
+    <Use-Cus2-Pal>0</Use-Cus2-Pal>
+    <Base-Color Red="0" Green="65" Blue="140" />
+    <Cust-Base-Color Red="0" Green="65" Blue="140" />
+    <Cust1-Back-Color Red="160" Green="255" Blue="192" />
+    <Cust1-Gauge-Color Red="160" Green="160" Blue="164" />
+    <Cust1-Captions-Color Red="0" Green="0" Blue="255" />
+    <Cust1-Data-Color Red="0" Green="0" Blue="0" />
+    <Cust1-Green-Color Red="0" Green="192" Blue="0" />
+    <Cust1-Yellow-Color Red="255" Green="255" Blue="87" />
+    <Cust1-Red-Color Red="255" Green="0" Blue="0" />
+    <Cust1-Blue-Color Red="0" Green="255" Blue="255" />
+    <Cust2-Back-Color Red="255" Green="251" Blue="240" />
+    <Cust2-Gauge-Color Red="255" Green="251" Blue="240" />
+    <Cust2-Captions-Color Red="0" Green="75" Blue="192" />
+    <Cust2-Data-Color Red="0" Green="0" Blue="0" />
+    <Cust2-Green-Color Red="0" Green="255" Blue="0" />
+    <Cust2-Yellow-Color Red="255" Green="255" Blue="87" />
+    <Cust2-Red-Color Red="255" Green="0" Blue="255" />
+    <Cust2-Blue-Color Red="0" Green="0" Blue="255" />
+    <Day-On-Hour>6</Day-On-Hour>
+    <Day-On-Minute>0</Day-On-Minute>
+    <Day-On-AMPM>0</Day-On-AMPM>
+    <Night-On-Hour>8</Night-On-Hour>
+    <Night-On-Minute>0</Night-On-Minute>
+    <Night-On-AMPM>1</Night-On-AMPM>
+    <Use-Timer>0</Use-Timer>
+    <Use-Blue>0</Use-Blue>
+    <Saturation-Offset>0</Saturation-Offset>
+    <Value-Offset>0</Value-Offset>
+  </Screen-Elements>
 </Root>

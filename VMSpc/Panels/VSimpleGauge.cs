@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using VMSpc.XmlFileManagers;
 using VMSpc.DevHelpers;
-using static VMSpc.Parsers.PresenterWrapper;
 using VMSpc.Parsers;
 
 namespace VMSpc.Panels
@@ -29,8 +28,9 @@ namespace VMSpc.Panels
 
         public override void UpdatePanel()
         {
-            double newValue = PresenterList[pid].datum.value;
-            UpdateFillBar(newValue);
+            double newValue = GetPidValue(pid);
+            UpdateFillBar((int)newValue);
+            UpdateValueText((int)newValue);
         }
     }
 }
