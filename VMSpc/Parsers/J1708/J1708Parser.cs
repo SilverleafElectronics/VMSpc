@@ -109,17 +109,47 @@ namespace VMSpc.Parsers
 
         private void SetTotalMiles(byte[] data)
         {
-
+            if (data[0] != 4)
+                return;
+            double tempS, tempM;
+            uint tempR;
+            tempS = data[1] * 0.1;
+            tempS += data[2] * (0.1 * 0x100);
+            tempS += data[3] * (0.1 * 0x10000);
+            tempM = tempS;
+            tempR = (uint)(tempS * 321.802209171f);
+            if (tempS > PresenterList[245].datum.value && tempS < 2000000)
+                SetValueSPN(245, tempR, tempM, tempS, J1708);
         }
 
         private void SetEngineHours(byte[] data)
         {
-
+            if (data[0] != 4)
+                return;
+            double tempS, tempM;
+            uint tempR;
+            tempS = data[1] * 0.05;
+            tempS += data[2] * (0.05 * 0x100);
+            tempS += data[3] * (0.05 * 0x10000);
+            tempM = tempS;
+            tempR = (uint)(tempS * 20);
+            if (tempS > PresenterList[247].datum.value && tempS < 50000)
+                SetValueSPN(247, tempR, tempM, tempS, J1708);
         }
 
         private void SetTotalFuel(byte[] data)
         {
-
+            if (data[0] != 4)
+                return;
+            double tempS, tempM;
+            uint tempR;
+            tempS = data[1] * 0.125;
+            tempS += data[2] * (0.125 * 0x100);
+            tempS += data[3] * (0.125 * 0x10000);
+            tempM = tempS;
+            tempR = (uint)(tempS * 7.5708236069);
+            if (tempS > PresenterList[250].datum.value && tempS < 250000)
+                SetValueSPN(250, tempR, tempM, tempS, J1708);
         }
 
         private void Parse1708Diagnostics(byte[] data)

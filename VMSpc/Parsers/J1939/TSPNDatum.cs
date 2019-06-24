@@ -20,7 +20,8 @@ namespace VMSpc.Parsers
     public class TSPNDatum
     {
         public uint rawValue;
-        public double value, valueMetric, recipNum;
+        public double value, valueMetric;
+        public double recipNum;
         public bool seen;
         public bool prioritize1708;
         public ushort spn;

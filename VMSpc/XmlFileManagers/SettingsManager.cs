@@ -7,12 +7,12 @@ using System.Xml;
 
 namespace VMSpc.XmlFileManagers
 {
-    public class SettingsManager : XmlFileManager
+    public sealed class SettingsManager : XmlFileManager
     {
-        //Constructor
-        public SettingsManager() : base("Settings.xml")
-        {
-        }
+        static SettingsManager() { }
+        public static SettingsManager Settings { get; set; } = new SettingsManager();
+        public SettingsManager() : base("Settings.xml") { }
+
         //GETTERS
         public string get_version()
         {
@@ -75,9 +75,9 @@ namespace VMSpc.XmlFileManagers
         {
             return getNodeValueByTagName("Engine-Name");
         }
-        public int get_odometerPID()
+        public ushort get_odometerPID()
         {
-            return Int32.Parse(getNodeValueByTagName("Odometer-PID"));
+            return UInt16.Parse(getNodeValueByTagName("Odometer-PID"));
         }
         public int get_autoDataLogFlag()
         {

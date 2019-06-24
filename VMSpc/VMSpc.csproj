@@ -76,6 +76,7 @@
       <DependentUpon>RawLogDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="DlgWindows\VMSDialog.cs" />
+    <Compile Include="Panels\VOdometerPanel.cs" />
     <Compile Include="Parsers\ChassisParameter.cs" />
     <Compile Include="Parsers\J1708\J1708Parser.cs" />
     <Compile Include="Parsers\J1939\J1939Parser.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Parsers\J1708\PIDWrapper.cs" />
     <Compile Include="Parsers\J1939\SPNWrapper.cs" />
     <Compile Include="Parsers\J1939\TSPNDatum.cs" />
+    <Compile Include="Parsers\Odometer.cs" />
     <Compile Include="Parsers\PresenterWrapper.cs" />
     <Compile Include="Parsers\TSPNPresenter.cs" />
     <Compile Include="Resources\Configuration.Designer.cs">

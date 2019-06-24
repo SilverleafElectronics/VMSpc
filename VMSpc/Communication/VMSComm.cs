@@ -253,7 +253,7 @@ namespace VMSpc.Communication
         }
 
         /// <summary>
-        /// Automatically called any time data comes through the USB Port. Splits all messages in the buffer and send them to ProcessData
+        /// Automatically called every time data comes through the USB Port. Splits all messages in the buffer and send them to ProcessData
         /// </summary>
         private void HandleCommPortData(object sender, SerialDataReceivedEventArgs e)
         {

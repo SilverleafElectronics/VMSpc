@@ -70,6 +70,7 @@ namespace VMSpc.CustomComponents
                     case PanelIDs.SCAN_GAUGE_ID:
                         break;
                     case PanelIDs.ODOMOTER_ID:
+                        panel = new VOdometerPanel(mainWindow, (OdometerSettings)panelSettings);
                         break;
                     case PanelIDs.TRANSMISSION_ID:
                         break;
@@ -158,7 +159,7 @@ namespace VMSpc.CustomComponents
                                 source = (VMSCanvas)VisualTreeHelper.GetParent((TextBlock)src);
                                 break;
                             default:
-                                source = (VMSCanvas)VisualTreeHelper.GetParent((Control)src);
+                                source = (VMSCanvas)VisualTreeHelper.GetParent((UIElement)src);
                                 source = null;
                                 selectedChild = null;
                                 break;

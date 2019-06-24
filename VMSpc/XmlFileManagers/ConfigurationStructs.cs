@@ -244,6 +244,7 @@ namespace VMSpc.XmlFileManagers
         public bool showCaptions;
         public bool showUnits;
         public bool showInMetric;
+        public bool layoutHorizontal;
         public string fileName;
         public RecordedSettings(ushort number) : base(number) { }
 
@@ -263,7 +264,10 @@ namespace VMSpc.XmlFileManagers
                 case "Show-In-Metric":
                     showInMetric = Boolean.Parse(val);
                     break;
-                case "FileName":
+                case "Layout-Horizontal":
+                    layoutHorizontal = Boolean.Parse(val);
+                    break;
+                case "File-Name":
                     fileName = val;
                     break;
                 default:
@@ -277,7 +281,6 @@ namespace VMSpc.XmlFileManagers
         public bool showFuel;
         public bool showMilesToEmpty;
         public bool useRollingMPG;
-        public bool layoutHorizontal;
         public int tankSize;
         public int tankSizeMetric;
         public TankMinderSettings(ushort number) : base(number) { }
@@ -294,9 +297,6 @@ namespace VMSpc.XmlFileManagers
                     break;
                 case "Use-Rolling-MPG":
                     useRollingMPG = Boolean.Parse(val);
-                    break;
-                case "Layout-Horizontal":
-                    layoutHorizontal = Boolean.Parse(val);
                     break;
                 case "Tank-Size":
                     tankSize = Int32.Parse(val);

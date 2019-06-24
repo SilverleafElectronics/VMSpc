@@ -5,7 +5,7 @@
     <File-Name>default.scr.xml</File-Name>
     <Panel Number="1">
       <ID>1</ID>
-      <Rect-Cord Top-LeftX="166" Top-LeftY="239" Bottom-RightX="306" Bottom-RightY="379" />
+      <Rect-Cord Top-LeftX="389" Top-LeftY="449" Bottom-RightX="529" Bottom-RightY="589" />
       <BackGround-Color Red="163" Green="82" Blue="0" />
       <Base-Color Red="255" Green="255" Blue="255" />
       <Explicit-Color Red="255" Green="255" Blue="255" />
@@ -22,10 +22,31 @@
       <Use-Static-Color>false</Use-Static-Color>
       <Format>1</Format>
     </Panel>
+    <Panel Number="2">
+      <ID>3</ID>
+      <Rect-Cord Top-LeftX="631" Top-LeftY="197" Bottom-RightX="1063" Bottom-RightY="581" />
+      <BackGround-Color Red="163" Green="82" Blue="0" />
+      <Base-Color Red="255" Green="255" Blue="255" />
+      <Explicit-Color Red="255" Green="255" Blue="255" />
+      <Explicit-Gauge-Color Red="211" Green="211" Blue="211" />
+      <Explicit-Fill-Color Red="0" Green="0" Blue="0" />
+      <Show-Fuel-Locked>true</Show-Fuel-Locked>
+      <Show-Hours>true</Show-Hours>
+      <Show-Miles>true</Show-Miles>
+      <Show-MPG>true</Show-MPG>
+      <Show-Speed>true</Show-Speed>
+      <Font-Format>false</Font-Format>
+      <Show-Captions>true</Show-Captions>
+      <Show-Units>true</Show-Units>
+      <Show-In-Metric>false</Show-In-Metric>
+      <Use-Static-Color>false</Use-Static-Color>
+      <Layout-Horizontal>false</Layout-Horizontal>
+      <File-Name>Odo73713926612.trp.xml</File-Name>
+    </Panel>
     <Wallpaper-Filename>
     </Wallpaper-Filename>
     <Text-Color Red="255" Green="0" Blue="0" />
-    <Panel-Count>1</Panel-Count>
+    <Panel-Count>2</Panel-Count>
     <Shader-Position>4</Shader-Position>
     <Day-Palette>1</Day-Palette>
     <Night-Palette>0</Night-Palette>

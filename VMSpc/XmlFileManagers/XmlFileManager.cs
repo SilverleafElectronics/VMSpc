@@ -51,16 +51,27 @@ namespace VMSpc.XmlFileManagers
         {
             xmlDoc = new XmlDocument();
             docName = docname;
-            initialize();
+            if (!File.Exists(docName))
+                CreateTemplate();
+            else
+                Initialize();
         }
 
-        //Protected Methods
-        protected void initialize()
+        #region Construction Helpers
+        protected void Initialize()
         {
             using (StreamReader fs = new StreamReader(docName, Encoding.GetEncoding("ISO-8859-1")))
                 xmlDoc.Load(fs);
         }
 
+        protected virtual void CreateTemplate()
+        {
+            File.Create(docName).Close();   //close right away so we can load it into the StreamReader
+            Initialize();
+        }
+        #endregion //Construction Helpers
+
+        #region XML Reading
         protected string getNodeValueByTagName(string tagname)
         {
             XmlNodeList node = xmlDoc.GetElementsByTagName(tagname);
@@ -113,5 +124,18 @@ namespace VMSpc.XmlFileManagers
         {
             return node.Attributes[attr].Value;
         }
+        #endregion //XML Reading
+
+        #region XML Writing
+
+        /// <summary>
+        /// Overwrites the current document with the specified newXml string parameter
+        /// </summary>
+        protected void OverwriteFile(string newXml)
+        {
+            xmlDoc.LoadXml(newXml);
+        }
+
+        #endregion //XML Writing
     }
 }

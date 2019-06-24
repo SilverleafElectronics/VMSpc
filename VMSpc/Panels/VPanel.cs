@@ -31,7 +31,7 @@ namespace VMSpc.Panels
     {
         public char cID;
         private MainWindow mainWindow;
-        private PanelSettings panelSettings;
+        protected PanelSettings panelSettings;
         public Border border;
         public VMSCanvas canvas;
 
@@ -64,9 +64,9 @@ namespace VMSpc.Panels
 
         private void GenerateEventHandlers()
         {
-            border.MouseEnter += OnMouseOverBorder;
-            border.MouseLeave += OnMouseLeaveBorder;
-            canvas.MouseEnter += OnMouseLeaveBorder;
+            //border.MouseEnter += OnMouseOverBorder;
+            //border.MouseLeave += OnMouseLeaveBorder;
+            //canvas.MouseEnter += OnMouseLeaveBorder;
         }
 
         public void OnMouseOverBorder(object sender, MouseEventArgs e)
