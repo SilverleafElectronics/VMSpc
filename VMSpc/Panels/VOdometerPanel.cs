@@ -24,10 +24,8 @@ namespace VMSpc.Panels
                      showInMetric,
                      layoutHorizontal;
         private Grid odometerGrid;
-        //private int  gridSpan;
+        private int  gridSpan;
         private Dictionary<string, TextBlock> odometerTitleValuePair;
-        private Dictionary<string, string> odometerTitleStdUnit;
-        private Dictionary<string, string> odometerTitleMetricUnit;
 
         public VOdometerPanel(MainWindow mainWindow, OdometerSettings panelSettings)
             : base (mainWindow, panelSettings)
@@ -50,30 +48,12 @@ namespace VMSpc.Panels
             };
             canvas.Children.Add(odometerGrid);
             odometerTitleValuePair = new Dictionary<string, TextBlock>();
-            odometerTitleStdUnit = new Dictionary<string, string>()
-            {
-                { "Distance_value", "Miles" },
-                { "Fuel_value", "Gallons" },
-                { "Time_value", "Hours" },
-                { "Speed_value", "MPH" },
-                { "Economy_value", "MPG" }
-
-            };
-            odometerTitleMetricUnit = new Dictionary<string, string>()
-            {
-                { "Distance_value", "Kilometers" },
-                { "Fuel_value", "Liters" },
-                { "Time_value", "Hours" },
-                { "Speed_value", "KPH" },
-                { "Economy_value", "L/100Km" }
-            };
-            //gridSpan = Convert.ToByte(showFuelLocked) + Convert.ToByte(showHours) + Convert.ToByte(showMiles) + Convert.ToByte(showMPG) + Convert.ToByte(showSpeed);
+            gridSpan = Convert.ToByte(showFuelLocked) + Convert.ToByte(showHours) + Convert.ToByte(showMiles) + Convert.ToByte(showMPG) + Convert.ToByte(showSpeed);
             GeneratePanel();
         }
 
         public override void GeneratePanel()
         {
-            DrawGridColumns();
             DrawGridRows();
         }
 
@@ -93,17 +73,6 @@ namespace VMSpc.Panels
                 );
         }
 
-        private void DrawGridColumns()
-        {
-            if (showCaptions)
-            {
-                odometerGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = (new GridLength(odometerGrid.Width / 2)) });
-                odometerGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = (new GridLength(odometerGrid.Width / 2)) });
-            }
-            else
-                odometerGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = (new GridLength(odometerGrid.Width)) });
-        }
-
         private void DrawGridRows()
         {
             if (showMiles)
@@ -120,24 +89,79 @@ namespace VMSpc.Panels
 
         private void AddRow(string name)
         {
-            odometerGrid.RowDefinitions.Add(new RowDefinition());
-            TextBlock headerLine = new TextBlock() { Name = name, Text = name, HorizontalAlignment = HorizontalAlignment.Left };
-            TextBlock valueLine = new TextBlock() { Name = name + "_value", HorizontalAlignment = HorizontalAlignment.Right };
+            AddTextBlocks(out TextBlock headerLine, out TextBlock valueLine, out Border headerBorder, out Border valueBorder, name);
+            SetTextBlockPositions(headerBorder, valueBorder);
             odometerTitleValuePair.Add(name, valueLine);
+        }
 
-            if (showCaptions)
-                odometerGrid.Children.Add(headerLine);
-            odometerGrid.Children.Add(valueLine);
-            if (showCaptions)
-                Grid.SetRow(headerLine, odometerGrid.RowDefinitions.Count - 1);
-            Grid.SetRow(valueLine, odometerGrid.RowDefinitions.Count - 1);
-            if (showCaptions)
+        /// <summary>
+        /// Creates the headerLine (optional caption) and valueLine and adds them to the odometer panel
+        /// </summary>
+        private void AddTextBlocks(out TextBlock headerLine, out TextBlock valueLine, out Border headerBorder, out Border valueBorder, string name)
+        {
+            var headerHzPos = (layoutHorizontal) ? HorizontalAlignment.Center : HorizontalAlignment.Left;
+            var valueHzPos = (layoutHorizontal || !showCaptions) ? HorizontalAlignment.Center : HorizontalAlignment.Right;
+            var headerVertPos = (layoutHorizontal) ? VerticalAlignment.Top : VerticalAlignment.Center;
+            var valueVertPos = (layoutHorizontal || !showCaptions) ? VerticalAlignment.Bottom : VerticalAlignment.Center;
+
+            headerBorder = new Border() { HorizontalAlignment = headerHzPos, VerticalAlignment = headerVertPos };
+            valueBorder = new Border()  { HorizontalAlignment = valueHzPos,  VerticalAlignment = valueVertPos };
+            headerBorder.Width = valueBorder.Width = (layoutHorizontal) ? (odometerGrid.Width / gridSpan) : (odometerGrid.Width / 2);
+            headerBorder.Height = valueBorder.Height = (layoutHorizontal) ? (odometerGrid.Height / 2) : (odometerGrid.Height / gridSpan);
+
+
+            if (layoutHorizontal)
             {
-                Grid.SetColumn(headerLine, 0);
-                Grid.SetColumn(valueLine, 1);
+                headerBorder.BorderThickness = new Thickness(2, 0, 2, 0);
+                valueBorder.BorderThickness = new Thickness(2, 0, 2, 0);
             }
             else
-                Grid.SetColumn(valueLine, 0);
+            {
+                headerBorder.BorderThickness = new Thickness(0, 2, 0, 2);
+                valueBorder.BorderThickness = new Thickness(0, 2, 0, 2);
+            }
+            headerLine = new TextBlock() { Name = name, Text = name };
+            valueLine = new TextBlock() { Name = name + "_value" };
+            headerLine.Width = headerBorder.Width;
+            valueLine.Width = valueBorder.Width;
+
+            headerLine.TextAlignment = valueLine.TextAlignment = TextAlignment.Center;
+            headerLine.VerticalAlignment = valueLine.VerticalAlignment = VerticalAlignment.Center;
+            headerLine.Background = Brushes.Purple;
+            headerLine.FontSize = 60;
+
+            headerBorder.Child = headerLine;
+            valueBorder.Child = valueLine;
+
+            if (showCaptions)
+                odometerGrid.Children.Add(headerBorder);
+            odometerGrid.Children.Add(valueBorder);
+        }
+
+        /// <summary>
+        /// Assigns the position of the header line item (caption) and the corresponding value
+        /// </summary>
+        private void SetTextBlockPositions(UIElement headerLine, UIElement valueLine)
+        {
+            //Decide whether the line item's orientation is horizontal or vertical - assigns function pointer accordingly
+            Action<UIElement, int> mainGridSet = ((layoutHorizontal) ? (Action<UIElement, int>)Grid.SetColumn : Grid.SetRow);
+            Action<UIElement, int> subGridSet = ((layoutHorizontal) ? (Action<UIElement, int>)Grid.SetRow : Grid.SetColumn);
+            if (layoutHorizontal)
+                odometerGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            else
+                odometerGrid.RowDefinitions.Add(new RowDefinition());
+            int mainGridItemCount = (layoutHorizontal) ? odometerGrid.ColumnDefinitions.Count : odometerGrid.RowDefinitions.Count;
+
+            if (showCaptions)
+                mainGridSet(headerLine, mainGridItemCount - 1);
+            mainGridSet(valueLine, mainGridItemCount - 1);
+            if (showCaptions)
+            {
+                subGridSet(headerLine, 0);
+                subGridSet(valueLine, 1);
+            }
+            else
+                subGridSet(valueLine, 0);
         }
 
         private void DrawValues(double hours, double miles, double fuel, double liters, double kilometers, double mpg, double lpk, double mph, double kph)
@@ -174,7 +198,6 @@ namespace VMSpc.Panels
                 if (showUnits) valueString += (showInMetric) ? "MPG" : "L/100KM";
                 odometerTitleValuePair["Economy"].Text = valueString;
             }
-
         }
     }
 }

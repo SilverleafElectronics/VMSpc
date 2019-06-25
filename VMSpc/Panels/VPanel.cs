@@ -296,5 +296,11 @@ namespace VMSpc.Panels
             VMSConsole.PrintLine("Bottom: " + Canvas.GetBottom(border));
         }
 
+        private void ScaleText(TextBlock textBlock)
+        {
+            double limitingDimension = (textBlock.Width < textBlock.Height) ? textBlock.Width : textBlock.Height;
+            //textBlock.FontSize = 12;
+        }
+
     }
 }
