@@ -9,6 +9,14 @@
         mc:Ignorable="d"
         Title="Simple Gauge Properties" Height="400" Width="350">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
     </Grid>
 </my:VMSDialog>
