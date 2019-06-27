@@ -138,38 +138,19 @@ namespace VMSpc.CustomComponents
         /// Sets selectedChild to the source of the click. If the user has clicked outside of the panel, selectedChild is set to null
         /// </summary>
         /// <param name="src"></param>
-        private void SetSelectedChild(object src)
+        private void SetSelectedChild(dynamic src)
         {
             foreach (VPanel panel in PanelList)
             {
-                VMSCanvas source;
-                try
+                dynamic source = src;
+                while (source.GetType() != panel.canvas.GetType())
                 {
-                    //user has clicked directly inside the canvas
-                    try { source = (VMSCanvas)src; }
-                    //user has clicked inside a subcomponent of the canvas
-                    catch
+                    if (source.GetType() == mainWindow.GetType())
                     {
-                        switch (src.GetType().ToString())
-                        {
-                            case "System.Windows.Shapes.Rectangle":
-                                source = (VMSCanvas)VisualTreeHelper.GetParent((Rectangle)src);
-                                break;
-                            case "System.Windows.Controls.TextBlock":
-                                source = (VMSCanvas)VisualTreeHelper.GetParent((TextBlock)src);
-                                break;
-                            default:
-                                source = (VMSCanvas)VisualTreeHelper.GetParent((UIElement)src);
-                                source = null;
-                                selectedChild = null;
-                                break;
-                        }
+                        selectedChild = null;
+                        return;
                     }
-                }
-                catch //indicates the user has clicked outside of a panel
-                {
-                    selectedChild = null;
-                    return;
+                    source = VisualTreeHelper.GetParent(source);
                 }
                 if (panel.canvas == source)
                 {

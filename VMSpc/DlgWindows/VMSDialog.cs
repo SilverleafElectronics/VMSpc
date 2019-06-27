@@ -14,14 +14,23 @@ using System.Windows.Shapes;
 using VMSpc.Communication;
 using static VMSpc.Constants;
 using VMSpc.DevHelpers;
+using VMSpc.Panels;
 
 namespace VMSpc.DlgWindows
 {
     public class VMSDialog : Window
     {
+        protected VPanel panel;
+
         protected virtual void ApplyBindings()
         {
             DataContext = this;
+        }
+
+        public bool? ShowDialog(VPanel panel)
+        {
+            this.panel = panel;
+            return ShowDialog();
         }
 
         protected void CreateBinding(string sourcePropName, object sourceObject, BindingMode mode, FrameworkElement UIElement, DependencyProperty UIElementProp)

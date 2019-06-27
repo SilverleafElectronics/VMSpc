@@ -75,6 +75,9 @@
     <Compile Include="DlgWindows\RawLogDlg.xaml.cs">
       <DependentUpon>RawLogDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DlgWindows\SimpleGaugeDlg.xaml.cs">
+      <DependentUpon>SimpleGaugeDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DlgWindows\VMSDialog.cs" />
     <Compile Include="Panels\VOdometerPanel.cs" />
     <Compile Include="Parsers\ChassisParameter.cs" />
@@ -121,6 +124,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DlgWindows\RawLogDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DlgWindows\SimpleGaugeDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

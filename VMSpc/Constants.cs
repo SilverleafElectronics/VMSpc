@@ -6,6 +6,22 @@ using System.Threading.Tasks;
 using System.Timers;
 using VMSpc.DevHelpers;
 using VMSpc.Parsers;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using VMSpc.XmlFileManagers;
+using VMSpc.DlgWindows;
+using VMSpc.Panels;
+using VMSpc.CustomComponents;
+using static VMSpc.Constants;
+using static VMSpc.Parsers.PresenterWrapper;
+using System.Globalization;
 
 //These are global constants. For global variables, see Globals.cs
 
@@ -275,5 +291,14 @@ namespace VMSpc
         public const byte LOGTYPE_PARSEREADY = 1;
         public const byte LOGTYPE_FULL = 2;
 
-    }
+        public static object DynamicCast(object obj, string type)
+        {
+            object castedObject;
+            castedObject = new Border();
+            return castedObject;
+
+
+        }
+
+    } //End of Constants class
 }

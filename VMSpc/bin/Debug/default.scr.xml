@@ -5,7 +5,7 @@
     <File-Name>default.scr.xml</File-Name>
     <Panel Number="1">
       <ID>1</ID>
-      <Rect-Cord Top-LeftX="291" Top-LeftY="361" Bottom-RightX="431" Bottom-RightY="501" />
+      <Rect-Cord Top-LeftX="638" Top-LeftY="176" Bottom-RightX="778" Bottom-RightY="316" />
       <BackGround-Color Red="163" Green="82" Blue="0" />
       <Base-Color Red="255" Green="255" Blue="255" />
       <Explicit-Color Red="255" Green="255" Blue="255" />
@@ -24,7 +24,7 @@
     </Panel>
     <Panel Number="2">
       <ID>3</ID>
-      <Rect-Cord Top-LeftX="684" Top-LeftY="103" Bottom-RightX="1116" Bottom-RightY="487" />
+      <Rect-Cord Top-LeftX="952" Top-LeftY="279" Bottom-RightX="1384" Bottom-RightY="663" />
       <BackGround-Color Red="163" Green="82" Blue="0" />
       <Base-Color Red="255" Green="255" Blue="255" />
       <Explicit-Color Red="255" Green="255" Blue="255" />
@@ -40,7 +40,7 @@
       <Show-Units>true</Show-Units>
       <Show-In-Metric>false</Show-In-Metric>
       <Use-Static-Color>false</Use-Static-Color>
-      <Layout-Horizontal>false</Layout-Horizontal>
+      <Layout-Horizontal>true</Layout-Horizontal>
       <File-Name>Odo73713926612.trp.xml</File-Name>
     </Panel>
     <Wallpaper-Filename>

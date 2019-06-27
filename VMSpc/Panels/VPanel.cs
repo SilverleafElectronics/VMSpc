@@ -21,6 +21,7 @@ using System.Timers;
 using static VMSpc.Constants;
 using static VMSpc.Parsers.PresenterWrapper;
 using System.Globalization;
+using VMSpc.DlgWindows;
 
 namespace VMSpc.Panels
 {
@@ -45,11 +46,20 @@ namespace VMSpc.Panels
         private bool isRightClipped;
         private bool isBottomClipped;
 
+        protected VMSDialog dlgWindow;
+
         public VPanel(MainWindow mainWindow, PanelSettings panelSettings)
         {
             this.mainWindow = mainWindow;
             this.panelSettings = panelSettings;
-            border = new Border();
+            dlgWindow = null;
+            Init();
+        }
+
+        protected void Init()
+        {
+
+            border = new Border() { BorderThickness = new Thickness(5, 5, 5, 5) };
             canvas = new VMSCanvas(mainWindow, border, panelSettings);
             border.Child = canvas;
             isLeftClipped = isTopClipped = isRightClipped = isBottomClipped = false;
@@ -67,6 +77,17 @@ namespace VMSpc.Panels
             //border.MouseEnter += OnMouseOverBorder;
             //border.MouseLeave += OnMouseLeaveBorder;
             //canvas.MouseEnter += OnMouseLeaveBorder;
+            canvas.MouseRightButtonDown += Canvas_MouseRightButtonDown;
+        }
+
+        private void Canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (dlgWindow != null)
+            {
+                bool? result = dlgWindow.ShowDialog(this);
+                if (result == true)
+                    Init();
+            }
         }
 
         public void OnMouseOverBorder(object sender, MouseEventArgs e)
@@ -76,14 +97,7 @@ namespace VMSpc.Panels
 
         public void OnMouseLeaveBorder(object sender, MouseEventArgs e)
         {
-            VMSConsole.PrintLine("XPosition: " + e.GetPosition(border).X);
-            if (
-                       (!IsWithinBoundary(0, 10, e.GetPosition(border).X))
-                    && (!IsWithinBoundary(border.Width, 10, e.GetPosition(border).X))
-                    && (!IsWithinBoundary(0, 10, e.GetPosition(border).Y))
-                    && (!IsWithinBoundary(border.Height, 10, e.GetPosition(border).Y))
-                )
-                Mouse.OverrideCursor = Cursors.Arrow;
+            Mouse.OverrideCursor = Cursors.Arrow;
         }
 
         private bool IsWithinBoundary(double targetPosition, double boundaryLimit, double value)
@@ -134,13 +148,13 @@ namespace VMSpc.Panels
 
         private bool CollisionPossible(double tPanelEdge1, double tPanelEdge2, double nPanelEdge1, double nPanelEdge2)
         {
-            if (    //is this panel's top in between the parameter panel's vertical edges?
+            if (        //is this panel's lower border (top or left) in between the parameter panel's corresponding edges?
                     (tPanelEdge1 >= nPanelEdge1 && tPanelEdge1 <= nPanelEdge2)
-                    ||  //is this panel's bottom in between the parameter panel's vertical edges?
+                    ||  //is this panel's upper border (bottom or right) in between the parameter panel's corresponding edges?
                     (tPanelEdge2 <= nPanelEdge2 && tPanelEdge2 >= nPanelEdge1)
-                    ||  //is the parameter panel's top in between this panel's vertical edges?
+                    ||  //is the parameter panel's lower border (top or left) in between this panel's corresponding edges?
                     (nPanelEdge1 >= tPanelEdge1 && nPanelEdge1 <= tPanelEdge2)
-                    ||  //is the parameter panel's bottom in between this panel's vertical edges?
+                    ||  //is the parameter panel's upper border (bottom or right) in between this panel's corresponding edges?
                     (nPanelEdge2 <= tPanelEdge2 && nPanelEdge2 >= tPanelEdge1)
                 )
                 return true;
@@ -150,9 +164,6 @@ namespace VMSpc.Panels
         /// <summary>
         /// Determines if there is still space to move between the panel and it's bounding Horizontal or Vertical neighbor
         /// </summary>
-        /// <param name="direction"></param>
-        /// <param name="newVal"></param>
-        /// <returns></returns>
         public bool CanMove(int direction, double newVal)
         {
             switch (direction)
@@ -296,11 +307,73 @@ namespace VMSpc.Panels
             VMSConsole.PrintLine("Bottom: " + Canvas.GetBottom(border));
         }
 
-        private void ScaleText(TextBlock textBlock)
+        protected void ScaleText(TextBlock textBlock, double maxWidth, double maxHeight)
         {
-            double limitingDimension = (textBlock.Width < textBlock.Height) ? textBlock.Width : textBlock.Height;
-            //textBlock.FontSize = 12;
+            textBlock.FontSize = 12;
+            Size size = CalculateStringSize(textBlock);
+            while (size.Width > maxWidth || size.Height > maxHeight)
+            {
+                    textBlock.FontSize--;
+                    size = CalculateStringSize(textBlock);
+            }
+            while (size.Width < (maxWidth - 50) || size.Height < (maxHeight - 50))
+            {
+                textBlock.FontSize++;
+                size = CalculateStringSize(textBlock);
+            }
         }
 
+        private Size CalculateStringSize(TextBlock textBlock)
+        {
+            if (textBlock.Text == "")
+                return new Size(0, 0);
+            FormattedText text = new FormattedText(
+                textBlock.Text,
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch),
+                textBlock.FontSize,
+                Brushes.Black,
+                new NumberSubstitution(),
+                TextFormattingMode.Display);
+            return new Size(text.Width, text.Height);
+        }
+        
+        protected void BalanceTextBlocks(dynamic parent)
+        {
+            double min = Double.MaxValue;
+
+            foreach (var block in parent.Children)
+            {
+                if (block.GetType().ToString() == "System.Windows.Controls.TextBlock")
+                {
+                    if (((TextBlock)block).FontSize < min)
+                        min = ((TextBlock)block).FontSize;
+                }
+                else if (block.GetType().ToString() == "System.Windows.Controls.Border")
+                {
+                    if (((Border)block).Child.GetType().ToString() == "System.Windows.Controls.TextBlock")
+                    {
+                        TextBlock textBlock = (TextBlock)((Border)block).Child;
+                        if (textBlock.FontSize < min)
+                            min = textBlock.FontSize;
+                    }
+                }
+            }
+            foreach (var block in parent.Children)
+            {
+                if (block.GetType().ToString() == "System.Windows.Controls.TextBlock")
+                    ((TextBlock)block).FontSize = min;
+                else if (block.GetType().ToString() == "System.Windows.Controls.Border")
+                {
+                    if (((Border)block).Child.GetType().ToString() == "System.Windows.Controls.TextBlock")
+                    {
+                        TextBlock textBlock = (TextBlock)((Border)block).Child;
+                        textBlock.FontSize = min;
+                    }
+
+                }
+            }
+        }
     }
 }

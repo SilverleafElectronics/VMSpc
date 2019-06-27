@@ -25,6 +25,7 @@ namespace VMSpc.Panels
                      layoutHorizontal;
         private Grid odometerGrid;
         private int  gridSpan;
+        private double cellWidth, cellHeight;
         private Dictionary<string, TextBlock> odometerTitleValuePair;
 
         public VOdometerPanel(MainWindow mainWindow, OdometerSettings panelSettings)
@@ -71,6 +72,7 @@ namespace VMSpc.Panels
                 odometer.currentTripMPH,
                 odometer.currentTripKPH
                 );
+            BalanceTextBlocks(odometerGrid);
         }
 
         private void DrawGridRows()
@@ -92,6 +94,9 @@ namespace VMSpc.Panels
             AddTextBlocks(out TextBlock headerLine, out TextBlock valueLine, out Border headerBorder, out Border valueBorder, name);
             SetTextBlockPositions(headerBorder, valueBorder);
             odometerTitleValuePair.Add(name, valueLine);
+            cellHeight = valueBorder.Height;
+            cellWidth = valueBorder.Width;
+            ScaleText(headerLine, headerBorder.Width, headerBorder.Height);
         }
 
         /// <summary>
@@ -127,8 +132,6 @@ namespace VMSpc.Panels
 
             headerLine.TextAlignment = valueLine.TextAlignment = TextAlignment.Center;
             headerLine.VerticalAlignment = valueLine.VerticalAlignment = VerticalAlignment.Center;
-            headerLine.Background = Brushes.Purple;
-            headerLine.FontSize = 60;
 
             headerBorder.Child = headerLine;
             valueBorder.Child = valueLine;
@@ -198,6 +201,8 @@ namespace VMSpc.Panels
                 if (showUnits) valueString += (showInMetric) ? "MPG" : "L/100KM";
                 odometerTitleValuePair["Economy"].Text = valueString;
             }
+            foreach(TextBlock textBlock in odometerTitleValuePair.Values)
+                ScaleText(textBlock, cellWidth, cellHeight);
         }
     }
 }
