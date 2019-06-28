@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using VMSpc.XmlFileManagers;
 using VMSpc.DevHelpers;
 using VMSpc.Parsers;
+using VMSpc.DlgWindows;
 
 namespace VMSpc.Panels
 {

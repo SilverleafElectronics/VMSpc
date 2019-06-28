@@ -85,3 +85,4 @@ C:\Projects\SilverLeaf\vmspc5\VMSpc\VMSpc\obj\Debug\VMSpc.pdb
 C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\RawLogDlg.g.cs
 C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\RawLogDlg.baml
 C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\SimpleGaugeDlg.g.cs
+C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\SimpleGaugeDlg.baml

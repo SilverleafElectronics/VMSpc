@@ -21,7 +21,6 @@ using System.Timers;
 using static VMSpc.Constants;
 using static VMSpc.Parsers.PresenterWrapper;
 using System.Globalization;
-using VMSpc.DlgWindows;
 
 namespace VMSpc.Panels
 {
