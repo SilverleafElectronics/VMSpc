@@ -1,4 +1,4 @@
-﻿#define DEBUG_CONSOLE //comment out for release builds   
+﻿//#define DEBUG_CONSOLE //comment out for release builds   
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;

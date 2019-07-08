@@ -51,12 +51,14 @@ namespace VMSpc.XmlFileManagers
         public Color baseColor;
         public Color explicitColor;
         public Color explicitGaugeColor;
+        public bool showInMetric;
         public int Text_Position;
         public int Use_Static_Color;
 
         public PanelSettings(ushort number)
-        {
+        { 
             this.number = number;
+            showInMetric = false;
         }
 
         public virtual void StoreSettings(string nodeName, string val, XmlNode panelNode)
@@ -80,6 +82,10 @@ namespace VMSpc.XmlFileManagers
                     break;
                 case "Explicit-Gauge-Color":
                     GetColorFromXml(panelNode);
+                    break;
+                case "Show-In-Metric":
+                    try   { showInMetric = Boolean.Parse(val); }
+                    catch { }
                     break;
             }
         }
@@ -134,8 +140,8 @@ namespace VMSpc.XmlFileManagers
     public class MessageBoxSettings : PanelSettings
     {
         public int numLines;
-        public int PID;
-        public int PIDLimited;
+        public ushort PID;
+        public ushort PIDLimited;
 
         public MessageBoxSettings(ushort number) : base(number) { }
 
@@ -147,10 +153,10 @@ namespace VMSpc.XmlFileManagers
                     numLines = Int32.Parse(val);
                     break;
                 case "PID":
-                    PID = Int32.Parse(val);
+                    PID = UInt16.Parse(val);
                     break;
                 case "PID-Limited":
-                    PIDLimited = Int32.Parse(val);
+                    PIDLimited = UInt16.Parse(val);
                     break;
                 default:
                     base.StoreSettings(nodeName, val, panelNode);
@@ -243,7 +249,6 @@ namespace VMSpc.XmlFileManagers
         public bool showMPG;
         public bool showCaptions;
         public bool showUnits;
-        public bool showInMetric;
         public bool layoutHorizontal;
         public string fileName;
         public RecordedSettings(ushort number) : base(number) { }
@@ -260,9 +265,6 @@ namespace VMSpc.XmlFileManagers
                     break;
                 case "Show-Units":
                     showUnits = Boolean.Parse(val);
-                    break;
-                case "Show-In-Metric":
-                    showInMetric = Boolean.Parse(val);
                     break;
                 case "Layout-Horizontal":
                     layoutHorizontal = Boolean.Parse(val);
@@ -348,7 +350,6 @@ namespace VMSpc.XmlFileManagers
         public bool showUnit;
         public bool showGraph;
         public bool showAbbreviation;
-        public bool showInMetric;
         public GaugeSettings(ushort number) : base(number) { }
 
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
@@ -373,9 +374,6 @@ namespace VMSpc.XmlFileManagers
                 case "Show-Abbreviation":
                     showAbbreviation = Boolean.Parse(val);
                     break;
-                case "Show-In-Metric":
-                    showInMetric = Boolean.Parse(val);
-                    break;
                 default:
                     base.StoreSettings(nodeName, val, panelNode);
                     break;
@@ -384,7 +382,7 @@ namespace VMSpc.XmlFileManagers
     }
     public class ScanGaugeSettings : GaugeSettings
     {
-        public List<int> PIDList;
+        public List<ushort> PIDList;
         public ScanGaugeSettings(ushort number) : base(number) { }
 
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
@@ -392,7 +390,7 @@ namespace VMSpc.XmlFileManagers
             switch (nodeName)
             {
                 case "PID":
-                    PIDList.Add(Int32.Parse(val));
+                    PIDList.Add(UInt16.Parse(val));
                     break;
                 default:
                     base.StoreSettings(nodeName, val, panelNode);
@@ -402,7 +400,7 @@ namespace VMSpc.XmlFileManagers
     }
     public class SimpleGaugeSettings : GaugeSettings
     {
-        public int PID;
+        public ushort PID;
         public SimpleGaugeSettings(ushort number) : base(number) { }
 
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
@@ -410,7 +408,7 @@ namespace VMSpc.XmlFileManagers
             switch (nodeName)
             {
                 case "PID":
-                    PID = Int32.Parse(val);
+                    PID = UInt16.Parse(val);
                     break;
                 default:
                     base.StoreSettings(nodeName, val, panelNode);

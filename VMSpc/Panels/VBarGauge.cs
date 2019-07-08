@@ -9,12 +9,13 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using VMSpc.DevHelpers;
+using VMSpc.DlgWindows;
 using VMSpc.XmlFileManagers;
 
 namespace VMSpc.Panels
 {
     /// <summary> Base class of VSimpleGauge, VScanGauge, and VRoundGauge </summary>
-    class VBarGauge : VPanel
+    abstract class VBarGauge : VPanel
     {
         protected Rectangle EmptyBar;
         protected Rectangle FillBar;
@@ -34,6 +35,11 @@ namespace VMSpc.Panels
             GeneratePanel();
         }
 
+        protected override void Init()
+        {
+            base.Init();
+        }
+
         public override void GeneratePanel()
         {
             EmptyBar = new Rectangle
@@ -46,6 +52,8 @@ namespace VMSpc.Panels
             DrawBar();
             DrawFillBar();
         }
+
+        protected override abstract VMSDialog GenerateDlg();
 
         //Move to VPanel?
         protected virtual void DrawTitleText()

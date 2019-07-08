@@ -8,6 +8,7 @@ using VMSpc.XmlFileManagers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using VMSpc.DlgWindows;
 
 namespace VMSpc.Panels
 {
@@ -51,6 +52,11 @@ namespace VMSpc.Panels
             odometerTitleValuePair = new Dictionary<string, TextBlock>();
             gridSpan = Convert.ToByte(showFuelLocked) + Convert.ToByte(showHours) + Convert.ToByte(showMiles) + Convert.ToByte(showMPG) + Convert.ToByte(showSpeed);
             GeneratePanel();
+        }
+
+        protected override VMSDialog GenerateDlg()
+        {
+            return new OdometerDlg(panelSettings);
         }
 
         public override void GeneratePanel()

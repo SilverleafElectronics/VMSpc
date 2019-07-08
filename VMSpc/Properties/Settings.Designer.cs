@@ -22,28 +22,5 @@ namespace VMSpc.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Setting {
-            get {
-                return ((string)(this["Setting"]));
-            }
-            set {
-                this["Setting"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::VMSpc.CustomSettings.PanelSettings Panel1 {
-            get {
-                return ((global::VMSpc.CustomSettings.PanelSettings)(this["Panel1"]));
-            }
-            set {
-                this["Panel1"] = value;
-            }
-        }
     }
 }

@@ -22,6 +22,7 @@ using System.Threading;
 using VMSpc.Communication;
 using static VMSpc.Parsers.PIDWrapper;
 using VMSpc.Parsers;
+using static VMSpc.XmlFileManagers.ParamDataManager;
 
 namespace VMSpc
 {
@@ -37,6 +38,7 @@ namespace VMSpc
         public MainWindow()
         {
             InitializeComponent();
+            ParamData.Load();
             PIDManager.InitializePIDs();
             PresenterWrapper.InitializePresenterList();
             GeneratePanels();

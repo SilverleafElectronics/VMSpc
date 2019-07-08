@@ -19,13 +19,22 @@ namespace VMSpc.Panels
             : base(mainWindow, panelSettings)
         {
             this.mainWindow = mainWindow;
-            dlgWindow = new SimpleGaugeDlg();
-            pid = (ushort)panelSettings.PID;
+        }
+
+        protected override void Init()
+        {
+            pid = ((SimpleGaugeSettings)panelSettings).PID;
+            base.Init();
         }
 
         public override void GeneratePanel()
         {
             base.GeneratePanel();
+        }
+
+        protected override VMSDialog GenerateDlg()
+        {
+            return new SimpleGaugeDlg(panelSettings);
         }
 
         public override void UpdatePanel()

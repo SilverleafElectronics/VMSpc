@@ -112,16 +112,16 @@ namespace VMSpc.CustomComponents
 
         #region overrides
 
-        protected override void OnMouseUp(MouseButtonEventArgs e)
+        protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
-            base.OnMouseUp(e);
+            base.OnMouseLeftButtonUp(e);
             Init();
             SavePanelCoordinates();
         }
 
-        protected override void OnMouseDown(MouseButtonEventArgs e)
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            base.OnMouseDown(e);
+            base.OnMouseLeftButtonDown(e);
             isDragging = false;
             SetSelectedChild(e.Source);
             cursorStartPoint = e.GetPosition(this);
@@ -206,13 +206,17 @@ namespace VMSpc.CustomComponents
 
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            //allows new thread to access object from the parent UI thread
-            Application.Current.Dispatcher.Invoke(() =>
+            try // Wrapped in try block, in case the user closes while this thread is executing
             {
-                foreach (VPanel panel in PanelList)
-                    panel.UpdatePanel();
+                //allows new thread to access object from the parent UI thread
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    foreach (VPanel panel in PanelList)
+                        panel.UpdatePanel();
+                }
+                );
             }
-            );
+            catch { }
         }
         #endregion
 

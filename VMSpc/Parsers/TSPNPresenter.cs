@@ -69,6 +69,4 @@ namespace VMSpc.Parsers
             enumProc = enum_proc;
         }
     }
-
-
 }

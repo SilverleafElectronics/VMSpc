@@ -60,9 +60,7 @@
     <Compile Include="Communication\MessageExtractor.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="CustomComponents\PanelGrid.cs" />
-    <Compile Include="CustomSettings\PanelSettingsConverter.cs" />
-    <Compile Include="CustomSettings\ScreenElements.cs" />
-    <Compile Include="CustomSettings\VmsSerializer.cs" />
+    <Compile Include="CustomComponents\VMSListBoxItem.cs" />
     <Compile Include="DevHelpers\MiscHelpers.cs" />
     <Compile Include="DevHelpers\VmsConsole.cs" />
     <Compile Include="DlgWindows\AboutDlg.xaml.cs">
@@ -72,6 +70,9 @@
       <DependentUpon>CommDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomComponents\VMSCanvas.cs" />
+    <Compile Include="DlgWindows\OdometerDlg.xaml.cs">
+      <DependentUpon>OdometerDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DlgWindows\RawLogDlg.xaml.cs">
       <DependentUpon>RawLogDlg.xaml</DependentUpon>
     </Compile>
@@ -79,6 +80,7 @@
       <DependentUpon>SimpleGaugeDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="DlgWindows\VMSDialog.cs" />
+    <Compile Include="DlgWindows\VPanelDlg.cs" />
     <Compile Include="Panels\VOdometerPanel.cs" />
     <Compile Include="Parsers\ChassisParameter.cs" />
     <Compile Include="Parsers\J1708\J1708Parser.cs" />
@@ -99,6 +101,7 @@
     </Compile>
     <Compile Include="target.cs" />
     <Compile Include="Panels\VPanel.cs" />
+    <Compile Include="VParameter.cs" />
     <Compile Include="XmlFileManagers\AlarmDataManager.cs" />
     <Compile Include="XmlFileManagers\ConfigurationStructs.cs" />
     <Compile Include="XmlFileManagers\DefaultScrnManager.cs" />
@@ -120,6 +123,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DlgWindows\CommDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DlgWindows\OdometerDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

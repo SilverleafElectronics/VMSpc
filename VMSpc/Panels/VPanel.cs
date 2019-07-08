@@ -19,7 +19,7 @@ using VMSpc.CustomComponents;
 using VMSpc.DevHelpers;
 using System.Timers;
 using static VMSpc.Constants;
-using static VMSpc.Parsers.PresenterWrapper;
+using static VMSpc.XmlFileManagers.ParamDataManager;
 using System.Globalization;
 
 namespace VMSpc.Panels
@@ -45,31 +45,35 @@ namespace VMSpc.Panels
         private bool isRightClipped;
         private bool isBottomClipped;
 
-        protected VMSDialog dlgWindow;
+        private VMSDialog dlgWindow;
 
         public VPanel(MainWindow mainWindow, PanelSettings panelSettings)
         {
             this.mainWindow = mainWindow;
             this.panelSettings = panelSettings;
             dlgWindow = null;
+            InitLimits();
+            border = new Border();
+            canvas = new VMSCanvas(mainWindow, border, panelSettings);
+            border.Child = canvas;
+            GenerateEventHandlers();
+            isLeftClipped = isTopClipped = isRightClipped = isBottomClipped = false;
             Init();
         }
 
-        protected void Init()
+        protected virtual void Init()
         {
-
-            border = new Border() { BorderThickness = new Thickness(5, 5, 5, 5) };
-            canvas = new VMSCanvas(mainWindow, border, panelSettings);
-            border.Child = canvas;
-            isLeftClipped = isTopClipped = isRightClipped = isBottomClipped = false;
-            InitLimits();
-            GenerateEventHandlers();
         }
 
         ~VPanel()
         {
 
         }
+
+        /// <summary>
+        /// Returns a call to the constructor of the corresponding Dialog Window for this panel.
+        /// </summary>
+        protected abstract VMSDialog GenerateDlg();
 
         private void GenerateEventHandlers()
         {
@@ -81,6 +85,7 @@ namespace VMSpc.Panels
 
         private void Canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
+            dlgWindow = GenerateDlg();
             if (dlgWindow != null)
             {
                 bool? result = dlgWindow.ShowDialog(this);
@@ -270,9 +275,15 @@ namespace VMSpc.Panels
             }
         }
 
+        /// <summary>
+        /// Gets the last updated value of the parameter at the specified PID
+        /// </summary>
         protected double GetPidValue(ushort pid)
         {
-            return PresenterList[pid].datum.value;
+            if (panelSettings.showInMetric)
+                return ParamData.parameters[pid].LastMetricValue;
+            else
+                return ParamData.parameters[pid].LastValue;
         }
 
         protected double MeasureFontSize(string text, double maxWidth, double maxHeight)
