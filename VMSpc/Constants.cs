@@ -22,6 +22,9 @@ using VMSpc.CustomComponents;
 using static VMSpc.Constants;
 using static VMSpc.Parsers.PresenterWrapper;
 using System.Globalization;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 
 //These are global constants. For global variables, see Globals.cs
 
@@ -161,6 +164,14 @@ namespace VMSpc
             return r;
         }
 
+        public static bool SetProperty<T>(ref T storage, T value, string propertyName = null)
+        {
+            if (storage.GetType() != value.GetType())
+                return false;
+            storage = value;
+            return true;
+        }
+
 
         /// <summary>
         /// Converts a string representation of bytes into a List<byte> object. E.g.: "FAFB" becomes [0xFA, 0xFB]
@@ -224,6 +235,21 @@ namespace VMSpc
             timer.AutoReset = true;
             timer.Enabled = true;
             return timer;
+        }
+
+        /// <summary>
+        /// Returns a copy of the object parameter for copying by value
+        /// </summary>
+        public static T DeepCopy<T>(T other)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Context = new StreamingContext(StreamingContextStates.Clone);
+                formatter.Serialize(ms, other);
+                ms.Position = 0;
+                return (T)formatter.Deserialize(ms);
+            }
         }
 
         public const byte SINGLE_BYTE = 0;

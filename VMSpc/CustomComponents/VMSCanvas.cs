@@ -33,7 +33,7 @@ namespace VMSpc.CustomComponents
             this.mainWindow = mainWindow;
             this.border = border;
             this.panelSettings = panelSettings;
-            BorderThickness = 2;
+            BorderThickness = 5;
             ApplyBorderDimensions();
             ApplyCanvasDimensions();
         }

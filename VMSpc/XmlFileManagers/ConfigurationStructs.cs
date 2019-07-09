@@ -52,7 +52,7 @@ namespace VMSpc.XmlFileManagers
         public Color explicitColor;
         public Color explicitGaugeColor;
         public bool showInMetric;
-        public int Text_Position;
+        public int TextPosition;
         public int Use_Static_Color;
 
         public PanelSettings(ushort number)

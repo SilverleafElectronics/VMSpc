@@ -53,7 +53,7 @@ namespace VMSpc.Panels
             this.panelSettings = panelSettings;
             dlgWindow = null;
             InitLimits();
-            border = new Border();
+            border = new Border() { BorderThickness = new Thickness(5) };
             canvas = new VMSCanvas(mainWindow, border, panelSettings);
             border.Child = canvas;
             GenerateEventHandlers();
@@ -77,15 +77,17 @@ namespace VMSpc.Panels
 
         private void GenerateEventHandlers()
         {
-            //border.MouseEnter += OnMouseOverBorder;
-            //border.MouseLeave += OnMouseLeaveBorder;
-            //canvas.MouseEnter += OnMouseLeaveBorder;
+            border.MouseEnter += OnMouseOverBorder;
+            border.MouseLeave += OnMouseLeaveBorder;
+            canvas.MouseEnter += OnMouseLeaveBorder;
+            canvas.MouseLeave += OnMouseOverBorder;
             canvas.MouseRightButtonDown += Canvas_MouseRightButtonDown;
         }
 
         private void Canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             dlgWindow = GenerateDlg();
+            dlgWindow.Owner = mainWindow;
             if (dlgWindow != null)
             {
                 bool? result = dlgWindow.ShowDialog(this);

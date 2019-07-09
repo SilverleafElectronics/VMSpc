@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VMSpc.XmlFileManagers;
+using static VMSpc.Constants;
 
 namespace VMSpc.DlgWindows
 {

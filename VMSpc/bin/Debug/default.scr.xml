@@ -5,7 +5,7 @@
     <File-Name>default.scr.xml</File-Name>
     <Panel Number="1">
       <ID>1</ID>
-      <Rect-Cord Top-LeftX="1132" Top-LeftY="460" Bottom-RightX="1272" Bottom-RightY="600" />
+      <Rect-Cord Top-LeftX="696" Top-LeftY="337" Bottom-RightX="836" Bottom-RightY="477" />
       <BackGround-Color Red="163" Green="82" Blue="0" />
       <Base-Color Red="255" Green="255" Blue="255" />
       <Explicit-Color Red="255" Green="255" Blue="255" />
@@ -24,7 +24,7 @@
     </Panel>
     <Panel Number="2">
       <ID>3</ID>
-      <Rect-Cord Top-LeftX="412" Top-LeftY="260" Bottom-RightX="844" Bottom-RightY="644" />
+      <Rect-Cord Top-LeftX="0" Top-LeftY="0" Bottom-RightX="432" Bottom-RightY="384" />
       <BackGround-Color Red="163" Green="82" Blue="0" />
       <Base-Color Red="255" Green="255" Blue="255" />
       <Explicit-Color Red="255" Green="255" Blue="255" />
