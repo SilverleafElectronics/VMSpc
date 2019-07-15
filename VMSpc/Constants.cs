@@ -137,6 +137,23 @@ namespace VMSpc
         public const int MOVEMENT_MOVE = 2;
         public const int MOVEMENT_NONE = 0;
 
+        /// <summary>
+        /// Method to map a sane text alignment enumeration (Left = 0, Center = 1, Right = 2) to the stupid order imposed by TextAlignment
+        /// </summary>
+        public static TextAlignment GET_TEXT_ALIGNMENT(int alignment)
+        {
+            switch (alignment)
+            {
+                case 0:
+                    return TextAlignment.Left;
+                case 1:
+                    return TextAlignment.Center;
+                case 2:
+                    return TextAlignment.Right;
+                default:
+                    return TextAlignment.Left;
+            }
+        }
 
         //-----------------------------------------------------------------------------------------
         //RV-C Helpers

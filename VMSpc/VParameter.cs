@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using static VMSpc.Parsers.PresenterWrapper;
+using static VMSpc.Constants;
 
 namespace VMSpc
 {
@@ -83,8 +84,8 @@ namespace VMSpc
             set { node["Multiplier"].InnerText = value.ToString(); }
         }
 
-        public double LastValue => PresenterList[Pid].datum.value * Multiplier + Offset;
-        public double LastMetricValue => PresenterList[Pid].datum.valueMetric;
+        public double LastValue => (PresenterList[Pid].datum.seen) ? PresenterList[Pid].datum.value * Multiplier + Offset : DUB_NODATA;
+        public double LastMetricValue => (PresenterList[Pid].datum.seen) ? PresenterList[Pid].datum.valueMetric : DUB_NODATA;
 
         public VParameter(XmlNode node)
         {

@@ -64,45 +64,64 @@ namespace VMSpc.CustomComponents
             scrnManager.LoadPanels();
             foreach(var panelSettings in scrnManager.configurationPanelList)
             {
-                VPanel panel = null;
-                switch (panelSettings.ID)
-                {
-                    case PanelIDs.SIMPLE_GAUGE_ID:
-                        panel = new VSimpleGauge(mainWindow, (SimpleGaugeSettings)panelSettings);
-                        break;
-                    case PanelIDs.SCAN_GAUGE_ID:
-                        break;
-                    case PanelIDs.ODOMOTER_ID:
-                        panel = new VOdometerPanel(mainWindow, (OdometerSettings)panelSettings);
-                        break;
-                    case PanelIDs.TRANSMISSION_ID:
-                        break;
-                    case PanelIDs.MULTIBAR_ID:
-                        break;
-                    case PanelIDs.HISTOGRAM_ID:
-                        break;
-                    case PanelIDs.CLOCK_PANEL_ID:
-                        break;
-                    case PanelIDs.IMG_PANEL_ID:
-                        break;
-                    case PanelIDs.TEXT_PANEL_ID:
-                        break;
-                    case PanelIDs.TANK_MINDER_ID:
-                        break;
-                    case PanelIDs.TIRE_PANEL_ID:
-                        break;
-                    case PanelIDs.MESSAGE_PANEL_ID:
-                        break;
-                    case PanelIDs.DIAG_ALARM_ID:
-                        break;
-                    case PanelIDs.RADIAL_GAUGE_ID:
-                        break;
-                    default:
-                        break;
-                }
-                if (panel != null)
-                    PanelList.Add(panel);
+                AddPanel(panelSettings);
             }
+        }
+
+        public void CreateNewPanel(PanelSettings panelSettings)
+        {
+            ApplyPanelDefaults(panelSettings);
+            AddPanel(panelSettings);
+        }
+
+        private void ApplyPanelDefaults(PanelSettings panelSettings)
+        {
+            panelSettings.rectCord.topLeftX = 0;
+            panelSettings.rectCord.topLeftY = 0;
+            panelSettings.rectCord.bottomRightX = 300;
+            panelSettings.rectCord.bottomRightY = 300;
+        }
+
+        private void AddPanel(PanelSettings panelSettings)
+        {
+            VPanel panel = null;
+            switch (panelSettings.ID)
+            {
+                case PanelIDs.SIMPLE_GAUGE_ID:
+                    panel = new VSimpleGauge(mainWindow, (SimpleGaugeSettings)panelSettings);
+                    break;
+                case PanelIDs.SCAN_GAUGE_ID:
+                    break;
+                case PanelIDs.ODOMOTER_ID:
+                    panel = new VOdometerPanel(mainWindow, (OdometerSettings)panelSettings);
+                    break;
+                case PanelIDs.TRANSMISSION_ID:
+                    break;
+                case PanelIDs.MULTIBAR_ID:
+                    break;
+                case PanelIDs.HISTOGRAM_ID:
+                    break;
+                case PanelIDs.CLOCK_PANEL_ID:
+                    break;
+                case PanelIDs.IMG_PANEL_ID:
+                    break;
+                case PanelIDs.TEXT_PANEL_ID:
+                    break;
+                case PanelIDs.TANK_MINDER_ID:
+                    break;
+                case PanelIDs.TIRE_PANEL_ID:
+                    break;
+                case PanelIDs.MESSAGE_PANEL_ID:
+                    break;
+                case PanelIDs.DIAG_ALARM_ID:
+                    break;
+                case PanelIDs.RADIAL_GAUGE_ID:
+                    break;
+                default:
+                    break;
+            }
+            if (panel != null)
+                PanelList.Add(panel);
         }
 
         public void LoadPanels()
@@ -119,7 +138,7 @@ namespace VMSpc.CustomComponents
         {
             base.OnMouseLeftButtonUp(e);
             Init();
-            SavePanelCoordinates();
+            SavePanels();
             if (selectedChild != null)
             {
                 selectedChild.isMoving = false;
@@ -252,9 +271,10 @@ namespace VMSpc.CustomComponents
             }
             catch { }
         }
+
         #endregion
 
-        protected void SavePanelCoordinates()
+        protected void SavePanels()
         {
             foreach (var panel in PanelList)
                 panel.SaveSettings();

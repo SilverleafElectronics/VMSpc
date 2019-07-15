@@ -72,21 +72,37 @@ namespace VMSpc.XmlFileManagers
                     rectCord.GetCordsFromXml(panelNode);
                     break;
                 case "BackGround-Color":
-                    GetColorFromXml(panelNode);
+                    backgroundColor = GetColorFromXml(panelNode);
                     break;
                 case "Base-Color":
-                    GetColorFromXml(panelNode);
+                    baseColor = GetColorFromXml(panelNode);
                     break;
                 case "Explicit-Color":
-                    GetColorFromXml(panelNode);
+                    explicitColor = GetColorFromXml(panelNode);
                     break;
                 case "Explicit-Gauge-Color":
-                    GetColorFromXml(panelNode);
+                    explicitGaugeColor = GetColorFromXml(panelNode);
+                    break;
+                case "Format":
+                    try { TextPosition = Int32.Parse(val); }
+                    catch { }
                     break;
                 case "Show-In-Metric":
                     try   { showInMetric = Boolean.Parse(val); }
                     catch { }
                     break;
+            }
+        }
+
+        protected void SafeSave(XmlNode node, string nodeName, string value)
+        {
+            try { node.SelectSingleNode(nodeName).InnerText = value; }
+            catch
+            {
+                XmlDocument doc = node.OwnerDocument;
+                XmlElement element = doc.CreateElement(nodeName);
+                element.InnerText = value;
+                node.AppendChild(element);
             }
         }
 
@@ -96,6 +112,12 @@ namespace VMSpc.XmlFileManagers
             panelNode["Rect-Cord"].SetAttribute("Top-LeftY", rectCord.topLeftY.ToString());
             panelNode["Rect-Cord"].SetAttribute("Bottom-RightX", rectCord.bottomRightX.ToString());
             panelNode["Rect-Cord"].SetAttribute("Bottom-RightY", rectCord.bottomRightY.ToString());
+            SaveColorToXml(panelNode, "BackGround-Color", ref backgroundColor);
+            SaveColorToXml(panelNode, "Base-Color", ref baseColor);
+            SaveColorToXml(panelNode, "Explicit-Color", ref explicitColor);
+            SaveColorToXml(panelNode, "Explicit-Gauge-Color", ref explicitGaugeColor);
+
+            SafeSave(panelNode, "Format", TextPosition.ToString());
         }
 
         protected Color GetColorFromXml(XmlNode node)
@@ -108,9 +130,11 @@ namespace VMSpc.XmlFileManagers
             return color;
         }
 
-        public void SaveColorToXml(string propName, XmlNode node)
+        public void SaveColorToXml(XmlNode node, string propName, ref Color prop)
         {
-
+            node[propName].SetAttribute("Red", prop.R.ToString());
+            node[propName].SetAttribute("Green", prop.G.ToString());
+            node[propName].SetAttribute("Blue", prop.B.ToString());
         }
     }
 

@@ -40,8 +40,8 @@ namespace VMSpc.Panels
         public override void UpdatePanel()
         {
             double newValue = GetPidValue(pid);
-            UpdateFillBar((int)newValue);
-            UpdateValueText((int)newValue);
+            UpdateFillBar(newValue);
+            UpdateValueText(newValue);
         }
     }
 }

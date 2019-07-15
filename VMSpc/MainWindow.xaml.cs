@@ -73,6 +73,22 @@ namespace VMSpc
             this.Close();
         }
 
+        private void NewSimpleGaugeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void NewSimpleGaugeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SimpleGaugeSettings panelSettings = new SimpleGaugeSettings(0);
+            SimpleGaugeDlg dlgWindow = new SimpleGaugeDlg(panelSettings);
+            bool? result = dlgWindow.ShowDialog(null);
+            if (result == true)
+            {
+                ContentGrid.CreateNewPanel(panelSettings);
+            }
+        }
+
         private void CommSettingsCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -119,6 +135,12 @@ namespace VMSpc
     #region Custom Event Handlers
     public static class MainCommands
     {
+        public static readonly RoutedUICommand NewSimpleGauge = new RoutedUICommand(
+            "New Simple Gauge",
+            "NewSimpleGauge",
+            typeof(MainCommands)
+        );
+
         public static readonly RoutedUICommand CommSettings = new RoutedUICommand(
             "Communication",
             "CommSettings",

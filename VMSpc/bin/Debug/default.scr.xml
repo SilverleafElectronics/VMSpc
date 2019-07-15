@@ -5,9 +5,9 @@
     <File-Name>default.scr.xml</File-Name>
     <Panel Number="1">
       <ID>1</ID>
-      <Rect-Cord Top-LeftX="711" Top-LeftY="251" Bottom-RightX="1347" Bottom-RightY="619" />
+      <Rect-Cord Top-LeftX="810" Top-LeftY="201" Bottom-RightX="1500" Bottom-RightY="397" />
       <BackGround-Color Red="163" Green="82" Blue="0" />
-      <Base-Color Red="255" Green="255" Blue="255" />
+      <Base-Color Red="200" Green="170" Blue="40" />
       <Explicit-Color Red="255" Green="255" Blue="255" />
       <Explicit-Gauge-Color Red="211" Green="211" Blue="211" />
       <Explicit-Fill-Color Red="0" Green="0" Blue="0" />
@@ -20,14 +20,14 @@
       <Show-Abbreviation>false</Show-Abbreviation>
       <Show-In-Metric>false</Show-In-Metric>
       <Use-Static-Color>false</Use-Static-Color>
-      <Format>1</Format>
+      <Format>0</Format>
     </Panel>
     <Panel Number="2">
       <ID>3</ID>
-      <Rect-Cord Top-LeftX="96" Top-LeftY="271" Bottom-RightX="528" Bottom-RightY="655" />
+      <Rect-Cord Top-LeftX="385" Top-LeftY="524" Bottom-RightX="1049" Bottom-RightY="609" />
       <BackGround-Color Red="163" Green="82" Blue="0" />
       <Base-Color Red="255" Green="255" Blue="255" />
-      <Explicit-Color Red="255" Green="255" Blue="255" />
+      <Explicit-Color Red="85" Green="16" Blue="190" />
       <Explicit-Gauge-Color Red="211" Green="211" Blue="211" />
       <Explicit-Fill-Color Red="0" Green="0" Blue="0" />
       <Show-Fuel-Locked>true</Show-Fuel-Locked>
@@ -42,6 +42,7 @@
       <Use-Static-Color>false</Use-Static-Color>
       <Layout-Horizontal>true</Layout-Horizontal>
       <File-Name>Odo73713926612.trp.xml</File-Name>
+      <Format>0</Format>
     </Panel>
     <Wallpaper-Filename>
     </Wallpaper-Filename>

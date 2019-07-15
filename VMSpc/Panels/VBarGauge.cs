@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using VMSpc.DevHelpers;
 using VMSpc.DlgWindows;
 using VMSpc.XmlFileManagers;
+using static VMSpc.Constants;
 
 namespace VMSpc.Panels
 {
@@ -27,16 +28,8 @@ namespace VMSpc.Panels
         public VBarGauge(MainWindow mainWindow, PanelSettings panelSettings)
         : base(mainWindow, panelSettings)
         {
-            FillBar = new Rectangle
-            {
-                Stroke = new SolidColorBrush(Colors.Black),
-                Fill = new SolidColorBrush(Colors.Green)
-            };
-            EmptyBar = new Rectangle
-            {
-                Stroke = new SolidColorBrush(Colors.Black),
-                Fill = new SolidColorBrush(Colors.Black)
-            };
+            FillBar = new Rectangle();
+            EmptyBar = new Rectangle();
             TitleText = new TextBlock();
             ValueText = new TextBlock();
             canvas.Children.Add(EmptyBar);
@@ -54,6 +47,8 @@ namespace VMSpc.Panels
 
         public override void GeneratePanel()
         {
+            EmptyBar.Stroke = new SolidColorBrush(Colors.Black);
+            EmptyBar.Fill = new SolidColorBrush(Colors.Black);
             DrawTitleText();
             DrawValueText();
             DrawBar();
@@ -66,12 +61,11 @@ namespace VMSpc.Panels
         protected virtual void DrawTitleText()
         {
             TitleText.Text = "Turbo Boost Pressure - Extended";
-            TitleText.Background = new SolidColorBrush(Colors.Blue);
             TitleText.Width = canvas.Width;
             TitleText.Height = canvas.Height / 4;
-            TitleText.FontSize = MeasureFontSize(TitleText.Text, TitleText.Width, TitleText.Height); //TODO
+            ScaleText(TitleText, TitleText.Width, TitleText.Height); //TODO
             TitleText.VerticalAlignment = VerticalAlignment.Center;
-            //canvas.Children.Add(TitleText);
+            TitleText.TextAlignment = GET_TEXT_ALIGNMENT(panelSettings.TextPosition);
             Canvas.SetTop(TitleText, 0);
             ApplyRightBottomCoords(TitleText);
         }
@@ -81,13 +75,12 @@ namespace VMSpc.Panels
         /// </summary>
         protected virtual void DrawValueText()
         {
-            ValueText.Text = "" + border.Width;
-            ValueText.Background = new SolidColorBrush(Colors.Yellow);
+            ValueText.Text = "No Data";
             ValueText.Width = canvas.Width;
             ValueText.Height = canvas.Height / 4;
-            ValueText.FontSize = MeasureFontSize(ValueText.Text, ValueText.Width, ValueText.Height);
+            ScaleText(ValueText, ValueText.Width, ValueText.Height);
             ValueText.FontWeight = FontWeights.Bold;
-            //canvas.Children.Add(ValueText);
+            ValueText.TextAlignment = GET_TEXT_ALIGNMENT(panelSettings.TextPosition);
             Canvas.SetTop(ValueText, Canvas.GetBottom(TitleText));
             ApplyRightBottomCoords(ValueText);
         }
@@ -100,7 +93,6 @@ namespace VMSpc.Panels
             Canvas.SetTop(EmptyBar, 3 * (canvas.Height / 4));   //Generates a bar that fills the bottom 1/4 of the panel
             EmptyBar.Height = canvas.Height / 4;
             EmptyBar.Width = canvas.Width;
-            //canvas.Children.Add(EmptyBar);
         }
 
         /// <summary>
@@ -108,9 +100,8 @@ namespace VMSpc.Panels
         /// </summary>
         protected virtual void DrawFillBar()
         {
-            Canvas.SetTop(FillBar, 3 * (canvas.Height / 4));    //Generates a bar that fills the bottom 1/4 of the panel
+            Canvas.SetTop(FillBar, 3 * (canvas.Height / 4));    //Generates a bar that fills EmptyBar
             FillBar.Height = canvas.Height / 4;
-            //canvas.Children.Add(FillBar);
         }
 
         /// <summary>
@@ -118,7 +109,10 @@ namespace VMSpc.Panels
         /// </summary>
         protected virtual void UpdateFillBar(double value)
         {
-            FillBar.Width = value;
+            if (value != DUB_NODATA)
+            {
+                FillBar.Width = value;
+            }
         }
 
         /// <summary>
@@ -126,7 +120,11 @@ namespace VMSpc.Panels
         /// </summary>
         protected void UpdateValueText(double value)
         {
-            //ValueText.Text = "" + value;
+            if (value != DUB_NODATA)
+            {
+                ValueText.Text = "" + value;
+                ScaleText(ValueText, ValueText.Width, ValueText.Height);
+            }
         }
 
         //implemented in child classes

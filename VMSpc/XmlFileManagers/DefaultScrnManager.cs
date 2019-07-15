@@ -42,6 +42,24 @@ namespace VMSpc.XmlFileManagers
             return Int32.Parse(getNodeValueByTagName("Panel-Count"));
         }
 
+        public void SetPanelCount(int count)
+        {
+            getNodeByTagName("Panel-Count").InnerText = count.ToString();
+        }
+
+        public void AddNewPanel(PanelSettings panelSettings)
+        {
+            panelSettings.number = (ushort)(configurationPanelList.Last().number + 1);
+            configurationPanelList.Add(panelSettings);
+            SetPanelCount(GetPanelCount() + 1);
+        }
+
+        public void DeletePanel(int panelNumber)
+        {
+
+        }
+
+
         /// <summary>   Returns a PanelSettings object for use in constructing a new panel  </summary>
         public PanelSettings GetPanel(ushort number)
         {

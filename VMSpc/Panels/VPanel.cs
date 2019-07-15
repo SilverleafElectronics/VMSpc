@@ -64,7 +64,8 @@ namespace VMSpc.Panels
 
 
         protected virtual void Init()
-        {
+        { 
+            canvas.Background = new SolidColorBrush(panelSettings.backgroundColor);
         }
 
         ~VPanel()
@@ -94,7 +95,10 @@ namespace VMSpc.Panels
             {
                 bool? result = dlgWindow.ShowDialog(this);
                 if (result == true)
+                {
+                    GeneratePanel();
                     Init();
+                }
             }
         }
 
@@ -398,12 +402,6 @@ namespace VMSpc.Panels
                 return ParamData.parameters[pid].LastValue;
         }
 
-        protected double MeasureFontSize(string text, double maxWidth, double maxHeight)
-        {
-
-            return 12;
-        }
-
         public abstract void GeneratePanel();
 
         public abstract void UpdatePanel();
@@ -423,10 +421,6 @@ namespace VMSpc.Panels
             panelSettings.rectCord.bottomRightY = (int)Canvas.GetBottom(border);
             panelSettings.rectCord.topLeftX = (int)Canvas.GetLeft(border);
             panelSettings.rectCord.topLeftY = (int)Canvas.GetTop(border);
-            VMSConsole.PrintLine("Right: "+Canvas.GetRight(border));
-            VMSConsole.PrintLine("Left: " + Canvas.GetLeft(border));
-            VMSConsole.PrintLine("Top: " + Canvas.GetTop(border));
-            VMSConsole.PrintLine("Bottom: " + Canvas.GetBottom(border));
         }
 
         protected void ScaleText(TextBlock textBlock, double maxWidth, double maxHeight)
@@ -438,7 +432,7 @@ namespace VMSpc.Panels
                     textBlock.FontSize--;
                     size = CalculateStringSize(textBlock);
             }
-            while (size.Width < (maxWidth - 50) || size.Height < (maxHeight - 50))
+            while (size.Width < (maxWidth) && size.Height < (maxHeight))
             {
                 textBlock.FontSize++;
                 size = CalculateStringSize(textBlock);

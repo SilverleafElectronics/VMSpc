@@ -63,6 +63,7 @@ namespace VMSpc.DlgWindows
                 if (button.IsChecked == true) panelSettings.TextPosition = Convert.ToInt16(button.Tag);
             VMSConsole.PrintLine("" + ((RadioButton)RadioAlignment.Children[0]).IsChecked);
             ((SimpleGaugeSettings)panelSettings).PID = ((VMSListBoxItem)GaugeTypes.SelectedItem).ID;
+            DialogResult = true;
             Close();
         }
         private void CancelButton_Click(object sender, RoutedEventArgs e)

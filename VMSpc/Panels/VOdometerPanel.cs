@@ -43,14 +43,6 @@ namespace VMSpc.Panels
             showSpeed = panelSettings.showSpeed;
             showInMetric = panelSettings.showInMetric;
             layoutHorizontal = panelSettings.layoutHorizontal;
-            odometerGrid = new Grid()
-            {
-                Width = canvas.Width,
-                Height = canvas.Height,
-            };
-            canvas.Children.Add(odometerGrid);
-            odometerTitleValuePair = new Dictionary<string, TextBlock>();
-            gridSpan = Convert.ToByte(showFuelLocked) + Convert.ToByte(showHours) + Convert.ToByte(showMiles) + Convert.ToByte(showMPG) + Convert.ToByte(showSpeed);
             GeneratePanel();
         }
 
@@ -61,6 +53,14 @@ namespace VMSpc.Panels
 
         public override void GeneratePanel()
         {
+            canvas.Children.RemoveRange(0, canvas.Children.Count);
+            odometerGrid = new Grid();
+            canvas.Children.Add(odometerGrid);
+            gridSpan = Convert.ToByte(showFuelLocked) + Convert.ToByte(showHours) + Convert.ToByte(showMiles) + Convert.ToByte(showMPG) + Convert.ToByte(showSpeed);
+            odometerGrid.Children.RemoveRange(0, odometerGrid.Children.Count);
+            odometerGrid.Width = canvas.Width;
+            odometerGrid.Height = canvas.Height;
+            odometerTitleValuePair = new Dictionary<string, TextBlock>();
             DrawGridRows();
         }
 
