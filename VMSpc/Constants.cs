@@ -123,6 +123,20 @@ namespace VMSpc
         public const int HORIZONTAL = 0;
         public const int VERTICAL = 1;
 
+        public const int RESIZE_TOP = 0;
+        public const int RESIZE_TOPRIGHT = 1;
+        public const int RESIZE_RIGHT = 2;
+        public const int RESIZE_BOTTOMRIGHT = 3;
+        public const int RESIZE_BOTTOM = 4;
+        public const int RESIZE_BOTTOMLEFT = 5;
+        public const int RESIZE_LEFT = 6;
+        public const int RESIZE_TOPLEFT = 7;
+        public const int RESIZE_NONE = -1;
+
+        public const int MOVEMENT_RESIZE = 1;
+        public const int MOVEMENT_MOVE = 2;
+        public const int MOVEMENT_NONE = 0;
+
 
         //-----------------------------------------------------------------------------------------
         //RV-C Helpers

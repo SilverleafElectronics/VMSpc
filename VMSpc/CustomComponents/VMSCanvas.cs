@@ -42,7 +42,7 @@ namespace VMSpc.CustomComponents
         {
         }
 
-        private void ApplyBorderDimensions()
+        public void ApplyBorderDimensions()
         {
             border.Width = panelSettings.rectCord.bottomRightX - panelSettings.rectCord.topLeftX;
             border.Height = panelSettings.rectCord.bottomRightY - panelSettings.rectCord.topLeftY;
@@ -52,14 +52,14 @@ namespace VMSpc.CustomComponents
             SetBottom(border, Canvas.GetTop(border) + border.Height);
         }
 
-        private void ApplyCanvasDimensions()
+        public void ApplyCanvasDimensions()
         {
-            Width = border.Width - (BorderThickness * 2);
-            Height = border.Height - (BorderThickness * 2);
             SetTop(this, GetTop(border) - BorderThickness);
             SetLeft(this, GetLeft(border) - BorderThickness);
             SetRight(this, GetRight(border) - BorderThickness);
             SetBottom(this, GetBottom(border) - BorderThickness);
+            Width = border.Width - (BorderThickness * 2);
+            Height = border.Height - (BorderThickness * 2);
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)

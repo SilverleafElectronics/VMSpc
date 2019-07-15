@@ -38,6 +38,8 @@ namespace VMSpc.CustomComponents
         private Double canvasStartLeft;
         private VPanel selectedChild;
 
+        private int movementType;
+
         private Timer panelTimer;
 
         public PanelGrid()
@@ -53,6 +55,7 @@ namespace VMSpc.CustomComponents
             isDragging = false;
             canvasStartTop = Double.NaN;
             canvasStartLeft = Double.NaN;
+            movementType = MOVEMENT_NONE;
         }
 
         public void InitPanels(MainWindow mainWindow)
@@ -117,6 +120,13 @@ namespace VMSpc.CustomComponents
             base.OnMouseLeftButtonUp(e);
             Init();
             SavePanelCoordinates();
+            if (selectedChild != null)
+            {
+                selectedChild.isMoving = false;
+                selectedChild.isResizing = false;
+                selectedChild = null;
+            }
+            movementType = MOVEMENT_NONE;
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -143,18 +153,32 @@ namespace VMSpc.CustomComponents
             foreach (VPanel panel in PanelList)
             {
                 dynamic source = src;
-                while (source.GetType() != panel.canvas.GetType())
+                if (source.GetType() == panel.border.GetType())
                 {
-                    if (source.GetType() == mainWindow.GetType())
+                    if (panel.border == source)
                     {
-                        selectedChild = null;
-                        return;
+                        selectedChild = panel;
+                        movementType = MOVEMENT_RESIZE;
+                        selectedChild.isResizing = true;
                     }
-                    source = VisualTreeHelper.GetParent(source);
                 }
-                if (panel.canvas == source)
+                else
                 {
-                    selectedChild = panel;
+                    while (source.GetType() != panel.canvas.GetType())
+                    {
+                        if (source.GetType() == mainWindow.GetType())
+                        {
+                            selectedChild = null;
+                            return;
+                        }
+                        source = VisualTreeHelper.GetParent(source);
+                    }
+                    if (panel.canvas == source)
+                    {
+                        selectedChild = panel;
+                        selectedChild.isMoving = true;
+                        movementType = MOVEMENT_MOVE;
+                    }
                 }
             }
         }
@@ -181,8 +205,18 @@ namespace VMSpc.CustomComponents
 
         private void MovePanel(VPanel panel, double newTop, double newLeft, Point newCursorPoint)
         {
-            panel.SetHorizontal(newLeft, newCursorPoint);
-            panel.SetVertical(newTop, newCursorPoint);
+            switch (movementType)
+            {
+                case MOVEMENT_MOVE:
+                    panel.SetHorizontal(newLeft, newCursorPoint);
+                    panel.SetVertical(newTop, newCursorPoint);
+                    break;
+                case MOVEMENT_RESIZE:
+                    panel.Resize(newCursorPoint);
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void SetNearestNeighbors(VPanel panel)

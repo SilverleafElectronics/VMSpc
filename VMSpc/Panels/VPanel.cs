@@ -34,16 +34,15 @@ namespace VMSpc.Panels
         protected PanelSettings panelSettings;
         public Border border;
         public VMSCanvas canvas;
+        
+        private int resizeType;
 
         public double leftLimit;
         public double topLimit;
         public double rightLimit;
         public double bottomLimit;
 
-        private bool isLeftClipped;
-        private bool isTopClipped;
-        private bool isRightClipped;
-        private bool isBottomClipped;
+        public bool isMoving, isResizing;
 
         private VMSDialog dlgWindow;
 
@@ -51,15 +50,18 @@ namespace VMSpc.Panels
         {
             this.mainWindow = mainWindow;
             this.panelSettings = panelSettings;
+            isMoving = false;
+            isResizing = false;
+            resizeType = RESIZE_NONE;
             dlgWindow = null;
             InitLimits();
             border = new Border() { BorderThickness = new Thickness(5) };
             canvas = new VMSCanvas(mainWindow, border, panelSettings);
             border.Child = canvas;
             GenerateEventHandlers();
-            isLeftClipped = isTopClipped = isRightClipped = isBottomClipped = false;
             Init();
         }
+
 
         protected virtual void Init()
         {
@@ -98,12 +100,124 @@ namespace VMSpc.Panels
 
         public void OnMouseOverBorder(object sender, MouseEventArgs e)
         {
-            Mouse.OverrideCursor = Cursors.SizeAll;
+            if (isMoving) return;
+            DetermineCursor(e.GetPosition(mainWindow));
+        }
+
+        private void DetermineCursor(Point pos)
+        {
+            if (pos.X <= (Canvas.GetLeft(border) + 10) && pos.Y <= (Canvas.GetTop(border) + 10))
+            {
+                Mouse.OverrideCursor = Cursors.SizeNWSE;
+                resizeType = RESIZE_TOPLEFT;
+            }
+            else if (pos.X >= (Canvas.GetRight(border) - 10) && pos.Y >= (Canvas.GetBottom(border) - 10))
+            {
+                Mouse.OverrideCursor = Cursors.SizeNWSE;
+                resizeType = RESIZE_BOTTOMRIGHT;
+            }
+            else if (pos.X <= (Canvas.GetLeft(border) + 10) && pos.Y >= (Canvas.GetBottom(border) - 10))
+            {
+                Mouse.OverrideCursor = Cursors.SizeNESW;
+                resizeType = RESIZE_BOTTOMLEFT;
+            }
+            else if (pos.X >= (Canvas.GetRight(border) - 10) && pos.Y <= (Canvas.GetTop(border) + 10))
+            {
+                Mouse.OverrideCursor = Cursors.SizeNESW;
+                resizeType = RESIZE_TOPRIGHT;
+            }
+            else if (pos.X <= Canvas.GetLeft(border) + 10)
+            {
+                Mouse.OverrideCursor = Cursors.SizeWE;
+                resizeType = RESIZE_LEFT;
+            }
+            else if (pos.X >= Canvas.GetRight(border) - 10)
+            {
+                Mouse.OverrideCursor = Cursors.SizeWE;
+                resizeType = RESIZE_RIGHT;
+            }
+            else if (pos.Y <= Canvas.GetTop(border) + 10)
+            {
+                Mouse.OverrideCursor = Cursors.SizeNS;
+                resizeType = RESIZE_TOP;
+            }
+            else if (pos.Y >= Canvas.GetBottom(border) - 10)
+            {
+                Mouse.OverrideCursor = Cursors.SizeNS;
+                resizeType = RESIZE_BOTTOM;
+            }
         }
 
         public void OnMouseLeaveBorder(object sender, MouseEventArgs e)
         {
+            if (isResizing) return;
             Mouse.OverrideCursor = Cursors.Arrow;
+            resizeType = RESIZE_NONE;
+        }
+
+        public void Resize(Point cursorPoint)
+        {
+            switch (resizeType)
+            {
+                case RESIZE_LEFT:
+                    ResizeLeft(cursorPoint.X);
+                    break;
+                case RESIZE_RIGHT:
+                    ResizeRight(cursorPoint.X);
+                    break;
+                case RESIZE_TOP:
+                    ResizeTop(cursorPoint.Y);
+                    break;
+                case RESIZE_BOTTOM:
+                    ResizeBottom(cursorPoint.Y);
+                    break;
+                case RESIZE_BOTTOMLEFT:
+                    ResizeBottom(cursorPoint.Y);
+                    ResizeLeft(cursorPoint.X);
+                    break;
+                case RESIZE_BOTTOMRIGHT:
+                    ResizeBottom(cursorPoint.Y);
+                    ResizeRight(cursorPoint.X);
+                    break;
+                case RESIZE_TOPLEFT:
+                    ResizeTop(cursorPoint.Y);
+                    ResizeLeft(cursorPoint.X);
+                    break;
+                case RESIZE_TOPRIGHT:
+                    ResizeTop(cursorPoint.Y);
+                    ResizeRight(cursorPoint.X);
+                    break;
+                default:
+                    break;
+            }
+            canvas.ApplyCanvasDimensions();
+            GeneratePanel();
+        }
+
+        private void ResizeTop(double newTop)
+        {
+            var oldBottom = Canvas.GetBottom(border);
+            Canvas.SetTop(border, newTop);
+            border.Height = oldBottom - newTop;
+        }
+
+        private void ResizeRight(double newRight)
+        {
+            border.Width = (newRight - Canvas.GetLeft(border));
+            Canvas.SetRight(border, (Canvas.GetLeft(canvas) + border.Width));
+        }
+
+        private void ResizeBottom(double newBottom)
+        {
+            border.Height = (newBottom - Canvas.GetTop(border));
+            Canvas.SetBottom(border, (Canvas.GetTop(canvas) + border.Height));
+        }
+        
+        private void ResizeLeft(double newLeft)
+        {
+            var oldRight = Canvas.GetRight(border);
+            Canvas.SetLeft(border, newLeft);
+            border.Width = oldRight - newLeft;
         }
 
         private bool IsWithinBoundary(double targetPosition, double boundaryLimit, double value)
@@ -251,13 +365,11 @@ namespace VMSpc.Panels
             {
                 Canvas.SetTop(border, topLimit);
                 Canvas.SetBottom(border, topLimit + border.Height);
-                isTopClipped = true;
             }
             else if (side == DOWN)
             {
                 Canvas.SetTop(border, bottomLimit - border.Height);
                 Canvas.SetBottom(border, bottomLimit);
-                isBottomClipped = true;
             }
         }
 
@@ -267,13 +379,11 @@ namespace VMSpc.Panels
             {
                 Canvas.SetLeft(border, leftLimit);
                 Canvas.SetRight(border, leftLimit + border.Width);
-                isLeftClipped = true;
             }
             else if (side == RIGHT)
             {
                 Canvas.SetLeft(border, rightLimit - border.Width);
                 Canvas.SetRight(border, rightLimit);
-                isRightClipped = true;
             }
         }
 

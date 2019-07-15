@@ -60,6 +60,7 @@
     <Compile Include="Communication\MessageExtractor.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="CustomComponents\PanelGrid.cs" />
+    <Compile Include="CustomComponents\VMSBorder.cs" />
     <Compile Include="CustomComponents\VMSListBoxItem.cs" />
     <Compile Include="DevHelpers\MiscHelpers.cs" />
     <Compile Include="DevHelpers\VmsConsole.cs" />

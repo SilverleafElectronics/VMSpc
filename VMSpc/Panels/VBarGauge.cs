@@ -32,6 +32,18 @@ namespace VMSpc.Panels
                 Stroke = new SolidColorBrush(Colors.Black),
                 Fill = new SolidColorBrush(Colors.Green)
             };
+            EmptyBar = new Rectangle
+            {
+                Stroke = new SolidColorBrush(Colors.Black),
+                Fill = new SolidColorBrush(Colors.Black)
+            };
+            TitleText = new TextBlock();
+            ValueText = new TextBlock();
+            canvas.Children.Add(EmptyBar);
+            canvas.Children.Add(FillBar);
+            canvas.Children.Add(TitleText);
+            canvas.Children.Add(ValueText);
+
             GeneratePanel();
         }
 
@@ -42,11 +54,6 @@ namespace VMSpc.Panels
 
         public override void GeneratePanel()
         {
-            EmptyBar = new Rectangle
-            {
-                Stroke = new SolidColorBrush(Colors.Black),
-                Fill = new SolidColorBrush(Colors.Black)
-            };
             DrawTitleText();
             DrawValueText();
             DrawBar();
@@ -58,14 +65,13 @@ namespace VMSpc.Panels
         //Move to VPanel?
         protected virtual void DrawTitleText()
         {
-            TitleText = new TextBlock();
             TitleText.Text = "Turbo Boost Pressure - Extended";
             TitleText.Background = new SolidColorBrush(Colors.Blue);
             TitleText.Width = canvas.Width;
             TitleText.Height = canvas.Height / 4;
             TitleText.FontSize = MeasureFontSize(TitleText.Text, TitleText.Width, TitleText.Height); //TODO
             TitleText.VerticalAlignment = VerticalAlignment.Center;
-            canvas.Children.Add(TitleText);
+            //canvas.Children.Add(TitleText);
             Canvas.SetTop(TitleText, 0);
             ApplyRightBottomCoords(TitleText);
         }
@@ -75,14 +81,13 @@ namespace VMSpc.Panels
         /// </summary>
         protected virtual void DrawValueText()
         {
-            ValueText = new TextBlock();
             ValueText.Text = "" + border.Width;
             ValueText.Background = new SolidColorBrush(Colors.Yellow);
             ValueText.Width = canvas.Width;
             ValueText.Height = canvas.Height / 4;
             ValueText.FontSize = MeasureFontSize(ValueText.Text, ValueText.Width, ValueText.Height);
             ValueText.FontWeight = FontWeights.Bold;
-            canvas.Children.Add(ValueText);
+            //canvas.Children.Add(ValueText);
             Canvas.SetTop(ValueText, Canvas.GetBottom(TitleText));
             ApplyRightBottomCoords(ValueText);
         }
@@ -95,7 +100,7 @@ namespace VMSpc.Panels
             Canvas.SetTop(EmptyBar, 3 * (canvas.Height / 4));   //Generates a bar that fills the bottom 1/4 of the panel
             EmptyBar.Height = canvas.Height / 4;
             EmptyBar.Width = canvas.Width;
-            canvas.Children.Add(EmptyBar);
+            //canvas.Children.Add(EmptyBar);
         }
 
         /// <summary>
@@ -105,7 +110,7 @@ namespace VMSpc.Panels
         {
             Canvas.SetTop(FillBar, 3 * (canvas.Height / 4));    //Generates a bar that fills the bottom 1/4 of the panel
             FillBar.Height = canvas.Height / 4;
-            canvas.Children.Add(FillBar);
+            //canvas.Children.Add(FillBar);
         }
 
         /// <summary>
