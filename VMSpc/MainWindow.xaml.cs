@@ -23,6 +23,7 @@ using VMSpc.Communication;
 using static VMSpc.Parsers.PIDWrapper;
 using VMSpc.Parsers;
 using static VMSpc.XmlFileManagers.ParamDataManager;
+using static VMSpc.Constants;
 
 namespace VMSpc
 {
@@ -58,7 +59,6 @@ namespace VMSpc
         {
             VMSConsole.AddConsoleToWindow(ContentGrid);
             ContentGrid.InitPanels(this);
-            ContentGrid.LoadPanels();
         }
 
         #region EVENT HANDLERS
@@ -82,6 +82,7 @@ namespace VMSpc
         {
             SimpleGaugeSettings panelSettings = new SimpleGaugeSettings(0);
             SimpleGaugeDlg dlgWindow = new SimpleGaugeDlg(panelSettings);
+            dlgWindow.Owner = this;
             bool? result = dlgWindow.ShowDialog(null);
             if (result == true)
             {

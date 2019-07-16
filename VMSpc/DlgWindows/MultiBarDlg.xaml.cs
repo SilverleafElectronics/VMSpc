@@ -16,12 +16,12 @@ using VMSpc.XmlFileManagers;
 namespace VMSpc.DlgWindows
 {
     /// <summary>
-    /// Interaction logic for OdometerDlg.xaml
+    /// Interaction logic for MultiBarDlg.xaml
     /// </summary>
-    public partial class OdometerDlg : VPanelDlg
+    public partial class MultiBarDlg : VPanelDlg
     {
-        public OdometerDlg(PanelSettings panelSettings)
-            : base(panelSettings)
+        public MultiBarDlg(PanelSettings panelSettings)
+            :base(panelSettings)
         {
             InitializeComponent();
         }

@@ -110,6 +110,7 @@ namespace VMSpc
             public const char RESERVED_ID = 'D';
             public const char DIAG_ALARM_ID = 'E';
             public const char RADIAL_GAUGE_ID = 'F';
+            public const char NO_ID = '~';
         }
 
         //-----------------------------------------------------------------------------------------

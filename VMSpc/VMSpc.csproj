@@ -62,7 +62,7 @@
     <Compile Include="CustomComponents\PanelGrid.cs" />
     <Compile Include="CustomComponents\VMSBorder.cs" />
     <Compile Include="CustomComponents\VMSListBoxItem.cs" />
-    <Compile Include="DevHelpers\MiscHelpers.cs" />
+    <Compile Include="CustomComponents\RadialBar.cs" />
     <Compile Include="DevHelpers\VmsConsole.cs" />
     <Compile Include="DlgWindows\AboutDlg.xaml.cs">
       <DependentUpon>AboutDlg.xaml</DependentUpon>
@@ -71,18 +71,26 @@
       <DependentUpon>CommDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomComponents\VMSCanvas.cs" />
+    <Compile Include="DlgWindows\MultiBarDlg.xaml.cs">
+      <DependentUpon>MultiBarDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DlgWindows\OdometerDlg.xaml.cs">
       <DependentUpon>OdometerDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="DlgWindows\RawLogDlg.xaml.cs">
       <DependentUpon>RawLogDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DlgWindows\RoundGaugeDlg.xaml.cs">
+      <DependentUpon>RoundGaugeDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DlgWindows\SimpleGaugeDlg.xaml.cs">
       <DependentUpon>SimpleGaugeDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="DlgWindows\VMSDialog.cs" />
     <Compile Include="DlgWindows\VPanelDlg.cs" />
+    <Compile Include="Panels\VMultiBar.cs" />
     <Compile Include="Panels\VOdometerPanel.cs" />
+    <Compile Include="Panels\VRoundGauge.cs" />
     <Compile Include="Parsers\ChassisParameter.cs" />
     <Compile Include="Parsers\J1708\J1708Parser.cs" />
     <Compile Include="Parsers\J1939\J1939Parser.cs" />
@@ -127,11 +135,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="DlgWindows\MultiBarDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DlgWindows\OdometerDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DlgWindows\RawLogDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DlgWindows\RoundGaugeDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -178,9 +194,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Managers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\silverleaf_300x200.bmp" />
   </ItemGroup>

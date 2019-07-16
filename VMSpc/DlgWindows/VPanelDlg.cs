@@ -8,13 +8,17 @@ using static VMSpc.Constants;
 
 namespace VMSpc.DlgWindows
 {
-    public class VPanelDlg : VMSDialog
+    public abstract class VPanelDlg : VMSDialog
     {
         public PanelSettings panelSettings;
         
         public VPanelDlg(PanelSettings panelSettings) : base()
         {
             this.panelSettings = panelSettings;
+            if (this.panelSettings.ID == PanelIDs.NO_ID)
+                ApplyDefaults();
         }
+
+        protected abstract void ApplyDefaults();
     }
 }

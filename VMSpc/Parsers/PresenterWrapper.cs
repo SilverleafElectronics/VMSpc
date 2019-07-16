@@ -20,6 +20,7 @@ namespace VMSpc.Parsers
             temp.datum.rawValue = raw;
             temp.datum.value = v_standard;
             temp.datum.valueMetric = v_metric;
+            temp.datum.seen = true;
         }
 
         public static readonly Dictionary<ushort, TSPNPresenter> PresenterList = new Dictionary<ushort, TSPNPresenter>();

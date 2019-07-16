@@ -12,36 +12,38 @@ using VMSpc.DevHelpers;
 using VMSpc.DlgWindows;
 using VMSpc.XmlFileManagers;
 using static VMSpc.Constants;
+using static VMSpc.XmlFileManagers.ParamDataManager;
 
 namespace VMSpc.Panels
 {
     /// <summary> Base class of VSimpleGauge, VScanGauge, and VRoundGauge </summary>
     abstract class VBarGauge : VPanel
     {
-        protected Rectangle EmptyBar;
-        protected Rectangle FillBar;
+        protected Shape EmptyBar;
+        protected Shape FillBar;
         protected TextBlock TitleText;
         protected TextBlock ValueText;
+        protected VParameter parameter;
+
+        protected double lastValue;
+
+        protected bool showAbbreviation;
 
         private static readonly Random getrandom = new Random();
 
         public VBarGauge(MainWindow mainWindow, PanelSettings panelSettings)
         : base(mainWindow, panelSettings)
         {
-            FillBar = new Rectangle();
-            EmptyBar = new Rectangle();
             TitleText = new TextBlock();
             ValueText = new TextBlock();
+        }
+
+        public override void Init()
+        {
             canvas.Children.Add(EmptyBar);
             canvas.Children.Add(FillBar);
             canvas.Children.Add(TitleText);
             canvas.Children.Add(ValueText);
-
-            GeneratePanel();
-        }
-
-        protected override void Init()
-        {
             base.Init();
         }
 
@@ -49,6 +51,9 @@ namespace VMSpc.Panels
         {
             EmptyBar.Stroke = new SolidColorBrush(Colors.Black);
             EmptyBar.Fill = new SolidColorBrush(Colors.Black);
+            FillBar.Fill = new SolidColorBrush(Colors.Green);
+            showAbbreviation = ((GaugeSettings)panelSettings).showAbbreviation;
+            lastValue = Double.NaN;
             DrawTitleText();
             DrawValueText();
             DrawBar();
@@ -60,7 +65,15 @@ namespace VMSpc.Panels
         //Move to VPanel?
         protected virtual void DrawTitleText()
         {
-            TitleText.Text = "Turbo Boost Pressure - Extended";
+            if (parameter != null)
+            {
+                if (showAbbreviation)
+                    TitleText.Text = parameter.Abbreviation;
+                else
+                    TitleText.Text = parameter.ParamName;
+            }
+            else
+                TitleText.Text = "NA";
             TitleText.Width = canvas.Width;
             TitleText.Height = canvas.Height / 4;
             ScaleText(TitleText, TitleText.Width, TitleText.Height); //TODO
@@ -105,14 +118,27 @@ namespace VMSpc.Panels
         }
 
         /// <summary>
+        /// Gets the last updated value of the parameter at the specified PID
+        /// </summary>
+        protected double GetPidValue(ushort pid)
+        {
+            if (parameter != null)
+            {
+                if (panelSettings.showInMetric)
+                    return parameter.LastMetricValue;
+                else
+                    return parameter.LastValue;
+            }
+            return DUB_NODATA;
+        }
+
+        /// <summary>
         /// Updates the fill bar with the specified value. This implementation is used by VSimpleGauge and VScanGauge, but is overridden by VRoundGauge
         /// </summary>
         protected virtual void UpdateFillBar(double value)
         {
-            if (value != DUB_NODATA)
-            {
-                FillBar.Width = value;
-            }
+            FillBar.Width = value;
+            lastValue = value;
         }
 
         /// <summary>
@@ -120,14 +146,11 @@ namespace VMSpc.Panels
         /// </summary>
         protected void UpdateValueText(double value)
         {
-            if (value != DUB_NODATA)
-            {
-                ValueText.Text = "" + value;
-                ScaleText(ValueText, ValueText.Width, ValueText.Height);
-            }
+            ValueText.Text = "" + value;
+            ScaleText(ValueText, ValueText.Width, ValueText.Height);
         }
 
         //implemented in child classes
-        public override void UpdatePanel() { }
+        public override abstract void UpdatePanel();
     }
 }

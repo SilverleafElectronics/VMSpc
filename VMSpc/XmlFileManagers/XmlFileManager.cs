@@ -136,6 +136,28 @@ namespace VMSpc.XmlFileManagers
             xmlDoc.LoadXml(newXml);
         }
 
+        public XmlNode AddNodeToParentNode(XmlNode parent, string childNodeName)
+        {
+            XmlElement newNode = xmlDoc.CreateElement(childNodeName);
+            parent.AppendChild(newNode);
+            return newNode;
+        }
+
+        public XmlNode AddNodeToParentTag(string parentTag, string childNodeName)
+        {
+            XmlNode parent = getNodeByTagName(parentTag);
+            XmlElement newNode = xmlDoc.CreateElement(childNodeName);
+            parent.AppendChild(newNode);
+            return newNode;
+        }
+
+        public void AddAttributeToNode(XmlNode node, string attrName, string attrValue)
+        {
+            XmlNode attr = xmlDoc.CreateNode(XmlNodeType.Attribute, attrName, "");
+            attr.Value = attrValue;
+            node.Attributes.SetNamedItem(attr);
+        }
+
         #endregion //XML Writing
     }
 }

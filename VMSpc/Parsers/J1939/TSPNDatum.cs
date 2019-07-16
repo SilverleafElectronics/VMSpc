@@ -45,14 +45,6 @@ namespace VMSpc.Parsers
         #region Update Methods
         //Note: these all compile with the unsafe modifiers.
 
-        private unsafe void VMSmemcpy(void *dest, void *src, int length)
-        {
-            char* csrc = (char*)src;
-            char* cdest = (char*)dest;
-            for (int i = 0; i < length; i++)
-                cdest[i] = csrc[i];
-        }
-
         /// <summary>
         /// updates flag according to the input two-bit pattern:
         ///    00 = sets datum to 0, returns 1

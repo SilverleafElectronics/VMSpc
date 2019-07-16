@@ -88,3 +88,7 @@ C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\SimpleGaugeDlg.g.
 C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\SimpleGaugeDlg.baml
 C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\OdometerDlg.g.cs
 C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\OdometerDlg.baml
+C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\RoundGaugeDlg.g.cs
+C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\RoundGaugeDlg.baml
+C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\MultiBarDlg.g.cs
+C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\MultiBarDlg.baml

@@ -23,14 +23,14 @@ namespace VMSpc.DlgWindows
     /// <summary>
     /// Interaction logic for SimpleGaugeDlg.xaml
     /// </summary>
-    public partial class SimpleGaugeDlg : VPanelDlg
+    public partial class RoundGaugeDlg : VPanelDlg
     {
         public int checkedRadio
         {
             get { return panelSettings.TextPosition; }
             set { SetProperty(ref panelSettings.TextPosition, value); }
         }
-        public SimpleGaugeDlg(PanelSettings panelSettings)
+        public RoundGaugeDlg(PanelSettings panelSettings)
             : base(panelSettings)
         {
             InitializeComponent();

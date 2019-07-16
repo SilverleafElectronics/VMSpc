@@ -13,6 +13,7 @@
         <DockPanel Name="DockMenu">
             <DockPanel.CommandBindings>
                 <CommandBinding Command="Close" CanExecute="CloseCommand_CanExecute" Executed="CloseCommand_Executed" />
+                <CommandBinding Command="self:MainCommands.NewSimpleGauge" CanExecute="NewSimpleGaugeCommand_CanExecute" Executed="NewSimpleGaugeCommand_Executed" />
                 <CommandBinding Command="self:MainCommands.CommSettings" CanExecute="CommSettingsCommand_CanExecute" Executed="CommSettingsCommand_Executed" />
                 <CommandBinding Command="self:MainCommands.About" CanExecute="NewSimpleGaugeCommand_CanExecute" Executed="AboutCommand_Executed" />
                 <CommandBinding Command="self:MainCommands.RawLog" CanExecute="RawLogCommand_CanExecute" Executed="RawLogCommand_Executed" />

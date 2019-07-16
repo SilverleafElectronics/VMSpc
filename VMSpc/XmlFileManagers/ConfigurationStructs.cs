@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Media;
 using System.Xml;
+using static VMSpc.Constants;
 
 namespace VMSpc.XmlFileManagers
 {
@@ -59,6 +60,35 @@ namespace VMSpc.XmlFileManagers
         { 
             this.number = number;
             showInMetric = false;
+            ID = PanelIDs.NO_ID;
+        }
+
+        protected void GenerateColorNodeAsXml(XmlFileManager fileManager, XmlNode parentNode, string newNodeName)
+        {
+            XmlNode newNode = fileManager.AddNodeToParentNode(parentNode, newNodeName);
+            fileManager.AddAttributeToNode(newNode, "Red", "");
+            fileManager.AddAttributeToNode(newNode, "Green", "");
+            fileManager.AddAttributeToNode(newNode, "Blue", "");
+        }
+
+        public virtual XmlNode GenerateNodeAsXml(XmlFileManager fileManager)
+        {
+            XmlNode panelNode = fileManager.AddNodeToParentTag("Screen-Elements", "Panel");
+            fileManager.AddAttributeToNode(panelNode, "Number", number.ToString());
+            fileManager.AddNodeToParentNode(panelNode, "ID");
+            XmlNode rectCordNode = fileManager.AddNodeToParentNode(panelNode, "Rect-Cord");
+            fileManager.AddAttributeToNode(rectCordNode, "Top-LeftX", rectCord.topLeftX.ToString());
+            fileManager.AddAttributeToNode(rectCordNode, "Top-LeftY", rectCord.topLeftY.ToString());
+            fileManager.AddAttributeToNode(rectCordNode, "Bottom-RightX", rectCord.bottomRightX.ToString());
+            fileManager.AddAttributeToNode(rectCordNode, "Bottom-RightY", rectCord.bottomRightY.ToString());
+            GenerateColorNodeAsXml(fileManager, panelNode, "BackGround-Color");
+            GenerateColorNodeAsXml(fileManager, panelNode, "Base-Color");
+            GenerateColorNodeAsXml(fileManager, panelNode, "Explicit-Color");
+            GenerateColorNodeAsXml(fileManager, panelNode, "Explicit-Gauge-Color");
+            fileManager.AddNodeToParentNode(panelNode, "Show-In-Metric");
+            fileManager.AddNodeToParentNode(panelNode, "Format");
+            fileManager.AddNodeToParentNode(panelNode, "Use-Static-Color");
+            return panelNode;
         }
 
         public virtual void StoreSettings(string nodeName, string val, XmlNode panelNode)
@@ -108,6 +138,7 @@ namespace VMSpc.XmlFileManagers
 
         public virtual void SaveSettings(XmlNode panelNode)
         {
+            SafeSave(panelNode, "ID", ID.ToString());
             panelNode["Rect-Cord"].SetAttribute("Top-LeftX", rectCord.topLeftX.ToString());
             panelNode["Rect-Cord"].SetAttribute("Top-LeftY", rectCord.topLeftY.ToString());
             panelNode["Rect-Cord"].SetAttribute("Bottom-RightX", rectCord.bottomRightX.ToString());
@@ -116,7 +147,7 @@ namespace VMSpc.XmlFileManagers
             SaveColorToXml(panelNode, "Base-Color", ref baseColor);
             SaveColorToXml(panelNode, "Explicit-Color", ref explicitColor);
             SaveColorToXml(panelNode, "Explicit-Gauge-Color", ref explicitGaugeColor);
-
+            SafeSave(panelNode, "Show-In-Metric", showInMetric.ToString());
             SafeSave(panelNode, "Format", TextPosition.ToString());
         }
 
@@ -403,18 +434,66 @@ namespace VMSpc.XmlFileManagers
                     break;
             }
         }
+
+        public override void SaveSettings(XmlNode panelNode)
+        {
+            base.SaveSettings(panelNode);
+            SafeSave(panelNode, "Show-Spot", showSpot.ToString());
+            SafeSave(panelNode, "Show-Name", showName.ToString());
+            SafeSave(panelNode, "Show-Value", showValue.ToString());
+            SafeSave(panelNode, "Show-Unit", showUnit.ToString());
+            SafeSave(panelNode, "Show-Graph", showGraph.ToString());
+            SafeSave(panelNode, "Show-Abbreviation", showAbbreviation.ToString());
+        }
+
+        public override XmlNode GenerateNodeAsXml(XmlFileManager fileManager)
+        {
+            XmlNode panelNode = base.GenerateNodeAsXml(fileManager);
+            fileManager.AddNodeToParentNode(panelNode, "Show-Spot");
+            fileManager.AddNodeToParentNode(panelNode, "Show-Name");
+            fileManager.AddNodeToParentNode(panelNode, "Show-Value");
+            fileManager.AddNodeToParentNode(panelNode, "Show-Unit");
+            fileManager.AddNodeToParentNode(panelNode, "Show-Graph");
+            fileManager.AddNodeToParentNode(panelNode, "Show-Abbreviation");
+            return panelNode;
+        }
     }
-    public class ScanGaugeSettings : GaugeSettings
+    public class MultiBarSettings : GaugeSettings
     {
         public List<ushort> PIDList;
-        public ScanGaugeSettings(ushort number) : base(number) { }
+        public int numPids;
+        public MultiBarSettings(ushort number) : base(number)
+        {
+            numPids = 0;
+        }
 
         public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
         {
             switch (nodeName)
             {
-                case "PID":
-                    PIDList.Add(UInt16.Parse(val));
+                case "Param":
+                    PIDList.Add(UInt16.Parse(panelNode.Attributes["Pid"].InnerText));
+                    numPids++;
+                    break;
+                default:
+                    base.StoreSettings(nodeName, val, panelNode);
+                    break;
+            }
+        }
+    }
+    public class ScanGaugeSettings : MultiBarSettings
+    {
+        public int scanSpeed;
+        public ScanGaugeSettings(ushort number) : base(number)
+        {
+            scanSpeed = 10;
+        }
+        public override void StoreSettings(string nodeName, string val, XmlNode panelNode)
+        {
+            switch (nodeName)
+            {
+                case "Scan-Speed":
+                    scanSpeed = Int32.Parse(val);
                     break;
                 default:
                     base.StoreSettings(nodeName, val, panelNode);
@@ -438,6 +517,19 @@ namespace VMSpc.XmlFileManagers
                     base.StoreSettings(nodeName, val, panelNode);
                     break;
             }
+        }
+
+        public override void SaveSettings(XmlNode panelNode)
+        {
+            base.SaveSettings(panelNode);
+            SafeSave(panelNode, "PID", PID.ToString());
+        }
+
+        public override XmlNode GenerateNodeAsXml(XmlFileManager fileManager)
+        {
+            XmlNode panelNode = base.GenerateNodeAsXml(fileManager);
+            fileManager.AddNodeToParentNode(panelNode, "PID");
+            return panelNode;
         }
     }
     public class RoundGaugeSettings : SimpleGaugeSettings

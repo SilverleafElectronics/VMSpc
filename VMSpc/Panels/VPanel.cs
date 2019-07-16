@@ -20,6 +20,7 @@ using VMSpc.DevHelpers;
 using System.Timers;
 using static VMSpc.Constants;
 using static VMSpc.XmlFileManagers.ParamDataManager;
+using static VMSpc.XmlFileManagers.DefaultScrnManager;
 using System.Globalization;
 
 namespace VMSpc.Panels
@@ -30,7 +31,7 @@ namespace VMSpc.Panels
     public abstract class VPanel
     {
         public char cID;
-        private MainWindow mainWindow;
+        protected MainWindow mainWindow;
         protected PanelSettings panelSettings;
         public Border border;
         public VMSCanvas canvas;
@@ -59,11 +60,10 @@ namespace VMSpc.Panels
             canvas = new VMSCanvas(mainWindow, border, panelSettings);
             border.Child = canvas;
             GenerateEventHandlers();
-            Init();
         }
 
 
-        protected virtual void Init()
+        public virtual void Init()
         { 
             canvas.Background = new SolidColorBrush(panelSettings.backgroundColor);
         }
@@ -97,7 +97,7 @@ namespace VMSpc.Panels
                 if (result == true)
                 {
                     GeneratePanel();
-                    Init();
+                    scrnManager.SaveConfiguration();
                 }
             }
         }
@@ -391,17 +391,6 @@ namespace VMSpc.Panels
             }
         }
 
-        /// <summary>
-        /// Gets the last updated value of the parameter at the specified PID
-        /// </summary>
-        protected double GetPidValue(ushort pid)
-        {
-            if (panelSettings.showInMetric)
-                return ParamData.parameters[pid].LastMetricValue;
-            else
-                return ParamData.parameters[pid].LastValue;
-        }
-
         public abstract void GeneratePanel();
 
         public abstract void UpdatePanel();
@@ -437,6 +426,7 @@ namespace VMSpc.Panels
                 textBlock.FontSize++;
                 size = CalculateStringSize(textBlock);
             }
+            textBlock.FontSize--;
         }
 
         private Size CalculateStringSize(TextBlock textBlock)
@@ -487,7 +477,6 @@ namespace VMSpc.Panels
                         TextBlock textBlock = (TextBlock)((Border)block).Child;
                         textBlock.FontSize = min;
                     }
-
                 }
             }
         }

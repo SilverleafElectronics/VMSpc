@@ -52,13 +52,14 @@ namespace VMSpc.XmlFileManagers
             panelSettings.number = (ushort)(configurationPanelList.Last().number + 1);
             configurationPanelList.Add(panelSettings);
             SetPanelCount(GetPanelCount() + 1);
+            XmlNode panelNode = panelSettings.GenerateNodeAsXml(this);
+            panelSettings.SaveSettings(panelNode);
         }
 
         public void DeletePanel(int panelNumber)
         {
 
         }
-
 
         /// <summary>   Returns a PanelSettings object for use in constructing a new panel  </summary>
         public PanelSettings GetPanel(ushort number)

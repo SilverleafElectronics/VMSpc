@@ -70,16 +70,8 @@ namespace VMSpc.CustomComponents
 
         public void CreateNewPanel(PanelSettings panelSettings)
         {
-            ApplyPanelDefaults(panelSettings);
+            scrnManager.AddNewPanel(panelSettings);
             AddPanel(panelSettings);
-        }
-
-        private void ApplyPanelDefaults(PanelSettings panelSettings)
-        {
-            panelSettings.rectCord.topLeftX = 0;
-            panelSettings.rectCord.topLeftY = 0;
-            panelSettings.rectCord.bottomRightX = 300;
-            panelSettings.rectCord.bottomRightY = 300;
         }
 
         private void AddPanel(PanelSettings panelSettings)
@@ -116,19 +108,17 @@ namespace VMSpc.CustomComponents
                 case PanelIDs.DIAG_ALARM_ID:
                     break;
                 case PanelIDs.RADIAL_GAUGE_ID:
+                    panel = new VRoundGauge(mainWindow, (RoundGaugeSettings)panelSettings);
                     break;
                 default:
                     break;
             }
-            if (panel != null)
-                PanelList.Add(panel);
-        }
-
-        public void LoadPanels()
-        {
-            foreach (VPanel panel in PanelList)
+            if (panel != null)  //Append panel to the grid for display
             {
+                PanelList.Add(panel);
                 Children.Add(panel.border);
+                panel.Init();
+                panel.GeneratePanel();
             }
         }
 

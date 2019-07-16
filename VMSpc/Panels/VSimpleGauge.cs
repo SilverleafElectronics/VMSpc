@@ -7,28 +7,27 @@ using VMSpc.XmlFileManagers;
 using VMSpc.DevHelpers;
 using VMSpc.Parsers;
 using VMSpc.DlgWindows;
+using static VMSpc.XmlFileManagers.ParamDataManager;
+using static VMSpc.Constants;
+using System.Windows.Shapes;
 
 namespace VMSpc.Panels
 {
     class VSimpleGauge : VBarGauge
     {
-        private MainWindow mainWindow;
-        private ushort pid;
+        protected ushort pid;
 
         public VSimpleGauge(MainWindow mainWindow, SimpleGaugeSettings panelSettings) 
             : base(mainWindow, panelSettings)
         {
-            this.mainWindow = mainWindow;
-        }
-
-        protected override void Init()
-        {
-            pid = ((SimpleGaugeSettings)panelSettings).PID;
-            base.Init();
+            FillBar = new Rectangle();
+            EmptyBar = new Rectangle();
         }
 
         public override void GeneratePanel()
         {
+            pid = ((SimpleGaugeSettings)panelSettings).PID;
+            parameter = ParamData.parameters[pid];
             base.GeneratePanel();
         }
 
@@ -39,9 +38,13 @@ namespace VMSpc.Panels
 
         public override void UpdatePanel()
         {
-            double newValue = GetPidValue(pid);
-            UpdateFillBar(newValue);
-            UpdateValueText(newValue);
+            double value = Math.Round(GetPidValue(pid), 2, MidpointRounding.AwayFromZero);
+            if (value != DUB_NODATA && value != lastValue)
+            {
+                UpdateFillBar(value);
+                UpdateValueText(value);
+                lastValue = value;
+            }
         }
     }
 }
