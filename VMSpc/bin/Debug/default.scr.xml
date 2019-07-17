@@ -67,7 +67,7 @@
     <Value-Offset>0</Value-Offset>
     <Panel Number="2">
       <ID>F</ID>
-      <Rect-Cord Top-LeftX="244" Top-LeftY="98" Bottom-RightX="990" Bottom-RightY="557" />
+      <Rect-Cord Top-LeftX="185" Top-LeftY="149" Bottom-RightX="931" Bottom-RightY="608" />
       <BackGround-Color Red="163" Green="82" Blue="0" />
       <Base-Color Red="0" Green="0" Blue="0" />
       <Explicit-Color Red="0" Green="0" Blue="0" />
