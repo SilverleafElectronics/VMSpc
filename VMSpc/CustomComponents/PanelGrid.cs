@@ -90,6 +90,7 @@ namespace VMSpc.CustomComponents
                 case PanelIDs.TRANSMISSION_ID:
                     break;
                 case PanelIDs.MULTIBAR_ID:
+                    panel = new VMultiBar(mainWindow, (MultiBarSettings)panelSettings);
                     break;
                 case PanelIDs.HISTOGRAM_ID:
                     break;

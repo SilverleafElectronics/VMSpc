@@ -5,7 +5,7 @@
     <File-Name>default.scr.xml</File-Name>
     <Panel Number="1">
       <ID>1</ID>
-      <Rect-Cord Top-LeftX="1073" Top-LeftY="283" Bottom-RightX="1314" Bottom-RightY="415" />
+      <Rect-Cord Top-LeftX="1259" Top-LeftY="339" Bottom-RightX="1500" Bottom-RightY="471" />
       <BackGround-Color Red="163" Green="82" Blue="0" />
       <Base-Color Red="200" Green="170" Blue="40" />
       <Explicit-Color Red="255" Green="255" Blue="255" />
@@ -25,7 +25,7 @@
     <Wallpaper-Filename>
     </Wallpaper-Filename>
     <Text-Color Red="255" Green="0" Blue="0" />
-    <Panel-Count>2</Panel-Count>
+    <Panel-Count>4</Panel-Count>
     <Shader-Position>4</Shader-Position>
     <Day-Palette>1</Day-Palette>
     <Night-Palette>0</Night-Palette>
@@ -67,7 +67,7 @@
     <Value-Offset>0</Value-Offset>
     <Panel Number="2">
       <ID>F</ID>
-      <Rect-Cord Top-LeftX="185" Top-LeftY="149" Bottom-RightX="931" Bottom-RightY="608" />
+      <Rect-Cord Top-LeftX="1002" Top-LeftY="0" Bottom-RightX="1500" Bottom-RightY="339" />
       <BackGround-Color Red="163" Green="82" Blue="0" />
       <Base-Color Red="0" Green="0" Blue="0" />
       <Explicit-Color Red="0" Green="0" Blue="0" />
@@ -82,6 +82,50 @@
       <Show-Graph>True</Show-Graph>
       <Show-Abbreviation>False</Show-Abbreviation>
       <PID>177</PID>
+    </Panel>
+    <Panel Number="3">
+      <ID>5</ID>
+      <Rect-Cord Top-LeftX="52" Top-LeftY="111" Bottom-RightX="654" Bottom-RightY="699" />
+      <BackGround-Color Red="255" Green="255" Blue="255" />
+      <Base-Color Red="255" Green="255" Blue="255" />
+      <Explicit-Color Red="255" Green="255" Blue="255" />
+      <Explicit-Gauge-Color Red="0" Green="0" Blue="0" />
+      <Num-PIDs>4</Num-PIDs>
+      <Show-In-Metric>False</Show-In-Metric>
+      <Use-Static-Color>0</Use-Static-Color>
+      <Param PID="100" />
+      <Param PID="175" />
+      <Param PID="84">
+        <Show-Name>0</Show-Name>
+        <Show-Value>0</Show-Value>
+        <Show-Unit>0</Show-Unit>
+        <Font-Format>0</Font-Format>
+      </Param>
+      <Format>0</Format>
+      <Show-Spot>False</Show-Spot>
+      <Show-Name>True</Show-Name>
+      <Show-Value>True</Show-Value>
+      <Show-Unit>False</Show-Unit>
+      <Show-Graph>True</Show-Graph>
+      <Show-Abbreviation>False</Show-Abbreviation>
+    </Panel>
+    <Panel Number="4">
+      <ID>1</ID>
+      <Rect-Cord Top-LeftX="702" Top-LeftY="0" Bottom-RightX="1002" Bottom-RightY="300" />
+      <BackGround-Color Red="255" Green="255" Blue="255" />
+      <Base-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Gauge-Color Red="0" Green="0" Blue="0" />
+      <Show-In-Metric>False</Show-In-Metric>
+      <Format>0</Format>
+      <Use-Static-Color />
+      <Show-Spot>True</Show-Spot>
+      <Show-Name>True</Show-Name>
+      <Show-Value>True</Show-Value>
+      <Show-Unit>True</Show-Unit>
+      <Show-Graph>True</Show-Graph>
+      <Show-Abbreviation>False</Show-Abbreviation>
+      <PID>175</PID>
     </Panel>
   </Screen-Elements>
 </Root>

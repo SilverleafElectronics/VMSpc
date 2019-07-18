@@ -16,17 +16,19 @@ namespace VMSpc.Panels
     class VSimpleGauge : VBarGauge
     {
         protected ushort pid;
+        protected new SimpleGaugeSettings panelSettings;
 
         public VSimpleGauge(MainWindow mainWindow, SimpleGaugeSettings panelSettings) 
             : base(mainWindow, panelSettings)
         {
+            this.panelSettings = panelSettings;
             FillBar = new Rectangle();
             EmptyBar = new Rectangle();
         }
 
         public override void GeneratePanel()
         {
-            pid = ((SimpleGaugeSettings)panelSettings).PID;
+            pid = panelSettings.PID;
             parameter = ParamData.parameters[pid];
             base.GeneratePanel();
         }

@@ -464,6 +464,7 @@ namespace VMSpc.XmlFileManagers
         public int numPids;
         public MultiBarSettings(ushort number) : base(number)
         {
+            PIDList = new List<ushort>();
             numPids = 0;
         }
 
@@ -472,7 +473,7 @@ namespace VMSpc.XmlFileManagers
             switch (nodeName)
             {
                 case "Param":
-                    PIDList.Add(UInt16.Parse(panelNode.Attributes["Pid"].InnerText));
+                    PIDList.Add(UInt16.Parse(panelNode.Attributes["PID"].InnerText));
                     numPids++;
                     break;
                 default:

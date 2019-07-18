@@ -107,11 +107,11 @@ namespace VMSpc.XmlFileManagers
                 case PanelIDs.MESSAGE_PANEL_ID:
                     return new MessageBoxSettings(number);
                 case PanelIDs.MULTIBAR_ID:
-                    break;
+                    return new MultiBarSettings(number);
                 case PanelIDs.ODOMOTER_ID:
                     return new OdometerSettings(number);
                 default:
-                    return new PanelSettings(number);
+                    throw new Exception("An invalid panel type was requested");
             }
             return new PanelSettings(number);
         }
