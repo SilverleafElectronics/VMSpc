@@ -12,37 +12,30 @@ using System.Windows.Controls;
 
 namespace VMSpc.Panels
 {
-    class VRoundGauge : VSimpleGauge
+    class VRoundGauge : VPanel
     {
         Shape roundBar;
+        RoundGaugeSettings panelSettings;
 
         public VRoundGauge(MainWindow mainWindow, RoundGaugeSettings panelSettings)
             : base(mainWindow, panelSettings)
         {
-            FillBar = new Rectangle();
-            EmptyBar = new Rectangle();
-            roundBar = new RadialBar();
-            roundBar.Width = 500;
-            roundBar.Height = 500;
-            roundBar.Stroke = new SolidColorBrush(Colors.Black);
-            roundBar.Fill = new SolidColorBrush(Colors.Red);
+            this.panelSettings = panelSettings;
         }
 
-        public override void Init()
+        public override void GeneratePanel()
         {
-            canvas.Children.Add(roundBar);
-            Canvas.SetTop(roundBar,  (canvas.Height / 4));   //Generates a bar that fills the bottom 1/4 of the panel
-            base.Init();
+
+        }
+
+        public override void UpdatePanel()
+        {
+
         }
 
         protected override VMSDialog GenerateDlg()
         {
             return new RoundGaugeDlg(panelSettings);
-        }
-
-        protected override void DrawTitleText()
-        {
-            base.DrawTitleText();
         }
     }
 }

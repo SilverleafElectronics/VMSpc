@@ -72,6 +72,12 @@ namespace VMSpc.CustomComponents
             return new Size(text.Width, text.Height);
         }
 
+        protected void AddChildren(params UIElement[] list)
+        {
+            foreach (var child in list)
+                Children.Add(child);
+        }
+
         /// <summary> 
         /// Takes a parent element and makes a best-effort attempt at balancing all child text blocks to the same font size. 
         /// NOTE: using this method can have unexpected results if there are various levels of nesting. It's advisable to use

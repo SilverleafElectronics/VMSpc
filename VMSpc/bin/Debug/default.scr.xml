@@ -5,7 +5,7 @@
     <File-Name>default.scr.xml</File-Name>
     <Panel Number="1">
       <ID>1</ID>
-      <Rect-Cord Top-LeftX="974" Top-LeftY="80" Bottom-RightX="1227" Bottom-RightY="239" />
+      <Rect-Cord Top-LeftX="955" Top-LeftY="104" Bottom-RightX="1208" Bottom-RightY="263" />
       <BackGround-Color Red="163" Green="82" Blue="0" />
       <Base-Color Red="200" Green="170" Blue="40" />
       <Explicit-Color Red="255" Green="255" Blue="255" />
@@ -17,7 +17,7 @@
       <Show-Value>True</Show-Value>
       <Show-Unit>True</Show-Unit>
       <Show-Graph>True</Show-Graph>
-      <Show-Abbreviation>True</Show-Abbreviation>
+      <Show-Abbreviation>False</Show-Abbreviation>
       <Show-In-Metric>False</Show-In-Metric>
       <Use-Static-Color>false</Use-Static-Color>
       <Format>2</Format>
@@ -85,7 +85,7 @@
     </Panel>
     <Panel Number="3">
       <ID>5</ID>
-      <Rect-Cord Top-LeftX="377" Top-LeftY="372" Bottom-RightX="1441" Bottom-RightY="658" />
+      <Rect-Cord Top-LeftX="55" Top-LeftY="303" Bottom-RightX="1119" Bottom-RightY="589" />
       <BackGround-Color Red="255" Green="255" Blue="255" />
       <Base-Color Red="255" Green="255" Blue="255" />
       <Explicit-Color Red="255" Green="255" Blue="255" />
@@ -109,11 +109,11 @@
         <Show-Unit>0</Show-Unit>
         <Font-Format>0</Font-Format>
       </Param>
-      <Format>2</Format>
+      <Format>1</Format>
       <Show-Spot>False</Show-Spot>
       <Show-Name>False</Show-Name>
       <Show-Value>True</Show-Value>
-      <Show-Unit>True</Show-Unit>
+      <Show-Unit>False</Show-Unit>
       <Show-Graph>True</Show-Graph>
       <Show-Abbreviation>True</Show-Abbreviation>
     </Panel>

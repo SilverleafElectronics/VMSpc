@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using VMSpc.CustomComponents;
 using VMSpc.DevHelpers;
 using VMSpc.DlgWindows;
 using VMSpc.XmlFileManagers;
@@ -17,140 +18,116 @@ using static VMSpc.XmlFileManagers.ParamDataManager;
 namespace VMSpc.Panels
 {
     /// <summary> Base class of VSimpleGauge, VScanGauge, and VRoundGauge </summary>
-    abstract class VBarGauge : VPanel
+    public class VBarGauge : VMSCanvas
     {
-        protected Shape EmptyBar;
-        protected Shape FillBar;
+        protected Rectangle EmptyBar;
+
+        protected Rectangle GreenFillBar;
+        protected Rectangle YellowFillBar;
+        protected Rectangle RedFillBar;
+        protected double MaxGreenWidth;
+        protected double MaxYellowWidth;
+        protected double MaxRedWidth;
+
         protected TextBlock TitleText;
         protected TextBlock ValueText;
         protected VParameter parameter;
+        protected ParamPresenter presenter;
 
         protected double lastValue;
 
-        protected bool showAbbreviation;
-
-        private static readonly Random getrandom = new Random();
-
-        public VBarGauge(MainWindow mainWindow, PanelSettings panelSettings)
-        : base(mainWindow, panelSettings)
+        public VBarGauge(ParamPresenter presenter, double width, double height)
         {
-            TitleText = new TextBlock();
-            ValueText = new TextBlock();
+            this.presenter = presenter;
+            Width = width;
+            Height = height;
+            TitleText = new TextBlock()
+            {
+                Width = Width,
+                Height = (Height / 4),
+                VerticalAlignment = VerticalAlignment.Center,
+                TextAlignment = GET_TEXT_ALIGNMENT(presenter.textPosition)
+            };
+            ValueText = new TextBlock()
+            {
+                Text = "No Data",
+                Width = Width,
+                Height = (Height / 4),
+                FontWeight = FontWeights.Bold,
+                TextAlignment = GET_TEXT_ALIGNMENT(presenter.textPosition)
+            };
+            EmptyBar = new Rectangle() { Fill = new SolidColorBrush(Colors.Black), Height = (Height / 4), Width = Width };
+            GreenFillBar = new Rectangle() { Fill = new SolidColorBrush(Colors.Green), Stroke = new SolidColorBrush(Colors.Black), Height = (Height / 4) };
+            YellowFillBar = new Rectangle() { Fill = new SolidColorBrush(Colors.Yellow), Stroke = new SolidColorBrush(Colors.Black), Height = (Height / 4) };
+            RedFillBar = new Rectangle() { Fill = new SolidColorBrush(Colors.Red), Stroke = new SolidColorBrush(Colors.Black), Height = (Height / 4) };
+            AddChildren(EmptyBar, GreenFillBar, YellowFillBar, RedFillBar, TitleText, ValueText);
+            Draw();
         }
 
-        public override void Init()
+        private void Draw()
         {
-            canvas.Children.Add(EmptyBar);
-            canvas.Children.Add(FillBar);
-            canvas.Children.Add(TitleText);
-            canvas.Children.Add(ValueText);
-            base.Init();
-        }
-
-        public override void GeneratePanel()
-        {
-            EmptyBar.Stroke = new SolidColorBrush(Colors.Black);
-            EmptyBar.Fill = new SolidColorBrush(Colors.Black);
-            FillBar.Fill = new SolidColorBrush(Colors.Green);
-            showAbbreviation = ((GaugeSettings)panelSettings).showAbbreviation;
-            lastValue = Double.NaN;
             DrawTitleText();
             DrawValueText();
             DrawBar();
-            DrawFillBar();
+            DrawFillBars();
         }
 
-        protected override abstract VMSDialog GenerateDlg();
-
-        //Move to VPanel?
         protected virtual void DrawTitleText()
         {
-            if (parameter != null)
-            {
-                if (showAbbreviation)
-                    TitleText.Text = parameter.Abbreviation;
-                else
-                    TitleText.Text = parameter.ParamName;
-            }
-            else
-                TitleText.Text = "NA";
-            TitleText.Width = canvas.Width;
-            TitleText.Height = canvas.Height / 4;
-            canvas.ScaleText(TitleText, TitleText.Width, TitleText.Height); //TODO
-            TitleText.VerticalAlignment = VerticalAlignment.Center;
-            TitleText.TextAlignment = GET_TEXT_ALIGNMENT(panelSettings.TextPosition);
-            Canvas.SetTop(TitleText, 0);
-            ApplyRightBottomCoords(TitleText);
+            TitleText.Text = presenter.Title;
+            ScaleText(TitleText, TitleText.Width, TitleText.Height);
+            SetTop(TitleText, 0);
         }
 
-        /// <summary>
-        /// Generates the rectangle for positioning the gauge's value text. This implementation is used by VSimpleGauge and VScanGauge, but is overridden by VRoundGauge
-        /// </summary>
         protected virtual void DrawValueText()
         {
-            ValueText.Text = "No Data";
-            ValueText.Width = canvas.Width;
-            ValueText.Height = canvas.Height / 4;
-            canvas.ScaleText(ValueText, ValueText.Width, ValueText.Height);
-            ValueText.FontWeight = FontWeights.Bold;
-            ValueText.TextAlignment = GET_TEXT_ALIGNMENT(panelSettings.TextPosition);
-            Canvas.SetTop(ValueText, Canvas.GetBottom(TitleText));
-            ApplyRightBottomCoords(ValueText);
+            ScaleText(ValueText, ValueText.Width, ValueText.Height);
+            SetTop(ValueText, TitleText.Height);
         }
 
-        /// <summary>
-        /// Draws the initial empty bar. This implementation is used by VSimpleGauge and VScanGauge, but is overridden by VRoundGauge
-        /// </summary>
         protected virtual void DrawBar()
         {
-            Canvas.SetTop(EmptyBar, 3 * (canvas.Height / 4));   //Generates a bar that fills the bottom 1/4 of the panel
-            EmptyBar.Height = canvas.Height / 4;
-            EmptyBar.Width = canvas.Width;
+            SetTop(EmptyBar, 3 * (Height / 4));
         }
 
-        /// <summary>
-        /// Generates the bar used for filling the bar with color. This implementation is used by VSimpleGauge and VScanGauge, but is overridden by VRoundGauge
-        /// </summary>
-        protected virtual void DrawFillBar()
+        protected virtual void DrawFillBars()
         {
-            Canvas.SetTop(FillBar, 3 * (canvas.Height / 4));    //Generates a bar that fills EmptyBar
-            FillBar.Height = canvas.Height / 4;
+            SetTop(GreenFillBar, 3 * (Height / 4));
+            SetTop(YellowFillBar, 3 * (Height / 4));
+            SetTop(RedFillBar, 3 * (Height / 4));
+            SetLeft(GreenFillBar, 0);
+            SetLeft(YellowFillBar, (presenter.GreenMaxAsPercent * Width));
+            SetLeft(RedFillBar, (presenter.YellowMaxAsPercent * Width));
         }
 
-        /// <summary>
-        /// Gets the last updated value of the parameter at the specified PID
-        /// </summary>
-        protected double GetPidValue(ushort pid)
+        public void Update()
         {
-            if (parameter != null)
+            if (presenter.IsValidForUpdate())
             {
-                if (panelSettings.showInMetric)
-                    return parameter.LastMetricValue;
-                else
-                    return parameter.LastValue;
+                UpdateFillBars();
+                UpdateValueText();
             }
-            return DUB_NODATA;
         }
 
-        /// <summary>
-        /// Updates the fill bar with the specified value. This implementation is used by VSimpleGauge and VScanGauge, but is overridden by VRoundGauge
-        /// </summary>
-        protected virtual void UpdateFillBar(double value)
+        protected virtual void UpdateFillBars()
         {
-            FillBar.Width = value;
-            lastValue = value;
+            double 
+            GreenFillLevel  = (presenter.ValueAsPercent() < presenter.GreenMaxAsPercent)  ? (presenter.ValueAsPercent()                               ) : presenter.GreenMaxAsPercent,
+            YellowFillLevel = (presenter.ValueAsPercent() < presenter.YellowMaxAsPercent) ? (presenter.ValueAsPercent() - presenter.GreenMaxAsPercent ) : presenter.YellowMaxAsPercent,
+            RedFillLevel    = (presenter.ValueAsPercent() < presenter.RedMaxAsPercent)    ? (presenter.ValueAsPercent() - presenter.YellowMaxAsPercent) : presenter.RedMaxAsPercent;
+
+            if (GreenFillLevel >= 0) GreenFillBar.Width = (Width * GreenFillLevel);
+            else GreenFillBar.Width = 0;
+            if (YellowFillLevel >= 0) YellowFillBar.Width = (Width * YellowFillLevel);
+            else YellowFillBar.Width = 0;
+            if (RedFillLevel >= 0) RedFillBar.Width = (Width * RedFillLevel);
+            else RedFillBar.Width = 0;
+
         }
 
-        /// <summary>
-        /// Draws the gauge's value text
-        /// </summary>
-        protected void UpdateValueText(double value)
+        protected void UpdateValueText()
         {
-            ValueText.Text = "" + value;
-            canvas.ScaleText(ValueText, ValueText.Width, ValueText.Height);
+            ValueText.Text = presenter.ValueAsString;
         }
-
-        //implemented in child classes
-        public override abstract void UpdatePanel();
     }
 }

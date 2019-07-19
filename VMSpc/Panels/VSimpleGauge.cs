@@ -13,24 +13,22 @@ using System.Windows.Shapes;
 
 namespace VMSpc.Panels
 {
-    class VSimpleGauge : VBarGauge
+    class VSimpleGauge : VPanel
     {
-        protected ushort pid;
         protected new SimpleGaugeSettings panelSettings;
+        protected VBarGauge barGauge;
 
         public VSimpleGauge(MainWindow mainWindow, SimpleGaugeSettings panelSettings) 
             : base(mainWindow, panelSettings)
         {
             this.panelSettings = panelSettings;
-            FillBar = new Rectangle();
-            EmptyBar = new Rectangle();
         }
 
         public override void GeneratePanel()
         {
-            pid = panelSettings.PID;
-            parameter = ParamData.parameters[pid];
-            base.GeneratePanel();
+            canvas.Children.Clear();
+            barGauge = new VBarGauge(new ParamPresenter(panelSettings.PID, panelSettings), canvas.Width, canvas.Height);
+            canvas.Children.Add(barGauge);
         }
 
         protected override VMSDialog GenerateDlg()
@@ -40,13 +38,7 @@ namespace VMSpc.Panels
 
         public override void UpdatePanel()
         {
-            double value = Math.Round(GetPidValue(pid), 2, MidpointRounding.AwayFromZero);
-            if (value != DUB_NODATA && value != lastValue)
-            {
-                UpdateFillBar(value);
-                UpdateValueText(value);
-                lastValue = value;
-            }
+            barGauge.Update();
         }
     }
 }

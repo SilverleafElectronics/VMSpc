@@ -59,12 +59,21 @@ namespace VMSpc.Panels
             return false;
         }
 
+        private double ValueToPercent(double value, double max, double min)
+        {
+            double span = max - min;
+            return (value - min) / span;
+        }
+
         /// <summary> Returns the current value as a percentage of the difference between gaugeMin and gaugeMax. Useful for visual presentation of the value in gauges </summary>
         public double ValueAsPercent()
         {
-            double gaugeSpan = parameter.GaugeMax - parameter.GaugeMin;
-            return (currentValue - parameter.GaugeMin) / gaugeSpan;
+            return ValueToPercent(currentValue, parameter.GaugeMax, parameter.GaugeMin);
         }
+        public double GreenMaxAsPercent  =>  ValueToPercent(parameter.HighYellow, parameter.GaugeMax, parameter.GaugeMin);
+        public double YellowMaxAsPercent => ValueToPercent(parameter.HighRed, parameter.GaugeMax, parameter.GaugeMin);
+        public double RedMaxAsPercent    => ValueToPercent(parameter.GaugeMax, parameter.GaugeMax, parameter.GaugeMin);
+        
     }
 
     public class MultiBarPresenter : ParamPresenter

@@ -282,16 +282,20 @@ namespace VMSpc.Communication
 
         private void ClosePortReader()
         {
-            if (NOT_NULL(keepJibAwakeTimer))
-                keepJibAwakeTimer.Dispose();
-            if (NOT_NULL(portCheckTimer))
-                portCheckTimer.Dispose();
-            if (NOT_NULL(portReader))
+            try
             {
-                portReader.Close();
-                portReader = null;
+                if (NOT_NULL(keepJibAwakeTimer))
+                    keepJibAwakeTimer.Dispose();
+                if (NOT_NULL(portCheckTimer))
+                    portCheckTimer.Dispose();
+                if (NOT_NULL(portReader))
+                {
+                    portReader.Close();
+                    portReader = null;
+                }
+                System.Threading.Thread.CurrentThread.Abort();
             }
-            System.Threading.Thread.CurrentThread.Abort();
+            catch { }
         }
         #endregion //Port Reader
 
