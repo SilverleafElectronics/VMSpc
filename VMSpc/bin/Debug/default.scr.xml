@@ -5,7 +5,7 @@
     <File-Name>default.scr.xml</File-Name>
     <Panel Number="1">
       <ID>1</ID>
-      <Rect-Cord Top-LeftX="1259" Top-LeftY="339" Bottom-RightX="1500" Bottom-RightY="471" />
+      <Rect-Cord Top-LeftX="974" Top-LeftY="80" Bottom-RightX="1227" Bottom-RightY="239" />
       <BackGround-Color Red="163" Green="82" Blue="0" />
       <Base-Color Red="200" Green="170" Blue="40" />
       <Explicit-Color Red="255" Green="255" Blue="255" />
@@ -17,10 +17,10 @@
       <Show-Value>True</Show-Value>
       <Show-Unit>True</Show-Unit>
       <Show-Graph>True</Show-Graph>
-      <Show-Abbreviation>False</Show-Abbreviation>
+      <Show-Abbreviation>True</Show-Abbreviation>
       <Show-In-Metric>False</Show-In-Metric>
       <Use-Static-Color>false</Use-Static-Color>
-      <Format>0</Format>
+      <Format>2</Format>
     </Panel>
     <Wallpaper-Filename>
     </Wallpaper-Filename>
@@ -67,7 +67,7 @@
     <Value-Offset>0</Value-Offset>
     <Panel Number="2">
       <ID>F</ID>
-      <Rect-Cord Top-LeftX="1002" Top-LeftY="0" Bottom-RightX="1500" Bottom-RightY="339" />
+      <Rect-Cord Top-LeftX="425" Top-LeftY="60" Bottom-RightX="923" Bottom-RightY="186" />
       <BackGround-Color Red="163" Green="82" Blue="0" />
       <Base-Color Red="0" Green="0" Blue="0" />
       <Explicit-Color Red="0" Green="0" Blue="0" />
@@ -85,7 +85,7 @@
     </Panel>
     <Panel Number="3">
       <ID>5</ID>
-      <Rect-Cord Top-LeftX="52" Top-LeftY="111" Bottom-RightX="654" Bottom-RightY="699" />
+      <Rect-Cord Top-LeftX="377" Top-LeftY="372" Bottom-RightX="1441" Bottom-RightY="658" />
       <BackGround-Color Red="255" Green="255" Blue="255" />
       <Base-Color Red="255" Green="255" Blue="255" />
       <Explicit-Color Red="255" Green="255" Blue="255" />
@@ -93,25 +93,33 @@
       <Num-PIDs>4</Num-PIDs>
       <Show-In-Metric>False</Show-In-Metric>
       <Use-Static-Color>0</Use-Static-Color>
+      <Param PID="86" />
+      <Param PID="110" />
+      <Param PID="247" />
+      <Param PID="236" />
+      <Param PID="235" />
+      <Param PID="92" />
+      <Param PID="121" />
+      <Param PID="183" />
       <Param PID="100" />
-      <Param PID="175" />
+      <Param PID="177" />
       <Param PID="84">
         <Show-Name>0</Show-Name>
         <Show-Value>0</Show-Value>
         <Show-Unit>0</Show-Unit>
         <Font-Format>0</Font-Format>
       </Param>
-      <Format>0</Format>
+      <Format>2</Format>
       <Show-Spot>False</Show-Spot>
-      <Show-Name>True</Show-Name>
+      <Show-Name>False</Show-Name>
       <Show-Value>True</Show-Value>
-      <Show-Unit>False</Show-Unit>
+      <Show-Unit>True</Show-Unit>
       <Show-Graph>True</Show-Graph>
-      <Show-Abbreviation>False</Show-Abbreviation>
+      <Show-Abbreviation>True</Show-Abbreviation>
     </Panel>
     <Panel Number="4">
       <ID>1</ID>
-      <Rect-Cord Top-LeftX="702" Top-LeftY="0" Bottom-RightX="1002" Bottom-RightY="300" />
+      <Rect-Cord Top-LeftX="56" Top-LeftY="78" Bottom-RightX="258" Bottom-RightY="191" />
       <BackGround-Color Red="255" Green="255" Blue="255" />
       <Base-Color Red="0" Green="0" Blue="0" />
       <Explicit-Color Red="0" Green="0" Blue="0" />

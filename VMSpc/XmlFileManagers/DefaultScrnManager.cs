@@ -116,14 +116,14 @@ namespace VMSpc.XmlFileManagers
             return new PanelSettings(number);
         }
 
-        public void SaveConfiguration()
+        public override void SaveConfiguration()
         {
             foreach (var panel in configurationPanelList)
             {
                 XmlNode parentNode = getNodeByTagAndAttr("Panel", "Number", panel.number.ToString());
                 panel.SaveSettings(parentNode);
             }
-            xmlDoc.Save(docName);
+            base.SaveConfiguration();
         }
     }
 }

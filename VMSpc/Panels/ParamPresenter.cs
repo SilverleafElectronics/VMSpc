@@ -5,31 +5,41 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
 using static VMSpc.XmlFileManagers.ParamDataManager;
+using VMSpc.XmlFileManagers;
 
 namespace VMSpc.Panels
 {
     public class ParamPresenter
     {
         protected bool UseMetric;
-        protected bool showValue;
-        protected bool showUnit;
+        public bool showValue;
+        public bool showUnit;
+        public bool showName;
+        public bool showAbbreviation;
+        public int textPosition;
         protected VParameter parameter;
         public double lastValue;
         public double currentValue => ((!UseMetric) ? parameter.LastValue : parameter.LastMetricValue);
 
-        public ParamPresenter(ushort pid, bool UseMetric, bool showValue, bool showUnit)
+        public ParamPresenter(ushort pid, GaugeSettings panelSettings)
         {
             parameter = ParamData.parameters[pid];
             lastValue = Double.NaN;
-            this.UseMetric = UseMetric;
-            this.showUnit = showUnit;
+            showName = panelSettings.showName;
+            UseMetric = panelSettings.showInMetric;
+            showUnit = panelSettings.showUnit;
+            showValue = panelSettings.showValue;
+            showAbbreviation = panelSettings.showAbbreviation;
+            textPosition = panelSettings.TextPosition;
         }
 
         /// <summary> Returns a stringified version of the current value, which conditionally renders the value text (if showValue is true) + the unit text (if showUnit is true) </summary>
         public string ValueAsString => (
-            ((showValue) ? currentValue.ToString() : "") +
+            ((showValue) ? String.Format(parameter.Format, currentValue) : "") +
             ((showUnit) ? ((UseMetric) ? parameter.Unit : parameter.MetricUnit) : "")
         );
+
+        public string Title => (showAbbreviation) ? parameter.Abbreviation : parameter.ParamName;
 
         /// <summary> Checks whether or not the currentValue is a fresh value. Note that calling this method will update lastValue, immediately rendering the data stale </summary>
         protected bool HasNewValue()
@@ -54,6 +64,16 @@ namespace VMSpc.Panels
         {
             double gaugeSpan = parameter.GaugeMax - parameter.GaugeMin;
             return (currentValue - parameter.GaugeMin) / gaugeSpan;
+        }
+    }
+
+    public class MultiBarPresenter : ParamPresenter
+    {
+        public bool showGraph;
+        public MultiBarPresenter(ushort pid, MultiBarSettings panelSettings)
+            :base(pid, panelSettings)
+        {
+            showGraph = panelSettings.showGraph;
         }
     }
 }

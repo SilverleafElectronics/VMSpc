@@ -35,7 +35,8 @@ namespace VMSpc.Panels
         protected PanelSettings panelSettings;
         public Border border;
         public VMSCanvas canvas;
-        
+        private double BorderThickness;
+
         private int resizeType;
 
         public double leftLimit;
@@ -51,15 +52,38 @@ namespace VMSpc.Panels
         {
             this.mainWindow = mainWindow;
             this.panelSettings = panelSettings;
+            BorderThickness = 5;
             isMoving = false;
             isResizing = false;
             resizeType = RESIZE_NONE;
             dlgWindow = null;
             InitLimits();
-            border = new Border() { BorderThickness = new Thickness(5) };
-            canvas = new VMSCanvas(mainWindow, border, panelSettings);
+            border = new Border() { BorderThickness = new Thickness(BorderThickness) };
+            canvas = new VMSCanvas();
+            ApplyBorderDimensions();
+            ApplyCanvasDimensions();
             border.Child = canvas;
             GenerateEventHandlers();
+        }
+
+        public void ApplyBorderDimensions()
+        {
+            border.Width = panelSettings.rectCord.bottomRightX - panelSettings.rectCord.topLeftX;
+            border.Height = panelSettings.rectCord.bottomRightY - panelSettings.rectCord.topLeftY;
+            Canvas.SetTop(border, panelSettings.rectCord.topLeftY);
+            Canvas.SetLeft(border, panelSettings.rectCord.topLeftX);
+            Canvas.SetRight(border, Canvas.GetLeft(border) + border.Width);
+            Canvas.SetBottom(border, Canvas.GetTop(border) + border.Height);
+        }
+
+        public void ApplyCanvasDimensions()
+        {
+            Canvas.SetTop(canvas,    Canvas.GetTop(border) - BorderThickness);
+            Canvas.SetLeft(canvas,   Canvas.GetLeft(border) - BorderThickness);
+            Canvas.SetRight(canvas,  Canvas.GetRight(border) - BorderThickness);
+            Canvas.SetBottom(canvas, Canvas.GetBottom(border) - BorderThickness);
+            canvas.Width = border.Width - (BorderThickness * 2);
+            canvas.Height = border.Height - (BorderThickness * 2);
         }
 
 
@@ -194,7 +218,7 @@ namespace VMSpc.Panels
                 default:
                     break;
             }
-            canvas.ApplyCanvasDimensions();
+            ApplyCanvasDimensions();
             GeneratePanel();
         }
 
@@ -410,75 +434,6 @@ namespace VMSpc.Panels
             panelSettings.rectCord.bottomRightY = (int)Canvas.GetBottom(border);
             panelSettings.rectCord.topLeftX = (int)Canvas.GetLeft(border);
             panelSettings.rectCord.topLeftY = (int)Canvas.GetTop(border);
-        }
-
-        protected void ScaleText(TextBlock textBlock, double maxWidth, double maxHeight)
-        {
-            textBlock.FontSize = 12;
-            Size size = CalculateStringSize(textBlock);
-            while (size.Width > maxWidth || size.Height > maxHeight)
-            {
-                    textBlock.FontSize--;
-                    size = CalculateStringSize(textBlock);
-            }
-            while (size.Width < (maxWidth) && size.Height < (maxHeight))
-            {
-                textBlock.FontSize++;
-                size = CalculateStringSize(textBlock);
-            }
-            textBlock.FontSize--;
-        }
-
-        private Size CalculateStringSize(TextBlock textBlock)
-        {
-            if (textBlock.Text == "")
-                return new Size(0, 0);
-            FormattedText text = new FormattedText(
-                textBlock.Text,
-                CultureInfo.CurrentCulture,
-                FlowDirection.LeftToRight,
-                new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch),
-                textBlock.FontSize,
-                Brushes.Black,
-                new NumberSubstitution(),
-                TextFormattingMode.Display);
-            return new Size(text.Width, text.Height);
-        }
-        
-        protected void BalanceTextBlocks(dynamic parent)
-        {
-            double min = Double.MaxValue;
-
-            foreach (var block in parent.Children)
-            {
-                if (block.GetType().ToString() == "System.Windows.Controls.TextBlock")
-                {
-                    if (((TextBlock)block).FontSize < min)
-                        min = ((TextBlock)block).FontSize;
-                }
-                else if (block.GetType().ToString() == "System.Windows.Controls.Border")
-                {
-                    if (((Border)block).Child.GetType().ToString() == "System.Windows.Controls.TextBlock")
-                    {
-                        TextBlock textBlock = (TextBlock)((Border)block).Child;
-                        if (textBlock.FontSize < min)
-                            min = textBlock.FontSize;
-                    }
-                }
-            }
-            foreach (var block in parent.Children)
-            {
-                if (block.GetType().ToString() == "System.Windows.Controls.TextBlock")
-                    ((TextBlock)block).FontSize = min;
-                else if (block.GetType().ToString() == "System.Windows.Controls.Border")
-                {
-                    if (((Border)block).Child.GetType().ToString() == "System.Windows.Controls.TextBlock")
-                    {
-                        TextBlock textBlock = (TextBlock)((Border)block).Child;
-                        textBlock.FontSize = min;
-                    }
-                }
-            }
         }
     }
 }

@@ -90,6 +90,18 @@ namespace VMSpc
         public VParameter(XmlNode node)
         {
             this.node = node;
+            if (node["Format"].InnerText.Contains("%"))
+                node["Format"].InnerText = ConvertFrom_C_Format(node["Format"].InnerText);
+            node["Unit"].InnerText = node["Unit"].InnerText.Replace("Â", "");
+        }
+
+        protected string ConvertFrom_C_Format(string format)
+        {
+            string newFormat = "{0:0";
+            int numZeroes = Int32.Parse(format[format.IndexOf(".") + 1].ToString());
+            if (numZeroes > 0) newFormat += ".";
+            for (int i = 0; i < numZeroes; i++) newFormat += "#";
+            return newFormat + "}";
         }
     }
 }

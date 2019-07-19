@@ -14,7 +14,6 @@ namespace VMSpc.Parsers
         public string title;
         public uint index;
 
-
         public TSPNPresenter(TSPNDatum spn_datum, string title, uint index)
         {
             datum = spn_datum;

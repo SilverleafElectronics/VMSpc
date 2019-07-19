@@ -257,28 +257,40 @@ namespace VMSpc.Communication
         /// </summary>
         private void HandleCommPortData(object sender, SerialDataReceivedEventArgs e)
         {
-            Application.Current.Dispatcher.Invoke(delegate
+            if (Application.Current != null)
             {
+                Application.Current.Dispatcher.Invoke(delegate
+                {
                 //break the buffer into an array of messages and process them individually.
                 //each valid, individual message in the buffer ends in a newline character
                 try
-                {
-                    string buffer = portReader.ReadExisting();
-                    foreach (string message in buffer.Split('\n'))
-                        ProcessData(message);
-                }
-                catch
-                {
-                }
-            });
+                    {
+                        string buffer = portReader.ReadExisting();
+                        foreach (string message in buffer.Split('\n'))
+                            ProcessData(message);
+                    }
+                    catch
+                    {
+                    }
+                });
+            }
+            else
+            {
+                ClosePortReader();
+            }
         }
 
         private void ClosePortReader()
         {
-            keepJibAwakeTimer.Dispose();
-            portCheckTimer.Dispose();
-            portReader.Close();
-            portReader = null;
+            if (NOT_NULL(keepJibAwakeTimer))
+                keepJibAwakeTimer.Dispose();
+            if (NOT_NULL(portCheckTimer))
+                portCheckTimer.Dispose();
+            if (NOT_NULL(portReader))
+            {
+                portReader.Close();
+                portReader = null;
+            }
             System.Threading.Thread.CurrentThread.Abort();
         }
         #endregion //Port Reader

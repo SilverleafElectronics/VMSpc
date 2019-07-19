@@ -43,7 +43,6 @@ namespace VMSpc.Parsers
         }
 
         #region Update Methods
-        //Note: these all compile with the unsafe modifiers.
 
         /// <summary>
         /// updates flag according to the input two-bit pattern:

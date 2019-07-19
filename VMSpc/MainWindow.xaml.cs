@@ -24,6 +24,7 @@ using static VMSpc.Parsers.PIDWrapper;
 using VMSpc.Parsers;
 using static VMSpc.XmlFileManagers.ParamDataManager;
 using static VMSpc.Constants;
+using System.ComponentModel;
 
 namespace VMSpc
 {
@@ -61,7 +62,19 @@ namespace VMSpc
             ContentGrid.InitPanels(this);
         }
 
+        private void SaveConfig()
+        {
+            ParamData.SaveConfiguration();
+            DefaultScrnManager.scrnManager.SaveConfiguration();
+        }
+
         #region EVENT HANDLERS
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            SaveConfig();
+            base.OnClosing(e);
+        }
 
         private void CloseCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -69,7 +82,8 @@ namespace VMSpc
         }
 
         private void CloseCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-        { 
+        {
+            SaveConfig();
             this.Close();
         }
 

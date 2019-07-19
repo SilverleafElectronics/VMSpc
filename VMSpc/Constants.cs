@@ -50,6 +50,12 @@ namespace VMSpc
         public const double DUB_USAGEERR = double.MaxValue - 1;
         public const double DUB_ERR = -double.MaxValue;
 
+        //object checking
+        public static bool NOT_NULL(object obj)
+        {
+            return obj != null;
+        }
+
         //evaluators for errors. all return true if the value passed
         //does not equal [TYPE]_NODATA, [TYPE]_USAGEERR, or [TYPE]_ERR
         public static bool VALID_STRING(string eval)

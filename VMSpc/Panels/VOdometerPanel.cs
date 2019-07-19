@@ -78,7 +78,7 @@ namespace VMSpc.Panels
                 odometer.currentTripMPH,
                 odometer.currentTripKPH
                 );
-            BalanceTextBlocks(odometerGrid);
+            canvas.BalanceTextBlocks(odometerGrid);
         }
 
         private void DrawGridRows()
@@ -102,7 +102,7 @@ namespace VMSpc.Panels
             odometerTitleValuePair.Add(name, valueLine);
             cellHeight = valueBorder.Height;
             cellWidth = valueBorder.Width;
-            ScaleText(headerLine, headerBorder.Width, headerBorder.Height);
+            canvas.ScaleText(headerLine, headerBorder.Width, headerBorder.Height);
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace VMSpc.Panels
                 odometerTitleValuePair["Economy"].Text = valueString;
             }
             foreach(TextBlock textBlock in odometerTitleValuePair.Values)
-                ScaleText(textBlock, cellWidth, cellHeight);
+                canvas.ScaleText(textBlock, cellWidth, cellHeight);
         }
     }
 }

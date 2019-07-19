@@ -60,7 +60,7 @@ namespace VMSpc.XmlFileManagers
         #region Construction Helpers
         protected void Initialize()
         {
-            using (StreamReader fs = new StreamReader(docName, Encoding.GetEncoding("ISO-8859-1")))
+            using (StreamReader fs = new StreamReader(docName, Encoding.GetEncoding("ISO-8859-15")))
                 xmlDoc.Load(fs);
         }
 
@@ -156,6 +156,16 @@ namespace VMSpc.XmlFileManagers
             XmlNode attr = xmlDoc.CreateNode(XmlNodeType.Attribute, attrName, "");
             attr.Value = attrValue;
             node.Attributes.SetNamedItem(attr);
+        }
+
+        public virtual void SaveConfiguration()
+        {
+            foreach (XmlNode node in xmlDoc)
+            {
+                node.InnerText.Replace("°", "&#176;");
+                node.InnerText.Replace("Â", "");
+            }
+            xmlDoc.Save(docName);
         }
 
         #endregion //XML Writing

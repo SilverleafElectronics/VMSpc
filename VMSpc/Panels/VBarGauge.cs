@@ -76,7 +76,7 @@ namespace VMSpc.Panels
                 TitleText.Text = "NA";
             TitleText.Width = canvas.Width;
             TitleText.Height = canvas.Height / 4;
-            ScaleText(TitleText, TitleText.Width, TitleText.Height); //TODO
+            canvas.ScaleText(TitleText, TitleText.Width, TitleText.Height); //TODO
             TitleText.VerticalAlignment = VerticalAlignment.Center;
             TitleText.TextAlignment = GET_TEXT_ALIGNMENT(panelSettings.TextPosition);
             Canvas.SetTop(TitleText, 0);
@@ -91,7 +91,7 @@ namespace VMSpc.Panels
             ValueText.Text = "No Data";
             ValueText.Width = canvas.Width;
             ValueText.Height = canvas.Height / 4;
-            ScaleText(ValueText, ValueText.Width, ValueText.Height);
+            canvas.ScaleText(ValueText, ValueText.Width, ValueText.Height);
             ValueText.FontWeight = FontWeights.Bold;
             ValueText.TextAlignment = GET_TEXT_ALIGNMENT(panelSettings.TextPosition);
             Canvas.SetTop(ValueText, Canvas.GetBottom(TitleText));
@@ -147,7 +147,7 @@ namespace VMSpc.Panels
         protected void UpdateValueText(double value)
         {
             ValueText.Text = "" + value;
-            ScaleText(ValueText, ValueText.Width, ValueText.Height);
+            canvas.ScaleText(ValueText, ValueText.Width, ValueText.Height);
         }
 
         //implemented in child classes

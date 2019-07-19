@@ -20,10 +20,16 @@ namespace VMSpc.Panels
     public class VMultiBar : VPanel
     {
         protected Dictionary<ushort, BarColumn> PidDict;
+        protected new MultiBarSettings panelSettings;
+        List<TextBlock> TitleTexts;
+        List<TextBlock> ValueTexts;
+
+        private Color[] ColorArray = { Color.FromRgb(255, 0, 0), Color.FromRgb(255, 255, 0), Color.FromRgb(0, 255, 0), Color.FromRgb(0, 255, 255), Color.FromRgb(0, 0, 255), };
 
         public VMultiBar(MainWindow mainWindow, MultiBarSettings panelSettings)
             : base(mainWindow, panelSettings)
         {
+            this.panelSettings = panelSettings;
             PidDict = new Dictionary<ushort, BarColumn>();
         }
 
@@ -41,22 +47,24 @@ namespace VMSpc.Panels
         {
             canvas.Children.Clear();
             PidDict.Clear();
+            TitleTexts = new List<TextBlock>();
+            ValueTexts = new List<TextBlock>();
+
             int i = 0;
-            foreach (ushort pid in ((MultiBarSettings)panelSettings).PIDList)
+            foreach (ushort pid in panelSettings.PIDList)
             {
-                PidDict.Add(pid, new BarColumn(
-                                                canvas,
-                                                pid,
-                                                ((MultiBarSettings)panelSettings).numPids,
-                                                i,
-                                                panelSettings.showInMetric,
-                                                ((MultiBarSettings)panelSettings).showGraph,
-                                                ((MultiBarSettings)panelSettings).showName,
-                                                ((MultiBarSettings)panelSettings).showValue,
-                                                ((MultiBarSettings)panelSettings).showUnit
-                                              ));
+                MultiBarPresenter presenter = new MultiBarPresenter(pid, panelSettings);
+                BarColumn barColumn = new BarColumn(presenter, (canvas.Width / panelSettings.numPids), canvas.Height, ColorArray[i % ColorArray.Length]);
+                Canvas.SetTop(barColumn, 0);
+                Canvas.SetLeft(barColumn, (i * barColumn.Width));
+                PidDict.Add(pid, barColumn);
+                canvas.Children.Add(barColumn);
+                TitleTexts.Add(barColumn.titleText);
+                ValueTexts.Add(barColumn.valueText);
                 i++;
             }
+            canvas.BalanceTextBlocks(TitleTexts);
+            canvas.BalanceTextBlocks(ValueTexts);
         }
 
         protected override VMSDialog GenerateDlg()
@@ -66,72 +74,81 @@ namespace VMSpc.Panels
 
         public override void UpdatePanel()
         {
+            bool TextNeedsUpdate = false;
             foreach (var barColumn in PidDict.Values)
             {
                 barColumn.Update();
+                TextNeedsUpdate = barColumn.ShouldUpdateGrid();
             }
+            if (TextNeedsUpdate)
+                canvas.BalanceTextBlocks(ValueTexts);
         }
     }
 
-    public class BarColumn
+    public class BarColumn : VMSCanvas
     {
-        private bool showGraph,
-                     showName,
-                     showValue,
-                     showUnit;
-
-        private TextBlock titleText;
-        private TextBlock valueText;
+        public TextBlock titleText;
+        public TextBlock valueText;
         private Rectangle valueRect;
-        private ParamPresenter presenter;
-        private Canvas canvas;
+        private Rectangle noValueRect;
+        private MultiBarPresenter presenter;
 
         private double graphBottom;
         private double graphTop;
-        private double numTextLines;
-        private double width;
-        private int barNumber;
+        private int numTextLines;
+        private bool updated;
 
-        public BarColumn(Canvas canvas, ushort pid, int numPids, int barNumber, bool useMetric, bool showGraph, bool showName, bool showValue, bool showUnit)
+        public BarColumn(MultiBarPresenter presenter, double width, double height, Color color)
         {
-            this.showGraph = showGraph;
-            this.showName = showName;
-            this.showValue = showValue;
-            this.showUnit = showUnit;
-            this.canvas = canvas;
-            this.barNumber = barNumber;
-            width = (canvas.Width / numPids);
-
+            this.presenter = presenter;
+            Height = height;
+            Width = width;
             titleText = new TextBlock();
             valueText = new TextBlock();
             valueRect = new Rectangle()
             {
-                Fill = new SolidColorBrush(Colors.Blue),
+                Fill = new SolidColorBrush(color),
                 Stroke = new SolidColorBrush(Colors.Black),
-                Width = width
+                Width = Width
             };
-            presenter = new ParamPresenter(pid, useMetric, showValue, showUnit);
-            numTextLines = (Convert.ToInt32(showValue) + Convert.ToInt32(showName || showUnit)) + 1;
-            graphBottom = canvas.Height / numTextLines;
-            //graphBottom = (2 + numTextLines) * (canvas.Height / 4);
+            noValueRect = new Rectangle()
+            {
+                Fill = new SolidColorBrush(color),
+                Width = Width,
+                Height = 1
+            };
+            numTextLines = (Convert.ToInt32(presenter.showName || presenter.showAbbreviation) + Convert.ToInt32(presenter.showValue || presenter.showUnit));
+            graphBottom = height * ((double)(8 - numTextLines) / 8);
             Draw();
         }
 
         private void Draw()
         {
-            if (showGraph)
+            if (presenter.showGraph)
             {
-                canvas.Children.Add(valueRect);
-                Canvas.SetLeft(valueRect, (barNumber * width));
-                //Canvas.SetBottom(valueRect, graphBottom);
+                Children.Add(valueRect);
+                Children.Add(noValueRect);
+                SetTop(noValueRect, graphBottom - noValueRect.Height);
             }
-            if (showName)
+            if (presenter.showName || presenter.showAbbreviation)
             {
-                canvas.Children.Add(titleText);
+                titleText.Text = presenter.Title;
+                titleText.Width = Width;
+                titleText.Height = Height / 8;
+                titleText.TextAlignment = GET_TEXT_ALIGNMENT(presenter.textPosition);
+                ScaleText(titleText, Width - 10, (Height / 8));
+                Children.Add(titleText);
+                SetTop(titleText, graphBottom);
             }
-            if (showValue || showUnit)
+            if (presenter.showValue || presenter.showUnit)
             {
-                canvas.Children.Add(valueText);
+                valueText.Text = "NO DATA";
+                valueText.Width = Width;
+                valueText.Height = Height / 8;
+                valueText.TextAlignment = GET_TEXT_ALIGNMENT(presenter.textPosition);
+                ScaleText(valueText, Width - 10, (Height / 8));
+                Children.Add(valueText);
+                SetTop(valueText, (!(presenter.showName || presenter.showAbbreviation)) ? graphBottom : (graphBottom + titleText.Height));
             }
         }
 
@@ -144,16 +161,30 @@ namespace VMSpc.Panels
             }
         }
 
+        /// <summary> Indicates whether or not the ValueText has been updated. Can be used to check if BalanceTextBlocks should be called </summary>
+        public bool ShouldUpdateGrid()
+        {
+            bool retval = updated;
+            updated = false;
+            return retval;
+        }
+
         private void UpdateBar()
         {
             graphTop = graphBottom - (graphBottom * presenter.ValueAsPercent());
-            Canvas.SetTop(valueRect, graphTop);
+            SetTop(valueRect, graphTop);
             valueRect.Height = graphBottom - graphTop;
         }
 
         private void UpdateValueText()
         {
-
+            valueText.Text = presenter.ValueAsString;
+            //Checks if the updated text has caused the rendered string to be wider than the column supports
+            if (CalculateStringSize(valueText).Width > (Width - 10))
+            {
+                ScaleText(valueText, Width - 10, (Height / 8));
+                updated = true;
+            }
         }
     }
 }

@@ -88,7 +88,7 @@
     </Compile>
     <Compile Include="DlgWindows\VMSDialog.cs" />
     <Compile Include="DlgWindows\VPanelDlg.cs" />
-    <Compile Include="Panels\ParamContainer.cs" />
+    <Compile Include="Panels\ParamPresenter.cs" />
     <Compile Include="Panels\VMultiBar.cs" />
     <Compile Include="Panels\VOdometerPanel.cs" />
     <Compile Include="Panels\VRoundGauge.cs" />
