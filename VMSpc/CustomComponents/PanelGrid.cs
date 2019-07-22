@@ -40,14 +40,11 @@ namespace VMSpc.CustomComponents
 
         private int movementType;
 
-        private Timer panelTimer;
-
         public PanelGrid()
             : base ()
         {
             selectedChild = null;
             Init();
-            SetTimer();
         }
 
         private void Init()
@@ -83,6 +80,7 @@ namespace VMSpc.CustomComponents
                     panel = new VSimpleGauge(mainWindow, (SimpleGaugeSettings)panelSettings);
                     break;
                 case PanelIDs.SCAN_GAUGE_ID:
+                    panel = new VScanGauge(mainWindow, (ScanGaugeSettings)panelSettings);
                     break;
                 case PanelIDs.ODOMOTER_ID:
                     panel = new VOdometerPanel(mainWindow, (OdometerSettings)panelSettings);
@@ -237,30 +235,6 @@ namespace VMSpc.CustomComponents
                 if (neighbor != panel)
                     panel.SetDirectionalLimits(neighbor);
             }
-        }
-
-        //should this be moved to VPanel to update each panel on individual threads?
-        private void SetTimer()
-        {
-            panelTimer = new Timer(50);
-            panelTimer.Elapsed += OnTimedEvent;
-            panelTimer.AutoReset = true;
-            panelTimer.Enabled = true;
-        }
-
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
-        {
-            try // Wrapped in try block, in case the user closes while this thread is executing
-            {
-                //allows new thread to access object from the parent UI thread
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    foreach (VPanel panel in PanelList)
-                        panel.UpdatePanel();
-                }
-                );
-            }
-            catch { }
         }
 
         #endregion

@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using VMSpc.DevHelpers;
 using static VMSpc.Constants;
 using static VMSpc.Parsers.ChassisParameter;
+using static VMSpc.Parsers.PresenterWrapper;
+using static VMSpc.Parsers.PIDWrapper;
 
 /// <summary>
 /// Update Notes:
@@ -140,7 +143,8 @@ namespace VMSpc.Parsers
         #endregion //Update Methods
     }
 
-    //Standard, flexible Datum types
+    //Standard, dynamic Datum types
+    #region Standard SPNs
 
     #region TSPNFlag
     public class TSPNFlag : TSPNDatum
@@ -293,7 +297,10 @@ namespace VMSpc.Parsers
     }
     #endregion //TSPNUint
 
+    #endregion //Standard SPNs
+
     //Special Datum types
+    #region Special SPNs
 
     #region TSPNRange
 
@@ -436,6 +443,76 @@ namespace VMSpc.Parsers
 
     #endregion //TSPNInferred
 
+    //These spns calculate automatically on a specified timer
+    #region TSPNAutoRunner
+
+    public abstract class TSPNAutoRunner : TSPNDatum
+    {
+        protected Timer calcTimer;
+        public TSPNAutoRunner(ushort spn, int interval) 
+            : base(spn)
+        {
+            CREATE_TIMER(Calculate, interval);
+        }
+
+        protected abstract void Calculate(object sender, ElapsedEventArgs e);
+    }
+
+    public class TSPNAcceleration : TSPNAutoRunner
+    {
+        protected double lastSpeed;
+
+        public TSPNAcceleration(ushort spn, int interval)
+            : base(spn, interval)
+        {
+            lastSpeed = Double.NaN;
+        }
+
+        protected override void Calculate(object sender, ElapsedEventArgs e)
+        {
+            if (Seen(roadSpeed))
+            {
+                double curSpeed = GetStandardValueSPN(roadSpeed);
+                if (!Double.IsNaN(lastSpeed))
+                {
+                    value = (curSpeed - lastSpeed);
+                    valueMetric = value * 1.60934 + 0;
+                    seen = true;
+                }
+                lastSpeed = curSpeed;
+            }
+        }
+    }
+
+    public class TSPNPeakTracker : TSPNAutoRunner
+    {
+        protected double[] acceleration;
+        protected int index;
+        protected Func<double[], double> compare;
+        public TSPNPeakTracker(ushort spn, int interval, Func<double[], double> compareMethod)
+            :base(spn, interval)
+        {
+            acceleration = new double[10];
+            Constants.ArrayFill(acceleration, 0);
+            compare = compareMethod;
+            index = 0;
+        }
+
+        protected override void Calculate(object sender, ElapsedEventArgs e)
+        {
+            if (Seen(roadSpeed))
+            {
+                acceleration[index] = GetStandardValueSPN(10);
+                index = (index + 1) % 10;
+                value = compare(acceleration);
+                valueMetric = value * 1.60934;
+                seen = true;
+            }
+        }
+    }
+
+    #endregion //TSPNAutoRunner
+
     //TODO
     #region TSPNDiag (diagnostics)
 
@@ -449,6 +526,6 @@ namespace VMSpc.Parsers
 
     #endregion //TSPNDiag (diagnostics)
 
-
+    #endregion //Special SPNs
 
 }

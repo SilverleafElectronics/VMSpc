@@ -110,7 +110,7 @@
     <Param Name="Max Oil Temp">
       <Abbreviation>MxOIL</Abbreviation>
       <Unit>°F</Unit>
-      <Metric-Unit>ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°C</Metric-Unit>
+      <Metric-Unit>°C</Metric-Unit>
       <PID>505</PID>
       <Gauge-Min>0</Gauge-Min>
       <Gauge-Max>300</Gauge-Max>
@@ -125,7 +125,7 @@
     <Param Name="Max Trans Temp">
       <Abbreviation>MxTRN</Abbreviation>
       <Unit>°F</Unit>
-      <Metric-Unit>ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°C</Metric-Unit>
+      <Metric-Unit>°C</Metric-Unit>
       <PID>504</PID>
       <Gauge-Min>80</Gauge-Min>
       <Gauge-Max>300</Gauge-Max>
@@ -140,7 +140,7 @@
     <Param Name="Max Coolant Temp">
       <Abbreviation>MxTMP</Abbreviation>
       <Unit>°F</Unit>
-      <Metric-Unit>ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°C</Metric-Unit>
+      <Metric-Unit>°C</Metric-Unit>
       <PID>503</PID>
       <Gauge-Min>140</Gauge-Min>
       <Gauge-Max>260</Gauge-Max>
@@ -245,7 +245,7 @@
     <Param Name="Transmission Temperature">
       <Abbreviation>TRANS</Abbreviation>
       <Unit>°F</Unit>
-      <Metric-Unit>ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°C</Metric-Unit>
+      <Metric-Unit>°C</Metric-Unit>
       <PID>177</PID>
       <Gauge-Min>32</Gauge-Min>
       <Gauge-Max>300</Gauge-Max>
@@ -260,7 +260,7 @@
     <Param Name="Oil Temperature">
       <Abbreviation>OIL</Abbreviation>
       <Unit>°F</Unit>
-      <Metric-Unit>ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°C</Metric-Unit>
+      <Metric-Unit>°C</Metric-Unit>
       <PID>175</PID>
       <Gauge-Min>0</Gauge-Min>
       <Gauge-Max>300</Gauge-Max>
@@ -275,7 +275,7 @@
     <Param Name="Engine Coolant Temp">
       <Abbreviation>TEMP</Abbreviation>
       <Unit>°F</Unit>
-      <Metric-Unit>ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°C</Metric-Unit>
+      <Metric-Unit>°C</Metric-Unit>
       <PID>110</PID>
       <Gauge-Min>32</Gauge-Min>
       <Gauge-Max>260</Gauge-Max>
@@ -350,7 +350,7 @@
     <Param Name="Intake Manifold Temp">
       <Abbreviation>MFOLD</Abbreviation>
       <Unit>°F</Unit>
-      <Metric-Unit>ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°C</Metric-Unit>
+      <Metric-Unit>°C</Metric-Unit>
       <PID>105</PID>
       <Gauge-Min>0</Gauge-Min>
       <Gauge-Max>250</Gauge-Max>
@@ -444,7 +444,7 @@
     <Param Name="Air Inlet Temp">
       <Abbreviation>AirInlet</Abbreviation>
       <Unit>°F</Unit>
-      <Metric-Unit>ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°C</Metric-Unit>
+      <Metric-Unit>°C</Metric-Unit>
       <PID>172</PID>
       <Gauge-Min>32</Gauge-Min>
       <Gauge-Max>300</Gauge-Max>
@@ -594,7 +594,7 @@
     <Param Name="Ambient Temp">
       <Abbreviation>Amb. Temp</Abbreviation>
       <Unit>°F</Unit>
-      <Metric-Unit>ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°C</Metric-Unit>
+      <Metric-Unit>°C</Metric-Unit>
       <PID>171</PID>
       <Gauge-Min>0</Gauge-Min>
       <Gauge-Max>150</Gauge-Max>
@@ -734,7 +734,7 @@
     <Param Name="Retarder Oil Temp (Hydraulic)">
       <Abbreviation>RTDR TEMP</Abbreviation>
       <Unit>°F</Unit>
-      <Metric-Unit>ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ°C</Metric-Unit>
+      <Metric-Unit>°C</Metric-Unit>
       <PID>120</PID>
       <Gauge-Min>0</Gauge-Min>
       <Gauge-Max>300</Gauge-Max>

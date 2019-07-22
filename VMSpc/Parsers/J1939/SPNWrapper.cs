@@ -136,9 +136,10 @@ namespace VMSpc.Parsers
         public static TSPNWord spn_reciprocalMPG = new TSPNWord(603, 2, 0.00000046f * 100 * 100, 0.0f, 0.0000001953125f * 100 * 100, 0.0f, 235.215f); //235.215 is conversion per gallon
         public static TSPNWord spn_rollingLPK = new TSPNWord(601, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f, 235.215f);
         public static TSPNWord spn_recentLPK = new TSPNWord(602, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f, 235.215f);
-        public static TSPNWord spn_acceleration = new TSPNWord(10, 0, 1.0, 0.0, 1.0, 0.0);
-        public static TSPNWord spn_braking = new TSPNWord(11, 0, 1.0, 0.0, 1.0, 0.0);
-        public static TSPNWord spn_peakAcceleration = new TSPNWord(12, 0, 1.0, 0.0, 1.0, 0.0);
+
+        public static TSPNAcceleration spn_acceleration = new TSPNAcceleration(10, 1000);
+        public static TSPNPeakTracker  spn_braking = new TSPNPeakTracker(11, 1000, Constants.DoubleArrayMin);
+        public static TSPNPeakTracker  spn_peakAcceleration = new TSPNPeakTracker(12, 1000, Constants.DoubleArrayMax);
 
         public static TSPNUint spn_idleFuel = new TSPNUint(236, 0, 0.132086f, 0.0f, 0.5f, 0.0f);
         public static TSPNUint spn_idleHours = new TSPNUint(235, 4, 0.05f, 0.0f, 0.05f, 0.0f);

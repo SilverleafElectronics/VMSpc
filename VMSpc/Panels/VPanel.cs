@@ -48,6 +48,8 @@ namespace VMSpc.Panels
 
         private VMSDialog dlgWindow;
 
+        private Timer panelTimer;
+
         public VPanel(MainWindow mainWindow, PanelSettings panelSettings)
         {
             this.mainWindow = mainWindow;
@@ -64,6 +66,7 @@ namespace VMSpc.Panels
             ApplyCanvasDimensions();
             border.Child = canvas;
             GenerateEventHandlers();
+            panelTimer = CREATE_TIMER(OnUpdateTimedEvent, 50);
         }
 
         public void ApplyBorderDimensions()
@@ -434,6 +437,19 @@ namespace VMSpc.Panels
             panelSettings.rectCord.bottomRightY = (int)Canvas.GetBottom(border);
             panelSettings.rectCord.topLeftX = (int)Canvas.GetLeft(border);
             panelSettings.rectCord.topLeftY = (int)Canvas.GetTop(border);
+        }
+
+        private void OnUpdateTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            try // Wrapped in try block, in case the user closes while this thread is executing
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    UpdatePanel();
+                }
+                );
+            }
+            catch { }
         }
     }
 }

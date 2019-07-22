@@ -60,7 +60,7 @@ namespace VMSpc.XmlFileManagers
         #region Construction Helpers
         protected void Initialize()
         {
-            using (StreamReader fs = new StreamReader(docName, Encoding.GetEncoding("ISO-8859-15")))
+            using (StreamReader fs = new StreamReader(docName, Encoding.GetEncoding("utf-8")))
                 xmlDoc.Load(fs);
         }
 

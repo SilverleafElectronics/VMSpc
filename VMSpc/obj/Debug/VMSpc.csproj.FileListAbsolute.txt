@@ -92,3 +92,5 @@ C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\RoundGaugeDlg.g.c
 C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\RoundGaugeDlg.baml
 C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\MultiBarDlg.g.cs
 C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\MultiBarDlg.baml
+C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\ScanGaugeDlg.g.cs
+C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\ScanGaugeDlg.baml

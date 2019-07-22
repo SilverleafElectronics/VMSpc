@@ -104,7 +104,7 @@ namespace VMSpc.Communication
             CloseDataReader();
         }
 
-        #region Business Logic
+        #region Common Logic
 
         /// <summary>   Initializes all communications activity. Begins the InitializeDataReader() thread and sends messages to the JIB to keep it in VMS mode  </summary>
         public void StartComm()
@@ -156,7 +156,7 @@ namespace VMSpc.Communication
                 logWriter.WriteLine(logEntry);
         }
 
-        #endregion //Business Logic
+        #endregion //Common Logic
 
         #region Communication Settings
 

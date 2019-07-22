@@ -23,6 +23,31 @@ namespace VMSpc.Parsers
             temp.datum.seen = true;
         }
 
+        static public uint GetRawValueSPN(ushort pid)
+        {
+            return PresenterList[pid].datum.rawValue;
+        }
+
+        static public double GetStandardValueSPN(ushort pid)
+        {
+            return PresenterList[pid].datum.value;
+        }
+
+        static public double GetMetricValueSPN(ushort pid)
+        {
+            return PresenterList[pid].datum.valueMetric;
+        }
+
+        static public bool Exists(ushort pid)
+        {
+            return PresenterList.ContainsKey(pid);
+        }
+
+        static public bool Seen(ushort pid)
+        {
+            return PresenterList[pid].datum.seen;
+        }
+
         public static readonly Dictionary<ushort, TSPNPresenter> PresenterList = new Dictionary<ushort, TSPNPresenter>();
         static PresenterWrapper()
         {

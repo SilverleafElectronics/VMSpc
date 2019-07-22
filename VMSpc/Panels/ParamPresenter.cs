@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Shapes;
 using static VMSpc.XmlFileManagers.ParamDataManager;
 using VMSpc.XmlFileManagers;
+using static VMSpc.Constants;
 
 namespace VMSpc.Panels
 {
@@ -24,7 +25,7 @@ namespace VMSpc.Panels
         public ParamPresenter(ushort pid, GaugeSettings panelSettings)
         {
             parameter = ParamData.parameters[pid];
-            lastValue = Double.NaN;
+            lastValue = DUB_NODATA;
             showName = panelSettings.showName;
             UseMetric = panelSettings.showInMetric;
             showUnit = panelSettings.showUnit;
@@ -36,7 +37,7 @@ namespace VMSpc.Panels
         /// <summary> Returns a stringified version of the current value, which conditionally renders the value text (if showValue is true) + the unit text (if showUnit is true) </summary>
         public string ValueAsString => (
             ((showValue) ? String.Format(parameter.Format, currentValue) : "") +
-            ((showUnit) ? ((UseMetric) ? parameter.Unit : parameter.MetricUnit) : "")
+            ((showUnit) ? ((!UseMetric) ? parameter.Unit : parameter.MetricUnit) : "")
         );
 
         public string Title => (showAbbreviation) ? parameter.Abbreviation : parameter.ParamName;
@@ -52,27 +53,21 @@ namespace VMSpc.Panels
         /// <summary> Indicates whether or not the value should be used for updating the UI. A valid value is both fresh and sits between gaugeMin and gaugeMax </summary>
         public bool IsValidForUpdate()
         {
-            if (!HasNewValue())
-                return false;
-            if (currentValue >= parameter.GaugeMin && currentValue <= parameter.GaugeMax)
-                return true;
-            return false;
+            return ( HasNewValue() && (currentValue >= parameter.GaugeMin) );
         }
 
-        private double ValueToPercent(double value, double max, double min)
+        private double ValueToPercent(double value, double min, double max)
         {
             double span = max - min;
             return (value - min) / span;
         }
 
         /// <summary> Returns the current value as a percentage of the difference between gaugeMin and gaugeMax. Useful for visual presentation of the value in gauges </summary>
-        public double ValueAsPercent()
-        {
-            return ValueToPercent(currentValue, parameter.GaugeMax, parameter.GaugeMin);
-        }
-        public double GreenMaxAsPercent  =>  ValueToPercent(parameter.HighYellow, parameter.GaugeMax, parameter.GaugeMin);
-        public double YellowMaxAsPercent => ValueToPercent(parameter.HighRed, parameter.GaugeMax, parameter.GaugeMin);
-        public double RedMaxAsPercent    => ValueToPercent(parameter.GaugeMax, parameter.GaugeMax, parameter.GaugeMin);
+        public double ValueAsPercent => ValueToPercent(currentValue, parameter.GaugeMin, parameter.GaugeMax);
+
+        public double GreenMaxAsPercent  =>  ValueToPercent(parameter.HighYellow, parameter.GaugeMin, parameter.GaugeMax);
+        public double YellowMaxAsPercent => ValueToPercent(parameter.HighRed, parameter.GaugeMin, parameter.GaugeMax);
+        public double RedMaxAsPercent    => ValueToPercent(parameter.GaugeMax, parameter.GaugeMin, parameter.GaugeMax);
         
     }
 

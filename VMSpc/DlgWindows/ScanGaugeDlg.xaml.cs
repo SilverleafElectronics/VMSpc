@@ -23,16 +23,20 @@ namespace VMSpc.DlgWindows
     /// <summary>
     /// Interaction logic for SimpleGaugeDlg.xaml
     /// </summary>
-    public partial class SimpleGaugeDlg : VPanelDlg
+    public partial class ScanGaugeDlg : VPanelDlg
     {
         public int checkedRadio
         {
             get { return panelSettings.TextPosition; }
             set { SetProperty(ref panelSettings.TextPosition, value); }
         }
-        public SimpleGaugeDlg(PanelSettings panelSettings)
+
+        protected new ScanGaugeSettings panelSettings;
+
+        public ScanGaugeDlg(ScanGaugeSettings panelSettings)
             : base(panelSettings)
         {
+            this.panelSettings = panelSettings;
             InitializeComponent();
             AddParameterChoices();
             ApplyBindings();
@@ -48,13 +52,13 @@ namespace VMSpc.DlgWindows
             panelSettings.TextPosition = 0;
             panelSettings.Use_Static_Color = 0;
             panelSettings.ID = PanelIDs.SIMPLE_GAUGE_ID;
-            ((SimpleGaugeSettings)panelSettings).PID = 84;
-            ((SimpleGaugeSettings)panelSettings).showName = true;
-            ((SimpleGaugeSettings)panelSettings).showSpot = true;
-            ((SimpleGaugeSettings)panelSettings).showUnit = true;
-            ((SimpleGaugeSettings)panelSettings).showValue = true;
-            ((SimpleGaugeSettings)panelSettings).showAbbreviation = false;
-            ((SimpleGaugeSettings)panelSettings).showGraph = true;
+            panelSettings.PIDList.Add(84);
+            panelSettings.showName = true;
+            panelSettings.showSpot = true;
+            panelSettings.showUnit = true;
+            panelSettings.showValue = true;
+            panelSettings.showAbbreviation = false;
+            panelSettings.showGraph = true;
         }
 
         protected override void ApplyBindings()
@@ -71,7 +75,7 @@ namespace VMSpc.DlgWindows
             {
                 VMSListBoxItem item = new VMSListBoxItem() { Content = param.Value.ParamName, ID = param.Value.Pid };
                 GaugeTypes.Items.Add(item);
-                if (item.ID == ((SimpleGaugeSettings)panelSettings).PID)
+                if (panelSettings.PIDList.Contains(item.ID))
                     item.IsSelected = true;
             }
         }
@@ -81,8 +85,10 @@ namespace VMSpc.DlgWindows
             foreach (RadioButton button in RadioAlignment.Children)
                 if (button.IsChecked == true) panelSettings.TextPosition = Convert.ToInt16(button.Tag);
             VMSConsole.PrintLine("" + ((RadioButton)RadioAlignment.Children[0]).IsChecked);
-            ((SimpleGaugeSettings)panelSettings).PID = ((VMSListBoxItem)GaugeTypes.SelectedItem).ID;
-            ((SimpleGaugeSettings)panelSettings).showAbbreviation = (bool)UseAbbr.IsChecked;
+            panelSettings.PIDList.Clear();
+            foreach (VMSListBoxItem item in GaugeTypes.SelectedItems)
+                panelSettings.PIDList.Add(item.ID);
+            panelSettings.showAbbreviation = (bool)UseAbbr.IsChecked;
             DialogResult = true;
             Close();
         }

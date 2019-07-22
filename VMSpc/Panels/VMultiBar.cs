@@ -156,8 +156,8 @@ namespace VMSpc.Panels
         {
             if (presenter.IsValidForUpdate())
             {
-                UpdateBar();
                 UpdateValueText();
+                UpdateBar();
             }
         }
 
@@ -171,7 +171,7 @@ namespace VMSpc.Panels
 
         private void UpdateBar()
         {
-            graphTop = graphBottom - (graphBottom * presenter.ValueAsPercent());
+            graphTop = graphBottom - (graphBottom * presenter.ValueAsPercent);
             SetTop(valueRect, graphTop);
             valueRect.Height = graphBottom - graphTop;
         }

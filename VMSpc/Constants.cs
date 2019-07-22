@@ -51,6 +51,7 @@ namespace VMSpc
         public const double DUB_ERR = -double.MaxValue;
 
         //object checking
+        /// <summary> Shorthand method for checking whether or not an object is null </summary>
         public static bool NOT_NULL(object obj)
         {
             return obj != null;
@@ -288,6 +289,34 @@ namespace VMSpc
                 ms.Position = 0;
                 return (T)formatter.Deserialize(ms);
             }
+        }
+
+        public static double DoubleArrayMax(double[] arr)
+        {
+            double max = 0;
+            foreach (var item in arr)
+            {
+                if (item > max)
+                    max = item;
+            }
+            return max;
+        }
+
+        public static double DoubleArrayMin(double[] arr)
+        {
+            double min = Double.MaxValue;
+            foreach (var item in arr)
+            {
+                if (item < min)
+                    min = item;
+            }
+            return min;
+        }
+
+        public static void ArrayFill<T>(this T[] arr, T value)
+        {
+            for (int i = 0; i < arr.Length; i++)
+                arr[i] = value;
         }
 
         public const byte SINGLE_BYTE = 0;
