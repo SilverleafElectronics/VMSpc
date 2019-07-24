@@ -37,6 +37,7 @@ namespace VMSpc.CustomComponents
         private Double canvasStartTop;
         private Double canvasStartLeft;
         private VPanel selectedChild;
+        private VPanel highlightedChild;
 
         private int movementType;
 
@@ -69,6 +70,20 @@ namespace VMSpc.CustomComponents
         {
             scrnManager.AddNewPanel(panelSettings);
             AddPanel(panelSettings);
+        }
+
+        public void DeletePanel()
+        {
+            if (NOT_NULL(highlightedChild))
+            {
+                highlightedChild.UnHighlight();
+                Children.Clear();
+                PanelList.Clear();
+                scrnManager.DeletePanel(highlightedChild.number);
+                InitPanels(mainWindow);
+                highlightedChild = null;
+
+            }
         }
 
         private void AddPanel(PanelSettings panelSettings)
@@ -141,23 +156,28 @@ namespace VMSpc.CustomComponents
         {
             base.OnMouseLeftButtonDown(e);
             isDragging = false;
-            SetSelectedChild(e.Source);
-            cursorStartPoint = e.GetPosition(this);
-            canvasStartTop = GetTop(selectedChild.border);
-            if (Double.IsNaN(canvasStartTop)) canvasStartTop = 0;
-            canvasStartLeft = GetLeft(selectedChild.border);
-            if (Double.IsNaN(canvasStartLeft)) canvasStartLeft = 0;
-            lastCursorY = canvasStartTop;
-            lastCursorX = canvasStartLeft;
-            isDragging = true;
+            if (SetSelectedChild(e.Source))
+            {
+                cursorStartPoint = e.GetPosition(this);
+                canvasStartTop = GetTop(selectedChild.border);
+                if (Double.IsNaN(canvasStartTop)) canvasStartTop = 0;
+                canvasStartLeft = GetLeft(selectedChild.border);
+                if (Double.IsNaN(canvasStartLeft)) canvasStartLeft = 0;
+                lastCursorY = canvasStartTop;
+                lastCursorX = canvasStartLeft;
+                isDragging = true;
+            }
         }
 
         /// <summary>
         /// Sets selectedChild to the source of the click. If the user has clicked outside of the panel, selectedChild is set to null
         /// </summary>
         /// <param name="src"></param>
-        private void SetSelectedChild(dynamic src)
+        private bool SetSelectedChild(dynamic src)
         {
+            if (NOT_NULL(highlightedChild))
+                highlightedChild.UnHighlight();
+            selectedChild = null;
             foreach (VPanel panel in PanelList)
             {
                 dynamic source = src;
@@ -165,9 +185,11 @@ namespace VMSpc.CustomComponents
                 {
                     if (panel.border == source)
                     {
-                        selectedChild = panel;
+                        selectedChild = highlightedChild = panel;
                         movementType = MOVEMENT_RESIZE;
                         selectedChild.isResizing = true;
+                        selectedChild.Highlight();
+                        return true;
                     }
                 }
                 else
@@ -177,18 +199,21 @@ namespace VMSpc.CustomComponents
                         if (source.GetType() == mainWindow.GetType())
                         {
                             selectedChild = null;
-                            return;
+                            return false;
                         }
                         source = VisualTreeHelper.GetParent(source);
                     }
                     if (panel.canvas == source)
                     {
-                        selectedChild = panel;
+                        selectedChild = highlightedChild = panel;
                         selectedChild.isMoving = true;
                         movementType = MOVEMENT_MOVE;
+                        selectedChild.Highlight();
+                        return true;
                     }
                 }
             }
+            return (selectedChild != null);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)

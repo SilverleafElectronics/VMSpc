@@ -25,12 +25,13 @@ namespace VMSpc.DlgWindows
     /// </summary>
     public partial class SimpleGaugeDlg : VPanelDlg
     {
+        protected new SimpleGaugeSettings panelSettings;
         public int checkedRadio
         {
             get { return panelSettings.TextPosition; }
             set { SetProperty(ref panelSettings.TextPosition, value); }
         }
-        public SimpleGaugeDlg(PanelSettings panelSettings)
+        public SimpleGaugeDlg(SimpleGaugeSettings panelSettings)
             : base(panelSettings)
         {
             InitializeComponent();
@@ -38,23 +39,22 @@ namespace VMSpc.DlgWindows
             ApplyBindings();
         }
 
+        protected override void Init(PanelSettings panelSettings)
+        {
+            this.panelSettings = (SimpleGaugeSettings)base.panelSettings;
+        }
+
         protected override void ApplyDefaults()
         {
-            panelSettings.rectCord.topLeftX = 0;
-            panelSettings.rectCord.topLeftY = 0;
-            panelSettings.rectCord.bottomRightX = 300;
-            panelSettings.rectCord.bottomRightY = 300;
-            panelSettings.showInMetric = false;
-            panelSettings.TextPosition = 0;
-            panelSettings.Use_Static_Color = 0;
+            base.ApplyDefaults();
             panelSettings.ID = PanelIDs.SIMPLE_GAUGE_ID;
-            ((SimpleGaugeSettings)panelSettings).PID = 84;
-            ((SimpleGaugeSettings)panelSettings).showName = true;
-            ((SimpleGaugeSettings)panelSettings).showSpot = true;
-            ((SimpleGaugeSettings)panelSettings).showUnit = true;
-            ((SimpleGaugeSettings)panelSettings).showValue = true;
-            ((SimpleGaugeSettings)panelSettings).showAbbreviation = false;
-            ((SimpleGaugeSettings)panelSettings).showGraph = true;
+            panelSettings.PID = 84;
+            panelSettings.showName = true;
+            panelSettings.showSpot = true;
+            panelSettings.showUnit = true;
+            panelSettings.showValue = true;
+            panelSettings.showAbbreviation = false;
+            panelSettings.showGraph = true;
         }
 
         protected override void ApplyBindings()
@@ -63,6 +63,13 @@ namespace VMSpc.DlgWindows
             if (panelSettings.TextPosition < 0 || panelSettings.TextPosition > 2)
                 panelSettings.TextPosition = 0;
             ((RadioButton)RadioAlignment.Children[panelSettings.TextPosition]).IsChecked = true;
+
+            UseAbbr.IsChecked = panelSettings.showAbbreviation;
+            ShowGraph.IsChecked = panelSettings.showGraph;
+            ShowGaugeName.IsChecked = panelSettings.showName;
+            ShowUnit.IsChecked = panelSettings.showUnit;
+            ShowMetric.IsChecked = panelSettings.showInMetric;
+            ShowValue.IsChecked = panelSettings.showValue;
         }
 
         protected void AddParameterChoices()
@@ -71,7 +78,7 @@ namespace VMSpc.DlgWindows
             {
                 VMSListBoxItem item = new VMSListBoxItem() { Content = param.Value.ParamName, ID = param.Value.Pid };
                 GaugeTypes.Items.Add(item);
-                if (item.ID == ((SimpleGaugeSettings)panelSettings).PID)
+                if (item.ID == panelSettings.PID)
                     item.IsSelected = true;
             }
         }
@@ -81,8 +88,13 @@ namespace VMSpc.DlgWindows
             foreach (RadioButton button in RadioAlignment.Children)
                 if (button.IsChecked == true) panelSettings.TextPosition = Convert.ToInt16(button.Tag);
             VMSConsole.PrintLine("" + ((RadioButton)RadioAlignment.Children[0]).IsChecked);
-            ((SimpleGaugeSettings)panelSettings).PID = ((VMSListBoxItem)GaugeTypes.SelectedItem).ID;
-            ((SimpleGaugeSettings)panelSettings).showAbbreviation = (bool)UseAbbr.IsChecked;
+            panelSettings.PID = ((VMSListBoxItem)GaugeTypes.SelectedItem).ID;
+            panelSettings.showAbbreviation = (bool)UseAbbr.IsChecked;
+            panelSettings.showGraph = (bool)ShowGraph.IsChecked;
+            panelSettings.showInMetric = (bool)ShowMetric.IsChecked;
+            panelSettings.showName = (bool)ShowGaugeName.IsChecked;
+            panelSettings.showUnit = (bool)ShowUnit.IsChecked;
+            panelSettings.showValue = (bool)ShowValue.IsChecked;
             DialogResult = true;
             Close();
         }

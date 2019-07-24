@@ -313,10 +313,25 @@ namespace VMSpc
             return min;
         }
 
+        public static double DoubleArrayMaxNegative(double[] arr)
+        {
+            double val = -(DoubleArrayMin(arr));
+            return -(DoubleArrayMin(arr));
+        }
+
         public static void ArrayFill<T>(this T[] arr, T value)
         {
             for (int i = 0; i < arr.Length; i++)
                 arr[i] = value;
+        }
+
+        /// <summary> Counts (and returns) the number of true arguments passed. e.g., TruthCount(true, false, true) = 2 </summary>
+        public static int TruthCount(params bool[] list)
+        {
+            int total = 0;
+            for (int i = 0; i < list.Length; i++)
+                total += (list[i] ? 1 : 0);
+            return total;
         }
 
         public const byte SINGLE_BYTE = 0;

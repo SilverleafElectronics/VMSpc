@@ -36,14 +36,19 @@ namespace VMSpc.DlgWindows
         public ScanGaugeDlg(ScanGaugeSettings panelSettings)
             : base(panelSettings)
         {
-            this.panelSettings = panelSettings;
             InitializeComponent();
             AddParameterChoices();
             ApplyBindings();
         }
 
+        protected override void Init(PanelSettings panelSettings)
+        {
+            panelSettings = (ScanGaugeSettings)base.panelSettings;
+        }
+
         protected override void ApplyDefaults()
         {
+            base.ApplyDefaults();
             panelSettings.rectCord.topLeftX = 0;
             panelSettings.rectCord.topLeftY = 0;
             panelSettings.rectCord.bottomRightX = 300;
@@ -51,7 +56,7 @@ namespace VMSpc.DlgWindows
             panelSettings.showInMetric = false;
             panelSettings.TextPosition = 0;
             panelSettings.Use_Static_Color = 0;
-            panelSettings.ID = PanelIDs.SIMPLE_GAUGE_ID;
+            panelSettings.ID = PanelIDs.SCAN_GAUGE_ID;
             panelSettings.PIDList.Add(84);
             panelSettings.showName = true;
             panelSettings.showSpot = true;

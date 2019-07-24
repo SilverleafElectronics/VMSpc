@@ -34,14 +34,19 @@ namespace VMSpc.DlgWindows
         public MultiBarDlg(MultiBarSettings panelSettings)
             : base(panelSettings)
         {
-            this.panelSettings = panelSettings;
             InitializeComponent();
             AddParameterChoices();
             ApplyBindings();
         }
 
+        protected override void Init(PanelSettings panelSettings)
+        {
+            panelSettings = (MultiBarSettings)base.panelSettings;
+        }
+
         protected override void ApplyDefaults()
         {
+            base.ApplyDefaults();
             panelSettings.rectCord.topLeftX = 0;
             panelSettings.rectCord.topLeftY = 0;
             panelSettings.rectCord.bottomRightX = 300;
@@ -49,12 +54,12 @@ namespace VMSpc.DlgWindows
             panelSettings.showInMetric = false;
             panelSettings.TextPosition = 0;
             panelSettings.Use_Static_Color = 0;
-            panelSettings.ID = PanelIDs.MULTIBAR_ID;
             panelSettings.showName = true;
             panelSettings.showUnit = true;
             panelSettings.showValue = true;
             panelSettings.showAbbreviation = true;
             panelSettings.showGraph = true;
+            panelSettings.ID = PanelIDs.MULTIBAR_ID;
         }
 
         protected override void ApplyBindings()

@@ -3,25 +3,6 @@
   <Version>V4.0</Version>
   <Screen-Elements>
     <File-Name>default.scr.xml</File-Name>
-    <Panel Number="1">
-      <ID>1</ID>
-      <Rect-Cord Top-LeftX="847" Top-LeftY="271" Bottom-RightX="1100" Bottom-RightY="430" />
-      <BackGround-Color Red="163" Green="82" Blue="0" />
-      <Base-Color Red="200" Green="170" Blue="40" />
-      <Explicit-Color Red="255" Green="255" Blue="255" />
-      <Explicit-Gauge-Color Red="211" Green="211" Blue="211" />
-      <Explicit-Fill-Color Red="0" Green="0" Blue="0" />
-      <PID>10</PID>
-      <Show-Spot>False</Show-Spot>
-      <Show-Name>True</Show-Name>
-      <Show-Value>True</Show-Value>
-      <Show-Unit>True</Show-Unit>
-      <Show-Graph>True</Show-Graph>
-      <Show-Abbreviation>False</Show-Abbreviation>
-      <Show-In-Metric>False</Show-In-Metric>
-      <Use-Static-Color>false</Use-Static-Color>
-      <Format>0</Format>
-    </Panel>
     <Wallpaper-Filename>
     </Wallpaper-Filename>
     <Text-Color Red="255" Green="0" Blue="0" />
@@ -65,9 +46,9 @@
     <Use-Blue>0</Use-Blue>
     <Saturation-Offset>0</Saturation-Offset>
     <Value-Offset>0</Value-Offset>
-    <Panel Number="2">
+    <Panel Number="1">
       <ID>1</ID>
-      <Rect-Cord Top-LeftX="311" Top-LeftY="297" Bottom-RightX="611" Bottom-RightY="597" />
+      <Rect-Cord Top-LeftX="23" Top-LeftY="33" Bottom-RightX="694" Bottom-RightY="255" />
       <BackGround-Color Red="163" Green="82" Blue="0" />
       <Base-Color Red="0" Green="0" Blue="0" />
       <Explicit-Color Red="0" Green="0" Blue="0" />
@@ -77,11 +58,29 @@
       <Use-Static-Color />
       <Show-Spot>True</Show-Spot>
       <Show-Name>True</Show-Name>
-      <Show-Value>True</Show-Value>
-      <Show-Unit>True</Show-Unit>
+      <Show-Value>False</Show-Value>
+      <Show-Unit>False</Show-Unit>
       <Show-Graph>True</Show-Graph>
       <Show-Abbreviation>False</Show-Abbreviation>
-      <PID>11</PID>
+      <PID>172</PID>
+    </Panel>
+    <Panel Number="2">
+      <ID>1</ID>
+      <Rect-Cord Top-LeftX="807" Top-LeftY="329" Bottom-RightX="1242" Bottom-RightY="624" />
+      <BackGround-Color Red="255" Green="255" Blue="255" />
+      <Base-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Gauge-Color Red="0" Green="0" Blue="0" />
+      <Show-In-Metric>False</Show-In-Metric>
+      <Format>1</Format>
+      <Use-Static-Color />
+      <Show-Spot>True</Show-Spot>
+      <Show-Name>True</Show-Name>
+      <Show-Value>True</Show-Value>
+      <Show-Unit>False</Show-Unit>
+      <Show-Graph>True</Show-Graph>
+      <Show-Abbreviation>False</Show-Abbreviation>
+      <PID>84</PID>
     </Panel>
   </Screen-Elements>
 </Root>

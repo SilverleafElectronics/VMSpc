@@ -489,6 +489,7 @@ namespace VMSpc.Parsers
         protected double[] acceleration;
         protected int index;
         protected Func<double[], double> compare;
+
         public TSPNPeakTracker(ushort spn, int interval, Func<double[], double> compareMethod)
             :base(spn, interval)
         {

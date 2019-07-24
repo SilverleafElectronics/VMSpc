@@ -10,10 +10,12 @@
         mc:Ignorable="d"
         Title="VMSpc" Height="800" Width="1500">
     <Grid>
-        <DockPanel Name="DockMenu">
+        <DockPanel Name="DockMenu" Height="Auto" Width="Auto">
             <DockPanel.CommandBindings>
                 <CommandBinding Command="Close" CanExecute="CloseCommand_CanExecute" Executed="CloseCommand_Executed" />
                 <CommandBinding Command="self:MainCommands.NewSimpleGauge" CanExecute="NewSimpleGaugeCommand_CanExecute" Executed="NewSimpleGaugeCommand_Executed" />
+                <CommandBinding Command="self:MainCommands.NewScanGauge" CanExecute="NewScanGaugeCommand_CanExecute" Executed="NewScanGaugeCommand_Executed" />
+                <CommandBinding Command="self:MainCommands.NewMultiBar" CanExecute="NewMultiBarCommand_CanExecute" Executed="NewMultiBarCommand_Executed" />
                 <CommandBinding Command="self:MainCommands.CommSettings" CanExecute="CommSettingsCommand_CanExecute" Executed="CommSettingsCommand_Executed" />
                 <CommandBinding Command="self:MainCommands.About" CanExecute="NewSimpleGaugeCommand_CanExecute" Executed="AboutCommand_Executed" />
                 <CommandBinding Command="self:MainCommands.RawLog" CanExecute="RawLogCommand_CanExecute" Executed="RawLogCommand_Executed" />
@@ -29,6 +31,9 @@
                 </MenuItem>
                 <MenuItem Header="_Gauges">
                     <MenuItem Command="self:MainCommands.NewSimpleGauge" />
+                    <MenuItem Command="self:MainCommands.NewScanGauge" />
+                    <MenuItem Command="self:MainCommands.NewMultiBar" />
+                    <!--<MenuItem Command="self:MainCommands.DeleteGauge" />-->
                 </MenuItem>
                 <MenuItem Header="_Advanced">
                     <MenuItem Header="_Communications" Command="self:MainCommands.CommSettings" />
@@ -39,7 +44,7 @@
                 </MenuItem>
             </Menu>
         </DockPanel>
-        <cs:PanelGrid x:Name="ContentGrid">
+        <cs:PanelGrid x:Name="ContentGrid" Width="Auto" Height="Auto" Background="White" Margin="5,18,5,5">
             <cs:PanelGrid.Resources>
                 <Style TargetType="cs:VMSCanvas">
                     <Setter Property="Background" Value="Crimson" />

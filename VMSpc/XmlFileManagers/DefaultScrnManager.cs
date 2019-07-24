@@ -58,7 +58,13 @@ namespace VMSpc.XmlFileManagers
 
         public void DeletePanel(int panelNumber)
         {
-
+            SetPanelCount(GetPanelCount() - 1);
+            xmlDoc.RemoveChild(getNodeByTagAndAttr("Panel", "Number", panelNumber.ToString()));
+            for (ushort i = (ushort)(panelNumber); i < GetPanelCount(); i++)
+            {
+                configurationPanelList[i] = configurationPanelList[i + 1];
+            }
+            SaveConfiguration();
         }
 
         /// <summary>   Returns a PanelSettings object for use in constructing a new panel  </summary>

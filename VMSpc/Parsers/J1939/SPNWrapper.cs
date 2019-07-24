@@ -138,7 +138,7 @@ namespace VMSpc.Parsers
         public static TSPNWord spn_recentLPK = new TSPNWord(602, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f, 235.215f);
 
         public static TSPNAcceleration spn_acceleration = new TSPNAcceleration(10, 1000);
-        public static TSPNPeakTracker  spn_braking = new TSPNPeakTracker(11, 1000, Constants.DoubleArrayMin);
+        public static TSPNPeakTracker  spn_braking = new TSPNPeakTracker(11, 1000, Constants.DoubleArrayMaxNegative);
         public static TSPNPeakTracker  spn_peakAcceleration = new TSPNPeakTracker(12, 1000, Constants.DoubleArrayMax);
 
         public static TSPNUint spn_idleFuel = new TSPNUint(236, 0, 0.132086f, 0.0f, 0.5f, 0.0f);

@@ -26,6 +26,11 @@ namespace VMSpc.DlgWindows
             InitializeComponent();
         }
 
+        protected override void Init(PanelSettings panelSettings)
+        {
+            panelSettings = (OdometerSettings)base.panelSettings;
+        }
+
         protected override void ApplyDefaults()
         {
             throw new NotImplementedException();

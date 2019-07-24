@@ -21,6 +21,7 @@ namespace VMSpc
         //private EngineManager enginemanager;
         //private PanelManager panelmanager;
         DateTime appstart;
+        MainWindow wnd;
         public long startcounter;
         public App()
         {
@@ -61,8 +62,24 @@ namespace VMSpc
 
         private void VMSpcStart()
         {
-            MainWindow wnd = new MainWindow();
+            wnd = new MainWindow();
             wnd.Show();
+        }
+
+        private string ExceptionInstructions =>
+            (
+                "It is unlikely that this issue has caused any permanent damage to your VMSpc configuration. However, if it has, if you keep seeing this message, or if you just want to report the issue, we would like to help. For debugging support, please do one of the following:\n" +
+                "1. Press the 'Copy' button below, paste it into an email, and send the email with the subject \"VMSpc Unhandled Exceptions\" to support@simply-smarter.com\n" +
+                "2. Take a screenshot of this screen, and either email us the image or call our support team\n" +
+                "3. Leave this window open and call our support team for more instructions"
+            );
+
+        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("An unhandled exception just occurred: " + e.Exception.Message + "\n\n" + ExceptionInstructions + "\n\nException Details:\n\n" + e.Exception.ToString() + "\n\nDo you want to copy the error message?\n\n", "VMSpc Error", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+                Clipboard.SetText("VMSpc Error Message: " + e.Exception.ToString());
+            wnd.ForceClose();
         }
     }
 }

@@ -10,9 +10,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VMSpc.DlgWindows"
         mc:Ignorable="d"
-        Title="Simple Gauge Properties" Height="400" Width="350">
+        Title="Simple Gauge Properties" Height="600" Width="350">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -110,6 +111,9 @@
             <CheckBox Grid.Row="2" Grid.Column="1" Name="ShowGraph" Margin="10, 5, 0, 5">Show Graph</CheckBox>
             <CheckBox Grid.Row="3" Grid.Column="0" Name="ShowMetric" Margin="10, 5, 0, 5">Show In Metric</CheckBox>
             <CheckBox Grid.Row="3" Grid.Column="1" Name="UniqueColor" Margin="10, 5, 0, 5">Use Unique Color</CheckBox>
+        </Grid>
+        <Grid Grid.Row="3">
+            <TextBlock Grid.Column="0" Name="BackgroundColor" HorizontalAlignment="Center">Color</TextBlock>
         </Grid>
     </Grid>
 </my:VPanelDlg>

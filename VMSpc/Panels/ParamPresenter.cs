@@ -17,6 +17,7 @@ namespace VMSpc.Panels
         public bool showUnit;
         public bool showName;
         public bool showAbbreviation;
+        public bool showGraph;
         public int textPosition;
         protected VParameter parameter;
         public double lastValue;
@@ -32,12 +33,17 @@ namespace VMSpc.Panels
             showValue = panelSettings.showValue;
             showAbbreviation = panelSettings.showAbbreviation;
             textPosition = panelSettings.TextPosition;
+            showGraph = panelSettings.showGraph;
         }
 
         /// <summary> Returns a stringified version of the current value, which conditionally renders the value text (if showValue is true) + the unit text (if showUnit is true) </summary>
         public string ValueAsString => (
-            ((showValue) ? String.Format(parameter.Format, currentValue) : "") +
-            ((showUnit) ? ((!UseMetric) ? parameter.Unit : parameter.MetricUnit) : "")
+            (currentValue == DUB_NODATA && showValue)
+            ? "No Data" 
+            : (
+                ((showValue) ? String.Format(parameter.Format, currentValue) : "") +
+                ((showUnit) ? ((!UseMetric) ? parameter.Unit : parameter.MetricUnit) : "")
+              )
         );
 
         public string Title => (showAbbreviation) ? parameter.Abbreviation : parameter.ParamName;
@@ -69,15 +75,5 @@ namespace VMSpc.Panels
         public double YellowMaxAsPercent => ValueToPercent(parameter.HighRed, parameter.GaugeMin, parameter.GaugeMax);
         public double RedMaxAsPercent    => ValueToPercent(parameter.GaugeMax, parameter.GaugeMin, parameter.GaugeMax);
         
-    }
-
-    public class MultiBarPresenter : ParamPresenter
-    {
-        public bool showGraph;
-        public MultiBarPresenter(ushort pid, MultiBarSettings panelSettings)
-            :base(pid, panelSettings)
-        {
-            showGraph = panelSettings.showGraph;
-        }
     }
 }

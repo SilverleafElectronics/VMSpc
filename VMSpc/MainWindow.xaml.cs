@@ -35,10 +35,12 @@ namespace VMSpc
     {
         public VMSComm commreader;
         //PanelGrid panelGrid;
+        public bool forceClose;
 
         //constructor
         public MainWindow()
         {
+            forceClose = false;
             InitializeComponent();
             ParamData.Load();
             PIDManager.InitializePIDs();
@@ -72,8 +74,15 @@ namespace VMSpc
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            SaveConfig();
+            if (!forceClose)
+                SaveConfig();
             base.OnClosing(e);
+        }
+
+        public void ForceClose()
+        {
+            forceClose = true;
+            Close();
         }
 
         private void CloseCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -96,12 +105,39 @@ namespace VMSpc
         {
             SimpleGaugeSettings panelSettings = new SimpleGaugeSettings(0);
             SimpleGaugeDlg dlgWindow = new SimpleGaugeDlg(panelSettings);
+            InitiateNewGaugeDlg(dlgWindow, panelSettings);
+        }
+
+        private void NewScanGaugeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void NewScanGaugeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            ScanGaugeSettings panelSettings = new ScanGaugeSettings(0);
+            ScanGaugeDlg dlgWindow = new ScanGaugeDlg(panelSettings);
+            InitiateNewGaugeDlg(dlgWindow, panelSettings);
+        }
+
+        private void NewMultiBarCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void NewMultiBarCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            MultiBarSettings panelSettings = new MultiBarSettings(0);
+            MultiBarDlg dlgWindow = new MultiBarDlg(panelSettings);
+            InitiateNewGaugeDlg(dlgWindow, panelSettings);
+        }
+
+        private void InitiateNewGaugeDlg(VPanelDlg dlgWindow, PanelSettings panelSettings)
+        {
             dlgWindow.Owner = this;
-            bool? result = dlgWindow.ShowDialog(null);
-            if (result == true)
-            {
+            bool result = (bool)dlgWindow.ShowDialog(null);
+            if (result)
                 ContentGrid.CreateNewPanel(panelSettings);
-            }
         }
 
         private void CommSettingsCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -137,15 +173,23 @@ namespace VMSpc
             rawlogdlg.ShowDialog();
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (e.Key == Key.Delete)
+                ContentGrid.DeletePanel();
+        }
+
+
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
             ContentGrid.ProcessMouseMove(this, e);
         }
-
-        #endregion //EVENT HANDLERS
     }
 
+    #endregion //Event Handlers
 
     #region Custom Event Handlers
     public static class MainCommands
@@ -153,6 +197,18 @@ namespace VMSpc
         public static readonly RoutedUICommand NewSimpleGauge = new RoutedUICommand(
             "New Simple Gauge",
             "NewSimpleGauge",
+            typeof(MainCommands)
+        );
+
+        public static readonly RoutedUICommand NewScanGauge = new RoutedUICommand(
+            "New Scan Gauge",
+            "NewScanGauge",
+            typeof(MainCommands)
+        );
+
+        public static readonly RoutedUICommand NewMultiBar = new RoutedUICommand(
+            "New Multi Bar",
+            "NewMultiBar",
             typeof(MainCommands)
         );
 

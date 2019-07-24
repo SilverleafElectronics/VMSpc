@@ -38,6 +38,11 @@ namespace VMSpc.DlgWindows
             ApplyBindings();
         }
 
+        protected override void Init(PanelSettings panelSettings)
+        {
+            panelSettings = (RoundGaugeSettings)base.panelSettings;
+        }
+
         protected override void ApplyDefaults()
         {
             panelSettings.rectCord.topLeftX = 0;

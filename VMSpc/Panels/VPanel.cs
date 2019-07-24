@@ -46,6 +46,8 @@ namespace VMSpc.Panels
 
         public bool isMoving, isResizing;
 
+        public int number;
+
         private VMSDialog dlgWindow;
 
         private Timer panelTimer;
@@ -54,6 +56,7 @@ namespace VMSpc.Panels
         {
             this.mainWindow = mainWindow;
             this.panelSettings = panelSettings;
+            number = panelSettings.number;
             BorderThickness = 5;
             isMoving = false;
             isResizing = false;
@@ -127,6 +130,16 @@ namespace VMSpc.Panels
                     scrnManager.SaveConfiguration();
                 }
             }
+        }
+
+        public void Highlight()
+        {
+            border.BorderBrush = Brushes.DarkGray;
+        }
+
+        public void UnHighlight()
+        {
+            border.BorderBrush = Brushes.Black;
         }
 
         public void OnMouseOverBorder(object sender, MouseEventArgs e)
