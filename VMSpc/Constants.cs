@@ -131,14 +131,15 @@ namespace VMSpc
         public const int HORIZONTAL = 0;
         public const int VERTICAL = 1;
 
-        public const int RESIZE_TOP = 0;
-        public const int RESIZE_TOPRIGHT = 1;
-        public const int RESIZE_RIGHT = 2;
-        public const int RESIZE_BOTTOMRIGHT = 3;
-        public const int RESIZE_BOTTOM = 4;
-        public const int RESIZE_BOTTOMLEFT = 5;
-        public const int RESIZE_LEFT = 6;
-        public const int RESIZE_TOPLEFT = 7;
+        public const int RESIZE_TOP = 0x0001;
+        public const int RESIZE_BOTTOM = 0x0010;
+        public const int RESIZE_RIGHT = 0x0100;
+        public const int RESIZE_LEFT = 0x1000;
+        public const int RESIZE_TOPLEFT = RESIZE_TOP + RESIZE_LEFT;
+        public const int RESIZE_TOPRIGHT = RESIZE_TOP + RESIZE_RIGHT;
+        public const int RESIZE_BOTTOMLEFT = RESIZE_BOTTOM + RESIZE_LEFT;
+        public const int RESIZE_BOTTOMRIGHT = RESIZE_BOTTOM + RESIZE_RIGHT;
+
         public const int RESIZE_NONE = -1;
 
         public const int MOVEMENT_RESIZE = 1;

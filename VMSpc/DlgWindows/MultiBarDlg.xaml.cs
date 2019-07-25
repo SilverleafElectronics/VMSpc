@@ -41,19 +41,12 @@ namespace VMSpc.DlgWindows
 
         protected override void Init(PanelSettings panelSettings)
         {
-            panelSettings = (MultiBarSettings)base.panelSettings;
+            this.panelSettings = (MultiBarSettings)base.panelSettings;
         }
 
         protected override void ApplyDefaults()
         {
             base.ApplyDefaults();
-            panelSettings.rectCord.topLeftX = 0;
-            panelSettings.rectCord.topLeftY = 0;
-            panelSettings.rectCord.bottomRightX = 300;
-            panelSettings.rectCord.bottomRightY = 300;
-            panelSettings.showInMetric = false;
-            panelSettings.TextPosition = 0;
-            panelSettings.Use_Static_Color = 0;
             panelSettings.showName = true;
             panelSettings.showUnit = true;
             panelSettings.showValue = true;
@@ -83,8 +76,8 @@ namespace VMSpc.DlgWindows
             {
                 VMSListBoxItem item = new VMSListBoxItem() { Content = param.Value.ParamName, ID = param.Value.Pid };
                 GaugeTypes.Items.Add(item);
-                //if (item.ID == ((SimpleGaugeSettings)panelSettings.PID)
-                //    GaugeTypes.SelectedItem = item;
+                if (panelSettings.PIDList.Contains(item.ID))
+                    item.IsSelected = true;
             }
         }
 
@@ -92,8 +85,10 @@ namespace VMSpc.DlgWindows
         {
             foreach (RadioButton button in RadioAlignment.Children)
                 if (button.IsChecked == true) panelSettings.TextPosition = Convert.ToInt16(button.Tag);
-            VMSConsole.PrintLine("" + ((RadioButton)RadioAlignment.Children[0]).IsChecked);
-            //panelSettings.PID = ((VMSListBoxItem)GaugeTypes.SelectedItem).ID;
+            panelSettings.PIDList.Clear();
+            foreach (VMSListBoxItem item in GaugeTypes.SelectedItems)
+                panelSettings.PIDList.Add(item.ID);
+            panelSettings.numPids = panelSettings.PIDList.Count();
             panelSettings.showAbbreviation = (bool)UseAbbr.IsChecked;
             panelSettings.showGraph = (bool)ShowGraph.IsChecked;
             panelSettings.showName = (bool)ShowGaugeName.IsChecked;

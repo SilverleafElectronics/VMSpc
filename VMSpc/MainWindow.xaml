@@ -19,6 +19,7 @@
                 <CommandBinding Command="self:MainCommands.CommSettings" CanExecute="CommSettingsCommand_CanExecute" Executed="CommSettingsCommand_Executed" />
                 <CommandBinding Command="self:MainCommands.About" CanExecute="NewSimpleGaugeCommand_CanExecute" Executed="AboutCommand_Executed" />
                 <CommandBinding Command="self:MainCommands.RawLog" CanExecute="RawLogCommand_CanExecute" Executed="RawLogCommand_Executed" />
+                <CommandBinding Command="self:MainCommands.DeleteGauge" CanExecute="DeleteGaugeCommand_CanExecute" Executed="DeleteGaugeCommand_Executed" />
             </DockPanel.CommandBindings>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
@@ -33,6 +34,7 @@
                     <MenuItem Command="self:MainCommands.NewSimpleGauge" />
                     <MenuItem Command="self:MainCommands.NewScanGauge" />
                     <MenuItem Command="self:MainCommands.NewMultiBar" />
+                    <MenuItem Command="self:MainCommands.DeleteGauge" />
                     <!--<MenuItem Command="self:MainCommands.DeleteGauge" />-->
                 </MenuItem>
                 <MenuItem Header="_Advanced">

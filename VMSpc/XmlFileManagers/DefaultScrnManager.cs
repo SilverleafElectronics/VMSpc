@@ -49,7 +49,10 @@ namespace VMSpc.XmlFileManagers
 
         public void AddNewPanel(PanelSettings panelSettings)
         {
-            panelSettings.number = (ushort)(configurationPanelList.Last().number + 1);
+            if (configurationPanelList.Count == 0)
+                panelSettings.number = 1;
+            else
+                panelSettings.number = (ushort)(configurationPanelList.Last().number + 1);
             configurationPanelList.Add(panelSettings);
             SetPanelCount(GetPanelCount() + 1);
             XmlNode panelNode = panelSettings.GenerateNodeAsXml(this);
@@ -58,12 +61,13 @@ namespace VMSpc.XmlFileManagers
 
         public void DeletePanel(int panelNumber)
         {
+            XmlNode screenElements = getNodeByTagName("Screen-Elements");
+            screenElements.RemoveChild(getNodeByTagAndAttr("Panel", "Number", panelNumber.ToString()));
+            for (int i = panelNumber + 1; i <= GetPanelCount(); i++)
+                ChangeAttribute(getNodeByTagAndAttr("Panel", "Number", i.ToString()), "Number", (i - 1).ToString());
             SetPanelCount(GetPanelCount() - 1);
-            xmlDoc.RemoveChild(getNodeByTagAndAttr("Panel", "Number", panelNumber.ToString()));
-            for (ushort i = (ushort)(panelNumber); i < GetPanelCount(); i++)
-            {
-                configurationPanelList[i] = configurationPanelList[i + 1];
-            }
+            configurationPanelList = null;
+            LoadPanels();
             SaveConfiguration();
         }
 

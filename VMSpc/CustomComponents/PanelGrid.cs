@@ -138,9 +138,8 @@ namespace VMSpc.CustomComponents
 
         #region overrides
 
-        protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
+        public void ProcessMouseRelease()
         {
-            base.OnMouseLeftButtonUp(e);
             Init();
             SavePanels();
             if (selectedChild != null)
@@ -176,7 +175,10 @@ namespace VMSpc.CustomComponents
         private bool SetSelectedChild(dynamic src)
         {
             if (NOT_NULL(highlightedChild))
+            {
                 highlightedChild.UnHighlight();
+                highlightedChild = null;
+            }
             selectedChild = null;
             foreach (VPanel panel in PanelList)
             {

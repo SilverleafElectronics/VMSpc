@@ -9,6 +9,7 @@ using static VMSpc.Constants;
 using static VMSpc.Parsers.ChassisParameter;
 using static VMSpc.Parsers.PresenterWrapper;
 using static VMSpc.Parsers.PIDWrapper;
+using static VMSpc.Parsers.SPNDefinitions;
 
 /// <summary>
 /// Update Notes:
@@ -43,6 +44,7 @@ namespace VMSpc.Parsers
         protected virtual void ConvertAndStore()
         {
             seen = true;
+            ProcessDataReceivedEvent(spn);
         }
 
         #region Update Methods
@@ -484,13 +486,13 @@ namespace VMSpc.Parsers
         }
     }
 
-    public class TSPNPeakTracker : TSPNAutoRunner
+    public class TSPNPeakRecorder : TSPNAutoRunner
     {
-        protected double[] acceleration;
+        public static double[] acceleration;
         protected int index;
         protected Func<double[], double> compare;
 
-        public TSPNPeakTracker(ushort spn, int interval, Func<double[], double> compareMethod)
+        public TSPNPeakRecorder(ushort spn, int interval, Func<double[], double> compareMethod)
             :base(spn, interval)
         {
             acceleration = new double[10];
@@ -511,6 +513,46 @@ namespace VMSpc.Parsers
             }
         }
     }
+
+    public class TSPNMaxTracker : TSPNDatum
+    {
+        private TSPNDatum trackedSPN;
+        private double maxValue;
+        private TimeValuePair[] valueArray;
+        ulong timeSpan;
+        ushort bufferSize, left, right;
+
+        protected struct TimeValuePair
+        {
+            public ulong time;
+            public double valueMetric;
+            public double value;
+            public TimeValuePair(ulong time, double valueMetric, double value) { this.time = time; this.valueMetric = valueMetric; this.value = value; }
+        }
+
+        public TSPNMaxTracker(ushort spn, TSPNDatum trackedSPN, ushort bufferSize, ulong timeSpan, double max = 999999.9)
+            :base(spn)
+        {
+            this.trackedSPN = trackedSPN;
+            SPNTrackers.Add(trackedSPN.spn, this);
+            maxValue = max;
+            valueArray = new TimeValuePair[bufferSize];
+            valueArray[0] = new TimeValuePair(0, Double.MinValue, Double.MinValue);
+            this.timeSpan = timeSpan;
+            this.bufferSize = bufferSize;
+            left = right = 0;
+        }
+
+        public void Record()
+        {
+            uint rawValue = trackedSPN.rawValue;
+            if (trackedSPN.value > maxValue)
+                return;
+            
+        }
+    }
+
+
 
     #endregion //TSPNAutoRunner
 

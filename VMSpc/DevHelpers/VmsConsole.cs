@@ -1,5 +1,4 @@
-﻿//#define DEBUG_CONSOLE //comment out for release builds   
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using static VMSpc.Constants;
@@ -7,38 +6,24 @@ using static VMSpc.Constants;
 
 namespace VMSpc.DevHelpers
 {
-#if (DEBUG_CONSOLE)
+#if (DEBUG)
     static class VMSConsole
     {
-        private static ScrollViewer ConsoleScroller;
-        private static StackPanel Console;
-        private static Canvas Wrapper;
+        private static DebugConsole console;
+
         static VMSConsole()
         {
             
         }
-        public static void AddConsoleToWindow(Canvas wrapper)
+
+        public static void InitializeConsoleHelpers(DebugConsole console)
         {
-            Wrapper = wrapper;
-            ConsoleScroller = new ScrollViewer();
-            ConsoleScroller.Background = Brushes.Black;
-            ConsoleScroller.Width = 600.0;
-            ConsoleScroller.Height = 200.0;
-            ConsoleScroller.VerticalAlignment = VerticalAlignment.Bottom;
-            ConsoleScroller.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
-            Console = new StackPanel();
-            Console.Background = Brushes.Black;
-            ConsoleScroller.Content = Console;
-            Wrapper.Children.Add(ConsoleScroller);
-            Canvas.SetTop(ConsoleScroller, Canvas.GetTop(wrapper) - 50);
+            VMSConsole.console = console;
         }
+
         public static void PrintLine(string logItem)
         {
-            TextBlock line = new TextBlock();
-            line.Text = logItem;
-            line.Foreground = Brushes.White;
-            Console.Children.Add(line);
-            ConsoleScroller.ScrollToBottom();
+            console.AddLine(logItem);
         }
         public static void PrintSide(double side)
         {
@@ -68,6 +53,7 @@ namespace VMSpc.DevHelpers
     static class VMSConsole
     {
         static VMSConsole(){ }
+        public static void InitializeConsoleHelpers(DebugConsole console) { }
         public static void AddConsoleToWindow(Canvas wrapper){}
         public static void PrintLine(string logItem) { }
         public static void PrintSide(double side) { }

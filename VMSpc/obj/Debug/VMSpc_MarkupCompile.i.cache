@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\App.xaml
-91203910837
+10-1761554342
 
-61235038549
+621898087219
 131569487696
-DlgWindows\AboutDlg.xaml;DlgWindows\CommDlg.xaml;DlgWindows\MultiBarDlg.xaml;DlgWindows\OdometerDlg.xaml;DlgWindows\RawLogDlg.xaml;DlgWindows\RoundGaugeDlg.xaml;DlgWindows\ScanGaugeDlg.xaml;DlgWindows\SimpleGaugeDlg.xaml;MainWindow.xaml;
+DevHelpers\DebugConsole.xaml;DlgWindows\AboutDlg.xaml;DlgWindows\CommDlg.xaml;DlgWindows\MultiBarDlg.xaml;DlgWindows\OdometerDlg.xaml;DlgWindows\RawLogDlg.xaml;DlgWindows\RoundGaugeDlg.xaml;DlgWindows\ScanGaugeDlg.xaml;DlgWindows\SimpleGaugeDlg.xaml;MainWindow.xaml;
 
-True
+False
 

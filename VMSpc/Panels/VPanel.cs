@@ -114,6 +114,7 @@ namespace VMSpc.Panels
             border.MouseLeave += OnMouseLeaveBorder;
             canvas.MouseEnter += OnMouseLeaveBorder;
             canvas.MouseLeave += OnMouseOverBorder;
+            canvas.MouseMove += OnMouseLeaveBorder;
             canvas.MouseRightButtonDown += Canvas_MouseRightButtonDown;
         }
 
@@ -150,45 +151,23 @@ namespace VMSpc.Panels
 
         private void DetermineCursor(Point pos)
         {
-            if (pos.X <= (Canvas.GetLeft(border) + 10) && pos.Y <= (Canvas.GetTop(border) + 10))
+            resizeType = 0;
+            if (pos.X <= Canvas.GetLeft(border) + 20)
+                resizeType |= RESIZE_LEFT;
+            if (pos.X >= Canvas.GetRight(border) - 20)
+                resizeType |= RESIZE_RIGHT;
+            if (pos.Y <= Canvas.GetTop(border) + 20)
+                resizeType |= RESIZE_TOP;
+            if (pos.Y >= Canvas.GetBottom(border) - 20)
+                resizeType |= RESIZE_BOTTOM;
+
+            switch (resizeType)
             {
-                Mouse.OverrideCursor = Cursors.SizeNWSE;
-                resizeType = RESIZE_TOPLEFT;
-            }
-            else if (pos.X >= (Canvas.GetRight(border) - 10) && pos.Y >= (Canvas.GetBottom(border) - 10))
-            {
-                Mouse.OverrideCursor = Cursors.SizeNWSE;
-                resizeType = RESIZE_BOTTOMRIGHT;
-            }
-            else if (pos.X <= (Canvas.GetLeft(border) + 10) && pos.Y >= (Canvas.GetBottom(border) - 10))
-            {
-                Mouse.OverrideCursor = Cursors.SizeNESW;
-                resizeType = RESIZE_BOTTOMLEFT;
-            }
-            else if (pos.X >= (Canvas.GetRight(border) - 10) && pos.Y <= (Canvas.GetTop(border) + 10))
-            {
-                Mouse.OverrideCursor = Cursors.SizeNESW;
-                resizeType = RESIZE_TOPRIGHT;
-            }
-            else if (pos.X <= Canvas.GetLeft(border) + 10)
-            {
-                Mouse.OverrideCursor = Cursors.SizeWE;
-                resizeType = RESIZE_LEFT;
-            }
-            else if (pos.X >= Canvas.GetRight(border) - 10)
-            {
-                Mouse.OverrideCursor = Cursors.SizeWE;
-                resizeType = RESIZE_RIGHT;
-            }
-            else if (pos.Y <= Canvas.GetTop(border) + 10)
-            {
-                Mouse.OverrideCursor = Cursors.SizeNS;
-                resizeType = RESIZE_TOP;
-            }
-            else if (pos.Y >= Canvas.GetBottom(border) - 10)
-            {
-                Mouse.OverrideCursor = Cursors.SizeNS;
-                resizeType = RESIZE_BOTTOM;
+                case RESIZE_LEFT: case RESIZE_RIGHT: Mouse.OverrideCursor = Cursors.SizeWE; break;
+                case RESIZE_TOP: case RESIZE_BOTTOM: Mouse.OverrideCursor = Cursors.SizeNS; break;
+                case RESIZE_TOPLEFT: case RESIZE_BOTTOMRIGHT: Mouse.OverrideCursor = Cursors.SizeNWSE; break;
+                case RESIZE_BOTTOMLEFT: case RESIZE_TOPRIGHT: Mouse.OverrideCursor = Cursors.SizeNESW; break;
+                default: Mouse.OverrideCursor = Cursors.Arrow;  break;
             }
         }
 

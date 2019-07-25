@@ -158,6 +158,11 @@ namespace VMSpc.XmlFileManagers
             node.Attributes.SetNamedItem(attr);
         }
 
+        public void ChangeAttribute(XmlNode node, string attrName, string attrValue)
+        {
+            node.Attributes[attrName].InnerText = attrValue;
+        }
+
         public virtual void SaveConfiguration()
         {
             foreach (XmlNode node in xmlDoc)

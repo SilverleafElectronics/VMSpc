@@ -136,6 +136,28 @@ namespace VMSpc.XmlFileManagers
             }
         }
 
+        protected void RemoveAll(XmlNode node, string childName)
+        {
+            XmlNodeList nodeList = node.SelectNodes("Param");
+            foreach (XmlNode childNode in nodeList)
+                node.RemoveChild(childNode);
+        }
+
+        protected void SafeSaveWithAttribute(XmlNode node, string nodeName, string attrName, string attrVal)
+        {
+            XmlNodeList childNodes = node.SelectNodes(nodeName);
+        }
+
+        protected void AddNodeWithAttribute(XmlNode parent, string childNodeName, string attrName, string attrVal)
+        {
+            XmlDocument doc = parent.OwnerDocument;
+            XmlElement element = doc.CreateElement(childNodeName);
+            XmlNode attribute = doc.CreateNode(XmlNodeType.Attribute, attrName, "");
+            attribute.InnerText = attrVal;
+            element.Attributes.SetNamedItem(attribute);
+            parent.AppendChild(element);
+        }
+
         public virtual void SaveSettings(XmlNode panelNode)
         {
             SafeSave(panelNode, "ID", ID.ToString());
@@ -479,6 +501,16 @@ namespace VMSpc.XmlFileManagers
                 default:
                     base.StoreSettings(nodeName, val, panelNode);
                     break;
+            }
+        }
+
+        public override void SaveSettings(XmlNode panelNode)
+        {
+            base.SaveSettings(panelNode);
+            RemoveAll(panelNode, "Param");
+            foreach (var parameter in PIDList)
+            {
+                AddNodeWithAttribute(panelNode, "Param", "PID", parameter.ToString());
             }
         }
     }

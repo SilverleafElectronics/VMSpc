@@ -1,5 +1,4 @@
-﻿//#define DEBUG_CONSOLE
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,18 +36,40 @@ namespace VMSpc
         //PanelGrid panelGrid;
         public bool forceClose;
 
+        private Dictionary<Key, Action> KeyboardShortcuts;
+
         //constructor
         public MainWindow()
         {
             forceClose = false;
             InitializeComponent();
+#if DEBUG
+            Window debugConsole = new DebugConsole();
+            debugConsole.Show();
+#endif
+            for (int i = 0; i < 300; i++)
+                VMSConsole.PrintLine(i.ToString());
             ParamData.Load();
             PIDManager.InitializePIDs();
             PresenterWrapper.InitializePresenterList();
             GeneratePanels();
             Application.Current.MainWindow = this;
             InitializeComm();
-            //Application.Current.MainWindow
+
+            BindKeyboardShortcuts();
+        }
+
+        public void OnMouseRelease(object sender, RoutedEventArgs e)
+        {
+            ContentGrid.ProcessMouseRelease();
+        }
+
+        private void BindKeyboardShortcuts()
+        {
+            KeyboardShortcuts = new Dictionary<Key, Action>
+            {
+                { Key.Delete, ProcessDeleteGauge }
+            };
         }
 
         private void InitializeComm()
@@ -60,7 +81,6 @@ namespace VMSpc
 
         private void GeneratePanels()
         {
-            VMSConsole.AddConsoleToWindow(ContentGrid);
             ContentGrid.InitPanels(this);
         }
 
@@ -173,19 +193,32 @@ namespace VMSpc
             rawlogdlg.ShowDialog();
         }
 
-        protected override void OnKeyDown(KeyEventArgs e)
+        private void DeleteGaugeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            base.OnKeyDown(e);
-            if (e.Key == Key.Delete)
-                ContentGrid.DeletePanel();
+            e.CanExecute = true;
         }
 
+        private void DeleteGaugeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            ProcessDeleteGauge();
+        }
 
+        private void ProcessDeleteGauge()
+        {
+            ContentGrid.DeletePanel();
+        }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
             ContentGrid.ProcessMouseMove(this, e);
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (KeyboardShortcuts.ContainsKey(e.Key))
+                KeyboardShortcuts[e.Key]();
         }
     }
 
@@ -194,6 +227,7 @@ namespace VMSpc
     #region Custom Event Handlers
     public static class MainCommands
     {
+
         public static readonly RoutedUICommand NewSimpleGauge = new RoutedUICommand(
             "New Simple Gauge",
             "NewSimpleGauge",
@@ -227,6 +261,12 @@ namespace VMSpc
         public static readonly RoutedUICommand RawLog = new RoutedUICommand(
             "Raw Log",
             "RawLog",
+            typeof(MainCommands)
+        );
+
+        public static readonly RoutedUICommand DeleteGauge = new RoutedUICommand(
+            "Delete Selected Gauge",
+            "DeleteGauge",
             typeof(MainCommands)
         );
     }

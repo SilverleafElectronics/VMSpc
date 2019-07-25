@@ -59,6 +59,7 @@ namespace VMSpc.Panels
 
         public override void UpdatePanel()
         {
+            if (barGaugeList.Count < 1) return;
             barGaugeList[currentVisibilityIndex].Update();
         }
 
@@ -74,6 +75,7 @@ namespace VMSpc.Panels
 
         private void UnhideCurrentIndex()
         {
+            if (barGaugeList.Count < 1) return;
             barGaugeList[currentVisibilityIndex].Visibility = Visibility.Visible;
         }
 

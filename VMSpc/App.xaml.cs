@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace VMSpc
 {
@@ -35,6 +36,14 @@ namespace VMSpc
             
             ShowSplashScreen();
             VMSpcStart();
+            AddGlobalEventHandlers();
+        }
+
+        private void AddGlobalEventHandlers()
+        {
+            EventManager.RegisterClassHandler(typeof(Window), Window.MouseLeftButtonUpEvent, new RoutedEventHandler(wnd.OnMouseRelease));
+            EventManager.RegisterClassHandler(typeof(UIElement), UIElement.MouseLeftButtonUpEvent, new RoutedEventHandler(wnd.OnMouseRelease));
+            EventManager.RegisterClassHandler(typeof(Control), Control.MouseLeftButtonUpEvent, new RoutedEventHandler(wnd.OnMouseRelease));
         }
 
         private void Initialize()
@@ -68,8 +77,8 @@ namespace VMSpc
 
         private string ExceptionInstructions =>
             (
-                "It is unlikely that this issue has caused any permanent damage to your VMSpc configuration. However, if it has, if you keep seeing this message, or if you just want to report the issue, we would like to help. For debugging support, please do one of the following:\n" +
-                "1. Press the 'Copy' button below, paste it into an email, and send the email with the subject \"VMSpc Unhandled Exceptions\" to support@simply-smarter.com\n" +
+                "For debugging support, please do one of the following:\n" +
+                "1. Press the 'Yes' button below. This will put the contents of the error into your clipboard. You can paste the text into an email, and send the email with the subject \"VMSpc Unhandled Exceptions\" to support@simply-smarter.com\n" +
                 "2. Take a screenshot of this screen, and either email us the image or call our support team\n" +
                 "3. Leave this window open and call our support team for more instructions"
             );

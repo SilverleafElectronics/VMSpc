@@ -43,7 +43,7 @@ namespace VMSpc.DlgWindows
 
         protected override void Init(PanelSettings panelSettings)
         {
-            panelSettings = (ScanGaugeSettings)base.panelSettings;
+            this.panelSettings = (ScanGaugeSettings)base.panelSettings;
         }
 
         protected override void ApplyDefaults()
@@ -89,7 +89,6 @@ namespace VMSpc.DlgWindows
         {
             foreach (RadioButton button in RadioAlignment.Children)
                 if (button.IsChecked == true) panelSettings.TextPosition = Convert.ToInt16(button.Tag);
-            VMSConsole.PrintLine("" + ((RadioButton)RadioAlignment.Children[0]).IsChecked);
             panelSettings.PIDList.Clear();
             foreach (VMSListBoxItem item in GaugeTypes.SelectedItems)
                 panelSettings.PIDList.Add(item.ID);

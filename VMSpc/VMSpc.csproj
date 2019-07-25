@@ -63,6 +63,9 @@
     <Compile Include="CustomComponents\VMSBorder.cs" />
     <Compile Include="CustomComponents\VMSListBoxItem.cs" />
     <Compile Include="CustomComponents\RadialBar.cs" />
+    <Compile Include="DevHelpers\DebugConsole.xaml.cs">
+      <DependentUpon>DebugConsole.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DevHelpers\VmsConsole.cs" />
     <Compile Include="DlgWindows\AboutDlg.xaml.cs">
       <DependentUpon>AboutDlg.xaml</DependentUpon>
@@ -132,6 +135,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Configuration.Designer.cs</LastGenOutput>
     </None>
+    <Page Include="DevHelpers\DebugConsole.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DlgWindows\AboutDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
