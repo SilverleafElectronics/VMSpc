@@ -47,6 +47,16 @@ namespace VMSpc.Parsers
             ProcessDataReceivedEvent(spn);
         }
 
+        /// <summary> Method allowing the datum's value to be set externally </summary>
+        public void SetValue(uint raw, double val, double valMetric)
+        {
+            rawValue = raw;
+            value = val;
+            valueMetric = valMetric;
+            seen = true;
+            ProcessDataReceivedEvent(spn);
+        }
+
         #region Update Methods
 
         /// <summary>
@@ -446,7 +456,7 @@ namespace VMSpc.Parsers
     #endregion //TSPNInferred
 
     //These spns calculate automatically on a specified timer
-    #region TSPNAutoRunner
+    #region TSPNAutoRunners
 
     public abstract class TSPNAutoRunner : TSPNDatum
     {
@@ -514,13 +524,18 @@ namespace VMSpc.Parsers
         }
     }
 
+    #endregion //TSPNAutoRunners
+
+    #region TSPNMaxTracker
+
     public class TSPNMaxTracker : TSPNDatum
     {
         private TSPNDatum trackedSPN;
         private double maxValue;
         private TimeValuePair[] valueArray;
-        ulong timeSpan;
-        ushort bufferSize, left, right;
+        private ulong timeSpan;
+        private int bufferSize, left, right;
+        uint counter;
 
         protected struct TimeValuePair
         {
@@ -545,16 +560,48 @@ namespace VMSpc.Parsers
 
         public void Record()
         {
-            uint rawValue = trackedSPN.rawValue;
-            if (trackedSPN.value > maxValue)
+            counter++;
+            TimeValuePair recordStruct = new TimeValuePair(counter, trackedSPN.valueMetric, trackedSPN.value);
+
+            if (recordStruct.value > maxValue)
                 return;
-            
+
+            if (recordStruct.value >= valueArray[right].value)
+            {
+                valueArray[left] = recordStruct;
+                right = left;
+                value = valueArray[right].value;
+                valueMetric = valueArray[right].valueMetric;
+                ConvertAndStore();
+                return;
+            }
+
+            bool roomForMore = valueArray[left].value < recordStruct.value;
+
+            while (valueArray[left].value < recordStruct.value)
+                SafeIndexAdd(ref left, 1, bufferSize);
+
+            SafeIndexAdd(ref left, -1, bufferSize);
+
+            if (left != right)
+                roomForMore = true;
+
+            if (roomForMore)
+                valueArray[left] = recordStruct;
+            else
+            {
+                SafeIndexAdd(ref left, 1, bufferSize);
+                if (valueArray[left].time < (counter - timeSpan))
+                    valueArray[left] = recordStruct;
+            }
+
+            if (counter > timeSpan)
+                while (valueArray[right].time < (counter - timeSpan))
+                    SafeIndexAdd(ref right, -1, bufferSize);
         }
     }
 
-
-
-    #endregion //TSPNAutoRunner
+    #endregion //TSPNMaxTracker
 
     //TODO
     #region TSPNDiag (diagnostics)

@@ -150,22 +150,22 @@ namespace VMSpc.Parsers
         public static TSPNInferred spn_hours = new TSPNInferred(247, 0, 0.05f, 0.0f, 0.05f, 0.0f, 50000);
         public static TSPNInferred spn_fuel = new TSPNInferred(250, 4, 0.132086f, 0.0f, 0.5f, 0.0f, 250000);
 
-        public static TSPNMaxTracker spn_MaxCoolant = new TSPNMaxTracker(503, spn_coolantTemp, 1000, 12000, 999.9);
-        public static TSPNMaxTracker spn_MaxTransmission = new TSPNMaxTracker(504, spn_transTemp, 1000, 12000, 999.9);
-        public static TSPNMaxTracker spn_MaxOil = new TSPNMaxTracker(505, spn_oilTemp, 1000, 12000, 999.9);
-        public static TSPNMaxTracker spn_MaxManifoldTemp = new TSPNMaxTracker(506, spn_intakeManifoldTemp, 1000, 12000, 999.9);
-        public static TSPNMaxTracker spn_MaxRPMs = new TSPNMaxTracker(507, spn_rpms, 1000, 12000, 9999.9);
-        public static TSPNMaxTracker spn_MaxSpeed = new TSPNMaxTracker(508, spn_roadSpeed, 1000, 12000, 199.9);
+
+        /// <summary> Dictionary that maps all SPNs to correlating MaxTrackers. </summary>
+        public static Dictionary<ushort, TSPNMaxTracker> SPNTrackers = new Dictionary<ushort, TSPNMaxTracker>();
+
+        public static TSPNMaxTracker spn_MaxCoolant = new TSPNMaxTracker(503, spn_coolantTemp, 2000, 12000, 999.9);
+        public static TSPNMaxTracker spn_MaxTransmission = new TSPNMaxTracker(504, spn_transTemp, 2000, 12000, 999.9);
+        public static TSPNMaxTracker spn_MaxOil = new TSPNMaxTracker(505, spn_oilTemp, 2000, 12000, 999.9);
+        public static TSPNMaxTracker spn_MaxManifoldTemp = new TSPNMaxTracker(506, spn_intakeManifoldTemp, 2000, 12000, 999.9);
+        public static TSPNMaxTracker spn_MaxRPMs = new TSPNMaxTracker(507, spn_rpms, 2000, 12000, 9999.9);
+        public static TSPNMaxTracker spn_MaxSpeed = new TSPNMaxTracker(508, spn_roadSpeed, 2000, 12000, 199.9);
 
         public static TSPNDiag spn_diagnostic1939 = new TSPNDiag(0); //TODO - implement once TSPNDiag is implemented
 
         //special parsing types
         public static TSPNRange spn_range = new TSPNRange(0);
         public static TSPNTransMode spn_transMode = new TSPNTransMode(0);
-
-        /// <summary> Dictionary that maps all SPNs to correlating MaxTrackers. </summary>
-        public static Dictionary<ushort, TSPNMaxTracker> SPNTrackers = new Dictionary<ushort, TSPNMaxTracker>();
-        public static ulong MaxTrackerTimer = 0;
 
         /// <summary> Called every time a datum is updated. This method will call the Record() function of a max tracker assigned to this SPN, if one exists </summary>
         public static void ProcessDataReceivedEvent(ushort spn)

@@ -326,6 +326,14 @@ namespace VMSpc
                 arr[i] = value;
         }
 
+        /// <summary> Shorthand for incrementing or decrementing an index for an array. Keeps the index in the bounds of the array (assuming a minimum index of 0 </summary>
+        public static void SafeIndexAdd(ref int index, int addend, int arraySize, int min = 0)
+        {
+            index += addend;
+            if (index < min) index = arraySize + index;
+            index %= arraySize;
+        }
+
         /// <summary> Counts (and returns) the number of true arguments passed. e.g., TruthCount(true, false, true) = 2 </summary>
         public static int TruthCount(params bool[] list)
         {

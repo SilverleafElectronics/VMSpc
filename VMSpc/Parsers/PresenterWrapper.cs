@@ -17,10 +17,7 @@ namespace VMSpc.Parsers
             TSPNPresenter temp = PresenterList[pid];
             if (src == J1708)
                 temp.datum.prioritize1708 = true;
-            temp.datum.rawValue = raw;
-            temp.datum.value = v_standard;
-            temp.datum.valueMetric = v_metric;
-            temp.datum.seen = true;
+            temp.datum.SetValue(raw, v_standard, v_metric);
         }
 
         static public uint GetRawValueSPN(ushort pid)
@@ -49,9 +46,8 @@ namespace VMSpc.Parsers
         }
 
         public static readonly Dictionary<ushort, TSPNPresenter> PresenterList = new Dictionary<ushort, TSPNPresenter>();
-        static PresenterWrapper()
-        {
-        }
+        static PresenterWrapper() { }
+
         public static void InitializePresenterList()
         {
             PresenterList.Add(91, new TSPNPresenterFloat(spn_accelPos, "ACCEL-POS", 91, "pct", "pct", 0, false));
@@ -119,6 +115,12 @@ namespace VMSpc.Parsers
             PresenterList.Add(121, new TSPNPresenterFloat(spn_1708_RtdrStatus, "Retarder Status", 121, "", "", 0, false));
             PresenterList.Add(119, new TSPNPresenterFloat(spn_1708_RtdrPressure, "Retarder Oil Pressure", 119, "psi", "kPa", 0, false));
             PresenterList.Add(120, new TSPNPresenterFloat(spn_1708_RtdrOilTemp, "Retarder Oil Temp", 120, "degF", "degC", 0, false));
+            PresenterList.Add(503, new TSPNPresenterFloat(spn_MaxCoolant, "", 503, "", "", 0, false));
+            PresenterList.Add(504, new TSPNPresenterFloat(spn_MaxTransmission, "", 504, "", "", 0, false));
+            PresenterList.Add(505, new TSPNPresenterFloat(spn_MaxOil, "", 505, "", "", 0, false));
+            PresenterList.Add(506, new TSPNPresenterFloat(spn_MaxManifoldTemp, "", 506, "", "", 0, false));
+            PresenterList.Add(507, new TSPNPresenterFloat(spn_MaxRPMs, "", 507, "", "", 0, false));
+            PresenterList.Add(508, new TSPNPresenterFloat(spn_MaxSpeed, "", 508, "", "", 0, false));
         }
     }
 }

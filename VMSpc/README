@@ -16,7 +16,6 @@ Solution:
             this may be resolved in VS2019
 
 
-
 ADDING CONFIGURATION ITEMS
 --------------------------
 
@@ -35,3 +34,32 @@ ADDING NEW ENGINE COMPONENTS FOR PARSING AND DISPLAY
 
 ADDING NEW GAUGE TYPES
 ----------------------
+
+
+USING STATIC CLASSES
+--------------------
+
+To preserve a lot of the conventions we use in other code-bases, VMSpc makes use of several static classes and Singletons. Since C# is a purely object oriented language, these 
+allow us to emulate "extern" objects. 
+
+Notes on static classes:
+	- When using a static class, all class members can be accessed from the class name. For instance, Constants.cs contains "static class Constants". All members of this class can be
+	  accessed from anywhere in the namespace by referencing the Constants class directly, such as Constants.J1939. You can avoid typing "Constants." in front of every member by adding
+	  the directive "using static VMSpc.Constants" above any usage of its members. Be wary of using this too much though - if you import every static class, you might run into naming conflicts.
+
+	- Using a static class directly like above should be used for anything meant to be Constant. Hence why this design is chosen for Constants.cs. However, to emulate an external object, you should
+	  instead use a singleton. See ParamDataManager.cs for a simple example implementation of a singleton (or really, any of the XmlFileManager child classes).
+
+	- When creating a static class, keep in mind that all declarations in that class are declared and assigned sequentially, as though they are being declared and instantiated inside a method. For instance,
+	  if you attempt to do the following inside of a static class:
+
+		integerArray.Add(3);
+		public static List<int> integerArray = new List<int>();
+
+	  it will throw a null reference exception. This behaves differently from what we're used to with classes, since in normal class operation, we can freely declare variables/objects inside a class in any order. In
+	  static classes, this isn't the case, since declaration and definition must occur in the same line, like so:
+
+		public static List<int> integerArray = new List<int>();
+		integerArray.Add(3);
+
+	- 

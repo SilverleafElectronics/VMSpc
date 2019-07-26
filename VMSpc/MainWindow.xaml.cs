@@ -47,8 +47,6 @@ namespace VMSpc
             Window debugConsole = new DebugConsole();
             debugConsole.Show();
 #endif
-            for (int i = 0; i < 300; i++)
-                VMSConsole.PrintLine(i.ToString());
             ParamData.Load();
             PIDManager.InitializePIDs();
             PresenterWrapper.InitializePresenterList();
