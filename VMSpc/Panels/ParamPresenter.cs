@@ -21,9 +21,13 @@ namespace VMSpc.Panels
         public int textPosition;
         protected VParameter parameter;
         public double lastValue;
-        public double currentValue => ((!UseMetric) ? parameter.LastValue : parameter.LastMetricValue);
 
-        public ParamPresenter(ushort pid, GaugeSettings panelSettings)
+        private string unit;
+        private string metricUnit;
+
+        public virtual double CurrentValue => ((!UseMetric) ? parameter.LastValue : parameter.LastMetricValue);
+
+        public ParamPresenter(ushort pid, GaugeSettings panelSettings, string alt_unit = "", string alt_mUnit = "")
         {
             parameter = ParamData.parameters[pid];
             lastValue = DUB_NODATA;
@@ -34,15 +38,17 @@ namespace VMSpc.Panels
             showAbbreviation = panelSettings.showAbbreviation;
             textPosition = panelSettings.TextPosition;
             showGraph = panelSettings.showGraph;
+            unit = (alt_unit.Length > 0) ? alt_unit : parameter.Unit;
+            metricUnit = (alt_mUnit.Length > 0) ? alt_mUnit : parameter.MetricUnit;
         }
 
         /// <summary> Returns a stringified version of the current value, which conditionally renders the value text (if showValue is true) + the unit text (if showUnit is true) </summary>
-        public string ValueAsString => (
-            (currentValue == DUB_NODATA && showValue)
+        public virtual string ValueAsString => (
+            (CurrentValue == DUB_NODATA && showValue)
             ? "No Data" 
             : (
-                ((showValue) ? String.Format(parameter.Format, currentValue) : "") +
-                ((showUnit) ? ((!UseMetric) ? parameter.Unit : parameter.MetricUnit) : "")
+                ((showValue) ? String.Format(parameter.Format, CurrentValue) : "") +
+                ((showUnit) ? ((!UseMetric) ? unit : metricUnit) : "")
               )
         );
 
@@ -51,15 +57,15 @@ namespace VMSpc.Panels
         /// <summary> Checks whether or not the currentValue is a fresh value. Note that calling this method will update lastValue, immediately rendering the data stale </summary>
         protected bool HasNewValue()
         {
-            bool retval = (currentValue != lastValue);
-            lastValue = currentValue;
+            bool retval = (CurrentValue != lastValue);
+            lastValue = CurrentValue;
             return retval;
         }
 
         /// <summary> Indicates whether or not the value should be used for updating the UI. A valid value is both fresh and sits between gaugeMin and gaugeMax </summary>
         public bool IsValidForUpdate()
         {
-            return ( HasNewValue() && (currentValue >= parameter.GaugeMin) );
+            return ( HasNewValue() && (CurrentValue >= parameter.GaugeMin) );
         }
 
         private double ValueToPercent(double value, double min, double max)
@@ -69,11 +75,23 @@ namespace VMSpc.Panels
         }
 
         /// <summary> Returns the current value as a percentage of the difference between gaugeMin and gaugeMax. Useful for visual presentation of the value in gauges </summary>
-        public double ValueAsPercent => ValueToPercent(currentValue, parameter.GaugeMin, parameter.GaugeMax);
+        public double ValueAsPercent => ValueToPercent(CurrentValue, parameter.GaugeMin, parameter.GaugeMax);
 
         public double GreenMaxAsPercent  =>  ValueToPercent(parameter.HighYellow, parameter.GaugeMin, parameter.GaugeMax);
         public double YellowMaxAsPercent => ValueToPercent(parameter.HighRed, parameter.GaugeMin, parameter.GaugeMax);
         public double RedMaxAsPercent    => ValueToPercent(parameter.GaugeMax, parameter.GaugeMin, parameter.GaugeMax);
         
+    }
+
+    public class OdometerPresenter : ParamPresenter
+    {
+        private double startValue;
+        public OdometerPresenter(ushort pid, OdometerSettings panelSettings, double startValue, string alt_unit = "", string alt_mUnit = "")
+            :base(pid, panelSettings, alt_unit, alt_mUnit)
+        {
+            this.startValue = startValue;
+        }
+
+        public override double CurrentValue => ((!UseMetric) ? parameter.LastValue : parameter.LastMetricValue);
     }
 }

@@ -50,7 +50,7 @@ namespace VMSpc.XmlFileManagers
         public XmlFileManager(string docname)
         {
             xmlDoc = new XmlDocument();
-            docName = docname;
+            docName = "./configuration/" + docname;
             if (!File.Exists(docName))
                 CreateTemplate();
             else
@@ -64,9 +64,14 @@ namespace VMSpc.XmlFileManagers
                 xmlDoc.Load(fs);
         }
 
+        /// <summary> 
+        /// Generates the template necessary for bare VMSpc operation. Child classes are responsible for 
+        /// generating their own template, and should store this template in `xmlDoc` before calling this base method
+        /// </summary>
         protected virtual void CreateTemplate()
         {
             File.Create(docName).Close();   //close right away so we can load it into the StreamReader
+            xmlDoc.Save(docName);
             Initialize();
         }
         #endregion //Construction Helpers

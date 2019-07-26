@@ -1,9 +1,0 @@
-<!--DO NOT MODIFY THE CONTENTS OF THIS FILE UNLESS YOU KNOW WHAT YOU ARE DOING!!!-->
-<Root>
-    <Version>V4.0</Version>
-    <Odometer-Data>
-        <Odometer>20019.701171875</Odometer>
-        <Hourmeter>500.25</Hourmeter>
-        <Fuelmeter>2501.125</Fuelmeter>
-    </Odometer-Data>
-</Root>
