@@ -119,6 +119,21 @@ namespace VMSpc.CustomComponents
             }
         }
 
+        /// <summary> Balances all text blocks in provided array to the same font size.This overload is safer than BalanceTextBlocks(dynamic parent) </summary>
+        public void BalanceTextBlocks(params TextBlock[] blocks)
+        {
+            double min = Double.MaxValue;
+            foreach (TextBlock block in blocks)
+            {
+                if (block.FontSize < min)
+                    min = block.FontSize;
+            }
+            foreach (TextBlock block in blocks)
+            {
+                block.FontSize = min;
+            }
+        }
+
         /// <summary> Balances all text blocks in provided List to the same font size.This overload is safer than BalanceTextBlocks(dynamic parent) </summary>
         public void BalanceTextBlocks(List<TextBlock> blocks)
         {

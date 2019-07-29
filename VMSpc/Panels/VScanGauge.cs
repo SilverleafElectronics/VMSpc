@@ -43,7 +43,7 @@ namespace VMSpc.Panels
             barGaugeList.Clear();
             foreach (var pid in panelSettings.PIDList)
             {
-                VBarGauge barGauge = new VBarGauge(new ParamPresenter(pid, panelSettings), canvas.Width, canvas.Height);
+                VBarGauge barGauge = new VBarGauge(new GaugePresenter(pid, panelSettings), canvas.Width, canvas.Height);
                 barGaugeList.Add(barGauge);
                 canvas.Children.Add(barGauge);
                 barGauge.Visibility = Visibility.Hidden;

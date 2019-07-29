@@ -1,4 +1,6 @@
 ﻿<my:VPanelDlg 
+        WindowStartupLocation="CenterOwner"          
+        ResizeMode="NoResize"
         xmlns:my="clr-namespace:VMSpc.DlgWindows"
         x:Class="VMSpc.DlgWindows.OdometerDlg"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -7,8 +9,104 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VMSpc.DlgWindows"
         mc:Ignorable="d"
-        Title="OdometerDlg" Height="450" Width="800">
+        Title="Odometer Properties" Height="450" Width="500">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <CheckBox Grid.Row="0" Grid.Column="0" Name="ShowCaptions" >Show Captions</CheckBox>
+            <CheckBox Grid.Row="1" Grid.Column="0" Name="ShowUnits"    >Show Units</CheckBox>
+            <CheckBox Grid.Row="1" Grid.Column="1" Name="ShowInMetric" >Show In Metric</CheckBox>
+            <Button Grid.Row="0" Grid.Column="2" Name="ResetTripBtn"   Margin="0,5,5,0" Click="ResetTripBtn_Click">Reset Trip</Button>
+            <Button Grid.Row="1" Grid.Column="2" Name="ViewHistoryBtn" Margin="0,5,5,0" Click="ViewHistoryBtn_Click">View History</Button>
+            <Button Grid.Row="0" Grid.Column="3" Name="OkBtn"          Margin="0,5,5,0" Click="OkBtn_Click">Ok</Button>
+            <Button Grid.Row="1" Grid.Column="3" Name="Cancel"         Margin="0,5,5,0" Click="Cancel_Click">Cancel</Button>
+        </Grid>
+        <Grid Grid.Row="1" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Column="0" Header="Layout">
+                <Grid Name="OdometerLayout">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <RadioButton Checked="LayoutRadio_Checked" 
+                                 GroupName="Layout" 
+                                 Name="LayoutHorizontal" 
+                                 Grid.Column="0" 
+                                 HorizontalAlignment="Left"  
+                                 VerticalAlignment="Center" 
+                                 Tag="0">
+                        Horizontal
+                    </RadioButton>
+                    <RadioButton Checked="LayoutRadio_Checked" 
+                                 GroupName="Layout" 
+                                 Name="LayoutVertical" 
+                                 Grid.Column="1" 
+                                 HorizontalAlignment="Right" 
+                                 VerticalAlignment="Center" 
+                                 Tag="1">
+                        Vertical
+                    </RadioButton>
+                </Grid>
+            </GroupBox>
+            <StackPanel Grid.Column="1" Orientation="Vertical" Width="150" >
+                <Button Name="ResetToDayOne"  Click="ResetToDayOne_Click" Margin="0,5,0,0" >Start From Day One</Button>
+                <Button Name="ChangeDataFile" Click="ChangeDataFile_Click" Margin="0,5,0,0">Change Data File</Button>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="2" VerticalAlignment="Center">
+            <GroupBox  Header="Text Alignment">
+                <Grid Name="OdometerAlignment">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <RadioButton Checked="AlignmentRadio_Checked" GroupName="Alignment" Grid.Column="0" HorizontalAlignment="Left"  VerticalAlignment="Center" Tag="0">Left</RadioButton>
+                    <RadioButton Checked="AlignmentRadio_Checked" GroupName="Alignment" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Tag="1">Center</RadioButton>
+                    <RadioButton Checked="AlignmentRadio_Checked" GroupName="Alignment" Grid.Column="2" HorizontalAlignment="Right"  VerticalAlignment="Center" Tag="2">Right</RadioButton>
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <Grid Grid.Row="3" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <CheckBox Grid.Row="0" Grid.Column="0" Name="ShowDistance"     >Show Distance</CheckBox>
+            <CheckBox Grid.Row="1" Grid.Column="0" Name="ShowFuel"         >Show Fuel</CheckBox>
+            <CheckBox Grid.Row="0" Grid.Column="1" Name="ShowRunTime"      >Show Run Time</CheckBox>
+            <CheckBox Grid.Row="1" Grid.Column="1" Name="ShowMPG"          >Show Fuel Economy</CheckBox>
+            <CheckBox Grid.Row="0" Grid.Column="2" Name="ShowAverageSpeed" >Show Average Speed</CheckBox>
+            <CheckBox Grid.Row="1" Grid.Column="2" Name="Locked"           >Lock Odometer</CheckBox>
+        </Grid>
+        <Grid Grid.Row="4">
+
+        </Grid>
     </Grid>
 </my:VPanelDlg>

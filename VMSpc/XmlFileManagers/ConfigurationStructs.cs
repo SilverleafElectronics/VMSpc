@@ -354,6 +354,16 @@ namespace VMSpc.XmlFileManagers
                     break;
             }
         }
+
+        public override void SaveSettings(XmlNode panelNode)
+        {
+            SafeSave(panelNode, "Show-MPG", showMPG.ToString());
+            SafeSave(panelNode, "Show-Captions", showCaptions.ToString());
+            SafeSave(panelNode, "Show-Units", showUnits.ToString());
+            SafeSave(panelNode, "Layout-Horizontal", layoutHorizontal.ToString());
+            SafeSave(panelNode, "File-Name", fileName);
+            base.SaveSettings(panelNode);
+        }
     }
     public class TankMinderSettings : RecordedSettings
     {
@@ -388,6 +398,16 @@ namespace VMSpc.XmlFileManagers
                     break;
             }
         }
+
+        public override void SaveSettings(XmlNode panelNode)
+        {
+            SafeSave(panelNode, "ShowFuel", showFuel.ToString());
+            SafeSave(panelNode, "Show-Miles-To-Empty", showMilesToEmpty.ToString());
+            SafeSave(panelNode, "Use-Rolling-MPG", useRollingMPG.ToString());
+            SafeSave(panelNode, "Tank-Size", tankSize.ToString());
+            SafeSave(panelNode, "Tank-Size-Metric", tankSizeMetric.ToString());
+            base.SaveSettings(panelNode);
+        }
     }
     public class OdometerSettings : RecordedSettings
     {
@@ -417,6 +437,14 @@ namespace VMSpc.XmlFileManagers
                     base.StoreSettings(nodeName, val, panelNode);
                     break;
             }
+        }
+        public override void SaveSettings(XmlNode panelNode)
+        {
+            SafeSave(panelNode, "Show-Fuel-Locked", showFuelLocked.ToString());
+            SafeSave(panelNode, "Show-Hours", showHours.ToString());
+            SafeSave(panelNode, "Show-Miles", showMiles.ToString());
+            SafeSave(panelNode, "Show-Speed", showSpeed.ToString());
+            base.SaveSettings(panelNode);
         }
     }
     public class GaugeSettings : PanelSettings

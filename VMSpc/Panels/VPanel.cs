@@ -44,7 +44,7 @@ namespace VMSpc.Panels
         public double rightLimit;
         public double bottomLimit;
 
-        public bool isMoving, isResizing;
+        public bool isMoving, isResizing, isHighlighted;
 
         public int number;
 
@@ -102,11 +102,6 @@ namespace VMSpc.Panels
         {
 
         }
-
-        /// <summary>
-        /// Returns a call to the constructor of the corresponding Dialog Window for this panel.
-        /// </summary>
-        protected abstract VMSDialog GenerateDlg();
 
         private void GenerateEventHandlers()
         {
@@ -255,8 +250,8 @@ namespace VMSpc.Panels
         {
             leftLimit = 0;
             topLimit = 0;
-            rightLimit = mainWindow.Width;
-            bottomLimit = mainWindow.Height;
+            rightLimit = mainWindow.ContentGrid.ActualWidth;
+            bottomLimit = mainWindow.ContentGrid.ActualHeight;
         }
 
         /// <summary>
@@ -413,6 +408,9 @@ namespace VMSpc.Panels
         public abstract void GeneratePanel();
 
         public abstract void UpdatePanel();
+
+        /// <summary> Returns a call to the constructor of the corresponding Dialog Window for this panel </summary>
+        protected abstract VMSDialog GenerateDlg();
 
         /// <summary>
         /// Assigns the appropriate right and bottom coordinates of an element. The element's width and height must already be set before calling this method

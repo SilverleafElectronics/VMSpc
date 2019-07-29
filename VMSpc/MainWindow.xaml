@@ -9,18 +9,20 @@
         xmlns:self="clr-namespace:VMSpc"
         mc:Ignorable="d"
         Title="VMSpc" Height="800" Width="1500">
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" CanExecute="CloseCommand_CanExecute" Executed="CloseCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.NewSimpleGauge" CanExecute="NewSimpleGaugeCommand_CanExecute" Executed="NewSimpleGaugeCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.NewScanGauge" CanExecute="NewScanGaugeCommand_CanExecute" Executed="NewScanGaugeCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.NewMultiBar" CanExecute="NewMultiBarCommand_CanExecute" Executed="NewMultiBarCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.NewOdometer" CanExecute="NewOdometerCommand_CanExecute" Executed="NewOdometerCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.CommSettings" CanExecute="CommSettingsCommand_CanExecute" Executed="CommSettingsCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.About" CanExecute="NewSimpleGaugeCommand_CanExecute" Executed="AboutCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.RawLog" CanExecute="RawLogCommand_CanExecute" Executed="RawLogCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.ToggleClipping" CanExecute="ToggleClippingCommand_CanExecute" Executed="ToggleClippingCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.DeleteGauge" CanExecute="DeleteGaugeCommand_CanExecute" Executed="DeleteGaugeCommand_Executed" />
+    </Window.CommandBindings>
     <Grid>
         <DockPanel Name="DockMenu" Height="Auto" Width="Auto">
-            <DockPanel.CommandBindings>
-                <CommandBinding Command="Close" CanExecute="CloseCommand_CanExecute" Executed="CloseCommand_Executed" />
-                <CommandBinding Command="self:MainCommands.NewSimpleGauge" CanExecute="NewSimpleGaugeCommand_CanExecute" Executed="NewSimpleGaugeCommand_Executed" />
-                <CommandBinding Command="self:MainCommands.NewScanGauge" CanExecute="NewScanGaugeCommand_CanExecute" Executed="NewScanGaugeCommand_Executed" />
-                <CommandBinding Command="self:MainCommands.NewMultiBar" CanExecute="NewMultiBarCommand_CanExecute" Executed="NewMultiBarCommand_Executed" />
-                <CommandBinding Command="self:MainCommands.CommSettings" CanExecute="CommSettingsCommand_CanExecute" Executed="CommSettingsCommand_Executed" />
-                <CommandBinding Command="self:MainCommands.About" CanExecute="NewSimpleGaugeCommand_CanExecute" Executed="AboutCommand_Executed" />
-                <CommandBinding Command="self:MainCommands.RawLog" CanExecute="RawLogCommand_CanExecute" Executed="RawLogCommand_Executed" />
-                <CommandBinding Command="self:MainCommands.DeleteGauge" CanExecute="DeleteGaugeCommand_CanExecute" Executed="DeleteGaugeCommand_Executed" />
-            </DockPanel.CommandBindings>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
                     <MenuItem Header="_New Layout" />
@@ -34,12 +36,14 @@
                     <MenuItem Command="self:MainCommands.NewSimpleGauge" />
                     <MenuItem Command="self:MainCommands.NewScanGauge" />
                     <MenuItem Command="self:MainCommands.NewMultiBar" />
+                    <MenuItem Command="self:MainCommands.NewOdometer" />
                     <MenuItem Command="self:MainCommands.DeleteGauge" />
                     <!--<MenuItem Command="self:MainCommands.DeleteGauge" />-->
                 </MenuItem>
                 <MenuItem Header="_Advanced">
                     <MenuItem Header="_Communications" Command="self:MainCommands.CommSettings" />
                     <MenuItem Header="_Raw Log" Command="self:MainCommands.RawLog" />
+                    <MenuItem Command="self:MainCommands.ToggleClipping" Name="ClipToggle" />
                 </MenuItem>
                 <MenuItem Header="_Help">
                     <MenuItem Command="self:MainCommands.About" />

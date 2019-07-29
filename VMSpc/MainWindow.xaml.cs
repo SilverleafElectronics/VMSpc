@@ -22,6 +22,7 @@ using VMSpc.Communication;
 using static VMSpc.Parsers.PIDWrapper;
 using VMSpc.Parsers;
 using static VMSpc.XmlFileManagers.ParamDataManager;
+using static VMSpc.XmlFileManagers.SettingsManager;
 using static VMSpc.Constants;
 using System.ComponentModel;
 
@@ -53,21 +54,11 @@ namespace VMSpc
             GeneratePanels();
             Application.Current.MainWindow = this;
             InitializeComm();
-
-            BindKeyboardShortcuts();
         }
 
         public void OnMouseRelease(object sender, RoutedEventArgs e)
         {
             ContentGrid.ProcessMouseRelease();
-        }
-
-        private void BindKeyboardShortcuts()
-        {
-            KeyboardShortcuts = new Dictionary<Key, Action>
-            {
-                { Key.Delete, ProcessDeleteGauge }
-            };
         }
 
         private void InitializeComm()
@@ -150,6 +141,18 @@ namespace VMSpc
             InitiateNewGaugeDlg(dlgWindow, panelSettings);
         }
 
+        private void NewOdometerCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void NewOdometerCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            OdometerSettings panelSettings = new OdometerSettings(0);
+            OdometerDlg dlgWindow = new OdometerDlg(panelSettings);
+            InitiateNewGaugeDlg(dlgWindow, panelSettings);
+        }
+
         private void InitiateNewGaugeDlg(VPanelDlg dlgWindow, PanelSettings panelSettings)
         {
             dlgWindow.Owner = this;
@@ -198,12 +201,18 @@ namespace VMSpc
 
         private void DeleteGaugeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            ProcessDeleteGauge();
+            ContentGrid.DeletePanel();
         }
 
-        private void ProcessDeleteGauge()
+        private void ToggleClippingCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            ContentGrid.DeletePanel();
+            e.CanExecute = true;
+        }
+
+        private void ToggleClippingCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Settings.UseClipping = !(Settings.UseClipping);
+            ClipToggle.Header = (Settings.UseClipping) ? "Disable Clipping" : "Enable Clipping";
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -222,7 +231,7 @@ namespace VMSpc
 
     #endregion //Event Handlers
 
-    #region Custom Event Handlers
+    #region Routed UI Commands (Maps to Custom Event Handlers)
     public static class MainCommands
     {
 
@@ -241,6 +250,12 @@ namespace VMSpc
         public static readonly RoutedUICommand NewMultiBar = new RoutedUICommand(
             "New Multi Bar",
             "NewMultiBar",
+            typeof(MainCommands)
+        );
+
+        public static readonly RoutedUICommand NewOdometer = new RoutedUICommand(
+            "New Odometer",
+            "NewOdometer",
             typeof(MainCommands)
         );
 
@@ -265,8 +280,22 @@ namespace VMSpc
         public static readonly RoutedUICommand DeleteGauge = new RoutedUICommand(
             "Delete Selected Gauge",
             "DeleteGauge",
-            typeof(MainCommands)
+            typeof(MainCommands),
+            new InputGestureCollection()
+            {
+                new KeyGesture(Key.Delete)
+            }
         );
+
+        public static readonly RoutedUICommand ToggleClipping = new RoutedUICommand(
+            (Settings.UseClipping) ? "Disable Clipping" : "Enable Clipping",
+            "ToggleClipping",
+            typeof(MainCommands),
+            new InputGestureCollection()
+            {
+                new KeyGesture(Key.F5)
+            }
+       );
     }
-    #endregion //Custom Event Handlers
+    #endregion //Routed UI Commands
 }

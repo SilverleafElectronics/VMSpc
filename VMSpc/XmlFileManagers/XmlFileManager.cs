@@ -71,7 +71,6 @@ namespace VMSpc.XmlFileManagers
         protected virtual void CreateTemplate()
         {
             File.Create(docName).Close();   //close right away so we can load it into the StreamReader
-            xmlDoc.Save(docName);
             Initialize();
         }
         #endregion //Construction Helpers
@@ -139,6 +138,7 @@ namespace VMSpc.XmlFileManagers
         protected void OverwriteFile(string newXml)
         {
             xmlDoc.LoadXml(newXml);
+            xmlDoc.Save(docName);
         }
 
         public XmlNode AddNodeToParentNode(XmlNode parent, string childNodeName)

@@ -123,6 +123,18 @@ namespace VMSpc.XmlFileManagers
         {
             return Int32.Parse(getNodeValueByTagName("Show-Splashscreen"));
         }
+        public bool UseClipping
+        {
+            get
+            {
+                return Boolean.Parse(getNodeValueByTagName("Use-Clipping"));
+            }
+            set
+            {
+                getNodeByTagName("Use-Clipping").InnerText = value.ToString();
+                SaveConfiguration();
+            }
+        }
 
         //SETTERS
 

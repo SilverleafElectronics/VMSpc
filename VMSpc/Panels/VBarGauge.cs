@@ -33,7 +33,7 @@ namespace VMSpc.Panels
         protected TextBlock TitleText;
         protected TextBlock ValueText;
         protected VParameter parameter;
-        protected ParamPresenter presenter;
+        protected GaugePresenter presenter;
 
         protected double
             graphHeight,
@@ -43,7 +43,7 @@ namespace VMSpc.Panels
          
         protected double lastValue;
 
-        public VBarGauge(ParamPresenter presenter, double width, double height)
+        public VBarGauge(GaugePresenter presenter, double width, double height)
         {
             this.presenter = presenter;
             Width = width;

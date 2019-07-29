@@ -27,7 +27,7 @@ namespace VMSpc.Panels
         public override void GeneratePanel()
         {
             canvas.Children.Clear();
-            barGauge = new VBarGauge(new ParamPresenter(panelSettings.PID, panelSettings), canvas.Width, canvas.Height);
+            barGauge = new VBarGauge(new GaugePresenter(panelSettings.PID, panelSettings), canvas.Width, canvas.Height);
             canvas.Children.Add(barGauge);
         }
 

@@ -53,7 +53,7 @@ namespace VMSpc.Panels
             int i = 0;
             foreach (ushort pid in panelSettings.PIDList)
             {
-                ParamPresenter presenter = new ParamPresenter(pid, panelSettings);
+                GaugePresenter presenter = new GaugePresenter(pid, panelSettings);
                 BarColumn barColumn = new BarColumn(presenter, (canvas.Width / panelSettings.numPids), canvas.Height, ColorArray[i % ColorArray.Length]);
                 Canvas.SetTop(barColumn, 0);
                 Canvas.SetLeft(barColumn, (i * barColumn.Width));
@@ -91,14 +91,14 @@ namespace VMSpc.Panels
         public TextBlock valueText;
         private Rectangle valueRect;
         private Rectangle noValueRect;
-        private ParamPresenter presenter;
+        private GaugePresenter presenter;
 
         private double graphBottom;
         private double graphTop;
         private int numTextLines;
         private bool updated;
 
-        public BarColumn(ParamPresenter presenter, double width, double height, Color color)
+        public BarColumn(GaugePresenter presenter, double width, double height, Color color)
         {
             this.presenter = presenter;
             Height = height;

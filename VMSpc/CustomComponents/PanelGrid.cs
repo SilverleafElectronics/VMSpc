@@ -98,7 +98,7 @@ namespace VMSpc.CustomComponents
                     panel = new VScanGauge(mainWindow, (ScanGaugeSettings)panelSettings);
                     break;
                 case PanelIDs.ODOMOTER_ID:
-                    panel = new VOdometerPanel(mainWindow, (OdometerSettings)panelSettings);
+                    panel = new VOdometer(mainWindow, (OdometerSettings)panelSettings);
                     break;
                 case PanelIDs.TRANSMISSION_ID:
                     break;
@@ -131,6 +131,8 @@ namespace VMSpc.CustomComponents
             {
                 PanelList.Add(panel);
                 Children.Add(panel.border);
+                SetZIndex(panel.canvas, panelSettings.number + 10);
+                SetZIndex(panel.border, panelSettings.number + 10);
                 panel.Init();
                 panel.GeneratePanel();
             }
@@ -191,6 +193,7 @@ namespace VMSpc.CustomComponents
                         movementType = MOVEMENT_RESIZE;
                         selectedChild.isResizing = true;
                         selectedChild.Highlight();
+                        SetZIndices();
                         return true;
                     }
                 }
@@ -211,11 +214,30 @@ namespace VMSpc.CustomComponents
                         selectedChild.isMoving = true;
                         movementType = MOVEMENT_MOVE;
                         selectedChild.Highlight();
+                        SetZIndices();
                         return true;
                     }
                 }
             }
             return (selectedChild != null);
+        }
+
+        private void SetZIndices()
+        {
+            int currentZIndex = GetZIndex(selectedChild.canvas);
+            int curMax = 0;
+            foreach (VPanel panel in PanelList)
+            {
+                int oldZIndex = GetZIndex(panel.canvas);
+                if (oldZIndex > curMax) curMax = oldZIndex;
+                if (oldZIndex > currentZIndex)
+                {
+                    SetZIndex(panel.canvas, oldZIndex - 1);
+                    SetZIndex(panel.border, oldZIndex - 1);
+                }
+            }
+            SetZIndex(selectedChild.canvas, curMax);
+            SetZIndex(selectedChild.border, curMax);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -257,6 +279,8 @@ namespace VMSpc.CustomComponents
         private void SetNearestNeighbors(VPanel panel)
         {
             panel.InitLimits();
+            if (!SettingsManager.Settings.UseClipping)
+                return;
             foreach (VPanel neighbor in PanelList)
             {
                 if (neighbor != panel)
