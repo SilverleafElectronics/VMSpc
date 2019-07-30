@@ -68,7 +68,7 @@ namespace VMSpc.Panels
             ApplyBorderDimensions();
             ApplyCanvasDimensions();
             border.Child = canvas;
-            GenerateEventHandlers();
+            GenerateCustomEventHandlers();
             panelTimer = CREATE_TIMER(OnUpdateTimedEvent, 50);
         }
 
@@ -103,7 +103,7 @@ namespace VMSpc.Panels
 
         }
 
-        private void GenerateEventHandlers()
+        protected virtual void GenerateCustomEventHandlers()
         {
             border.MouseEnter += OnMouseOverBorder;
             border.MouseLeave += OnMouseLeaveBorder;
@@ -238,6 +238,25 @@ namespace VMSpc.Panels
             border.Width = oldRight - newLeft;
         }
 
+        public void Slide(Key direction)
+        {
+            switch (direction)
+            {
+                case Key.Left:
+                    BoundlessSetHorizontal(Canvas.GetLeft(border) - 1);
+                    break;
+                case Key.Right:
+                    BoundlessSetHorizontal(Canvas.GetLeft(border) + 1);
+                    break;
+                case Key.Up:
+                    BoundlessSetVertical(Canvas.GetTop(border) - 1);
+                    break;
+                case Key.Down:
+                    BoundlessSetVertical(Canvas.GetTop(border) + 1);
+                    break;
+            }
+        }
+
         private bool IsWithinBoundary(double targetPosition, double boundaryLimit, double value)
         {
             return ((targetPosition + boundaryLimit >= targetPosition) && (targetPosition - boundaryLimit <= targetPosition));
@@ -315,7 +334,7 @@ namespace VMSpc.Panels
             }
         }
 
-        public void SetVertical(double newTop, Point newCursorPoint)
+        public void SetVertical(double newTop)
         {
             double clipSide;
             if (CanMove(VERTICAL, newTop))
@@ -331,7 +350,13 @@ namespace VMSpc.Panels
             }
         }
 
-        public void SetHorizontal(double newLeft, Point newCursorPoint)
+        public void BoundlessSetVertical(double newTop)
+        {
+            Canvas.SetTop(border, newTop);
+            Canvas.SetBottom(border, newTop + border.Height);
+        }
+
+        public void SetHorizontal(double newLeft)
         {
             double clipSide;
             if (CanMove(HORIZONTAL, newLeft))
@@ -345,6 +370,12 @@ namespace VMSpc.Panels
                     Canvas.SetRight(border, newLeft + border.Width);
                 }
             }
+        }
+
+        public void BoundlessSetHorizontal(double newLeft)
+        {
+            Canvas.SetLeft(border, newLeft);
+            Canvas.SetRight(border, newLeft + border.Width);
         }
 
         /// <summary>

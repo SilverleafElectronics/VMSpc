@@ -18,9 +18,16 @@ namespace VMSpc.XmlFileManagers
         {
             return getNodeValueByTagName("Version");
         }
-        public int get_port()
+        public string port
         {
-            return Int32.Parse(getNodeValueByTagName("Port"));
+            get
+            {
+                return getNodeValueByTagName("Port");
+            }
+            set
+            {
+                SetNodeValueByTagName("Port", value);
+            }
         }
         public int get_commDatabus()
         {

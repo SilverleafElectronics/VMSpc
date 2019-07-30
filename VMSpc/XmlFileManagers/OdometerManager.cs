@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using static VMSpc.XmlFileManagers.ParamDataManager;
+using static VMSpc.Constants;
+using System.IO;
 
 namespace VMSpc.XmlFileManagers
 {
@@ -14,7 +17,7 @@ namespace VMSpc.XmlFileManagers
                       startMiles,
                       startLiters,
                       startKilometers;
-        public OdometerManager(string filename) : base (filename)
+        public OdometerManager(string filename) : base ("/odometer_files/" + filename)
         {
             startFuel       = Double.Parse(getNodeByTagName("Start-Fuel").InnerText);
             startHours      = Double.Parse(getNodeByTagName("Start-Hours").InnerText);
@@ -26,18 +29,66 @@ namespace VMSpc.XmlFileManagers
         protected override void CreateTemplate()
         {
             base.CreateTemplate();
+            ResetTrip();
+        }
+
+        public void ResetTrip()
+        {
+            startFuel = ZERO_IF_INVALID(ParamData.parameters[250].LastValue);
+            startLiters = ZERO_IF_INVALID(ParamData.parameters[250].LastMetricValue);
+            startHours = ZERO_IF_INVALID(ParamData.parameters[247].LastValue);
+            startMiles = ZERO_IF_INVALID(ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastValue);
+            startKilometers = ZERO_IF_INVALID(ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastMetricValue);
+            if (!File.Exists("./history_files/" + CHANGE_FILE_TYPE(docName, ".xml", ".txt")))
+                CreateHistoryFile(docName.Substring(docName.LastIndexOf("/") + 1));
             OverwriteFile(
                 "<Root>" +
-                "   < Version > V4.0 </ Version >" +
-                "   < Odo-Trip-Data >" +
-                "       < Start-Fuel > 0 </Start-Fuel >" +
-                "       < Start-Hours > 0 </Start-Hours >" +
-                "       < Start-Miles > 0 </Start-Miles >" +
-                "       <Start-Liters> 0 </Start-Liters>" +
-                "       <Start-Km> 0 </Start-Km>" +
-                "   </ Odo-Trip-Data >" +
-                "</ Root > "
+                "   <Version>V4.1</Version>" +
+                "   <Odo-Trip-Data>" +
+                "       <Start-Fuel>" + startFuel + "</Start-Fuel>" +
+                "       <Start-Hours>" + startHours + "</Start-Hours>" +
+                "       <Start-Miles>" + startMiles + "</Start-Miles>" +
+                "       <Start-Liters>" + startLiters + "</Start-Liters>" +
+                "       <Start-Km>" + startKilometers + "</Start-Km>" +
+                "   </Odo-Trip-Data>" +
+                "</Root> "
                 );
+            Initialize();
+        }
+
+        public void StartFromDayOne()
+        {
+            OverwriteFile(
+                "<Root>" +
+                "   <Version>V4.1</Version>" +
+                "   <Odo-Trip-Data>" +
+                "       <Start-Fuel>0</Start-Fuel>" +
+                "       <Start-Hours>0</Start-Hours>" +
+                "       <Start-Miles>0</Start-Miles>" +
+                "       <Start-Liters>0</Start-Liters>" +
+                "       <Start-Km>0</Start-Km>" +
+                "   </Odo-Trip-Data>" +
+                "</Root> "
+                );
+            Initialize();
+        }
+
+        public static void CreateHistoryFile(string xmlFile)
+        {
+            string fileName = CHANGE_FILE_TYPE(xmlFile, ".xml", ".txt");
+            string historyHeader =
+                "Trip History File\n" +
+                "Feel free to add notes to this file, but do not move or delete.\n" +
+                "End Date    Miles    Time   Fuel  Speed   MPG\n" +
+                "=============================================\n";
+            File.WriteAllText("./history_files/" + fileName, historyHeader);
+        }
+
+        public static void AddHistoryLog(double miles, double hours, double fuel, double speed, double mpg)
+        {
+            string date = string.Format("{0}/{1}/{2}", DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Year);
+            string TimeElapsed = string.Format("{0}:{1:00}", Math.Round(hours), ((hours % 1) * 60));
+            string entry = string.Format("{0},    {1},    {2},    {3},    {4},    {5}", date, miles, hours, fuel, speed, mpg);
         }
     }
 }

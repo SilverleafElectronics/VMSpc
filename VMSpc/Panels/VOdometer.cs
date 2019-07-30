@@ -7,6 +7,7 @@ using static VMSpc.XmlFileManagers.SettingsManager;
 using VMSpc.CustomComponents;
 using System.Collections.Generic;
 using System.Windows;
+using VMSpc.DevHelpers;
 
 namespace VMSpc.Panels
 {
@@ -24,6 +25,34 @@ namespace VMSpc.Panels
             : base (mainWindow, panelSettings)
         {
             this.panelSettings = panelSettings;
+        }
+
+        protected override void GenerateCustomEventHandlers()
+        {
+            base.GenerateCustomEventHandlers();
+            Canvas newCanvas = new Canvas();
+            canvas.MouseDoubleClickEvent += Canvas_MouseDoubleClickEvent;
+        }
+
+        private void Canvas_MouseDoubleClickEvent(object arg1, System.Windows.Input.MouseButtonEventArgs arg2)
+        {
+            ResetTrip();
+        }
+
+        /// <summary>
+        /// Sets the odometer file to the current values for hours, fuel, and distance
+        /// </summary>
+        public void ResetTrip()
+        {
+//            OdometerManager.AddHistoryLog(manager.)
+            manager.ResetTrip();
+            GeneratePanel();
+        }
+
+        public void StartFromDayOne()
+        {
+            manager.StartFromDayOne();
+            GeneratePanel();
         }
 
         protected override VMSDialog GenerateDlg()
@@ -58,8 +87,8 @@ namespace VMSpc.Panels
         private void DrawGridCells()
         {
             CreateGridCell(panelSettings.showMiles, "Distance", "Miles", "Kilometers", Settings.get_odometerPID(), (!panelSettings.showInMetric) ? manager.startMiles : manager.startKilometers);
-            CreateGridCell(panelSettings.showFuelLocked, "Fuel", "Gallons", "Liters", 250, (!panelSettings.showInMetric) ? manager.startMiles : manager.startKilometers);
-            CreateGridCell(panelSettings.showHours, "Time", "Hrs", "Hrs", 247, (!panelSettings.showInMetric) ? manager.startMiles : manager.startKilometers);
+            CreateGridCell(panelSettings.showFuelLocked, "Fuel", "Gallons", "Liters", 250, (!panelSettings.showInMetric) ? manager.startFuel : manager.startLiters);
+            CreateGridCell(panelSettings.showHours, "Time", "Hrs", "Hrs", 247, manager.startHours);
             CreateGridCell(panelSettings.showSpeed, "Speed", "MPH", "KPH", 86, (!panelSettings.showInMetric) ? manager.startMiles : manager.startKilometers);
             CreateGridCell(panelSettings.showMPG, "Economy", "MPG", "L/100Km", 184, (!panelSettings.showInMetric) ? manager.startMiles : manager.startKilometers);
         }

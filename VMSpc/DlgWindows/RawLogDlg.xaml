@@ -7,6 +7,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VMSpc.DlgWindows"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"          
+        ResizeMode="NoResize"
         Title="Raw Log" Height="225" Width="500" Background="LightGray">
     <Grid>
         <Grid.RowDefinitions>

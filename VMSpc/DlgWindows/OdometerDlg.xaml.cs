@@ -17,6 +17,9 @@ using VMSpc.CustomComponents;
 using VMSpc.XmlFileManagers;
 using static VMSpc.Constants;
 using System.ComponentModel;
+using System.IO;
+using VMSpc.Panels;
+using Microsoft.Win32;
 
 namespace VMSpc.DlgWindows
 {
@@ -26,12 +29,16 @@ namespace VMSpc.DlgWindows
     public partial class OdometerDlg : VPanelDlg
     {
         protected new OdometerSettings panelSettings;
+        private string textFile;
+        private string newOdoFile;
 
         public OdometerDlg(OdometerSettings panelSettings)
             : base(panelSettings)
         {
             InitializeComponent();
             ApplyBindings();
+            textFile = "./history_files/" + CHANGE_FILE_TYPE(panelSettings.fileName, ".xml", ".txt");
+            newOdoFile = panelSettings.fileName;
         }
 
         protected override void Init(PanelSettings panelSettings)
@@ -83,6 +90,7 @@ namespace VMSpc.DlgWindows
         {
             foreach (RadioButton button in OdometerAlignment.Children)
                 if (button.IsChecked == true) panelSettings.TextPosition = Convert.ToInt16(button.Tag);
+            panelSettings.fileName = newOdoFile;
             panelSettings.layoutHorizontal = (bool)LayoutHorizontal.IsChecked;
             panelSettings.showInMetric = (bool)ShowInMetric.IsChecked;
             panelSettings.showCaptions = (bool)ShowCaptions.IsChecked;
@@ -114,12 +122,20 @@ namespace VMSpc.DlgWindows
 
         private void ResetTripBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            if (NOT_NULL(panel))
+            {
+                ((VOdometer)panel).ResetTrip();
+                Close();
+            }
         }
 
         private void ViewHistoryBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            if (!File.Exists(textFile))
+                OdometerManager.CreateHistoryFile(panelSettings.fileName);
+            Window dlg = new HistoryViewerDlg(textFile);
+            dlg.Owner = this;
+            dlg.Show();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -129,12 +145,25 @@ namespace VMSpc.DlgWindows
 
         private void ResetToDayOne_Click(object sender, RoutedEventArgs e)
         {
-
+            if (NOT_NULL(panel))
+            {
+                ((VOdometer)panel).StartFromDayOne();
+                Close();
+            }
         }
 
         private void ChangeDataFile_Click(object sender, RoutedEventArgs e)
         {
-
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                DefaultExt = ".trp.xml",
+                Filter = "Odometer Trip Files (*.trp.xml)|*.trp.xml",
+                InitialDirectory = Directory.GetCurrentDirectory() + "\\configuration\\odometer_files"
+            };
+            if ((bool)dlg.ShowDialog() == true)
+            {
+                newOdoFile = dlg.FileName.Substring(dlg.FileName.LastIndexOf("\\") + 1);
+            }
         }
     }
 }

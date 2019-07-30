@@ -277,6 +277,14 @@ namespace VMSpc
             return timer;
         }
 
+        /// <summary> returns the passed value if valid (!= DUB_NODATA). Otherwise, returns 0 </summary>
+        public static double ZERO_IF_INVALID(double value)
+        {
+            if (value == DUB_NODATA)
+                return 0;
+            return value;
+        }
+
         /// <summary>
         /// Returns a copy of the object parameter for copying by value
         /// </summary>
@@ -290,6 +298,20 @@ namespace VMSpc
                 ms.Position = 0;
                 return (T)formatter.Deserialize(ms);
             }
+        }
+
+        /// <summary> Prevents division by zero or subzero dividend. Also prevents division where either operator is NaN </summary>
+        public static double SAFE_DIVIDE(double dividend, double divisor)
+        {
+            if (divisor <= 0 || Double.IsNaN(dividend) || Double.IsNaN(divisor))
+                return 0;
+            return dividend / divisor;
+        }
+
+        /// <summary> returns a new filename with the extension converted </summary>
+        public static string CHANGE_FILE_TYPE(string fileName, string originalExtension, string newExtension)
+        {
+            return fileName.Replace(originalExtension, newExtension);
         }
 
         public static double DoubleArrayMax(double[] arr)

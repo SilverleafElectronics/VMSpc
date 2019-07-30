@@ -30,7 +30,6 @@ namespace VMSpc.DlgWindows
         public CommDlg(VMSComm commreader) : base()
         {
             this.commreader = commreader;
-            Owner = Application.Current.MainWindow;
             InitializeComponent();
             ApplyBindings();
         }
@@ -61,6 +60,11 @@ namespace VMSpc.DlgWindows
                 commreader.LogPlayerFile = dlg.FileName;
                 LogPlayerFileName.Text = dlg.FileName;
             }
+        }
+
+        private void RestartComm_Click(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Owner).InitializeComm();
         }
     }
 }

@@ -71,7 +71,6 @@ namespace VMSpc.XmlFileManagers
         protected virtual void CreateTemplate()
         {
             File.Create(docName).Close();   //close right away so we can load it into the StreamReader
-            Initialize();
         }
         #endregion //Construction Helpers
 
@@ -154,6 +153,11 @@ namespace VMSpc.XmlFileManagers
             XmlElement newNode = xmlDoc.CreateElement(childNodeName);
             parent.AppendChild(newNode);
             return newNode;
+        }
+
+        public void SetNodeValueByTagName(string tagName, string value)
+        {
+            getNodeByTagName(tagName).InnerText = value;
         }
 
         public void AddAttributeToNode(XmlNode node, string attrName, string attrValue)

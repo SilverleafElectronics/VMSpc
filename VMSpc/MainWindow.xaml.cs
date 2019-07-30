@@ -36,8 +36,7 @@ namespace VMSpc
         public VMSComm commreader;
         //PanelGrid panelGrid;
         public bool forceClose;
-
-        private Dictionary<Key, Action> KeyboardShortcuts;
+        private Thread commThread;
 
         //constructor
         public MainWindow()
@@ -56,15 +55,41 @@ namespace VMSpc
             InitializeComm();
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            ProcessKeyDownEvent(e);
+        }
+
+        //Add any additional event handlers here. NOTE: this method is not for binding event handlers to 
+        //Menu Items. That is handled in the Routed UI Commands (Maps to Custom Event Handlers) section at
+        //the bottom of this class. Also see README for more info
+        public void ProcessKeyDownEvent(KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Left:
+                case Key.Right:
+                case Key.Up:
+                case Key.Down:
+                    ContentGrid.ProcessArrowNavigation(e.Key);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public void OnMouseRelease(object sender, RoutedEventArgs e)
         {
             ContentGrid.ProcessMouseRelease();
         }
 
-        private void InitializeComm()
+        public void InitializeComm()
         {
             commreader = new VMSComm();
-            Thread commThread = new Thread(commreader.StartComm);
+            if (NOT_NULL(commThread))
+                commThread.Abort();
+            commThread = new Thread(commreader.StartComm);
             commThread.Start();
         }
 
@@ -161,6 +186,13 @@ namespace VMSpc
                 ContentGrid.CreateNewPanel(panelSettings);
         }
 
+        private bool ShowVMSDlg(VMSDialog dlgWindow)
+        {
+            dlgWindow.Owner = this;
+            bool result = (bool)dlgWindow.ShowDialog();
+            return result;
+        }
+
         private void CommSettingsCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -169,7 +201,7 @@ namespace VMSpc
         private void CommSettingsCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             CommDlg commdlg = new CommDlg(commreader);
-            commdlg.ShowDialog();
+            ShowVMSDlg(commdlg);
         }
 
         private void AboutCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -180,7 +212,7 @@ namespace VMSpc
         private void AboutCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             AboutDlg aboutdlg = new AboutDlg();
-            aboutdlg.ShowDialog();
+            ShowVMSDlg(aboutdlg);
         }
 
         private void RawLogCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -191,7 +223,7 @@ namespace VMSpc
         private void RawLogCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             RawLogDlg rawlogdlg = new RawLogDlg(commreader);
-            rawlogdlg.ShowDialog();
+            ShowVMSDlg(rawlogdlg);
         }
 
         private void DeleteGaugeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -219,13 +251,6 @@ namespace VMSpc
         {
             base.OnMouseMove(e);
             ContentGrid.ProcessMouseMove(this, e);
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-            if (KeyboardShortcuts.ContainsKey(e.Key))
-                KeyboardShortcuts[e.Key]();
         }
     }
 

@@ -41,6 +41,7 @@ namespace VMSpc
 
         private void AddGlobalEventHandlers()
         {
+            //For handling release of the mouse. This is the only way to prevent the cursor from freezing on border resizing 
             EventManager.RegisterClassHandler(typeof(Window), Window.MouseLeftButtonUpEvent, new RoutedEventHandler(wnd.OnMouseRelease));
             EventManager.RegisterClassHandler(typeof(UIElement), UIElement.MouseLeftButtonUpEvent, new RoutedEventHandler(wnd.OnMouseRelease));
             EventManager.RegisterClassHandler(typeof(Control), Control.MouseLeftButtonUpEvent, new RoutedEventHandler(wnd.OnMouseRelease));

@@ -22,17 +22,24 @@ namespace VMSpc.CustomComponents
 {
     public class VMSCanvas : Canvas
     {
-        
-
-        public VMSCanvas() : base(){}
+        public event Action<object, MouseButtonEventArgs> MouseDoubleClickEvent;
+        public VMSCanvas() : base()
+        {
+            MouseLeftButtonDown += PollDoubleClick;
+        }
 
         ~VMSCanvas()
         {
         }
 
-        protected override void OnMouseDown(MouseButtonEventArgs e)
+        /// <summary> 
+        /// Trigger for our "Custom" canvas event, since for some mind-boggling
+        /// reason the WPF canvas doesn't support a double-click event by default
+        /// </summary>
+        private void PollDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            base.OnMouseDown(e);
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 2)
+                MouseDoubleClickEvent?.Invoke(sender, e);
         }
 
         /// <summary> 

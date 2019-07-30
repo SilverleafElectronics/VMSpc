@@ -74,6 +74,9 @@
       <DependentUpon>CommDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomComponents\VMSCanvas.cs" />
+    <Compile Include="DlgWindows\HistoryViewerDlg.xaml.cs">
+      <DependentUpon>HistoryViewerDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DlgWindows\MultiBarDlg.xaml.cs">
       <DependentUpon>MultiBarDlg.xaml</DependentUpon>
     </Compile>
@@ -143,6 +146,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DlgWindows\CommDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DlgWindows\HistoryViewerDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

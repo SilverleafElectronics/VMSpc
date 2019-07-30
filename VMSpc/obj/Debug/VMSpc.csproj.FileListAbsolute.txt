@@ -96,3 +96,5 @@ C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\ScanGaugeDlg.g.cs
 C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\ScanGaugeDlg.baml
 C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DevHelpers\DebugConsole.g.cs
 C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DevHelpers\DebugConsole.baml
+C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\HistoryViewerDlg.g.cs
+C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\DlgWindows\HistoryViewerDlg.baml

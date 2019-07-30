@@ -176,50 +176,59 @@ namespace VMSpc.CustomComponents
         /// <param name="src"></param>
         private bool SetSelectedChild(dynamic src)
         {
-            if (NOT_NULL(highlightedChild))
+            try
             {
-                highlightedChild.UnHighlight();
-                highlightedChild = null;
-            }
-            selectedChild = null;
-            foreach (VPanel panel in PanelList)
-            {
-                dynamic source = src;
-                if (source.GetType() == panel.border.GetType())
+                if (src == null)
+                    return false;
+                if (NOT_NULL(highlightedChild))
                 {
-                    if (panel.border == source)
-                    {
-                        selectedChild = highlightedChild = panel;
-                        movementType = MOVEMENT_RESIZE;
-                        selectedChild.isResizing = true;
-                        selectedChild.Highlight();
-                        SetZIndices();
-                        return true;
-                    }
+                    highlightedChild.UnHighlight();
+                    highlightedChild = null;
                 }
-                else
+                selectedChild = null;
+                foreach (VPanel panel in PanelList)
                 {
-                    while (source.GetType() != panel.canvas.GetType())
+                    dynamic source = src;
+                    if (source.GetType() == panel.border.GetType())
                     {
-                        if (source.GetType() == mainWindow.GetType())
+                        if (panel.border == source)
                         {
-                            selectedChild = null;
-                            return false;
+                            selectedChild = highlightedChild = panel;
+                            movementType = MOVEMENT_RESIZE;
+                            selectedChild.isResizing = true;
+                            selectedChild.Highlight();
+                            SetZIndices();
+                            return true;
                         }
-                        source = VisualTreeHelper.GetParent(source);
                     }
-                    if (panel.canvas == source)
+                    else
                     {
-                        selectedChild = highlightedChild = panel;
-                        selectedChild.isMoving = true;
-                        movementType = MOVEMENT_MOVE;
-                        selectedChild.Highlight();
-                        SetZIndices();
-                        return true;
+                        while (source.GetType() != panel.canvas.GetType())
+                        {
+                            if (source.GetType() == mainWindow.GetType())
+                            {
+                                selectedChild = null;
+                                return false;
+                            }
+                            source = VisualTreeHelper.GetParent(source);
+                        }
+                        if (panel.canvas == source)
+                        {
+                            selectedChild = highlightedChild = panel;
+                            selectedChild.isMoving = true;
+                            movementType = MOVEMENT_MOVE;
+                            selectedChild.Highlight();
+                            SetZIndices();
+                            return true;
+                        }
                     }
                 }
+                return (selectedChild != null);
             }
-            return (selectedChild != null);
+            catch
+            {
+                return false;
+            }
         }
 
         private void SetZIndices()
@@ -260,13 +269,19 @@ namespace VMSpc.CustomComponents
             MovePanel(selectedChild, newTop, newLeft, newCursorPoint);
         }
 
+        public void ProcessArrowNavigation(Key direction)
+        {
+            if (NOT_NULL(highlightedChild))
+                highlightedChild.Slide(direction);
+        }
+
         private void MovePanel(VPanel panel, double newTop, double newLeft, Point newCursorPoint)
         {
             switch (movementType)
             {
                 case MOVEMENT_MOVE:
-                    panel.SetHorizontal(newLeft, newCursorPoint);
-                    panel.SetVertical(newTop, newCursorPoint);
+                    panel.SetHorizontal(newLeft);
+                    panel.SetVertical(newTop);
                     break;
                 case MOVEMENT_RESIZE:
                     panel.Resize(newCursorPoint);

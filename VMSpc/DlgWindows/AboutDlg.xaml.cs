@@ -17,7 +17,7 @@ namespace VMSpc.DlgWindows
     /// <summary>
     /// Interaction logic for About.xaml
     /// </summary>
-    public partial class AboutDlg : Window
+    public partial class AboutDlg : VMSDialog
     {
         public AboutDlg()
         {

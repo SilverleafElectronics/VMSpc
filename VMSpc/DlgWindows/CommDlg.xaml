@@ -8,8 +8,10 @@
         xmlns:local="clr-namespace:VMSpc"
         xmlns:comm="clr-namespace:VMSpc.Communication"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
+        WindowStartupLocation="CenterOwner"          
+        ResizeMode="NoResize"
     mc:Ignorable="d"
-        Title="Communication Settings" Height="500" Width="300" Background="LightGray">
+        Title="Communication Settings" Height="500" Width="400" Background="LightGray">
     <Grid Margin="0,10,0,0">
         <Button HorizontalAlignment="Center" VerticalAlignment="Top" Width="75">Ok</Button>
         <Grid Margin="10,20,10,10">
@@ -95,6 +97,7 @@
             <Label Grid.Row="9" HorizontalAlignment="Left">Log Player File Name:</Label>
             <TextBox Grid.Row="10" HorizontalAlignment="Left" Height="20" Margin="20,0,0,0" IsEnabled="False" Name="LogPlayerFileName">NA</TextBox>
             <Button Grid.Row="10" HorizontalAlignment="Right" Height="20" Name="ChangeLogPlayerFile" Click="ChangeLogPlayerFile_Click">Change</Button>
+            <Button Grid.Row="11" HorizontalAlignment="Center" Height="20" Name="RestartComm" Click="RestartComm_Click">Restart Communications</Button>
         </Grid>
     </Grid>
 </my:VMSDialog>

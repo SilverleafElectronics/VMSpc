@@ -12,7 +12,7 @@ using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using VMSpc.Parsers;
 using static VMSpc.Constants;
-
+using VMSpc.XmlFileManagers;
 
 namespace VMSpc.Communication
 {
@@ -89,7 +89,7 @@ namespace VMSpc.Communication
             };
 
             comPort = 9;
-            portString = "COM10"; //CHANGEME - port should be retrieved from config or inferred. User should also be able to override
+            portString = SettingsManager.Settings.port; //CHANGEME - port should be retrieved from config or inferred. User should also be able to override
             logPlayerFile = "j1939log.vms";   //CHANGEME - should rely on user input
             parseBehavior = PARSE_ALL;  //CHANGEME - should initially come from config
 

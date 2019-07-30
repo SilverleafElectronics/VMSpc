@@ -130,15 +130,15 @@ namespace VMSpc.Panels
                 if (ParamData.parameters[247].LastValue == DUB_NODATA || ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastValue == DUB_NODATA)
                     return DUB_NODATA;
                 if (useMetric)
-                    return 
-                        (ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastMetricValue - manager.startKilometers)
-                        /
-                        (ParamData.parameters[247].LastValue - manager.startHours);
+                    return
+                        SAFE_DIVIDE(
+                            (ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastMetricValue - manager.startKilometers),
+                            (ParamData.parameters[247].LastValue - manager.startHours));
                 else
                     return
-                        (ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastValue - manager.startMiles)
-                        /
-                        (ParamData.parameters[247].LastValue - manager.startHours);
+                        SAFE_DIVIDE(
+                            (ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastValue - manager.startMiles),
+                            (ParamData.parameters[247].LastValue - manager.startHours));
             }
             else if (pid == 184)  //economy
             {
@@ -146,14 +146,14 @@ namespace VMSpc.Panels
                     return DUB_NODATA;
                 if (useMetric)
                     return
-                        (ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastMetricValue - manager.startKilometers)
-                        /
-                        (ParamData.parameters[250].LastMetricValue - manager.startLiters);
+                        SAFE_DIVIDE(
+                        (ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastMetricValue - manager.startKilometers),
+                        (ParamData.parameters[250].LastMetricValue - manager.startLiters));
                 else
                     return
-                        (ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastValue - manager.startMiles)
-                        /
-                        (ParamData.parameters[250].LastValue - manager.startFuel);
+                        SAFE_DIVIDE(
+                        (ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastValue - manager.startMiles),
+                        (ParamData.parameters[250].LastValue - manager.startFuel));
             }
             else
             {
