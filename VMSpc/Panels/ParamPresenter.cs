@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
 using static VMSpc.XmlFileManagers.ParamDataManager;
+using static VMSpc.XmlFileManagers.OdometerTracker;
 using VMSpc.XmlFileManagers;
 using static VMSpc.Constants;
 
@@ -125,41 +126,10 @@ namespace VMSpc.Panels
 
         private double GetOdometerValue()
         {
-            if (pid == 86)   //average speed
-            {
-                if (ParamData.parameters[247].LastValue == DUB_NODATA || ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastValue == DUB_NODATA)
-                    return DUB_NODATA;
-                if (useMetric)
-                    return
-                        SAFE_DIVIDE(
-                            (ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastMetricValue - manager.startKilometers),
-                            (ParamData.parameters[247].LastValue - manager.startHours));
-                else
-                    return
-                        SAFE_DIVIDE(
-                            (ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastValue - manager.startMiles),
-                            (ParamData.parameters[247].LastValue - manager.startHours));
-            }
-            else if (pid == 184)  //economy
-            {
-                if (ParamData.parameters[250].LastValue == DUB_NODATA || ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastValue == DUB_NODATA)
-                    return DUB_NODATA;
-                if (useMetric)
-                    return
-                        SAFE_DIVIDE(
-                        (ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastMetricValue - manager.startKilometers),
-                        (ParamData.parameters[250].LastMetricValue - manager.startLiters));
-                else
-                    return
-                        SAFE_DIVIDE(
-                        (ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastValue - manager.startMiles),
-                        (ParamData.parameters[250].LastValue - manager.startFuel));
-            }
+            if (pid == 509 || pid == 510)
+                return parameter.LastValue;
             else
-            {
-                return ((!useMetric) ? (parameter.LastValue - startValue) : 
-                        (parameter.LastMetricValue - startValue));
-            }
+                return parameter.LastValue - startValue;
         }
 
         public override double CurrentValue => GetOdometerValue();

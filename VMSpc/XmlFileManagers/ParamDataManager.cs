@@ -24,5 +24,10 @@ namespace VMSpc.XmlFileManagers
                 parameters.Add(param.Pid, param);
             }
         }
+
+        public static bool SEEN(ushort pid)
+        {
+            return ParamData.parameters[pid].Seen;
+        }
     }
 }

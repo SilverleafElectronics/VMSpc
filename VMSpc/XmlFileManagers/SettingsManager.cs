@@ -82,9 +82,16 @@ namespace VMSpc.XmlFileManagers
         {
             return getNodeValueByTagName("Engine-Name");
         }
-        public ushort get_odometerPID()
+        public ushort odometerPID
         {
-            return UInt16.Parse(getNodeValueByTagName("Odometer-PID"));
+            get
+            {
+                return UInt16.Parse(getNodeValueByTagName("Odometer-PID"));
+            }
+            set
+            {
+                SetNodeValueByTagName("Odometer-PID", value.ToString());
+            }
         }
         public int get_autoDataLogFlag()
         {

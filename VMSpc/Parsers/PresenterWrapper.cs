@@ -46,9 +46,7 @@ namespace VMSpc.Parsers
         }
 
         public static readonly Dictionary<ushort, TSPNPresenter> PresenterList = new Dictionary<ushort, TSPNPresenter>();
-        static PresenterWrapper() { }
-
-        public static void InitializePresenterList()
+        static PresenterWrapper()
         {
             PresenterList.Add(91, new TSPNPresenterFloat(spn_accelPos, "ACCEL-POS", 91, "pct", "pct", 0, false));
             PresenterList.Add(171, new TSPNPresenterFloat(spn_ambientTemp, "AMB.-TEMP", 171, "degF", "degC", 0, false));
@@ -122,5 +120,11 @@ namespace VMSpc.Parsers
             PresenterList.Add(507, new TSPNPresenterFloat(spn_MaxRPMs, "", 507, "", "", 0, false));
             PresenterList.Add(508, new TSPNPresenterFloat(spn_MaxSpeed, "", 508, "", "", 0, false));
         }
+
+        public static void InitializePresenterList()
+        {
+        }
+
+        public static void Activate() { }
     }
 }

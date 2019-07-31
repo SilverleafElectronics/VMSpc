@@ -45,6 +45,7 @@ namespace VMSpc.XmlFileManagers
         //Protected Properties
         protected XmlDocument xmlDoc;
         protected string docName;
+        public virtual void Activate() { }
 
         //Constructor
         public XmlFileManager(string docname)
@@ -155,9 +156,15 @@ namespace VMSpc.XmlFileManagers
             return newNode;
         }
 
-        public void SetNodeValueByTagName(string tagName, string value)
+        /// <summary> Saves the specified value to the node, then calls SaveConfiguration() to write to the file. 
+        /// Optionally allows to specify whether or not to save immediately (defaults to false) to the config file.
+        /// Calls to this method from user interaction can save immediately, while calls on timers and in response
+        /// to other events should consider specifying false
+        /// </summary>
+        public void SetNodeValueByTagName(string tagName, string value, bool SaveImmediately = false)
         {
             getNodeByTagName(tagName).InnerText = value;
+            SaveConfiguration();
         }
 
         public void AddAttributeToNode(XmlNode node, string attrName, string attrValue)

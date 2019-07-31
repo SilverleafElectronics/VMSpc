@@ -13,7 +13,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -70,8 +70,8 @@
                 </Grid>
             </GroupBox>
             <StackPanel Grid.Column="1" Orientation="Vertical" Width="150" >
-                <Button Name="ResetToDayOne"  Click="ResetToDayOne_Click" Margin="0,5,0,0" >Start From Day One</Button>
-                <Button Name="ChangeDataFile" Click="ChangeDataFile_Click" Margin="0,5,0,0">Change Data File</Button>
+                <Button Name="ResetToDayOne"  Click="ResetToDayOne_Click" Margin="0,5,0,5" >Start From Day One</Button>
+                <Button Name="ChangeDataFile" Click="ChangeDataFile_Click" Margin="0,5,0,5">Change Data File</Button>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="2" VerticalAlignment="Center" Margin="10">

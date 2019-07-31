@@ -87,6 +87,8 @@ namespace VMSpc
         public double LastValue => (PresenterList[Pid].datum.seen) ? PresenterList[Pid].datum.value * Multiplier + Offset : DUB_NODATA;
         public double LastMetricValue => (PresenterList[Pid].datum.seen) ? PresenterList[Pid].datum.valueMetric : DUB_NODATA;
 
+        public bool Seen => PresenterList[Pid].datum.seen;
+
         public VParameter(XmlNode node)
         {
             this.node = node;

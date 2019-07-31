@@ -268,9 +268,9 @@ namespace VMSpc
         /// <param name="callback"></param>
         /// <param name="interval"></param>
         /// <returns></returns>
-        public static Timer CREATE_TIMER(ElapsedEventHandler callback, int interval)
+        public static Timer CREATE_TIMER(ElapsedEventHandler callback, int millisecond_interval)
         {
-            Timer timer = new Timer(interval);
+            Timer timer = new Timer(millisecond_interval);
             timer.Elapsed += callback;
             timer.AutoReset = true;
             timer.Enabled = true;

@@ -152,8 +152,9 @@ namespace VMSpc.Parsers
 
 
         /// <summary> Dictionary that maps all SPNs to correlating MaxTrackers. </summary>
-        public static Dictionary<ushort, TSPNMaxTracker> SPNTrackers = new Dictionary<ushort, TSPNMaxTracker>();
+        public static Dictionary<ushort, List<TSPNTracker>> SPNTrackers = new Dictionary<ushort, List<TSPNTracker>>();
 
+          /***************These are not "real" SPNs. Continue incrementing if adding more is needed*******************/
         public static TSPNMaxTracker spn_MaxCoolant = new TSPNMaxTracker(503, spn_coolantTemp, 2000, 12000, 999.9);
         public static TSPNMaxTracker spn_MaxTransmission = new TSPNMaxTracker(504, spn_transTemp, 2000, 12000, 999.9);
         public static TSPNMaxTracker spn_MaxOil = new TSPNMaxTracker(505, spn_oilTemp, 2000, 12000, 999.9);
@@ -161,21 +162,26 @@ namespace VMSpc.Parsers
         public static TSPNMaxTracker spn_MaxRPMs = new TSPNMaxTracker(507, spn_rpms, 2000, 12000, 9999.9);
         public static TSPNMaxTracker spn_MaxSpeed = new TSPNMaxTracker(508, spn_roadSpeed, 2000, 12000, 199.9);
 
+        public static TSPNAverageTracker spn_AvgEconomy = new TSPNAverageTracker(509, spn_odometer, spn_fuel);
+        public static TSPNAverageTracker spn_AvgSpeed = new TSPNAverageTracker(510, spn_odometer, spn_hours);
+        /*********************************************End of "fake" SPNs**********************************************/
+
         public static TSPNDiag spn_diagnostic1939 = new TSPNDiag(0); //TODO - implement once TSPNDiag is implemented
 
         //special parsing types
         public static TSPNRange spn_range = new TSPNRange(0);
         public static TSPNTransMode spn_transMode = new TSPNTransMode(0);
 
-        /// <summary> Called every time a datum is updated. This method will call the Record() function of a max tracker assigned to this SPN, if one exists </summary>
+        /// <summary> Called every time a datum is updated. This method will call the Record() function of all trackers assigned to this SPN, if one exists </summary>
         public static void ProcessDataReceivedEvent(ushort spn)
         {
             if (SPNTrackers.ContainsKey(spn))
-                SPNTrackers[spn].Record();
+                foreach (TSPNTracker tracker in SPNTrackers[spn])
+                    tracker.Record();
         }
 
         static SPNDefinitions() { }
 
-        public static void InitializeSPNs() { }
+        public static void Activate() { }
     }
 }

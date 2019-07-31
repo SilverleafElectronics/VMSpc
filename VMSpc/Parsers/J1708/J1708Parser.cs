@@ -116,7 +116,7 @@ namespace VMSpc.Parsers
             tempS = data[1] * 0.1;
             tempS += data[2] * (0.1 * 0x100);
             tempS += data[3] * (0.1 * 0x10000);
-            tempM = tempS;
+            tempM = tempS * 1.60934;
             tempR = (uint)(tempS * 321.802209171f);
             if (tempS > PresenterList[245].datum.value && tempS < 2000000)
                 SetValueSPN(245, tempR, tempM, tempS, J1708);
@@ -146,7 +146,7 @@ namespace VMSpc.Parsers
             tempS = data[1] * 0.125;
             tempS += data[2] * (0.125 * 0x100);
             tempS += data[3] * (0.125 * 0x10000);
-            tempM = tempS;
+            tempM = tempS * 3.78541;
             tempR = (uint)(tempS * 7.5708236069);
             if (tempS > PresenterList[250].datum.value && tempS < 250000)
                 SetValueSPN(250, tempR, tempM, tempS, J1708);

@@ -47,6 +47,8 @@ namespace VMSpc.Parsers
             ProcessDataReceivedEvent(spn);
         }
 
+
+
         /// <summary> Method allowing the datum's value to be set externally </summary>
         public void SetValue(uint raw, double val, double valMetric)
         {
@@ -464,7 +466,7 @@ namespace VMSpc.Parsers
         public TSPNAutoRunner(ushort spn, int interval) 
             : base(spn)
         {
-            CREATE_TIMER(Calculate, interval);
+            calcTimer = CREATE_TIMER(Calculate, interval);
         }
 
         protected abstract void Calculate(object sender, ElapsedEventArgs e);
@@ -526,11 +528,28 @@ namespace VMSpc.Parsers
 
     #endregion //TSPNAutoRunners
 
+    #region TSPNTracker
+
+    public abstract class TSPNTracker : TSPNDatum
+    {
+        protected TSPNDatum trackedSPN;
+        public TSPNTracker(ushort spn, TSPNDatum trackedSPN)
+            :base(spn)
+        {
+            this.trackedSPN = trackedSPN;
+            if (SPNTrackers.ContainsKey(trackedSPN.spn))
+                SPNTrackers[trackedSPN.spn].Add(this);
+            else
+                SPNTrackers.Add(trackedSPN.spn, new List<TSPNTracker>() { this });
+        }
+
+        public abstract void Record();
+    }
+
     #region TSPNMaxTracker
 
-    public class TSPNMaxTracker : TSPNDatum
+    public class TSPNMaxTracker : TSPNTracker
     {
-        private TSPNDatum trackedSPN;
         private double maxValue;
         private TimeValuePair[] valueArray;
         private ulong timeSpan;
@@ -546,10 +565,8 @@ namespace VMSpc.Parsers
         }
 
         public TSPNMaxTracker(ushort spn, TSPNDatum trackedSPN, ushort bufferSize, ulong timeSpan, double max = 999999.9)
-            :base(spn)
+            :base(spn, trackedSPN)
         {
-            this.trackedSPN = trackedSPN;
-            SPNTrackers.Add(trackedSPN.spn, this);
             maxValue = max;
             valueArray = new TimeValuePair[bufferSize];
             valueArray[0] = new TimeValuePair(0, Double.MinValue, Double.MinValue);
@@ -558,7 +575,7 @@ namespace VMSpc.Parsers
             left = right = 0;
         }
 
-        public void Record()
+        public override void Record()
         {
             counter++;
             TimeValuePair recordStruct = new TimeValuePair(counter, trackedSPN.valueMetric, trackedSPN.value);
@@ -602,6 +619,38 @@ namespace VMSpc.Parsers
     }
 
     #endregion //TSPNMaxTracker
+
+    #region TSPNAverageTracker
+    /// <summary>
+    /// Specifically made for use with Averages that depend on two values, such as MPG.
+    /// trackedSPN is used as the dividend, second_trackedSPN is the divisor.
+    /// </summary>
+    public class TSPNAverageTracker : TSPNTracker
+    {
+        protected TSPNDatum second_trackedSPN;
+        public TSPNAverageTracker(ushort spn, TSPNDatum trackedSPN, TSPNDatum second_trackedSPN)
+            :base(spn, trackedSPN)
+        {
+            this.second_trackedSPN = second_trackedSPN;
+            if (SPNTrackers.ContainsKey(second_trackedSPN.spn))
+                SPNTrackers[second_trackedSPN.spn].Add(this);
+            else
+                SPNTrackers.Add(second_trackedSPN.spn, new List<TSPNTracker>() { this });
+        }
+
+        public override void Record()
+        {
+            if (!trackedSPN.seen || !second_trackedSPN.seen)
+                return;
+            value = trackedSPN.value / second_trackedSPN.value;
+            valueMetric = trackedSPN.valueMetric / second_trackedSPN.valueMetric;
+            seen = true;
+        }
+    }
+
+    #endregion TSPNAverageTracker
+
+    #endregion //TSPNTracker
 
     //TODO
     #region TSPNDiag (diagnostics)

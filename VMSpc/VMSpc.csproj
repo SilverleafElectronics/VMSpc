@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="DlgWindows\VMSDialog.cs" />
     <Compile Include="DlgWindows\VPanelDlg.cs" />
+    <Compile Include="Helpers\Pointer.cs" />
     <Compile Include="Panels\ParamPresenter.cs" />
     <Compile Include="Panels\VMultiBar.cs" />
     <Compile Include="Panels\VOdometer.cs" />
@@ -109,7 +110,7 @@
     <Compile Include="Panels\VSimpleGauge.cs" />
     <Compile Include="Parsers\J1939\PGNMapper.cs" />
     <Compile Include="Parsers\J1708\PIDWrapper.cs" />
-    <Compile Include="Parsers\J1939\SPNWrapper.cs" />
+    <Compile Include="Parsers\J1939\SPNDefinitions.cs" />
     <Compile Include="Parsers\J1939\TSPNDatum.cs" />
     <Compile Include="Parsers\PresenterWrapper.cs" />
     <Compile Include="Parsers\TSPNPresenter.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="XmlFileManagers\DefaultScrnManager.cs" />
     <Compile Include="XmlFileManagers\MessagesManager.cs" />
     <Compile Include="XmlFileManagers\OdometerManager.cs" />
+    <Compile Include="XmlFileManagers\OdometerTracker.cs" />
     <Compile Include="XmlFileManagers\ParamDataManager.cs" />
     <Compile Include="XmlFileManagers\SettingsManager.cs" />
     <Compile Include="XmlFileManagers\TireSettingsManager.cs" />

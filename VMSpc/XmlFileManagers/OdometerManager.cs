@@ -7,9 +7,16 @@ using System.Xml;
 using static VMSpc.XmlFileManagers.ParamDataManager;
 using static VMSpc.Constants;
 using System.IO;
+using System.Timers;
+using static VMSpc.XmlFileManagers.OdometerTracker;
+using VMSpc.Helpers;
 
 namespace VMSpc.XmlFileManagers
 {
+    /// <summary> 
+    /// Class for handling the creation of specific odometer files. Not 
+    /// responsible for writing to the main Odometer.xml file. See OdometerTracker.cs for that implementation 
+    /// </summary>
     public class OdometerManager : XmlFileManager
     {
         public double startFuel,
@@ -34,11 +41,11 @@ namespace VMSpc.XmlFileManagers
 
         public void ResetTrip()
         {
-            startFuel = ZERO_IF_INVALID(ParamData.parameters[250].LastValue);
-            startLiters = ZERO_IF_INVALID(ParamData.parameters[250].LastMetricValue);
-            startHours = ZERO_IF_INVALID(ParamData.parameters[247].LastValue);
-            startMiles = ZERO_IF_INVALID(ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastValue);
-            startKilometers = ZERO_IF_INVALID(ParamData.parameters[SettingsManager.Settings.get_odometerPID()].LastMetricValue);
+            startFuel = ZERO_IF_INVALID(Odometer.Fuel);
+            startLiters = ZERO_IF_INVALID(Odometer.Liters);
+            startHours = ZERO_IF_INVALID(Odometer.Hours);
+            startMiles = ZERO_IF_INVALID(Odometer.Miles);
+            startKilometers = ZERO_IF_INVALID(Odometer.Kilometers);
             if (!File.Exists("./history_files/" + CHANGE_FILE_TYPE(docName, ".xml", ".txt")))
                 CreateHistoryFile(docName.Substring(docName.LastIndexOf("/") + 1));
             OverwriteFile(
@@ -90,5 +97,16 @@ namespace VMSpc.XmlFileManagers
             string TimeElapsed = string.Format("{0}:{1:00}", Math.Round(hours), ((hours % 1) * 60));
             string entry = string.Format("{0},    {1},    {2},    {3},    {4},    {5}", date, miles, hours, fuel, speed, mpg);
         }
+
+        public void InitializeOdometerWrite()
+        {
+            CREATE_TIMER(UpdateOdometer, 10000);
+        }
+
+        protected static void UpdateOdometer(object sender, ElapsedEventArgs e)
+        {
+
+        }
+
     }
 }

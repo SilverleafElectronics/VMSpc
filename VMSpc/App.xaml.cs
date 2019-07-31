@@ -6,6 +6,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using VMSpc.Parsers;
+using static VMSpc.XmlFileManagers.AlarmDataManager;
+using static VMSpc.XmlFileManagers.ClockSettings;
+using static VMSpc.XmlFileManagers.DefaultScrnManager;
+using static VMSpc.XmlFileManagers.DiagnosticGaugeSettings;
+using static VMSpc.XmlFileManagers.GaugeSettings;
+using static VMSpc.XmlFileManagers.MessageBoxSettings;
+using static VMSpc.XmlFileManagers.MessagesManager;
+using static VMSpc.XmlFileManagers.MultiBarSettings;
+using static VMSpc.XmlFileManagers.OdometerManager;
+using static VMSpc.XmlFileManagers.OdometerSettings;
+using static VMSpc.XmlFileManagers.OdometerTracker;
+using static VMSpc.XmlFileManagers.ParamDataManager;
+using static VMSpc.XmlFileManagers.TireSettingsManager;
+using static VMSpc.XmlFileManagers.XmlFileManager;
 
 namespace VMSpc
 {
@@ -31,10 +46,28 @@ namespace VMSpc
             var settings = VMSpc.Properties.Settings.Default;
         }
 
+        /// <summary>
+        /// All static classes and singletons meant for global 
+        /// usage are activated here. Some areas depend on these classes having their 
+        /// data loaded before the program starts (e.g., OdometerTracker), so it
+        /// is very important that they are called here. All static classes should at
+        /// the bare minimum implement an empty Activate() method to ensure their 
+        /// constructors are called
+        /// </summary>
+        private void ActivateStaticClasses()
+        {
+            PresenterWrapper.Activate();
+            SPNDefinitions.Activate();
+            Odometer.Activate();
+            ParamData.Activate();
+
+        }
+
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             
             ShowSplashScreen();
+            ActivateStaticClasses();
             VMSpcStart();
             AddGlobalEventHandlers();
         }
