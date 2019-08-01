@@ -7,6 +7,7 @@ using VMSpc.Communication;
 using static VMSpc.Constants;
 using static VMSpc.Parsers.PGNMapper;
 using VMSpc.DevHelpers;
+using static VMSpc.XmlFileManagers.SettingsManager;
 
 namespace VMSpc.Parsers
 {
@@ -23,7 +24,10 @@ namespace VMSpc.Parsers
             if (PGNMap.ContainsKey(canMessage.pgn) && PGNMap[canMessage.pgn] != null)
             {
                 foreach (TSPNDatum datum in PGNMap[canMessage.pgn])
+                {
+                    //if (Settings.)
                     datum.Parse(canMessage.address, canMessage.data);
+                }
             }
         }
     }

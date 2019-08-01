@@ -47,9 +47,6 @@ namespace VMSpc
             Window debugConsole = new DebugConsole();
             debugConsole.Show();
 #endif
-            ParamData.Load();
-            PIDManager.InitializePIDs();
-            PresenterWrapper.InitializePresenterList();
             GeneratePanels();
             Application.Current.MainWindow = this;
             InitializeComm();
@@ -86,11 +83,20 @@ namespace VMSpc
 
         public void InitializeComm()
         {
+            CloseComm();
             commreader = new VMSComm();
-            if (NOT_NULL(commThread))
-                commThread.Abort();
             commThread = new Thread(commreader.StartComm);
             commThread.Start();
+        }
+
+        public void CloseComm()
+        {
+            if (NOT_NULL(commThread))
+            {
+                commreader.StopComm();
+                commThread.Abort();
+                commreader = null;
+            }
         }
 
         private void GeneratePanels()
@@ -110,6 +116,7 @@ namespace VMSpc
         {
             if (!forceClose)
                 SaveConfig();
+            CloseComm();
             base.OnClosing(e);
         }
 
@@ -201,7 +208,8 @@ namespace VMSpc
         private void CommSettingsCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             CommDlg commdlg = new CommDlg(commreader);
-            ShowVMSDlg(commdlg);
+            if (ShowVMSDlg(commdlg))
+                InitializeComm();
         }
 
         private void AboutCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -223,7 +231,10 @@ namespace VMSpc
         private void RawLogCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             RawLogDlg rawlogdlg = new RawLogDlg(commreader);
-            ShowVMSDlg(rawlogdlg);
+            if (ShowVMSDlg(rawlogdlg))
+            {
+                InitializeComm();
+            }
         }
 
         private void DeleteGaugeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)

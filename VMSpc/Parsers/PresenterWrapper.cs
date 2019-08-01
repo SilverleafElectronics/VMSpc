@@ -119,10 +119,8 @@ namespace VMSpc.Parsers
             PresenterList.Add(506, new TSPNPresenterFloat(spn_MaxManifoldTemp, "", 506, "", "", 0, false));
             PresenterList.Add(507, new TSPNPresenterFloat(spn_MaxRPMs, "", 507, "", "", 0, false));
             PresenterList.Add(508, new TSPNPresenterFloat(spn_MaxSpeed, "", 508, "", "", 0, false));
-        }
-
-        public static void InitializePresenterList()
-        {
+            PresenterList.Add(511, new TSPNPresenterFloat(spn_AvgEconomy, "", 511, "", "", 0, false));
+            PresenterList.Add(512, new TSPNPresenterFloat(spn_AvgSpeed, "", 512, "", "", 0, false));
         }
 
         public static void Activate() { }

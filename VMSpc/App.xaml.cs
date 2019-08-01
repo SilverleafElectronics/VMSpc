@@ -19,6 +19,7 @@ using static VMSpc.XmlFileManagers.OdometerManager;
 using static VMSpc.XmlFileManagers.OdometerSettings;
 using static VMSpc.XmlFileManagers.OdometerTracker;
 using static VMSpc.XmlFileManagers.ParamDataManager;
+using static VMSpc.Parsers.PIDWrapper;
 using static VMSpc.XmlFileManagers.TireSettingsManager;
 using static VMSpc.XmlFileManagers.XmlFileManager;
 
@@ -56,8 +57,9 @@ namespace VMSpc
         /// </summary>
         private void ActivateStaticClasses()
         {
-            PresenterWrapper.Activate();
-            SPNDefinitions.Activate();
+            SPNDefinitions.Activate();      //in VMSpc/Parsers/J1939/SPNDefinitions.cs - Defines every SPN object
+            PIDManager.Activate();          //in VMSpc/Parsers/J1708/PIDWrapper.cs     - Creates a PID object for all J1708 PIDs and attaches them to PIDList
+            PresenterWrapper.Activate();    //in VMSpc/Parsers/PresenterWrapper.cs     - Attaches all TSPNDatum objects to a presenter object, which is then stored in PresenterList
             Odometer.Activate();
             ParamData.Activate();
 

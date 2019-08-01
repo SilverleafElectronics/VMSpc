@@ -55,7 +55,7 @@ namespace VMSpc.Parsers
         {
         }
 
-        public void InitializePIDs()
+        public void Activate()
         {
             //                             PID  NumDataBytes       Title   
             PIDList.Add(47, new PID(47, 2, "Retarder Switch"));

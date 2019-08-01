@@ -16,6 +16,7 @@ using static VMSpc.Constants;
 using VMSpc.DevHelpers;
 using Microsoft.Win32;
 using System.IO;
+using static VMSpc.XmlFileManagers.SettingsManager;
 
 namespace VMSpc.DlgWindows
 {
@@ -26,6 +27,8 @@ namespace VMSpc.DlgWindows
     {
         private VMSComm commreader;
         public int testSelection;
+
+        private int dataReaderType;
         
         public CommDlg(VMSComm commreader) : base()
         {
@@ -41,8 +44,9 @@ namespace VMSpc.DlgWindows
             CreateBinding("ComPort", commreader, BindingMode.TwoWay, PortSelection, ComboBox.SelectedIndexProperty);
             CreateBinding("MessageCount", commreader, BindingMode.OneWay, GoodPacketCount, Label.ContentProperty);
             CreateBinding("BadMessageCount", commreader, BindingMode.OneWay, BadPacketCount, Label.ContentProperty);
-            CreateBinding("ParseBehavior", commreader, BindingMode.TwoWay, ParsingBehavior, ComboBox.SelectedIndexProperty);
+            //CreateBinding("ParseBehavior", commreader, BindingMode.TwoWay, ParsingBehavior, ComboBox.SelectedIndexProperty);
             CreateBinding("LogFile", commreader, BindingMode.OneWay, LogPlayerFileName, TextBox.TextProperty);
+            ParsingBehavior.SelectedIndex = Settings.ParseMode;
         }
 
         private void ChangeLogPlayerFile_Click(object sender, RoutedEventArgs e)
@@ -65,6 +69,13 @@ namespace VMSpc.DlgWindows
         private void RestartComm_Click(object sender, RoutedEventArgs e)
         {
             ((MainWindow)Owner).InitializeComm();
+        }
+
+        private void OkButton_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.ParseMode = ParsingBehavior.SelectedIndex;
+            DialogResult = true;
+
         }
     }
 }

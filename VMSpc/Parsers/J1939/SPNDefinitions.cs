@@ -162,8 +162,8 @@ namespace VMSpc.Parsers
         public static TSPNMaxTracker spn_MaxRPMs = new TSPNMaxTracker(507, spn_rpms, 2000, 12000, 9999.9);
         public static TSPNMaxTracker spn_MaxSpeed = new TSPNMaxTracker(508, spn_roadSpeed, 2000, 12000, 199.9);
 
-        public static TSPNAverageTracker spn_AvgEconomy = new TSPNAverageTracker(509, spn_odometer, spn_fuel);
-        public static TSPNAverageTracker spn_AvgSpeed = new TSPNAverageTracker(510, spn_odometer, spn_hours);
+        public static TSPNAverageTracker spn_AvgEconomy = new TSPNAverageTracker(511, spn_odometer, spn_fuel);
+        public static TSPNAverageTracker spn_AvgSpeed = new TSPNAverageTracker(512, spn_odometer, spn_hours);
         /*********************************************End of "fake" SPNs**********************************************/
 
         public static TSPNDiag spn_diagnostic1939 = new TSPNDiag(0); //TODO - implement once TSPNDiag is implemented

@@ -13,12 +13,14 @@ using System.Text.RegularExpressions;
 using VMSpc.Parsers;
 using static VMSpc.Constants;
 using VMSpc.XmlFileManagers;
+using static VMSpc.XmlFileManagers.SettingsManager;
 
 namespace VMSpc.Communication
 {
     public class VMSComm
     {
         //Data readers
+        private DataReader dataReader;
         private SerialPort portReader;
         private Socket wifiReader;
         private StreamReader logReader;
@@ -63,6 +65,7 @@ namespace VMSpc.Communication
         private string logPlayerFile;
         public string LogPlayerFile { get { return logPlayerFile; } set { ChangeLogPlayerFile(value); } }
 
+        public string logDataQueue;
         public string LogRecordingFile;
         public bool LogRecordingEnabled;
         public byte LogType;
@@ -78,6 +81,7 @@ namespace VMSpc.Communication
             LogRecordingEnabled = false;
             LogType = LOGTYPE_RAWLOG;
             LogRecordingFile = null; //CHANGEME - retrieve from config
+            logDataQueue = "";
 
             dataReaderType = USB;
             dataReaderMap = new Dictionary<int, Action>
@@ -89,9 +93,9 @@ namespace VMSpc.Communication
             };
 
             comPort = 9;
-            portString = SettingsManager.Settings.port; //CHANGEME - port should be retrieved from config or inferred. User should also be able to override
+            portString = Settings.port;
             logPlayerFile = "j1939log.vms";   //CHANGEME - should rely on user input
-            parseBehavior = PARSE_ALL;  //CHANGEME - should initially come from config
+            parseBehavior = Settings.ParseMode;
 
             j1939Parser = new J1939Parser();
             j1708Parser = new J1708Parser();
@@ -117,6 +121,11 @@ namespace VMSpc.Communication
                 keepJibAwakeTimer = CREATE_TIMER(KeepJibAwake, 10000);
             }
             catch { } // CHANGEME - put something useful here
+        }
+
+        public void StopComm()
+        {
+            CloseDataReader();
         }
 
         /// <summary>
@@ -152,8 +161,14 @@ namespace VMSpc.Communication
                     logEntry += canMessage.ToParsedString(j1708Parser);
             }
             logEntry += "\nEnd of Message\n\n";
-            using (StreamWriter logWriter = new StreamWriter(LogRecordingFile, true))
-                logWriter.WriteLine(logEntry);
+            logDataQueue += logEntry;
+            if (logDataQueue.Length >= 2000)
+            {
+                string outputStream = String.Copy(logDataQueue);
+                logDataQueue = "";
+                using (StreamWriter logWriter = new StreamWriter(LogRecordingFile, true))
+                    logWriter.WriteLine(outputStream);
+            }
         }
 
         #endregion //Common Logic

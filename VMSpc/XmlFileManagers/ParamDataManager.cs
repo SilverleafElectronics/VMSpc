@@ -16,7 +16,7 @@ namespace VMSpc.XmlFileManagers
         {
             parameters = new Dictionary<ushort, VParameter>();
         }
-        public void Load()
+        private void Load()
         {
             foreach (XmlNode node in xmlDoc.GetElementsByTagName("Param"))
             {
@@ -28,6 +28,12 @@ namespace VMSpc.XmlFileManagers
         public static bool SEEN(ushort pid)
         {
             return ParamData.parameters[pid].Seen;
+        }
+
+        public override void Activate()
+        {
+            base.Activate();
+            Load();
         }
     }
 }

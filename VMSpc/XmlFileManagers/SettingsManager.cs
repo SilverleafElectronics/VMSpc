@@ -150,6 +150,12 @@ namespace VMSpc.XmlFileManagers
             }
         }
 
+        public int ParseMode
+        {
+            get => Int32.Parse(getNodeValueByTagName("Parse-Mode"));
+            set => SetNodeValueByTagName("Parse-Mode", value.ToString(), true);
+        }
+
         //SETTERS
 
     }

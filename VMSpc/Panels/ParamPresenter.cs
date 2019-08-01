@@ -126,7 +126,7 @@ namespace VMSpc.Panels
 
         private double GetOdometerValue()
         {
-            if (pid == 509 || pid == 510)
+            if (pid == 511 || pid == 512)
                 return parameter.LastValue;
             else
                 return parameter.LastValue - startValue;

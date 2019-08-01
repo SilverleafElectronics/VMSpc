@@ -57,7 +57,12 @@
     </ApplicationDefinition>
     <None Include="README" />
     <Compile Include="Communication\CanMessage.cs" />
+    <Compile Include="Communication\DataReader.cs" />
+    <Compile Include="Communication\LogFileReader.cs" />
     <Compile Include="Communication\MessageExtractor.cs" />
+    <Compile Include="Communication\SerialPortReader.cs" />
+    <Compile Include="Communication\USBPortReader.cs" />
+    <Compile Include="Communication\WifiSocketReader.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="CustomComponents\PanelGrid.cs" />
     <Compile Include="CustomComponents\VMSBorder.cs" />
