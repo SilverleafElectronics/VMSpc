@@ -14,32 +14,15 @@ namespace VMSpc.XmlFileManagers
         public SettingsManager() : base("Settings.xml") { }
 
         //GETTERS
-        public string get_version()
+        public string Version
         {
-            return getNodeValueByTagName("Version");
+            get => getNodeValueByTagName("Version");
+            set => SetNodeValueByTagName("Version", value, true);
         }
-        public string port
+        public int Port
         {
-            get
-            {
-                return getNodeValueByTagName("Port");
-            }
-            set
-            {
-                SetNodeValueByTagName("Port", value);
-            }
-        }
-        public int get_commDatabus()
-        {
-            return Int32.Parse(getNodeValueByTagName("Comm-Databus"));
-        }
-        public string get_scrnFileName()
-        {
-            return getNodeValueByTagName("Scrn-File-Name");
-        }
-        public int get_gaugeLock()
-        {
-            return Int32.Parse(getNodeValueByTagName("Gauge-Lock"));
+            get => Int32.Parse(getNodeValueByTagName("Port"));
+            set => SetNodeValueByTagName("Port", value.ToString());
         }
         public WindowPlacement get_windowPlacement()
         {
@@ -58,105 +41,33 @@ namespace VMSpc.XmlFileManagers
             windowPlacement.rcnpTopLeftY = Int32.Parse(getAttributeValueByNode(node, "rcNP-top-leftY"));
             return windowPlacement;
         }
-        public int get_datalogFrequency()
+        public ushort OdometerPID
         {
-            return Int32.Parse(getNodeValueByTagName("Frequency"));
+            get => UInt16.Parse(getNodeValueByTagName("Odometer-PID"));
+            set => SetNodeValueByTagName("Odometer-PID", value.ToString());
         }
-        public int get_datalogNumPids()
+        public int JibType
         {
-            return Int32.Parse(getNodeValueByTagName("Num-Pids"));
-        }
-        public string get_datalogFileName()
-        {
-            return getNodeValueByTagName("File-Name");
-        }
-        public int get_autoRestartFlag()
-        {
-            return Int32.Parse(getNodeValueByTagName("Auto-Restart-Flag"));
-        }
-        public int get_rollingBuffSize()
-        {
-            return Int32.Parse(getNodeValueByTagName("Rolling-Buff-Size"));
-        }
-        public string get_engineName()
-        {
-            return getNodeValueByTagName("Engine-Name");
-        }
-        public ushort odometerPID
-        {
-            get
-            {
-                return UInt16.Parse(getNodeValueByTagName("Odometer-PID"));
-            }
-            set
-            {
-                SetNodeValueByTagName("Odometer-PID", value.ToString());
-            }
-        }
-        public int get_autoDataLogFlag()
-        {
-            return Int32.Parse(getNodeValueByTagName("Auto-Data-Log-Flag"));
-        }
-        public int get_logWhenEngineOff()
-        {
-            return Int32.Parse(getNodeValueByTagName("Log-When_engine-Off"));
-        }
-        public int get_jibType()
-        {
-            return Int32.Parse(getNodeValueByTagName("Jib-Type"));
-        }
-        public int get_usbDelay()
-        {
-            return Int32.Parse(getNodeValueByTagName("Usb-Delay"));
-        }
-        public int get_tpmsType()
-        {
-            return Int32.Parse(getNodeValueByTagName("TPMS-Type"));
-        }
-        public int get_rqstFuelmeter()
-        {
-            return Int32.Parse(getNodeValueByTagName("Rqst-Fuelmeter"));
-        }
-        public int get_rqstOdometer()
-        {
-            return Int32.Parse(getNodeValueByTagName("Rqst-Odometer"));
-        }
-        public string get_IPAddress()
-        {
-            return getNodeValueByTagName("IP-Address");
-        }
-        public int get_IPPort()
-        {
-            return Int32.Parse(getNodeValueByTagName("IP-Port"));
-        }
-        public int get_cfgEngineModel()
-        {
-            return Int32.Parse(getNodeValueByTagName("CFG-Engine_model"));
-        }
-        public int get_showSplashscreen()
-        {
-            return Int32.Parse(getNodeValueByTagName("Show-Splashscreen"));
+            get => Int32.Parse(getNodeValueByTagName("Jib-Type"));
+            set => SetNodeValueByTagName("Jib-Type", value.ToString());
         }
         public bool UseClipping
         {
-            get
-            {
-                return Boolean.Parse(getNodeValueByTagName("Use-Clipping"));
-            }
-            set
-            {
-                getNodeByTagName("Use-Clipping").InnerText = value.ToString();
-                SaveConfiguration();
-            }
+            get => Boolean.Parse(getNodeValueByTagName("Use-Clipping"));
+            set => SetNodeValueByTagName("Use-Clipping", value.ToString(), true);
         }
 
         public int ParseMode
         {
             get => Int32.Parse(getNodeValueByTagName("Parse-Mode"));
-            set => SetNodeValueByTagName("Parse-Mode", value.ToString(), true);
+            set => SetNodeValueByTagName("Parse-Mode", value.ToString());
         }
 
-        //SETTERS
+        public string LogPlayerFileName
+        {
+            get => getNodeValueByTagName("LogPlayer-FileName");
+            set => SetNodeValueByTagName("LogPlayer-FileName", value);
+        }
 
     }
 }

@@ -17,7 +17,6 @@ using VMSpc.DlgWindows;
 using VMSpc.Panels;
 using VMSpc.DevHelpers;
 using VMSpc.CustomComponents;
-using System.Threading;
 using VMSpc.Communication;
 using static VMSpc.Parsers.PIDWrapper;
 using VMSpc.Parsers;
@@ -36,7 +35,6 @@ namespace VMSpc
         public VMSComm commreader;
         //PanelGrid panelGrid;
         public bool forceClose;
-        private Thread commThread;
 
         //constructor
         public MainWindow()
@@ -85,18 +83,13 @@ namespace VMSpc
         {
             CloseComm();
             commreader = new VMSComm();
-            commThread = new Thread(commreader.StartComm);
-            commThread.Start();
+            commreader.StartComm();
         }
 
         public void CloseComm()
         {
-            if (NOT_NULL(commThread))
-            {
+            if (NOT_NULL(commreader))
                 commreader.StopComm();
-                commThread.Abort();
-                commreader = null;
-            }
         }
 
         private void GeneratePanels()

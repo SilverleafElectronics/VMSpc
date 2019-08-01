@@ -56,9 +56,9 @@ namespace VMSpc.XmlFileManagers
                 Hours = ParamData.parameters[247].LastValue;
                 updated = true;
             }
-            if (SEEN(Settings.odometerPID) && Miles != ParamData.parameters[Settings.odometerPID].LastValue)
+            if (SEEN(Settings.OdometerPID) && Miles != ParamData.parameters[Settings.OdometerPID].LastValue)
             {
-                Miles = ParamData.parameters[Settings.odometerPID].LastValue;
+                Miles = ParamData.parameters[Settings.OdometerPID].LastValue;
                 updated = true;
             }
             if (SEEN(250) && Fuel != ParamData.parameters[250].LastValue)
@@ -74,7 +74,7 @@ namespace VMSpc.XmlFileManagers
         {
             PresenterList[247].datum.SetValue((uint)Hours, Hours, Hours);
             PresenterList[250].datum.SetValue((uint)Fuel, Fuel, Liters);
-            PresenterList[Settings.odometerPID].datum.SetValue((uint)Miles, Miles, Kilometers);
+            PresenterList[Settings.OdometerPID].datum.SetValue((uint)Miles, Miles, Kilometers);
         }
     }
 }

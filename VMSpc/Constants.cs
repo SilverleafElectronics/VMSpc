@@ -415,8 +415,8 @@ namespace VMSpc
         //-----------------------------------------------------------------------------------------
         //Communications Types
         //-----------------------------------------------------------------------------------------
-        public const int USB = 0;
-        public const int SERIAL = 1;
+        public const int SERIAL = 0;
+        public const int USB = 1;
         public const int WIFI = 2;
         public const int LOGPLAYER = 3;
 

@@ -15,10 +15,15 @@ namespace VMSpc.Communication
         }
         public override void InitDataReader()
         {
+            base.InitDataReader();
             throw new NotImplementedException();
         }
 
         public override void CloseDataReader()
+        {
+            throw new NotImplementedException();
+        }
+        public override bool SendMsg()
         {
             throw new NotImplementedException();
         }

@@ -40,12 +40,11 @@ namespace VMSpc.DlgWindows
         protected override void ApplyBindings()
         {
             base.ApplyBindings();
-            CreateBinding("DataReaderType", commreader, BindingMode.TwoWay, CommSelection, ComboBox.SelectedIndexProperty);
-            CreateBinding("ComPort", commreader, BindingMode.TwoWay, PortSelection, ComboBox.SelectedIndexProperty);
             CreateBinding("MessageCount", commreader, BindingMode.OneWay, GoodPacketCount, Label.ContentProperty);
             CreateBinding("BadMessageCount", commreader, BindingMode.OneWay, BadPacketCount, Label.ContentProperty);
-            //CreateBinding("ParseBehavior", commreader, BindingMode.TwoWay, ParsingBehavior, ComboBox.SelectedIndexProperty);
-            CreateBinding("LogFile", commreader, BindingMode.OneWay, LogPlayerFileName, TextBox.TextProperty);
+            LogPlayerFileName.Text = Settings.LogPlayerFileName;
+            CommSelection.SelectedIndex = Settings.JibType;
+            PortSelection.SelectedIndex = Settings.Port - 1;
             ParsingBehavior.SelectedIndex = Settings.ParseMode;
         }
 
@@ -61,7 +60,6 @@ namespace VMSpc.DlgWindows
             bool? result = dlg.ShowDialog();
             if (result == true)
             {
-                commreader.LogPlayerFile = dlg.FileName;
                 LogPlayerFileName.Text = dlg.FileName;
             }
         }
@@ -73,9 +71,11 @@ namespace VMSpc.DlgWindows
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
+            Settings.LogPlayerFileName = LogPlayerFileName.Text;
             Settings.ParseMode = ParsingBehavior.SelectedIndex;
+            Settings.Port = PortSelection.SelectedIndex + 1;
             DialogResult = true;
-
+            Close();
         }
     }
 }

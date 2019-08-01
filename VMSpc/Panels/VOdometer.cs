@@ -86,7 +86,7 @@ namespace VMSpc.Panels
 
         private void DrawGridCells()
         {
-            CreateGridCell(panelSettings.showMiles, "Distance", "Miles", "Kilometers", Settings.odometerPID, (!panelSettings.showInMetric) ? manager.startMiles : manager.startKilometers);
+            CreateGridCell(panelSettings.showMiles, "Distance", "Miles", "Kilometers", Settings.OdometerPID, (!panelSettings.showInMetric) ? manager.startMiles : manager.startKilometers);
             CreateGridCell(panelSettings.showFuelLocked, "Fuel", "Gallons", "Liters", 250, (!panelSettings.showInMetric) ? manager.startFuel : manager.startLiters);
             CreateGridCell(panelSettings.showHours, "Time", "Hrs", "Hrs", 247, manager.startHours);
             CreateGridCell(panelSettings.showSpeed, "Speed", "MPH", "KPH", 511, (!panelSettings.showInMetric) ? manager.startMiles : manager.startKilometers);
