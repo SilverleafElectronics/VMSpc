@@ -31,7 +31,7 @@ namespace VMSpc.Communication
         /// Called every 100ms when using the log reader. Reads the next line of the log file and passes the message to ProcessData(). 
         /// Returns to the beginning of the file once reaching the end
         /// </summary>
-        private void ReadLogEntry(object sender, ElapsedEventArgs e)
+        private void ReadLogEntry()
         {
             string line = " ";
             while (line != null && line.Length < 2)
@@ -42,7 +42,7 @@ namespace VMSpc.Communication
                     DataProcessor(line);
                 });
             else if (line != null)          //continue reading until a valid line is found
-                ReadLogEntry(null, null);
+                ReadLogEntry();
             else
             {
                 logReader.DiscardBufferedData();
@@ -58,9 +58,6 @@ namespace VMSpc.Communication
         {
             throw new NotImplementedException();
         }
-        protected override void KeepJibAwake(object source, ElapsedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+        protected override void KeepJibAwake(){ }
     }
 }

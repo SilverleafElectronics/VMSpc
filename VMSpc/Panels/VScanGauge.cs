@@ -63,7 +63,7 @@ namespace VMSpc.Panels
             barGaugeList[currentVisibilityIndex].Update();
         }
 
-        private void ChangeGaugeFace(object Sender, ElapsedEventArgs e)
+        private void ChangeGaugeFace()
         {
             Application.Current.Dispatcher.Invoke(() =>
             {

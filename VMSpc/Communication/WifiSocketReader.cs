@@ -29,7 +29,7 @@ namespace VMSpc.Communication
         {
             throw new NotImplementedException();
         }
-        protected override void KeepJibAwake(object source, ElapsedEventArgs e)
+        protected override void KeepJibAwake()
         {
             throw new NotImplementedException();
         }

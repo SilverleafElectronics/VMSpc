@@ -40,8 +40,10 @@ namespace VMSpc.DlgWindows
         protected override void ApplyBindings()
         {
             base.ApplyBindings();
-            CreateBinding("MessageCount", commreader, BindingMode.OneWay, GoodPacketCount, Label.ContentProperty);
-            CreateBinding("BadMessageCount", commreader, BindingMode.OneWay, BadPacketCount, Label.ContentProperty);
+            //CreateBinding("MessageCount", commreader, BindingMode.OneWay, GoodPacketCount, Label.ContentProperty);
+            //CreateBinding("BadMessageCount", commreader, BindingMode.OneWay, BadPacketCount, Label.ContentProperty);
+            CreateBinding(GoodPacketCount, "Content", commreader, "MessageCount", ONE_WAY, true);
+
             LogPlayerFileName.Text = Settings.LogPlayerFileName;
             CommSelection.SelectedIndex = Settings.JibType;
             PortSelection.SelectedIndex = Settings.Port - 1;

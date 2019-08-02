@@ -22,10 +22,10 @@ namespace VMSpc.Communication
         public abstract void CloseDataReader();
         public virtual void InitDataReader()
         {
-            KeepJibAwake(null, null);
+            KeepJibAwake();
             keepJibAwakeTimer = CREATE_TIMER(KeepJibAwake, 10000);
         }
         public abstract bool SendMsg();
-        protected abstract void KeepJibAwake(object source, ElapsedEventArgs e);
+        protected abstract void KeepJibAwake();
     }
 }

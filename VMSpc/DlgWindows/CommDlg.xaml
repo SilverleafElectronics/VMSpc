@@ -42,8 +42,8 @@
                       Margin="0,0,5,0" 
                       >
                 <!--SelectionChanged="ComboBox_SelectionChanged_COMTYPE"-->
-                <ComboBoxItem>USB</ComboBoxItem>
                 <ComboBoxItem>Serial</ComboBoxItem>
+                <ComboBoxItem>USB</ComboBoxItem>
                 <ComboBoxItem>WiFi</ComboBoxItem>
                 <ComboBoxItem>Log Player</ComboBoxItem>
             </ComboBox>
@@ -56,8 +56,8 @@
                 <ComboBox.Style>
                     <Style TargetType="{x:Type ComboBox}">
                         <Setter Property="IsEnabled" Value="False" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=CommSelection, Path=SelectedIndex}" Value="0">
+                        <Style.Triggers> <!-- Disables the port selection combobox unless USB is selected for the data source -->
+                            <DataTrigger Binding="{Binding ElementName=CommSelection, Path=SelectedIndex}" Value="1">
                                 <Setter Property="IsEnabled" Value="True" />
                             </DataTrigger>
                         </Style.Triggers>

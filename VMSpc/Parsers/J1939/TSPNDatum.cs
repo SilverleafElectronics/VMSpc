@@ -469,7 +469,7 @@ namespace VMSpc.Parsers
             calcTimer = CREATE_TIMER(Calculate, interval);
         }
 
-        protected abstract void Calculate(object sender, ElapsedEventArgs e);
+        protected abstract void Calculate();
     }
 
     public class TSPNAcceleration : TSPNAutoRunner
@@ -482,7 +482,7 @@ namespace VMSpc.Parsers
             lastSpeed = Double.NaN;
         }
 
-        protected override void Calculate(object sender, ElapsedEventArgs e)
+        protected override void Calculate()
         {
             if (Seen(roadSpeed))
             {
@@ -513,7 +513,7 @@ namespace VMSpc.Parsers
             index = 0;
         }
 
-        protected override void Calculate(object sender, ElapsedEventArgs e)
+        protected override void Calculate()
         {
             if (Seen(roadSpeed))
             {

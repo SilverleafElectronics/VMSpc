@@ -27,11 +27,15 @@ namespace VMSpc.DevHelpers
 
         public void AddLine(string logItem)
         {
-            TextBlock line = new TextBlock();
-            line.Text = logItem;
-            line.Foreground = Brushes.White;
-            Console.Children.Add(line);
-            ConsoleScroller.ScrollToBottom();
+            try
+            {
+                TextBlock line = new TextBlock();
+                line.Text = logItem;
+                line.Foreground = Brushes.White;
+                Console.Children.Add(line);
+                ConsoleScroller.ScrollToBottom();
+            }
+            catch { }
         }
     }
 }

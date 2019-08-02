@@ -103,7 +103,7 @@ namespace VMSpc.XmlFileManagers
             CREATE_TIMER(UpdateOdometer, 10000);
         }
 
-        protected static void UpdateOdometer(object sender, ElapsedEventArgs e)
+        protected static void UpdateOdometer()
         {
 
         }

@@ -48,7 +48,7 @@ namespace VMSpc.XmlFileManagers
         public double Kilometers => Miles * 1.60934;
 
         /// <summary> Updates the values in Odometer.xml with the latest values. Only writes to the file if an update has been made </summary>
-        private void UpdateOdometer(object source, ElapsedEventArgs e)
+        private void UpdateOdometer()
         {
             bool updated = false;
             if (SEEN(247) && Hours != ParamData.parameters[247].LastValue)

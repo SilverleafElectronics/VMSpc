@@ -460,7 +460,7 @@ namespace VMSpc.Panels
             panelSettings.rectCord.topLeftY = (int)Canvas.GetTop(border);
         }
 
-        private void OnUpdateTimedEvent(Object source, ElapsedEventArgs e)
+        private void OnUpdateTimedEvent()
         {
             try // Wrapped in try block, in case the user closes while this thread is executing
             {

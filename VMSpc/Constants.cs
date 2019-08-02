@@ -265,13 +265,11 @@ namespace VMSpc
         /// <summary>
         /// Attaches the specified callback method and interval to a timer object. Returns the timer object
         /// </summary>
-        /// <param name="callback"></param>
-        /// <param name="interval"></param>
         /// <returns></returns>
-        public static Timer CREATE_TIMER(ElapsedEventHandler callback, int millisecond_interval)
+        public static Timer CREATE_TIMER(Action callback, int millisecond_interval)
         {
             Timer timer = new Timer(millisecond_interval);
-            timer.Elapsed += callback;
+            timer.Elapsed += (object obj, ElapsedEventArgs e) => callback();
             timer.AutoReset = true;
             timer.Enabled = true;
             return timer;
