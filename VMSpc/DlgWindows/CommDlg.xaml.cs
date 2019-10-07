@@ -42,7 +42,7 @@ namespace VMSpc.DlgWindows
             base.ApplyBindings();
             //CreateBinding("MessageCount", commreader, BindingMode.OneWay, GoodPacketCount, Label.ContentProperty);
             //CreateBinding("BadMessageCount", commreader, BindingMode.OneWay, BadPacketCount, Label.ContentProperty);
-            CreateBinding(GoodPacketCount, "Content", commreader, "MessageCount", ONE_WAY, true);
+            //CreateBinding(GoodPacketCount, "Content", commreader, "MessageCount", ONE_WAY, true);
 
             LogPlayerFileName.Text = Settings.LogPlayerFileName;
             CommSelection.SelectedIndex = Settings.JibType;
@@ -76,6 +76,7 @@ namespace VMSpc.DlgWindows
             Settings.LogPlayerFileName = LogPlayerFileName.Text;
             Settings.ParseMode = ParsingBehavior.SelectedIndex;
             Settings.Port = PortSelection.SelectedIndex + 1;
+            Settings.JibType = CommSelection.SelectedIndex;
             DialogResult = true;
             Close();
         }

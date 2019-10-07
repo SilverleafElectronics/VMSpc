@@ -15,7 +15,7 @@ namespace VMSpc.Helpers
     ///    should only be used in this context if the `ref` and `out` constraints are too restrictive
     ///  - Can serve as a method for moving structs around by reference
     /// </usage>
-    public class SharpPointer<T> :ISharpPointer
+    public class SharpPointer<T> 
     {
         private Func<T> GetVal;
         private Action<T> SetVal;

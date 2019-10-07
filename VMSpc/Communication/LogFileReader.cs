@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using static VMSpc.Constants;
+using static VMSpc.XmlFileManagers.SettingsManager;
 
 namespace VMSpc.Communication
 {
@@ -19,7 +20,7 @@ namespace VMSpc.Communication
         public LogFileReader(Action<string> DataProcessor)
             : base(DataProcessor)
         {
-
+            logPlayerFile = Settings.LogPlayerFileName;
         }
         public override void InitDataReader()
         {
@@ -52,11 +53,11 @@ namespace VMSpc.Communication
 
         public override void CloseDataReader()
         {
-            throw new NotImplementedException();
+            logReader.Close();
         }
         public override bool SendMsg()
         {
-            throw new NotImplementedException();
+            return true;
         }
         protected override void KeepJibAwake(){ }
     }

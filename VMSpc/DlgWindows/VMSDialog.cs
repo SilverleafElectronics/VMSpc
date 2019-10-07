@@ -92,7 +92,7 @@ namespace VMSpc.DlgWindows
         {
             if (BindingType == VMSDialog.TWO_WAY)
             {
-                DataPointer.Value = (T2)UIPointer.Value; //TODO
+                //DataPointer.Value = (T2)UIPointer.Value; //TODO
             }
         }
     }
