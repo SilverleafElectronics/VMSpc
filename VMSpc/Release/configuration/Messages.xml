@@ -1,0 +1,13 @@
+<!--DO NOT MODIFY THE CONTENTS OF THIS FILE UNLESS YOU KNOW WHAT YOU ARE DOING!!!-->
+<Root>
+    <Version>V2</Version>
+    <Messages>
+        <Message Name="Amb. Temp">
+            <Pid>171</Pid>
+            <Relation>0</Relation>
+            <Value>0</Value>
+            <Color Red="255" Green="255" Blue="255"/>
+            <Message></Message>
+        </Message>
+    </Messages>
+</Root>

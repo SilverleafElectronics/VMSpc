@@ -1,0 +1,660 @@
+<Root>
+    <Version>V4.0</Version>
+    <Screen-Elements>
+        <File-Name>default.scr.xml</File-Name>
+        <Panel Number="1">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="648" Top-Left:Y="232" Bottom-Right:X="848" Bottom-Right:Y="304"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>10</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>0</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>0</Format>
+        </Panel>
+        <Panel Number="2">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="840" Top-Left:Y="16" Bottom-Right:X="1048" Bottom-Right:Y="104"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>11</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>0</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>0</Format>
+        </Panel>
+        <Panel Number="3">
+            <ID>C</ID>
+            <Rect-Cord Top-Left:X="368" Top-Left:Y="552" Bottom-Right:X="616" Bottom-Right:Y="656"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="128" Green="0" Blue="64"/>
+            <Num-Lines>5</Num-Lines>
+            <PID>0</PID>
+            <PID-Limited>0</PID-Limited>
+            <Use-Static-Color>0</Use-Static-Color>
+        </Panel>
+        <Panel Number="4">
+            <ID>6</ID>
+            <Rect-Cord Top-Left:X="1120" Top-Left:Y="392" Bottom-Right:X="1304" Bottom-Right:Y="552"/>
+            <BackGround-Color Red="128" Green="128" Blue="128"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="128" Green="128" Blue="128"/>
+            <Number-of-Pids>2</Number-of-Pids>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>1</Use-Static-Color>
+            <Param PID="509"/>
+            <Param PID="510"/>
+            <Scan-Rate>1</Scan-Rate>
+        </Panel>
+        <Panel Number="5">
+            <ID>2</ID>
+            <Rect-Cord Top-Left:X="882" Top-Left:Y="496" Bottom-Right:X="1098" Bottom-Right:Y="584"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>504</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>0</Show-Abbreviation>
+            <Show-In-Metric>1</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>0</Format>
+            <Scan-Speed>6</Scan-Speed>
+            <Num-Pids>6</Num-Pids>
+            <Param Pid="503"/>
+            <Param Pid="505"/>
+            <Param Pid="507"/>
+            <Param Pid="508"/>
+            <Param Pid="504"/>
+            <Param Pid="84"/>
+        </Panel>
+        <Panel Number="6">
+            <ID>5</ID>
+            <Rect-Cord Top-Left:X="904" Top-Left:Y="128" Bottom-Right:X="1408" Bottom-Right:Y="360"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <Num-PIDs>14</Num-PIDs>
+            <Show-In-Metric>1</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Param PID="168"/>
+            <Param PID="86"/>
+            <Param PID="110"/>
+            <Param PID="92"/>
+            <Param PID="190"/>
+            <Param PID="183"/>
+            <Param PID="184"/>
+            <Param PID="105"/>
+            <Param PID="100"/>
+            <Param PID="84"/>
+            <Param PID="601"/>
+            <Param PID="9"/>
+            <Param PID="177"/>
+            <Param PID="102">
+                <Show-Name>1</Show-Name>
+                <Show-Value>1</Show-Value>
+                <Show-Unit>1</Show-Unit>
+                <Font-Format>1</Font-Format>
+            </Param>
+        </Panel>
+        <Panel Number="7">
+            <ID>2</ID>
+            <Rect-Cord Top-Left:X="632" Top-Left:Y="416" Bottom-Right:X="848" Bottom-Right:Y="504"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>504</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>0</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>0</Format>
+            <Scan-Speed>6</Scan-Speed>
+            <Num-Pids>6</Num-Pids>
+            <Param Pid="503"/>
+            <Param Pid="505"/>
+            <Param Pid="507"/>
+            <Param Pid="508"/>
+            <Param Pid="504"/>
+            <Param Pid="84"/>
+        </Panel>
+        <Panel Number="8">
+            <ID>2</ID>
+            <Rect-Cord Top-Left:X="634" Top-Left:Y="512" Bottom-Right:X="850" Bottom-Right:Y="600"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>508</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>0</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>0</Format>
+            <Scan-Speed>6</Scan-Speed>
+            <Num-Pids>3</Num-Pids>
+            <Param Pid="507"/>
+            <Param Pid="508"/>
+            <Param Pid="504"/>
+        </Panel>
+        <Panel Number="9">
+            <ID>7</ID>
+            <Rect-Cord Top-Left:X="720" Top-Left:Y="624" Bottom-Right:X="1072" Bottom-Right:Y="672"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <Show-Date>1</Show-Date>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Show-AMPM>1</Show-AMPM>
+        </Panel>
+        <Panel Number="10">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="120" Top-Left:Y="112" Bottom-Right:X="512" Bottom-Right:Y="224"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>247</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>0</Show-Unit>
+            <Show-Graph>0</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>1</Format>
+        </Panel>
+        <Panel Number="11">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="616" Top-Left:Y="0" Bottom-Right:X="824" Bottom-Right:Y="112"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>9</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>1</Format>
+        </Panel>
+        <Panel Number="12">
+            <ID>D</ID>
+            <Rect-Cord Top-Left:X="1128" Top-Left:Y="-8" Bottom-Right:X="1428" Bottom-Right:Y="122"/>
+            <BackGround-Color Red="64" Green="64" Blue="64"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+        </Panel>
+        <Panel Number="13">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="416" Top-Left:Y="400" Bottom-Right:X="608" Bottom-Right:Y="520"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>509</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>0</Show-Abbreviation>
+            <Show-In-Metric>1</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>0</Format>
+        </Panel>
+        <Panel Number="14">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="416" Top-Left:Y="0" Bottom-Right:X="608" Bottom-Right:Y="112"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="0" Green="128" Blue="64"/>
+            <PID>102</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>0</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>1</Format>
+        </Panel>
+        <Panel Number="15">
+            <ID>4</ID>
+            <Rect-Cord Top-Left:X="0" Top-Left:Y="0" Bottom-Right:X="224" Bottom-Right:Y="112"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="128" Green="0" Blue="0"/>
+            <Show-Attained>1</Show-Attained>
+            <Show-Selected>1</Show-Selected>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Font-Format>1</Font-Format>
+        </Panel>
+        <Panel Number="16">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="0" Top-Left:Y="304" Bottom-Right:X="112" Bottom-Right:Y="344"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>84</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>0</Show-Unit>
+            <Show-Graph>0</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>1</Format>
+        </Panel>
+        <Panel Number="17">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="0" Top-Left:Y="344" Bottom-Right:X="112" Bottom-Right:Y="384"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>86</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>0</Show-Unit>
+            <Show-Graph>0</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>1</Format>
+        </Panel>
+        <Panel Number="18">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="0" Top-Left:Y="112" Bottom-Right:X="112" Bottom-Right:Y="136"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>168</PID>
+            <Show-Spot>1</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>0</Show-Value>
+            <Show-Unit>0</Show-Unit>
+            <Show-Graph>0</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>2</Format>
+        </Panel>
+        <Panel Number="19">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="0" Top-Left:Y="136" Bottom-Right:X="112" Bottom-Right:Y="160"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>177</PID>
+            <Show-Spot>1</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>0</Show-Value>
+            <Show-Unit>0</Show-Unit>
+            <Show-Graph>0</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>2</Format>
+        </Panel>
+        <Panel Number="20">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="0" Top-Left:Y="160" Bottom-Right:X="112" Bottom-Right:Y="184"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>110</PID>
+            <Show-Spot>1</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>0</Show-Value>
+            <Show-Unit>0</Show-Unit>
+            <Show-Graph>0</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>2</Format>
+        </Panel>
+        <Panel Number="21">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="0" Top-Left:Y="248" Bottom-Right:X="112" Bottom-Right:Y="288"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>177</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>0</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>1</Format>
+        </Panel>
+        <Panel Number="22">
+            <ID>9</ID>
+            <Rect-Cord Top-Left:X="0" Top-Left:Y="704" Bottom-Right:X="1432" Bottom-Right:Y="800"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <Font-Format>1</Font-Format>
+            <Text-Length>34</Text-Length>
+            <Text>What a long strange trip its been!</Text>
+            <Use-Static-Color>0</Use-Static-Color>
+        </Panel>
+        <Panel Number="23">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="0" Top-Left:Y="208" Bottom-Right:X="112" Bottom-Right:Y="248"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>100</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>0</Show-Unit>
+            <Show-Graph>0</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>1</Format>
+        </Panel>
+        <Panel Number="24">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="0" Top-Left:Y="184" Bottom-Right:X="112" Bottom-Right:Y="208"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>100</PID>
+            <Show-Spot>1</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>0</Show-Value>
+            <Show-Unit>0</Show-Unit>
+            <Show-Graph>0</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>2</Format>
+        </Panel>
+        <Panel Number="25">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="224" Top-Left:Y="0" Bottom-Right:X="416" Bottom-Right:Y="112"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="0" Green="0" Blue="160"/>
+            <PID>190</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>0</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>1</Format>
+        </Panel>
+        <Panel Number="26">
+            <ID>2</ID>
+            <Rect-Cord Top-Left:X="0" Top-Left:Y="392" Bottom-Right:X="168" Bottom-Right:Y="448"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>184</PID>
+            <Show-Spot>1</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>0</Show-Graph>
+            <Show-Abbreviation>0</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>2</Format>
+            <Scan-Speed>6</Scan-Speed>
+            <Num-Pids>2</Num-Pids>
+            <Param Pid="184"/>
+            <Param Pid="84"/>
+        </Panel>
+        <Panel Number="27">
+            <ID>2</ID>
+            <Rect-Cord Top-Left:X="192" Top-Left:Y="392" Bottom-Right:X="400" Bottom-Right:Y="496"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>84</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>0</Show-Abbreviation>
+            <Show-In-Metric>1</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>0</Format>
+            <Scan-Speed>6</Scan-Speed>
+            <Num-Pids>3</Num-Pids>
+            <Param Pid="509"/>
+            <Param Pid="84"/>
+            <Param Pid="84"/>
+        </Panel>
+        <Panel Number="28">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="512" Top-Left:Y="264" Bottom-Right:X="640" Bottom-Right:Y="320"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>168</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>0</Format>
+        </Panel>
+        <Panel Number="29">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="512" Top-Left:Y="328" Bottom-Right:X="664" Bottom-Right:Y="384"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>175</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>1</Format>
+        </Panel>
+        <Panel Number="30">
+            <ID>3</ID>
+            <Rect-Cord Top-Left:X="512" Top-Left:Y="120" Bottom-Right:X="648" Bottom-Right:Y="264"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="0" Green="64" Blue="0"/>
+            <Show-Fuel-Locked>1</Show-Fuel-Locked>
+            <Show-Hours>1</Show-Hours>
+            <Show-Miles>1</Show-Miles>
+            <Show-MPG>1</Show-MPG>
+            <Show-Speed>1</Show-Speed>
+            <Font-Format>0</Font-Format>
+            <Show-Captions>1</Show-Captions>
+            <Show-Units>1</Show-Units>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Layout-Horizontal>0</Layout-Horizontal>
+            <File-Name>Odo73555431845.trp</File-Name>
+        </Panel>
+        <Panel Number="31">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="0" Top-Left:Y="448" Bottom-Right:X="112" Bottom-Right:Y="488"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>245</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>0</Show-Unit>
+            <Show-Graph>0</Show-Graph>
+            <Show-Abbreviation>1</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>1</Format>
+        </Panel>
+        <Panel Number="32">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="688" Top-Left:Y="312" Bottom-Right:X="832" Bottom-Right:Y="384"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>508</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>0</Show-Abbreviation>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>0</Format>
+        </Panel>
+        <Panel Number="33">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="648" Top-Left:Y="120" Bottom-Right:X="816" Bottom-Right:Y="216"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>510</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>0</Show-Abbreviation>
+            <Show-In-Metric>1</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>0</Format>
+        </Panel>
+        <Panel Number="34">
+            <ID>A</ID>
+            <Rect-Cord Top-Left:X="0" Top-Left:Y="576" Bottom-Right:X="352" Bottom-Right:Y="656"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <Show-Fuel>1</Show-Fuel>
+            <Show-Miles-To-Empty>1</Show-Miles-To-Empty>
+            <Show-MPG>1</Show-MPG>
+            <Font-Format>1</Font-Format>
+            <Show-Captions>1</Show-Captions>
+            <Show-Units>1</Show-Units>
+            <Show-In-Metric>1</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Use-Rolling-MPG>1</Use-Rolling-MPG>
+            <Layout-Horizontal>1</Layout-Horizontal>
+            <Tank-Size>757</Tank-Size>
+            <Tank-Size-Metric>785</Tank-Size-Metric>
+            <File-Name>Tnk73191737243.trp</File-Name>
+        </Panel>
+        <Panel Number="35">
+            <ID>A</ID>
+            <Rect-Cord Top-Left:X="0" Top-Left:Y="496" Bottom-Right:X="200" Bottom-Right:Y="576"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="0" Green="128" Blue="192"/>
+            <Show-Fuel>1</Show-Fuel>
+            <Show-Miles-To-Empty>1</Show-Miles-To-Empty>
+            <Show-MPG>1</Show-MPG>
+            <Font-Format>0</Font-Format>
+            <Show-Captions>1</Show-Captions>
+            <Show-Units>1</Show-Units>
+            <Show-In-Metric>0</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Use-Rolling-MPG>0</Use-Rolling-MPG>
+            <Layout-Horizontal>0</Layout-Horizontal>
+            <Tank-Size>100</Tank-Size>
+            <Tank-Size-Metric>378.541</Tank-Size-Metric>
+            <File-Name>Tnk73191737205.trp</File-Name>
+        </Panel>
+        <Panel Number="36">
+            <ID>B</ID>
+            <Rect-Cord Top-Left:X="128" Top-Left:Y="232" Bottom-Right:X="392" Bottom-Right:Y="392"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="128" Green="128" Blue="255"/>
+            <Show-Icon>1</Show-Icon>
+            <Show-Value>1</Show-Value>
+            <Use-Static-Color>0</Use-Static-Color>
+        </Panel>
+        <Panel Number="37">
+            <ID>E</ID>
+            <Rect-Cord Top-Left:X="688" Top-Left:Y="120" Bottom-Right:X="1328" Bottom-Right:Y="264"/>
+            <BackGround-Color Red="255" Green="102" Blue="0"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>0</PID>
+            <Use-Static-Color>0</Use-Static-Color>
+        </Panel>
+        <Panel Number="38">
+            <ID>1</ID>
+            <Rect-Cord Top-Left:X="888" Top-Left:Y="384" Bottom-Right:X="1096" Bottom-Right:Y="472"/>
+            <BackGround-Color Red="51" Green="51" Blue="51"/>
+            <Base-Color Red="255" Green="255" Blue="255"/>
+            <Explicit-Color Red="255" Green="255" Blue="255"/>
+            <PID>12</PID>
+            <Show-Spot>0</Show-Spot>
+            <Show-Name>1</Show-Name>
+            <Show-Value>1</Show-Value>
+            <Show-Unit>1</Show-Unit>
+            <Show-Graph>1</Show-Graph>
+            <Show-Abbreviation>0</Show-Abbreviation>
+            <Show-In-Metric>1</Show-In-Metric>
+            <Use-Static-Color>0</Use-Static-Color>
+            <Format>0</Format>
+        </Panel>
+        <Wallpaper-Filename>C:\Users\Silverleaf\Downloads\MillenniumFalconCrossSection-SWICS.bmp</Wallpaper-Filename>
+        <Text-Color Red="255" Green="128" Blue="0"/>
+        <Panel-Count>38</Panel-Count>
+        <Shader-Position>7</Shader-Position>
+        <Use-Def-Pal>1</Use-Def-Pal>
+        <Use-Blu-Pal>0</Use-Blu-Pal>
+        <Use-Brn-Pal>0</Use-Brn-Pal>
+        <Use-Cus-Pal>0</Use-Cus-Pal>
+        <Base-Color Red="100" Green="100" Blue="100"/>
+        <Cust-Base-Color Red="0" Green="65" Blue="140"/>
+        <Saturation-Offset>0</Saturation-Offset>
+        <Value-Offset>0</Value-Offset>
+    </Screen-Elements>
+</Root>

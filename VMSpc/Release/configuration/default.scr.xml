@@ -1,0 +1,164 @@
+<!--DO NOT MODIFY THE CONTENTS OF THIS FILE UNLESS YOU KNOW WHAT YOU ARE DOING!!!-->
+<Root>
+  <Version>V4.0</Version>
+  <Screen-Elements>
+    <File-Name>default.scr.xml</File-Name>
+    <Wallpaper-Filename>
+    </Wallpaper-Filename>
+    <Text-Color Red="255" Green="0" Blue="0" />
+    <Panel-Count>6</Panel-Count>
+    <Shader-Position>4</Shader-Position>
+    <Day-Palette>1</Day-Palette>
+    <Night-Palette>0</Night-Palette>
+    <Use-Def-Pal>0</Use-Def-Pal>
+    <Use-Blu-Pal>0</Use-Blu-Pal>
+    <Use-Brn-Pal>1</Use-Brn-Pal>
+    <Use-White-Pal>0</Use-White-Pal>
+    <Use-Chrome-Pal>0</Use-Chrome-Pal>
+    <Use-Obsidian-Pal>0</Use-Obsidian-Pal>
+    <Use-Cus-Pal>0</Use-Cus-Pal>
+    <Use-Cus2-Pal>0</Use-Cus2-Pal>
+    <Base-Color Red="0" Green="65" Blue="140" />
+    <Cust-Base-Color Red="0" Green="65" Blue="140" />
+    <Cust1-Back-Color Red="160" Green="255" Blue="192" />
+    <Cust1-Gauge-Color Red="160" Green="160" Blue="164" />
+    <Cust1-Captions-Color Red="0" Green="0" Blue="255" />
+    <Cust1-Data-Color Red="0" Green="0" Blue="0" />
+    <Cust1-Green-Color Red="0" Green="192" Blue="0" />
+    <Cust1-Yellow-Color Red="255" Green="255" Blue="87" />
+    <Cust1-Red-Color Red="255" Green="0" Blue="0" />
+    <Cust1-Blue-Color Red="0" Green="255" Blue="255" />
+    <Cust2-Back-Color Red="255" Green="251" Blue="240" />
+    <Cust2-Gauge-Color Red="255" Green="251" Blue="240" />
+    <Cust2-Captions-Color Red="0" Green="75" Blue="192" />
+    <Cust2-Data-Color Red="0" Green="0" Blue="0" />
+    <Cust2-Green-Color Red="0" Green="255" Blue="0" />
+    <Cust2-Yellow-Color Red="255" Green="255" Blue="87" />
+    <Cust2-Red-Color Red="255" Green="0" Blue="255" />
+    <Cust2-Blue-Color Red="0" Green="0" Blue="255" />
+    <Day-On-Hour>6</Day-On-Hour>
+    <Day-On-Minute>0</Day-On-Minute>
+    <Day-On-AMPM>0</Day-On-AMPM>
+    <Night-On-Hour>8</Night-On-Hour>
+    <Night-On-Minute>0</Night-On-Minute>
+    <Night-On-AMPM>1</Night-On-AMPM>
+    <Use-Timer>0</Use-Timer>
+    <Use-Blue>0</Use-Blue>
+    <Saturation-Offset>0</Saturation-Offset>
+    <Value-Offset>0</Value-Offset>
+    <Panel Number="1">
+      <ID>1</ID>
+      <Rect-Cord Top-LeftX="320" Top-LeftY="530" Bottom-RightX="793" Bottom-RightY="738" />
+      <BackGround-Color Red="255" Green="255" Blue="255" />
+      <Base-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Gauge-Color Red="0" Green="0" Blue="0" />
+      <Show-In-Metric>False</Show-In-Metric>
+      <Format>0</Format>
+      <Use-Static-Color />
+      <Show-Spot>True</Show-Spot>
+      <Show-Name>True</Show-Name>
+      <Show-Value>True</Show-Value>
+      <Show-Unit>True</Show-Unit>
+      <Show-Graph>True</Show-Graph>
+      <Show-Abbreviation>False</Show-Abbreviation>
+      <PID>12</PID>
+    </Panel>
+    <Panel Number="2">
+      <ID>1</ID>
+      <Rect-Cord Top-LeftX="0" Top-LeftY="566" Bottom-RightX="339" Bottom-RightY="738" />
+      <BackGround-Color Red="255" Green="255" Blue="255" />
+      <Base-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Gauge-Color Red="0" Green="0" Blue="0" />
+      <Show-In-Metric>False</Show-In-Metric>
+      <Format>0</Format>
+      <Use-Static-Color />
+      <Show-Spot>True</Show-Spot>
+      <Show-Name>True</Show-Name>
+      <Show-Value>True</Show-Value>
+      <Show-Unit>True</Show-Unit>
+      <Show-Graph>True</Show-Graph>
+      <Show-Abbreviation>False</Show-Abbreviation>
+      <PID>10</PID>
+    </Panel>
+    <Panel Number="3">
+      <ID>3</ID>
+      <Rect-Cord Top-LeftX="784" Top-LeftY="132" Bottom-RightX="1449" Bottom-RightY="418" />
+      <BackGround-Color Red="255" Green="255" Blue="255" />
+      <Base-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Gauge-Color Red="0" Green="0" Blue="0" />
+      <Show-In-Metric>False</Show-In-Metric>
+      <Format>0</Format>
+      <Use-Static-Color />
+      <Show-Fuel-Locked>True</Show-Fuel-Locked>
+      <Show-Hours>True</Show-Hours>
+      <Show-Miles>True</Show-Miles>
+      <Show-Speed>True</Show-Speed>
+      <Show-MPG>True</Show-MPG>
+      <Show-Captions>True</Show-Captions>
+      <Show-Units>True</Show-Units>
+      <Layout-Horizontal>False</Layout-Horizontal>
+      <File-Name>Odo201907301438499.trp.xml</File-Name>
+    </Panel>
+    <Panel Number="4">
+      <ID>5</ID>
+      <Rect-Cord Top-LeftX="1588" Top-LeftY="0" Bottom-RightX="1888" Bottom-RightY="300" />
+      <BackGround-Color Red="255" Green="255" Blue="255" />
+      <Base-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Gauge-Color Red="0" Green="0" Blue="0" />
+      <Show-In-Metric>False</Show-In-Metric>
+      <Format>0</Format>
+      <Use-Static-Color />
+      <Show-Spot>False</Show-Spot>
+      <Show-Name>True</Show-Name>
+      <Show-Value>True</Show-Value>
+      <Show-Unit>True</Show-Unit>
+      <Show-Graph>True</Show-Graph>
+      <Show-Abbreviation>True</Show-Abbreviation>
+      <Param PID="84" />
+      <Param PID="9" />
+      <Param PID="439" />
+    </Panel>
+    <Panel Number="5">
+      <ID>1</ID>
+      <Rect-Cord Top-LeftX="253" Top-LeftY="202" Bottom-RightX="553" Bottom-RightY="502" />
+      <BackGround-Color Red="255" Green="255" Blue="255" />
+      <Base-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Gauge-Color Red="0" Green="0" Blue="0" />
+      <Show-In-Metric>False</Show-In-Metric>
+      <Format>0</Format>
+      <Use-Static-Color />
+      <Show-Spot>True</Show-Spot>
+      <Show-Name>True</Show-Name>
+      <Show-Value>True</Show-Value>
+      <Show-Unit>True</Show-Unit>
+      <Show-Graph>True</Show-Graph>
+      <Show-Abbreviation>False</Show-Abbreviation>
+      <PID>84</PID>
+    </Panel>
+    <Panel Number="6">
+      <ID>5</ID>
+      <Rect-Cord Top-LeftX="520" Top-LeftY="84" Bottom-RightX="1029" Bottom-RightY="271" />
+      <BackGround-Color Red="255" Green="255" Blue="255" />
+      <Base-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Color Red="0" Green="0" Blue="0" />
+      <Explicit-Gauge-Color Red="0" Green="0" Blue="0" />
+      <Show-In-Metric>False</Show-In-Metric>
+      <Format>0</Format>
+      <Use-Static-Color />
+      <Show-Spot>False</Show-Spot>
+      <Show-Name>True</Show-Name>
+      <Show-Value>True</Show-Value>
+      <Show-Unit>True</Show-Unit>
+      <Show-Graph>True</Show-Graph>
+      <Show-Abbreviation>True</Show-Abbreviation>
+      <Param PID="84" />
+      <Param PID="9" />
+      <Param PID="439" />
+    </Panel>
+  </Screen-Elements>
+</Root>
