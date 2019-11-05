@@ -1,0 +1,4 @@
+Trip History File
+Feel free to add notes to this file, but do not move or delete.
+End Date    Miles    Time   Fuel  Speed   MPG
+=============================================
