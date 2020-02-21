@@ -87,6 +87,11 @@ namespace VMSpc.Parsers
             PIDList.Add(245, new PID(245, 6, "Total Miles"));
             PIDList.Add(247, new PID(247, 6, "Engine Hours"));
             PIDList.Add(250, new PID(250, 6, "Total Fuel"));
+            PIDList.Add(0xA5, new PID(0xA5, 1000, "Pressure Pro Tire"));
+            PIDList.Add(0xA6, new PID(0xA6, 1000, "Pressure Pro Tire"));
+            PIDList.Add(0xA7, new PID(0xA7, 1000, "Pressure Pro Tire"));
+            //PIDList.Add(0xA8, new PID(0xA8, 1000, "Pressure Pro Tire")); TODO - handle duplicates here
+            PIDList.Add(0xA9, new PID(0xA9, 1000, "Pressure Pro Tire"));
             PIDList.Add(0xC2, new PID(0xC2, 1000, "Diagnostic"));
             PIDList.Add(0xC0, new PID(0xC0, 1000, "Multipart"));
         }

@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using VMSpc.XmlFileManagers;
 using VMSpc.DlgWindows;
 using VMSpc.Panels;
 using VMSpc.DevHelpers;
@@ -20,10 +19,11 @@ using VMSpc.CustomComponents;
 using VMSpc.Communication;
 using static VMSpc.Parsers.PIDWrapper;
 using VMSpc.Parsers;
-using static VMSpc.XmlFileManagers.ParamDataManager;
-using static VMSpc.XmlFileManagers.SettingsManager;
+using VMSpc.JsonFileManagers;
+using static VMSpc.JsonFileManagers.ConfigurationManager;
 using static VMSpc.Constants;
 using System.ComponentModel;
+using VMSpc.UI.DlgWindows;
 
 namespace VMSpc
 {
@@ -99,8 +99,8 @@ namespace VMSpc
 
         private void SaveConfig()
         {
-            ParamData.SaveConfiguration();
-            DefaultScrnManager.scrnManager.SaveConfiguration();
+            ConfigManager.ParamData.SaveConfiguration();
+            ConfigManager.Screen.SaveConfiguration();
         }
 
         #region EVENT HANDLERS
@@ -137,7 +137,7 @@ namespace VMSpc
 
         private void NewSimpleGaugeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            SimpleGaugeSettings panelSettings = new SimpleGaugeSettings(0);
+            SimpleGaugeSettings panelSettings = new SimpleGaugeSettings();
             SimpleGaugeDlg dlgWindow = new SimpleGaugeDlg(panelSettings);
             InitiateNewGaugeDlg(dlgWindow, panelSettings);
         }
@@ -149,7 +149,7 @@ namespace VMSpc
 
         private void NewScanGaugeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            ScanGaugeSettings panelSettings = new ScanGaugeSettings(0);
+            ScanGaugeSettings panelSettings = new ScanGaugeSettings();
             ScanGaugeDlg dlgWindow = new ScanGaugeDlg(panelSettings);
             InitiateNewGaugeDlg(dlgWindow, panelSettings);
         }
@@ -161,9 +161,11 @@ namespace VMSpc
 
         private void NewMultiBarCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            /*
             MultiBarSettings panelSettings = new MultiBarSettings(0);
             MultiBarDlg dlgWindow = new MultiBarDlg(panelSettings);
             InitiateNewGaugeDlg(dlgWindow, panelSettings);
+            */
         }
 
         private void NewOdometerCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -173,8 +175,55 @@ namespace VMSpc
 
         private void NewOdometerCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            /*
             OdometerSettings panelSettings = new OdometerSettings(0);
             OdometerDlg dlgWindow = new OdometerDlg(panelSettings);
+            InitiateNewGaugeDlg(dlgWindow, panelSettings);
+            */
+        }
+
+        private void NewTextPanelCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+        private void NewTextPanelCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            TextGaugeSettings panelSettings = new TextGaugeSettings();
+            TextPanelDlg dlgWindow = new TextPanelDlg(panelSettings);
+            InitiateNewGaugeDlg(dlgWindow, panelSettings);
+        }
+        private void NewImagePanel_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void NewImagePanel_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            PictureSettings panelSettings = new PictureSettings();
+            ImagePanelDlg dlgWindow = new ImagePanelDlg(panelSettings);
+            InitiateNewGaugeDlg(dlgWindow, panelSettings);
+        }
+        private void NewDiagnosticPanel_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void NewDiagnosticPanel_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            DiagnosticGaugeSettings panelSettings = new DiagnosticGaugeSettings();
+            DiagnosticAlarmDlg dlgWindow = new DiagnosticAlarmDlg(panelSettings);
+            InitiateNewGaugeDlg(dlgWindow, panelSettings);
+        }
+
+        private void NewTirePanel_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void NewTirePanel_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            TireGaugeSettings panelSettings = new TireGaugeSettings();
+            TirePanelDlg dlgWindow = new TirePanelDlg(panelSettings);
             InitiateNewGaugeDlg(dlgWindow, panelSettings);
         }
 
@@ -247,8 +296,8 @@ namespace VMSpc
 
         private void ToggleClippingCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Settings.UseClipping = !(Settings.UseClipping);
-            ClipToggle.Header = (Settings.UseClipping) ? "Disable Clipping" : "Enable Clipping";
+            ConfigManager.Settings.Contents.useClipping = !(ConfigManager.Settings.Contents.useClipping);
+            //ClipToggle.Header = (ConfigManager.Settings.Contents.useClipping) ? "Disable Clipping" : "Enable Clipping";
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -287,7 +336,26 @@ namespace VMSpc
             "NewOdometer",
             typeof(MainCommands)
         );
-
+        public static readonly RoutedUICommand NewTextPanel = new RoutedUICommand(
+            "New Text Panel",
+            "NewTextPanel",
+            typeof(MainCommands)
+        );
+        public static readonly RoutedUICommand NewImagePanel = new RoutedUICommand(
+            "New Image Panel",
+            "NewImagePanel",
+            typeof(MainCommands)
+        );
+        public static readonly RoutedUICommand NewDiagnosticPanel = new RoutedUICommand(
+            "New Diagnostic Panel",
+            "NewDiagnosticPanel",
+            typeof(MainCommands)
+        );
+        public static readonly RoutedUICommand NewTirePanel = new RoutedUICommand(
+            "New Tire Panel",
+            "NewTirePanel",
+            typeof(MainCommands)
+        );
         public static readonly RoutedUICommand CommSettings = new RoutedUICommand(
             "Communication",
             "CommSettings",
@@ -317,7 +385,7 @@ namespace VMSpc
         );
 
         public static readonly RoutedUICommand ToggleClipping = new RoutedUICommand(
-            (Settings.UseClipping) ? "Disable Clipping" : "Enable Clipping",
+            (ConfigManager.Settings.Contents.useClipping) ? "Disable Clipping" : "Enable Clipping",
             "ToggleClipping",
             typeof(MainCommands),
             new InputGestureCollection()

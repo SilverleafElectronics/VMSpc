@@ -8,8 +8,15 @@ using static VMSpc.Parsers.SPNDefinitions;
 
 namespace VMSpc.Parsers
 {
+
+    public class NewValueEventHandler
+    {
+
+    }
+
     public static class PresenterWrapper
     {
+        //static public event List<EventHandler<NewValueEventHandler>> NewValueEvent;
         static public void SetValueSPN(ushort pid, uint raw, double v_metric, double v_standard, byte src)
         {
             if (!PresenterList.ContainsKey(pid))

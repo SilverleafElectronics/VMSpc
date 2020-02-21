@@ -8,27 +8,39 @@ using VMSpc.DevHelpers;
 using static VMSpc.Parsers.PIDWrapper;
 using static VMSpc.Parsers.PresenterWrapper;
 using static VMSpc.Constants;
+using static VMSpc.Parsers.TireParsers.PressureProParser;
 
 namespace VMSpc.Parsers
 {
     /// <summary>
     /// 
     /// </summary>
-    class J1708Parser
+    class J1708Parser : IDataBus
     {
         private Dictionary<byte, J1708ParsingHelper> J1708ParseMethodMap;
 
         public J1708Parser()
         {
             J1708ParseMethodMap = new Dictionary<byte, J1708ParsingHelper>();
+            PproParser.SetDataBuse(this);
             DefineParsers();
         }
 
-        public void Parse(J1708Message canMessage)
+        public void Parse(CanMessage canMessage)
         {
-            foreach (var pair in canMessage.data)
+            J1708Message j1708Message = (canMessage as J1708Message);
+            foreach (var pair in j1708Message.data)
             {
                 J1708ParseMethodMap[pair.Key].ParseMethod(pair.Key, pair.Value, J1708ParseMethodMap[pair.Key]);
+            }
+        }
+
+        public void SendMessage(byte[] message)
+        {
+            byte check = 0;
+            for (int i = 0; i < message.Length; i++)
+            {
+                check += message[i];
             }
         }
 
@@ -82,13 +94,17 @@ namespace VMSpc.Parsers
                     SetTotalFuel(data);
                     break;
                 case diagnosticsPID:
-                    Parse1708Diagnostics(data);
+                    Diagnostics.diagnostics.Parse1708Diagnostics(data);
                     break;
                 case multipartMessage:
                     ParseMultipartMessage(data);
                     break;
                 default:
                     break;
+            }
+            if (PproParser.IsPressureProPid(PID))
+            {
+                PproParser.Parse(0, data); //TODO - pass correct index
             }
         }
 

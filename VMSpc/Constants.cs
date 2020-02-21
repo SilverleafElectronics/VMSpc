@@ -223,7 +223,7 @@ namespace VMSpc
             {
                 if (length % 2 != 0)
                     return false;
-                for (int i = 0; i < (length - 2); i += 2)
+                for (int i = 0; i <= (length - 2); i += 2)
                     byteArr.Add(BinConvert(byteString[i], byteString[i + 1]));
                 return true;
             }
@@ -257,6 +257,13 @@ namespace VMSpc
         {
             return 0;
         }
+
+        //-----------------------------------------------------------------------------------------
+        //Event-Handling helpers
+        //-----------------------------------------------------------------------------------------
+        public static uint PID_BASE = 0x00010000;
+        public static uint DIAGNOSTIC_BASE = 0x00020000;
+        public static uint TIRE_BASE = 0x00030000;
 
         //-----------------------------------------------------------------------------------------
         //Misc Helpers
@@ -427,6 +434,13 @@ namespace VMSpc
         public const byte LOGTYPE_RAWLOG = 0;
         public const byte LOGTYPE_PARSEREADY = 1;
         public const byte LOGTYPE_FULL = 2;
+
+        //-----------------------------------------------------------------------------------------
+        //TPMS Types
+        //-----------------------------------------------------------------------------------------
+        public const int TPMS_NONE = 0;
+        public const int TPMS_TST = 1;
+        public const int TPMS_PRESSURE_PRO = 2;
 
         public static object DynamicCast(object obj, string type)
         {

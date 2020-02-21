@@ -25,11 +25,7 @@ namespace VMSpc.Communication
             wifiReader.Shutdown(SocketShutdown.Both);
             wifiReader.Close();
         }
-        public override bool SendMsg()
-        {
-            throw new NotImplementedException();
-        }
-        protected override void KeepJibAwake()
+        public override void SendMessage(string message)
         {
             throw new NotImplementedException();
         }

@@ -11,24 +11,28 @@ using System.Windows;
 using VMSpc.DevHelpers;
 using static VMSpc.Constants;
 using static VMSpc.XmlFileManagers.SettingsManager;
+using System.Collections.Concurrent;
 
 namespace VMSpc.Communication
 {
     class CommPortReader : DataReader
     {
         private SerialPort portReader;
-        private int comPort;
+        private ushort comPort;
         private System.Timers.Timer portCheckTimer;
+        private System.Timers.Timer sendMessageTimer;
         private SerialDataReceivedEventHandler dataReceivedHandler;
+        private ConcurrentQueue<string> messagesToSend;
         private delegate void SplitDataIntoProcess();
 
         int quietlyTryReconnect;
         System.Timers.Timer quietReconnectTimer;
 
-        public CommPortReader(Action<string> DataProcessor)
+        public CommPortReader(Action<string> DataProcessor, ushort comPort)
             : base(DataProcessor)
         {
-            comPort = Settings.Port;
+            this.comPort = comPort;
+            messagesToSend = new ConcurrentQueue<string>();
             dataReceivedHandler = new SerialDataReceivedEventHandler(HandleCommPortData);
             quietlyTryReconnect = 0;
             quietReconnectTimer = CREATE_TIMER(TryReconnect, 3000);
@@ -44,21 +48,20 @@ namespace VMSpc.Communication
         {
             portReader = new SerialPort("COM" + comPort, 9600, Parity.None, 8, StopBits.One);
             portReader.DataReceived += dataReceivedHandler;
-            if (NOT_NULL(portCheckTimer))
-                portCheckTimer.Stop();
+            portCheckTimer?.Stop();
             try
             {
                 portReader.Open(); // Begin communications 
                 portCheckTimer = CREATE_TIMER(CheckPort, 5000);
+                sendMessageTimer = CREATE_TIMER(PopMessageQueue, 250);
                 base.InitDataReader();
                 quietReconnectTimer.Stop();
                 quietlyTryReconnect = 0;
-                if (!keepJibAwakeTimer.Enabled)
-                    keepJibAwakeTimer = CREATE_TIMER(KeepJibAwake, 10000);
+                base.InitDataReader();
             }
             catch (Exception ex)
             {
-                int newPort = FindVmsPort();
+                ushort newPort = FindVmsPort();
                 if (newPort == comPort && quietlyTryReconnect == 1)
                 {
                     MessageBox.Show("Something went wrong in attempting to connect to the data source, using a USB connection on COM" + comPort + ". " +
@@ -109,10 +112,9 @@ namespace VMSpc.Communication
         {
             try
             {
-                if (NOT_NULL(keepJibAwakeTimer))
-                    keepJibAwakeTimer.Dispose();
-                if (NOT_NULL(portCheckTimer))
-                    portCheckTimer.Dispose();
+                keepJibAwakeTimer?.Dispose();
+                portCheckTimer?.Dispose();
+                sendMessageTimer?.Dispose();
                 if (NOT_NULL(portReader))
                 {
                     portReader.DataReceived -= dataReceivedHandler;
@@ -123,38 +125,50 @@ namespace VMSpc.Communication
             }
             catch { } //do something useful here
         }
-        public override bool SendMsg()
+        public override void SendMessage(string message)
         {
-            throw new NotImplementedException();
+            messagesToSend.Enqueue(message);
         }
-        protected override void KeepJibAwake()
+
+        /// <summary>
+        /// Removes a message from messagesToSend and transmits the message through WriteToPort()
+        /// </summary>
+        private void PopMessageQueue()
+        {
+            messagesToSend.TryDequeue(out string message);
+            WriteToPort(message);
+        }
+
+        /// <summary>
+        /// Writes a message to the port
+        /// </summary>
+        private void WriteToPort(string message)
         {
             if (portReader.IsOpen)
-                portReader.Write("V");
+                portReader.Write(message);
         }
 
         private void CheckPort()
         {
             if (lastMessageCount == messagesReceived)
             {
-                int newPort = FindVmsPort();
+                ushort newPort = FindVmsPort();
                 if (newPort != comPort)
                     ChangeComPort(newPort);
                 lastMessageCount = messagesReceived;
             }
         }
 
-        /// <summary>  </summary>
-        private int FindVmsPort()
+        private ushort FindVmsPort()
         {
-            int newPort = comPort;
+            ushort newPort = comPort;
             foreach (var portString in GetComPortList())
             {
                 if (portString.Contains("VMSpc Virtual Serial Port") && portString.Contains("(COM"))
                 {
                     int startIndex = portString.IndexOf("(COM") + 4;
                     int count = portString.LastIndexOf(")") - startIndex;
-                    return Int32.Parse(portString.Substring(startIndex, count));
+                    return ushort.Parse(portString.Substring(startIndex, count));
                 }
             }
             return comPort; //failed, just defaulting back to original
@@ -172,7 +186,7 @@ namespace VMSpc.Communication
             }
         }
 
-        private void ChangeComPort(int newPort)
+        private void ChangeComPort(ushort newPort)
         {
             comPort = newPort;
             Settings.Port = newPort;

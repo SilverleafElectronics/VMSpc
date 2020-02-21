@@ -81,7 +81,7 @@ namespace VMSpc.Parsers
         public static TSPNBits spn_dpfHighTempLamp = new TSPNBits(0, 6, 2, 3);
         public static TSPNBits spn_dpfLamp = new TSPNBits(0, 0, 0, 3);
 
-        public static TSPNByte spn_cruiseSetSpeed = new TSPNByte(84, 5, 0.006215f * 100, 0.0f, 0.01f * 100, 0.0f);
+        public static TSPNByte spn_cruiseSetSpeed = new TSPNByte(86, 5, 0.006215f * 100, 0.0f, 0.01f * 100, 0.0f);
         public static TSPNByte spn_inletTemp = new TSPNByte(172, 5, 1.8f, -40.0f, 1.0f, -40.0f);
         public static TSPNByte spn_accelPos = new TSPNByte(91, 1, 0.4f, 0.0f, 0.4f, 0.0f);
         public static TSPNByte spn_fuelPressure = new TSPNByte(94, 0, 0.580151f, 0.0f, 4.0f, 0.0f);
@@ -113,7 +113,7 @@ namespace VMSpc.Parsers
         public static TSPNWord spn_exhaustTemp3241 = new TSPNWord(3241, 0, 0.05625f, -459.4f, 0.03125f, -273.0f);
         public static TSPNWord spn_dpfIntakeTemp = new TSPNWord(3242, 2, 0.05625f, -459.4f, 0.03125f, -273.0f);
         public static TSPNWord spn_dpfOutletTemp = new TSPNWord(3246, 2, 0.05625f, -459.4f, 0.03125f, -273.0f);
-        public static TSPNWord spn_roadSpeed = new TSPNWord(86, 1, 0.00242775f, 0.0f, 0.00390625f, 0.0f);
+        public static TSPNWord spn_roadSpeed = new TSPNWord(84, 1, 0.00242775f, 0.0f, 0.00390625f, 0.0f);
         public static TSPNWord spn_ambientTemp = new TSPNWord(171, 3, 0.05625f, -459.4f, 0.03125f, -273.0f);
         public static TSPNWord spn_rpms = new TSPNWord(190, 3, 0.125, 0.0, 0.125, 0.0);
         public static TSPNWord spn_crankCasePressure = new TSPNWord(101, 4, 0.0011331073f, -36.2594344f, 0.0078125f, -250.0f);
@@ -178,6 +178,12 @@ namespace VMSpc.Parsers
             if (SPNTrackers.ContainsKey(spn))
                 foreach (TSPNTracker tracker in SPNTrackers[spn])
                     tracker.Record();
+            RegisterDataEvent(spn);
+        }
+
+        private static void RegisterDataEvent(ushort spn)
+        {
+
         }
 
         static SPNDefinitions() { }

@@ -30,7 +30,7 @@ namespace VMSpc.Parsers
                       cruiseStat;
         public byte mode;
         public byte error;
-        public byte diagActiveFlag;
+        public bool diagActiveFlag;
 
         static ChassisParameter() { }
 

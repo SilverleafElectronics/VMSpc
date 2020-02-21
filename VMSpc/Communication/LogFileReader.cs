@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
+using VMSpc.DevHelpers;
 using static VMSpc.Constants;
 using static VMSpc.XmlFileManagers.SettingsManager;
 
@@ -15,16 +16,22 @@ namespace VMSpc.Communication
     {
         private Timer logReadTimer;
         private StreamReader logReader;
-        private string logPlayerFile;
+        private string LogPlayerFilePath;
+        private string[] RecordBuffer;
+        private int RecordIndex;
+        private bool Reloading;
 
-        public LogFileReader(Action<string> DataProcessor)
+        public LogFileReader(Action<string> DataProcessor, string logPlayerFilePath)
             : base(DataProcessor)
         {
-            logPlayerFile = Settings.LogPlayerFileName;
+            LogPlayerFilePath = logPlayerFilePath;
+            RecordBuffer = new string[100];
+            RecordIndex = 1000;
+            Reloading = false;
         }
         public override void InitDataReader()
         {
-            logReader = new StreamReader(logPlayerFile);
+            logReader = new StreamReader(LogPlayerFilePath);
             logReadTimer = CREATE_TIMER(ReadLogEntry, 100);
         }
 
@@ -34,31 +41,66 @@ namespace VMSpc.Communication
         /// </summary>
         private void ReadLogEntry()
         {
-            string line = " ";
-            while (line != null && line.Length < 2)
-                line = logReader.ReadLine();
-            if (line != null && (line[0] == 'J' || line[0] == 'R'))
+            if (!Reloading && logReader != null) //In case reloading the buffer takes longer than the timer, we don't want thread contention over the RecordBuffer
+            {
+                if (RecordIndex > 99)
+                {
+                    ReloadBuffer();
+                }
                 Application.Current.Dispatcher.Invoke(delegate
                 {
-                    DataProcessor(line);
+                    DataProcessor(RecordBuffer[RecordIndex]);
                 });
-            else if (line != null)          //continue reading until a valid line is found
-                ReadLogEntry();
-            else
-            {
-                logReader.DiscardBufferedData();
-                logReader.BaseStream.Seek(0, System.IO.SeekOrigin.Begin);
+                RecordIndex++;
             }
         }
 
         public override void CloseDataReader()
         {
-            logReader.Close();
+            try
+            {
+                logReader.Close();
+                logReader = null;
+                logReadTimer.Stop();
+            }
+            catch
+            {
+
+            }
         }
-        public override bool SendMsg()
+        public override void SendMessage(string message)
         {
-            return true;
+            throw new NotImplementedException();
         }
-        protected override void KeepJibAwake(){ }
+        private void ReloadBuffer()
+        {
+            Reloading = true;
+            for (int i = 0; i < 100; i++)
+            {
+                RecordBuffer[i] = GetNextValidLine();
+            }
+            RecordIndex = 0;
+            Reloading = false;
+        }
+        private string GetNextValidLine()
+        {
+            string line;
+            bool found = false;
+            while (!found)
+            {
+                line = logReader.ReadLine();
+                if (line == null)
+                {
+                    logReader.DiscardBufferedData();
+                    logReader.BaseStream.Seek(0, System.IO.SeekOrigin.Begin);
+                    return GetNextValidLine();
+                }
+                else if ( (line.Length > 2) && (line[0] == 'J' || line[0] == 'R') )
+                {
+                    return line;
+                }
+            }
+            return null; //This will only happen if the file is invalid - shouldn't ever happen
+        }
     }
 }

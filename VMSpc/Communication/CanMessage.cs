@@ -189,16 +189,25 @@ namespace VMSpc.Communication
         }
 
         /// <summary>
-        /// Saves a key/value pair (pid/data[]) to the MessageList Dictionary. Ignores an element if the data is empty
+        /// Saves a key:value pair (pid:data[]) to the MessageList Dictionary. Ignores an element if the data is empty
         /// </summary>
         private void SavePid(Dictionary<byte, byte[]> MessageList, byte pid, bool continueFlag, int pos, int indexToCopyTo)
         {
             byte[] pidData = new byte[6];
             int j = 0;
-            int i = pos + 1;
+            int i;
+            if (indexToCopyTo == 1000) //if indexToCopyTo is set to 1000, we just copy all values over
+            {
+                i = 0;
+            }
+            else
+            {
+                i = pos + 1;
+            }
             if (!continueFlag)
             {
-                while (i < (pos + indexToCopyTo))
+                int length = rawData.Count;
+                while ((i < (pos + indexToCopyTo)) && i < length)
                 {
                     pidData[j] = rawData[i];
                     i++;

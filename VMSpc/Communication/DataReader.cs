@@ -25,7 +25,10 @@ namespace VMSpc.Communication
             KeepJibAwake();
             keepJibAwakeTimer = CREATE_TIMER(KeepJibAwake, 10000);
         }
-        public abstract bool SendMsg();
-        protected abstract void KeepJibAwake();
+        public abstract void SendMessage(string message);
+        protected void KeepJibAwake()
+        {
+            SendMessage("V");
+        }
     }
 }

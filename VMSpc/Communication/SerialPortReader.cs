@@ -23,11 +23,7 @@ namespace VMSpc.Communication
         {
             throw new NotImplementedException();
         }
-        public override bool SendMsg()
-        {
-            throw new NotImplementedException();
-        }
-        protected override void KeepJibAwake()
+        public override void SendMessage(string message)
         {
             throw new NotImplementedException();
         }

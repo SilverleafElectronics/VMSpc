@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Management" />
@@ -56,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <None Include="packages.config" />
     <None Include="README" />
     <Compile Include="Communication\CanMessage.cs" />
     <Compile Include="Communication\DataReader.cs" />
@@ -65,55 +69,95 @@
     <Compile Include="Communication\CommPortReader.cs" />
     <Compile Include="Communication\WifiSocketReader.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="CustomComponents\PanelGrid.cs" />
-    <Compile Include="CustomComponents\VMSBorder.cs" />
-    <Compile Include="CustomComponents\VMSListBoxItem.cs" />
-    <Compile Include="CustomComponents\RadialBar.cs" />
+    <Compile Include="EventBridge.cs" />
+    <Compile Include="Extensions\UI\TextBlockExtensions.cs" />
+    <Compile Include="Helpers\IndexingInteger.cs" />
+    <Compile Include="JsonFileManagers\JsonDefaults\ParamDataDefaults.cs" />
+    <Compile Include="JsonFileManagers\ParamDataReader.cs" />
+    <Compile Include="Parsers\Diagnostics.cs" />
+    <Compile Include="Parsers\IDataBus.cs" />
+    <Compile Include="Parsers\SpecialParsers\TireParsers\ITireParser.cs" />
+    <Compile Include="Parsers\SpecialParsers\TireParsers\PProTire.cs" />
+    <Compile Include="Parsers\SpecialParsers\TireParsers\PressureProParser.cs" />
+    <Compile Include="Parsers\SpecialParsers\TireParsers\Tire.cs" />
+    <Compile Include="Parsers\SpecialParsers\TireParsers\TireParser.cs" />
+    <Compile Include="Parsers\SpecialParsers\TireParsers\TSTTire.cs" />
+    <Compile Include="UI\ColorPicker.xaml.cs">
+      <DependentUpon>ColorPicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ComponentWrappers\HorizontalBarWrapper.cs" />
+    <Compile Include="UI\CustomComponents\ColoredLine.cs" />
+    <Compile Include="UI\ComponentWrappers\ComponentCanvas.cs" />
+    <Compile Include="UI\CustomComponents\PanelGrid.cs" />
+    <Compile Include="UI\CustomComponents\ValueLine.cs" />
+    <Compile Include="UI\CustomComponents\VMSBorder.cs" />
+    <Compile Include="UI\CustomComponents\VMSListBoxItem.cs" />
+    <Compile Include="UI\CustomComponents\RadialBar.cs" />
     <Compile Include="DevHelpers\DebugConsole.xaml.cs">
       <DependentUpon>DebugConsole.xaml</DependentUpon>
     </Compile>
     <Compile Include="DevHelpers\VmsConsole.cs" />
-    <Compile Include="DlgWindows\AboutDlg.xaml.cs">
+    <Compile Include="UI\DlgWindows\AboutDlg.xaml.cs">
       <DependentUpon>AboutDlg.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DlgWindows\CommDlg.xaml.cs">
+    <Compile Include="UI\DlgWindows\CommDlg.xaml.cs">
       <DependentUpon>CommDlg.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CustomComponents\VMSCanvas.cs" />
-    <Compile Include="DlgWindows\HistoryViewerDlg.xaml.cs">
+    <Compile Include="UI\CustomComponents\VMSCanvas.cs" />
+    <Compile Include="UI\DlgWindows\DiagnosticAlarmDlg.xaml.cs">
+      <DependentUpon>DiagnosticAlarmDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DlgWindows\HistoryViewerDlg.xaml.cs">
       <DependentUpon>HistoryViewerDlg.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DlgWindows\MultiBarDlg.xaml.cs">
-      <DependentUpon>MultiBarDlg.xaml</DependentUpon>
+    <Compile Include="UI\DlgWindows\ImagePanelDlg.xaml.cs">
+      <DependentUpon>ImagePanelDlg.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DlgWindows\OdometerDlg.xaml.cs">
-      <DependentUpon>OdometerDlg.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DlgWindows\RawLogDlg.xaml.cs">
+    <Compile Include="UI\DlgWindows\RawLogDlg.xaml.cs">
       <DependentUpon>RawLogDlg.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DlgWindows\RoundGaugeDlg.xaml.cs">
-      <DependentUpon>RoundGaugeDlg.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DlgWindows\ScanGaugeDlg.xaml.cs">
+    <Compile Include="UI\DlgWindows\ScanGaugeDlg.xaml.cs">
       <DependentUpon>ScanGaugeDlg.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DlgWindows\SimpleGaugeDlg.xaml.cs">
+    <Compile Include="UI\DlgWindows\SimpleGaugeDlg.xaml.cs">
       <DependentUpon>SimpleGaugeDlg.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DlgWindows\VMSDialog.cs" />
-    <Compile Include="DlgWindows\VPanelDlg.cs" />
+    <Compile Include="UI\DlgWindows\TextPanelDlg.xaml.cs">
+      <DependentUpon>TextPanelDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DlgWindows\TirePanelDlg.xaml.cs">
+      <DependentUpon>TirePanelDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DlgWindows\VMSDialog.cs" />
+    <Compile Include="UI\DlgWindows\VPanelDlg.cs" />
     <Compile Include="Helpers\Pointer.cs" />
-    <Compile Include="Panels\ParamPresenter.cs" />
-    <Compile Include="Panels\VMultiBar.cs" />
-    <Compile Include="Panels\VOdometer.cs" />
-    <Compile Include="Panels\VRoundGauge.cs" />
-    <Compile Include="Panels\VScanGauge.cs" />
+    <Compile Include="JsonFileManagers\JsonFileReader.cs" />
+    <Compile Include="JsonFileManagers\ConfigurationManager.cs" />
+    <Compile Include="JsonFileManagers\PanelConfigs\Panel.cs" />
+    <Compile Include="JsonFileManagers\SettingsReader.cs" />
+    <Compile Include="UI\ExceptionWindow.xaml.cs">
+      <DependentUpon>ExceptionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\GaugeComponents\BarComponent.cs" />
+    <Compile Include="UI\GaugeComponents\ClockComponent.cs" />
+    <Compile Include="UI\GaugeComponents\GaugeComponent.cs" />
+    <Compile Include="UI\GaugeComponents\IGaugeComponent.cs" />
+    <Compile Include="UI\GaugeComponents\RadialComponent.cs" />
+    <Compile Include="UI\GaugeComponents\PIDTextComponent.cs" />
+    <Compile Include="UI\GaugeComponents\TextComponent.cs" />
+    <Compile Include="UI\GaugeComponents\TireIconComponent.cs" />
+    <Compile Include="UI\ComponentWrappers\BarGauge.cs" />
+    <Compile Include="UI\Panels\MultiBar.cs" />
+    <Compile Include="UI\Panels\ParamPresenter.cs" />
     <Compile Include="Parsers\ChassisParameter.cs" />
     <Compile Include="Parsers\J1708\J1708Parser.cs" />
     <Compile Include="Parsers\J1939\J1939Parser.cs" />
-    <Compile Include="Panels\VBarGauge.cs" />
-    <Compile Include="Panels\VSimpleGauge.cs" />
+    <Compile Include="UI\Panels\ScanGauge.cs" />
+    <Compile Include="UI\Panels\VBarGauge.cs" />
+    <Compile Include="UI\Panels\VDiagAlarmPanel.cs" />
+    <Compile Include="UI\Panels\VImagePanel.cs" />
+    <Compile Include="UI\Panels\VRadialGauge.cs" />
+    <Compile Include="UI\Panels\VSimpleGauge.cs" />
     <Compile Include="Parsers\J1939\PGNMapper.cs" />
     <Compile Include="Parsers\J1708\PIDWrapper.cs" />
     <Compile Include="Parsers\J1939\SPNDefinitions.cs" />
@@ -125,19 +169,30 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Configuration.settings</DependentUpon>
     </Compile>
+    <Compile Include="JsonFileManagers\ScreenReader.cs" />
     <Compile Include="target.cs" />
-    <Compile Include="Panels\VPanel.cs" />
+    <Compile Include="UI\Panels\VPanel.cs" />
+    <Compile Include="UI\GaugeComponents\GaugePIDComponent.cs" />
+    <Compile Include="UI\Panels\VTextPanel.cs" />
+    <Compile Include="UI\Panels\VTirePanel.cs" />
+    <Compile Include="Recorders\DiagnosticsRecorder.cs" />
+    <Compile Include="Recorders\ErrorRecorder.cs" />
+    <Compile Include="Recorders\OdometerRecorder.cs" />
+    <Compile Include="Recorders\RawLogger.cs" />
+    <Compile Include="UI\TireMaps\TireMap.cs" />
+    <Compile Include="VEnum\Parsing.cs" />
+    <Compile Include="VEnum\UI.cs" />
     <Compile Include="VParameter.cs" />
-    <Compile Include="XmlFileManagers\AlarmDataManager.cs" />
-    <Compile Include="XmlFileManagers\ConfigurationStructs.cs" />
-    <Compile Include="XmlFileManagers\DefaultScrnManager.cs" />
-    <Compile Include="XmlFileManagers\MessagesManager.cs" />
-    <Compile Include="XmlFileManagers\OdometerManager.cs" />
-    <Compile Include="XmlFileManagers\OdometerTracker.cs" />
-    <Compile Include="XmlFileManagers\ParamDataManager.cs" />
-    <Compile Include="XmlFileManagers\SettingsManager.cs" />
-    <Compile Include="XmlFileManagers\TireSettingsManager.cs" />
-    <Compile Include="XmlFileManagers\XmlFileManager.cs" />
+    <Compile Include="XmlFileManagers_deprecated\AlarmDataManager.cs" />
+    <Compile Include="XmlFileManagers_deprecated\ConfigurationStructs.cs" />
+    <Compile Include="XmlFileManagers_deprecated\DefaultScrnManager.cs" />
+    <Compile Include="XmlFileManagers_deprecated\MessagesManager.cs" />
+    <Compile Include="XmlFileManagers_deprecated\OdometerManager.cs" />
+    <Compile Include="XmlFileManagers_deprecated\OdometerTracker.cs" />
+    <Compile Include="XmlFileManagers_deprecated\ParamDataManager.cs" />
+    <Compile Include="XmlFileManagers_deprecated\SettingsManager.cs" />
+    <Compile Include="XmlFileManagers_deprecated\TireSettingsManager.cs" />
+    <Compile Include="XmlFileManagers_deprecated\XmlFileManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Communication\VMSComm.cs" />
@@ -149,39 +204,39 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DlgWindows\AboutDlg.xaml">
+    <Page Include="UI\ColorPicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DlgWindows\CommDlg.xaml">
+    <Page Include="UI\DlgWindows\AboutDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DlgWindows\HistoryViewerDlg.xaml">
+    <Page Include="UI\DlgWindows\CommDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DlgWindows\MultiBarDlg.xaml">
+    <Page Include="UI\DlgWindows\DiagnosticAlarmDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DlgWindows\OdometerDlg.xaml">
+    <Page Include="UI\DlgWindows\HistoryViewerDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DlgWindows\RawLogDlg.xaml">
+    <Page Include="UI\DlgWindows\ImagePanelDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DlgWindows\RoundGaugeDlg.xaml">
+    <Page Include="UI\DlgWindows\RawLogDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DlgWindows\ScanGaugeDlg.xaml">
+    <Page Include="UI\DlgWindows\ScanGaugeDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DlgWindows\SimpleGaugeDlg.xaml">
+    <Page Include="UI\DlgWindows\SimpleGaugeDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -197,6 +252,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\DlgWindows\TextPanelDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DlgWindows\TirePanelDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ExceptionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

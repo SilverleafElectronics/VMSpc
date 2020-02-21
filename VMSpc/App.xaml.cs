@@ -7,21 +7,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using VMSpc.Parsers;
-using static VMSpc.XmlFileManagers.AlarmDataManager;
-using static VMSpc.XmlFileManagers.ClockSettings;
-using static VMSpc.XmlFileManagers.DefaultScrnManager;
-using static VMSpc.XmlFileManagers.DiagnosticGaugeSettings;
-using static VMSpc.XmlFileManagers.GaugeSettings;
-using static VMSpc.XmlFileManagers.MessageBoxSettings;
-using static VMSpc.XmlFileManagers.MessagesManager;
-using static VMSpc.XmlFileManagers.MultiBarSettings;
-using static VMSpc.XmlFileManagers.OdometerManager;
-using static VMSpc.XmlFileManagers.OdometerSettings;
-using static VMSpc.XmlFileManagers.OdometerTracker;
-using static VMSpc.XmlFileManagers.ParamDataManager;
 using static VMSpc.Parsers.PIDWrapper;
-using static VMSpc.XmlFileManagers.TireSettingsManager;
-using static VMSpc.XmlFileManagers.XmlFileManager;
+using static VMSpc.JsonFileManagers.ConfigurationManager;
+using VMSpc.UI;
 
 namespace VMSpc
 {
@@ -57,17 +45,16 @@ namespace VMSpc
         /// </summary>
         private void ActivateStaticClasses()
         {
+            ConfigManager.LoadConfiguration();
             SPNDefinitions.Activate();      //in VMSpc/Parsers/J1939/SPNDefinitions.cs - Defines every SPN object
             PIDManager.Activate();          //in VMSpc/Parsers/J1708/PIDWrapper.cs     - Creates a PID object for all J1708 PIDs and attaches them to PIDList
             PresenterWrapper.Activate();    //in VMSpc/Parsers/PresenterWrapper.cs     - Attaches all TSPNDatum objects to a presenter object, which is then stored in PresenterList
-            Odometer.Activate();
-            ParamData.Activate();
-
+            //Odometer.Activate();
+            //ParamData.Activate();
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            
             ShowSplashScreen();
             ActivateStaticClasses();
             VMSpcStart();
@@ -111,20 +98,11 @@ namespace VMSpc
             wnd.Show();
         }
 
-        private string ExceptionInstructions =>
-            (
-                "For debugging support, please do one of the following:\n" +
-                "1. Press the 'Yes' button below. This will put the contents of the error into your clipboard. You can paste the text into an email, and send the email with the subject \"VMSpc Unhandled Exceptions\" to support@simply-smarter.com\n" +
-                "2. Take a screenshot of this screen, and either email us the image or call our support team\n" +
-                "3. Leave this window open and call our support team for more instructions"
-            );
-
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("An unhandled exception just occurred: " + e.Exception.Message + "\n\n" + ExceptionInstructions + "\n\nException Details:\n\n" + e.Exception.ToString() + "\n\nDo you want to copy the error message?\n\n", "VMSpc Error", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
-                Clipboard.SetText("VMSpc Error Message: " + e.Exception.ToString());
-            wnd.ForceClose();
+            ExceptionWindow exceptionWindow = new ExceptionWindow(e);
+            exceptionWindow.ShowDialog();
+            wnd.Close();
         }
     }
 }

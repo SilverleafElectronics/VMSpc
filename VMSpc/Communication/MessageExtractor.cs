@@ -19,7 +19,6 @@ namespace VMSpc.Communication
         /// </summary>
         public CanMessage GetMessage(string message)
         {
-            
             CanMessage canMessage = FromString(RemoveControlCharacters(message));
             return canMessage;
         }

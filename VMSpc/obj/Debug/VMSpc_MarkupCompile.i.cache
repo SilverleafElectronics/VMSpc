@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\obj\Debug\
+C:\Users\urban\Documents\SilverLeaf\VMSpc_dev\VMSpc\obj\Debug\
 VMSpc
 none
 false
 DEBUG;TRACE
-C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\App.xaml
-11-1031815726
+C:\Users\urban\Documents\SilverLeaf\VMSpc_dev\VMSpc\App.xaml
+14278657012
 
-661654101063
-14-35541203
-DevHelpers\DebugConsole.xaml;DlgWindows\AboutDlg.xaml;DlgWindows\CommDlg.xaml;DlgWindows\HistoryViewerDlg.xaml;DlgWindows\MultiBarDlg.xaml;DlgWindows\OdometerDlg.xaml;DlgWindows\RawLogDlg.xaml;DlgWindows\RoundGaugeDlg.xaml;DlgWindows\ScanGaugeDlg.xaml;DlgWindows\SimpleGaugeDlg.xaml;MainWindow.xaml;
+1112110265364
+15-1877801083
+DevHelpers\DebugConsole.xaml;UI\ColorPicker.xaml;UI\DlgWindows\AboutDlg.xaml;UI\DlgWindows\CommDlg.xaml;UI\DlgWindows\DiagnosticAlarmDlg.xaml;UI\DlgWindows\HistoryViewerDlg.xaml;UI\DlgWindows\ImagePanelDlg.xaml;UI\DlgWindows\RawLogDlg.xaml;UI\DlgWindows\ScanGaugeDlg.xaml;UI\DlgWindows\SimpleGaugeDlg.xaml;MainWindow.xaml;UI\DlgWindows\TextPanelDlg.xaml;UI\DlgWindows\TirePanelDlg.xaml;UI\ExceptionWindow.xaml;
 
 True
 

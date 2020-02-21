@@ -11,7 +11,7 @@ using static VMSpc.XmlFileManagers.SettingsManager;
 
 namespace VMSpc.Parsers
 {
-    public class J1939Parser
+    public class J1939Parser : IDataBus
     {
         public readonly int spn;
         public J1939Parser()
@@ -19,16 +19,22 @@ namespace VMSpc.Parsers
 
         }
 
-        public void Parse(J1939Message canMessage)
+        public void Parse(CanMessage canMessage)
         {
-            if (PGNMap.ContainsKey(canMessage.pgn) && PGNMap[canMessage.pgn] != null)
+            J1939Message j1939Message = (canMessage as J1939Message);
+            if (PGNMap.ContainsKey(j1939Message.pgn) && PGNMap[j1939Message.pgn] != null)
             {
-                foreach (TSPNDatum datum in PGNMap[canMessage.pgn])
+                foreach (TSPNDatum datum in PGNMap[j1939Message.pgn])
                 {
                     //if (Settings.)
-                    datum.Parse(canMessage.address, canMessage.data);
+                    datum.Parse(j1939Message.address, j1939Message.data);
                 }
             }
+        }
+
+        public void SendMessage(byte[] message)
+        {
+
         }
     }
 }

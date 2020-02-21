@@ -1,0 +1,19 @@
+﻿<my:VMSDialog x:Class="VMSpc.DlgWindows.AboutDlg"
+        xmlns:my="clr-namespace:VMSpc.DlgWindows"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VMSpc.DlgWindows"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"          
+        ResizeMode="NoResize"
+        Title="About VMSpc" Height="250" Width="400">
+    <StackPanel>
+        <TextBlock Margin="10" Name="version"    />
+        <TextBlock Margin="10" Name="copyright"  />
+        <TextBlock Margin="10" Name="moreInfo"   />
+        <TextBlock Margin="10" Name="phone"      />
+        <TextBlock Margin="10" Name="address"    />
+    </StackPanel>
+</my:VMSDialog>

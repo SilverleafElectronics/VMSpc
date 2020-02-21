@@ -20,7 +20,7 @@
     <Auto-Data-Log-Flag>0</Auto-Data-Log-Flag>
     <Log-When-Engine-Off>0</Log-When-Engine-Off>
     <Jib-Type>3</Jib-Type>
-    <LogPlayer-FileName>C:\Projects\VMSpc\VMSpc5.0Dev\VMSpc\VMSpc\bin\Release\rawlogs\j1708log.vms</LogPlayer-FileName>
+    <LogPlayer-FileName>C:\Users\urban\Documents\SilverLeaf\VMSpc_dev\VMSpc\bin\Release\rawlogs\rawlog.vms</LogPlayer-FileName>
     <RawLog-FileName>rawlog.vms</RawLog-FileName>
     <Usb-Delay>0</Usb-Delay>
     <TPMS-Type>0</TPMS-Type>

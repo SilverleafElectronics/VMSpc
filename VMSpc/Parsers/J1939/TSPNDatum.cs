@@ -21,7 +21,7 @@ using static VMSpc.Parsers.SPNDefinitions;
 
 namespace VMSpc.Parsers
 {
-    public class TSPNDatum
+    public class TSPNDatum : IEventPublisher
     {
         public uint rawValue;
         public double value, valueMetric;
@@ -30,6 +30,9 @@ namespace VMSpc.Parsers
         public bool prioritize1708;
         public ushort spn;
 
+        //public delegate void VmsDataEventHandler(object sender, VMSDataEventArgs a);
+        public event EventHandler<VMSEventArgs> RaiseVMSEvent;
+
         public TSPNDatum(ushort spn)
         {
             rawValue = 0;
@@ -37,6 +40,7 @@ namespace VMSpc.Parsers
             seen = false;
             prioritize1708 = false;
             this.spn = spn;
+            EventBridge.EventProcessor.AddEventPublisher(this);
         }
 
         public virtual void Parse(byte address, byte[] data) { }
@@ -45,9 +49,13 @@ namespace VMSpc.Parsers
         {
             seen = true;
             ProcessDataReceivedEvent(spn);
+            OnRaiseCustomEvent(new VMSDataEventArgs((Constants.PID_BASE | (uint)spn), value));
         }
 
-
+        protected virtual void OnRaiseCustomEvent(VMSDataEventArgs e)
+        {
+            RaiseVMSEvent?.Invoke(this, e);
+        }
 
         /// <summary> Method allowing the datum's value to be set externally </summary>
         public void SetValue(uint raw, double val, double valMetric)
@@ -57,6 +65,7 @@ namespace VMSpc.Parsers
             valueMetric = valMetric;
             seen = true;
             ProcessDataReceivedEvent(spn);
+            OnRaiseCustomEvent(new VMSDataEventArgs((Constants.PID_BASE | (uint)spn), value));
         }
 
         #region Update Methods

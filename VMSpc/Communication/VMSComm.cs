@@ -12,8 +12,8 @@ using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using VMSpc.Parsers;
 using static VMSpc.Constants;
-using VMSpc.XmlFileManagers;
-using static VMSpc.XmlFileManagers.SettingsManager;
+using static VMSpc.JsonFileManagers.ConfigurationManager;
+using VMSpc.VEnum.Parsing;
 using System.Threading;
 
 namespace VMSpc.Communication
@@ -26,7 +26,6 @@ namespace VMSpc.Communication
         public ulong messageCount;
         public ulong badMessageCount;
         public string BadMessageCount { get { return ("" + badMessageCount); } }
-        public int parseBehavior;
 
         private Thread dataReaderThread;
         private MessageExtractor extractor;
@@ -49,7 +48,6 @@ namespace VMSpc.Communication
             LogType = LOGTYPE_RAWLOG;
             LogRecordingFile = null; //CHANGEME - retrieve from config
             logDataQueue = "";
-            parseBehavior = Settings.ParseMode;
 
             j1939Parser = new J1939Parser();
             j1708Parser = new J1708Parser();
@@ -66,19 +64,19 @@ namespace VMSpc.Communication
 
         private void CreateDataReader()
         {
-            switch(Settings.JibType)
+            switch(ConfigManager.Settings.Contents.jibType)
             {
-                case SERIAL:
+                case JibType.SERIAL:
                     dataReader = new SerialPortReader(ProcessData);
                     break;
-                case USB:
-                    dataReader = new CommPortReader(ProcessData);
+                case JibType.USB:
+                    dataReader = new CommPortReader(ProcessData, ConfigManager.Settings.Contents.comPort);
                     break;
-                case WIFI:
+                case JibType.WIFI:
                     dataReader = new WifiSocketReader(ProcessData);
                     break;
-                case LOGPLAYER:
-                    dataReader = new LogFileReader(ProcessData);
+                case JibType.LOGPLAYER:
+                    dataReader = new LogFileReader(ProcessData, ConfigManager.Settings.Contents.jibPlayerFilePath);
                     break;
                 default:
                     break;
@@ -95,7 +93,7 @@ namespace VMSpc.Communication
 
         public void StopComm()
         {
-            if (NOT_NULL(dataReader))
+            if (dataReader != null)
             {
                 dataReader.CloseDataReader();
                 //dataReaderThread.Abort();
@@ -116,9 +114,9 @@ namespace VMSpc.Communication
                 badMessageCount++;
                 return;
             }
-            if (canMessage.messageType == J1939 && parseBehavior != IGNORE_1939)
+            if (canMessage.messageType == J1939 && ConfigManager.Settings.Contents.globalParseBehavior != ParseBehavior.IGNORE_1939)
                 j1939Parser.Parse((J1939Message)canMessage);
-            else if (canMessage.messageType == J1708 && parseBehavior != IGNORE_1708)
+            else if (canMessage.messageType == J1708 && ConfigManager.Settings.Contents.globalParseBehavior != ParseBehavior.IGNORE_1708)
                 j1708Parser.Parse((J1708Message)canMessage);
             messageCount++;
         }
@@ -130,9 +128,9 @@ namespace VMSpc.Communication
                 logEntry += canMessage.ToString();
             if (LogType == LOGTYPE_FULL)
             {
-                if (canMessage.messageType == J1939 && parseBehavior != IGNORE_1939)
+                if (canMessage.messageType == J1939 && ConfigManager.Settings.Contents.globalParseBehavior != ParseBehavior.IGNORE_1939)
                     logEntry += canMessage.ToParsedString(j1939Parser);
-                else if (canMessage.messageType == J1708 && parseBehavior != IGNORE_1708)
+                else if (canMessage.messageType == J1708 && ConfigManager.Settings.Contents.globalParseBehavior != ParseBehavior.IGNORE_1708)
                     logEntry += canMessage.ToParsedString(j1708Parser);
             }
             logEntry += "\nEnd of Message\n\n";

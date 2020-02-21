@@ -35,7 +35,13 @@ namespace VMSpc.DevHelpers
                 Console.Children.Add(line);
                 ConsoleScroller.ScrollToBottom();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                if (ex == null)
+                    return;
+                else
+                    return;
+            }
         }
     }
 }
