@@ -10,8 +10,8 @@ using System.Timers;
 using System.Windows;
 using VMSpc.DevHelpers;
 using static VMSpc.Constants;
-using static VMSpc.XmlFileManagers.SettingsManager;
 using System.Collections.Concurrent;
+using VMSpc.JsonFileManagers;
 
 namespace VMSpc.Communication
 {
@@ -64,11 +64,11 @@ namespace VMSpc.Communication
                 ushort newPort = FindVmsPort();
                 if (newPort == comPort && quietlyTryReconnect == 1)
                 {
+                    quietlyTryReconnect++;
                     MessageBox.Show("Something went wrong in attempting to connect to the data source, using a USB connection on COM" + comPort + ". " +
                         "VMSpc will continue trying to reconnect, but if another application is using the COM port, the connection will continue to fail. Please make " +
                         "sure that all other instances of VMSpc are currently shutdown, and call our support " +
                         "team if the problem persists.");
-                    quietlyTryReconnect++;
                 }
                 else if (newPort == comPort)
                 {
@@ -188,8 +188,9 @@ namespace VMSpc.Communication
 
         private void ChangeComPort(ushort newPort)
         {
+            var Settings = ConfigurationManager.ConfigManager.Settings.Contents;
             comPort = newPort;
-            Settings.Port = newPort;
+            Settings.comPort = newPort;
             CloseDataReader();
             InitDataReader();
         }

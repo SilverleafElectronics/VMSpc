@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VMSpc.Parsers.SpecialParsers.TireParsers;
-using VMSpc.VEnum.Parsing;
+using VMSpc.Enums.Parsing;
 
 namespace VMSpc.Parsers.TireParsers
 {

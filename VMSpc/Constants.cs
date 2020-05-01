@@ -15,10 +15,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using VMSpc.XmlFileManagers;
-using VMSpc.DlgWindows;
+using VMSpc.UI.DlgWindows;
 using VMSpc.Panels;
-using VMSpc.CustomComponents;
+using VMSpc.UI.CustomComponents;
 using static VMSpc.Constants;
 using static VMSpc.Parsers.PresenterWrapper;
 using System.Globalization;
@@ -49,6 +48,8 @@ namespace VMSpc
         public const double DUB_NODATA = double.MaxValue;
         public const double DUB_USAGEERR = double.MaxValue - 1;
         public const double DUB_ERR = -double.MaxValue;
+
+        public const double PID_NODATA = double.NaN;
 
         //object checking
         /// <summary> Shorthand method for checking whether or not an object is null </summary>
@@ -146,24 +147,6 @@ namespace VMSpc
         public const int MOVEMENT_MOVE = 2;
         public const int MOVEMENT_NONE = 0;
 
-        /// <summary>
-        /// Method to map a sane text alignment enumeration (Left = 0, Center = 1, Right = 2) to the stupid order imposed by TextAlignment
-        /// </summary>
-        public static TextAlignment GET_TEXT_ALIGNMENT(int alignment)
-        {
-            switch (alignment)
-            {
-                case 0:
-                    return TextAlignment.Left;
-                case 1:
-                    return TextAlignment.Center;
-                case 2:
-                    return TextAlignment.Right;
-                default:
-                    return TextAlignment.Left;
-            }
-        }
-
         //-----------------------------------------------------------------------------------------
         //RV-C Helpers
         //-----------------------------------------------------------------------------------------
@@ -229,7 +212,6 @@ namespace VMSpc
             }
             catch (Exception ex)
             {
-                //VMSConsole.PrintLine(ex.Message);
                 return false;
             }
         }
@@ -257,13 +239,6 @@ namespace VMSpc
         {
             return 0;
         }
-
-        //-----------------------------------------------------------------------------------------
-        //Event-Handling helpers
-        //-----------------------------------------------------------------------------------------
-        public static uint PID_BASE = 0x00010000;
-        public static uint DIAGNOSTIC_BASE = 0x00020000;
-        public static uint TIRE_BASE = 0x00030000;
 
         //-----------------------------------------------------------------------------------------
         //Misc Helpers
@@ -447,9 +422,17 @@ namespace VMSpc
             object castedObject;
             castedObject = new Border();
             return castedObject;
-
-
         }
+
+        private static string GetBaseDirectory()
+        {
+            var exeLocation = System.Reflection.Assembly.GetEntryAssembly().Location;
+            var indexOf = exeLocation.IndexOf("VMSpc.exe") - 1;//-1 to remove the \\
+            var withoutExeName = exeLocation.Substring(0, indexOf);
+            return withoutExeName;
+        }
+
+        public static string BaseDirectory => GetBaseDirectory();
 
     } //End of Constants class
 }

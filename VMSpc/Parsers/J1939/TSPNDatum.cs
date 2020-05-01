@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using VMSpc.DevHelpers;
+using VMSpc.Common;
 using static VMSpc.Constants;
 using static VMSpc.Parsers.ChassisParameter;
 using static VMSpc.Parsers.PresenterWrapper;
@@ -49,7 +50,7 @@ namespace VMSpc.Parsers
         {
             seen = true;
             ProcessDataReceivedEvent(spn);
-            OnRaiseCustomEvent(new VMSDataEventArgs((Constants.PID_BASE | (uint)spn), value));
+            OnRaiseCustomEvent(new VMSDataEventArgs((EventIDs.PID_BASE | (uint)spn), value));
         }
 
         protected virtual void OnRaiseCustomEvent(VMSDataEventArgs e)
@@ -65,7 +66,7 @@ namespace VMSpc.Parsers
             valueMetric = valMetric;
             seen = true;
             ProcessDataReceivedEvent(spn);
-            OnRaiseCustomEvent(new VMSDataEventArgs((Constants.PID_BASE | (uint)spn), value));
+            OnRaiseCustomEvent(new VMSDataEventArgs((EventIDs.PID_BASE | (uint)spn), value));
         }
 
         #region Update Methods
@@ -325,6 +326,64 @@ namespace VMSpc.Parsers
     //Special Datum types
     #region Special SPNs
 
+    public abstract class TSPNEngineDependentDatum : TSPNDatum, IEventConsumer
+    {
+        protected double
+            currentRpms,
+            currentLoadPercent;
+        public TSPNEngineDependentDatum(ushort spn) : base(spn) 
+        {
+            currentRpms = currentLoadPercent = double.NaN;
+            EventBridge.EventProcessor.SubscribeToEvent(this, (EventIDs.PID_BASE | spn_rpms.spn));
+            EventBridge.EventProcessor.SubscribeToEvent(this, (EventIDs.PID_BASE | spn_loadPercent.spn));
+        }
+        public void ConsumeEvent(VMSEventArgs e)
+        {
+            var pid = e.eventID & 0xFFFF;
+            if (pid == spn_rpms.spn)
+            {
+                currentRpms = (e as VMSDataEventArgs).value;
+            }
+            else if (pid == spn_loadPercent.spn)
+            {
+                currentLoadPercent = (e as VMSDataEventArgs).value;
+            }
+            if (!double.IsNaN(currentLoadPercent) && !double.IsNaN(currentRpms))
+            {
+                value = ResolveValue();
+                rawValue = (uint)Math.Ceiling(value);
+                ConvertAndStore();
+            }
+        }
+        protected abstract double ResolveValue();
+    }
+
+    public class TSPNTorque : TSPNEngineDependentDatum
+    {
+        public TSPNTorque(ushort spn) : base(spn) { }
+        protected override double ResolveValue()
+        {
+            return EngineSpec.CalculateTorque(currentRpms, currentLoadPercent);
+        }
+        protected override void ConvertAndStore()
+        {
+            base.ConvertAndStore();
+        }
+    }
+
+    public class TSPNHorsepower : TSPNEngineDependentDatum
+    {
+        public TSPNHorsepower(ushort spn) : base(spn) { }
+        protected override double ResolveValue()
+        {
+            return EngineSpec.CalculateHorsepower(currentRpms, currentLoadPercent);
+        }
+        protected override void ConvertAndStore()
+        {
+            base.ConvertAndStore();
+        }
+    }
+
     #region TSPNRange
 
     public class TSPNRange : TSPNDatum
@@ -499,7 +558,7 @@ namespace VMSpc.Parsers
                 if (!Double.IsNaN(lastSpeed))
                 {
                     value = (curSpeed - lastSpeed);
-                    valueMetric = value * 1.60934 + 0;
+                    valueMetric = value * 1.60934;
                     seen = true;
                 }
                 lastSpeed = curSpeed;

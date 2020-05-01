@@ -6,7 +6,7 @@ using System.Timers;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using VMSpc.DlgWindows;
+using VMSpc.UI.DlgWindows;
 using VMSpc.JsonFileManagers;
 using VMSpc.Panels;
 using static VMSpc.Constants;
@@ -15,6 +15,7 @@ using static VMSpc.JsonFileManagers.ConfigurationManager;
 using VMSpc.UI.ComponentWrappers;
 using VMSpc.UI.DlgWindows;
 using VMSpc.Extensions.UI;
+using System.Windows.Media;
 
 namespace VMSpc.UI.Panels
 { 
@@ -43,6 +44,7 @@ namespace VMSpc.UI.Panels
             SimpleGaugeSlider.Clear();
             canvas.Children.Clear();
             CurrentSimpleSliderIndex = 0;
+            canvas.Background = new SolidColorBrush(panelSettings.backgroundColor);
             foreach (var pid in panelSettings.pidList)
             {
                 AddGaugeCanvas(pid);
@@ -56,7 +58,7 @@ namespace VMSpc.UI.Panels
 
         private void AddGaugeCanvas(ushort pid)
         {
-            var gaugeCanvas = new BarGauge()
+            var gaugeCanvas = new BarGauge(panelSettings)
             {
                 Width = canvas.Width,
                 Height = canvas.Height,

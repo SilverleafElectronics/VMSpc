@@ -1,0 +1,80 @@
+﻿<my:VPanelDlg 
+        WindowStartupLocation="CenterOwner"          
+        ResizeMode="NoResize"
+        xmlns:my="clr-namespace:VMSpc.UI.DlgWindows"
+        xmlns:vs="clr-namespace:VMSpc.UI.CustomComponents"
+        x:Class="VMSpc.UI.DlgWindows.DiagnosticAlarmDlg"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VMSpc.UI.DlgWindows"
+        mc:Ignorable="d"
+        Title="Diagnostic Alarm Settings" Height="350" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <Label HorizontalAlignment="Center">Background Color</Label>
+                <Border BorderBrush="Black" BorderThickness="1" Width="50" Height="50" Margin="10">
+                    <Rectangle x:Name="BackgroundColorRect" />
+                </Border>
+                <Button x:Name="ChangeBackgroundColorButton" Width="75" Height="25" Click="ChangeBackgroundColorButton_Click">Change</Button>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <Label HorizontalAlignment="Center">Warning Color</Label>
+                <Border BorderBrush="Black" BorderThickness="1" Width="50" Height="50" Margin="10">
+                    <Rectangle x:Name="WarningColorRect" />
+                </Border>
+                <Button x:Name="ChangeWarningColorButton" Width="75" Height="25" Click="ChangeWarningColorButton_Click">Change</Button>
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+                <Label HorizontalAlignment="Center">Border Color</Label>
+                <Border BorderBrush="Black" BorderThickness="1" Width="50" Height="50" Margin="10">
+                    <Rectangle x:Name="BorderColorRect"/>
+                </Border>
+                <Button x:Name="ChangeBorderColorButton" Width="75" Height="25" Click="ChangeBorderColorButton_Click">Change</Button>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <CheckBox 
+                Grid.Column="0" 
+                x:Name="UseGlobalColor" 
+                Height="25" 
+                Width="150" 
+                Checked="UseGlobalColor_Checked" 
+                Unchecked="UseGlobalColor_Unchecked">
+                Use Global Color Palette
+            </CheckBox>
+            <CheckBox
+                Grid.Column="1"
+                Height="25"
+                Width="150"
+                Name="UseMilitaryTime"
+                >
+                Use Military Time
+            </CheckBox>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Name="CancelButton" Width="125" Height="25" Click="CancelButton_Click" Grid.Column="0">Cancel</Button> 
+            <Button Name="OkButton"     Width="125" Height="25" Click="OkButton_Click" Grid.Column="1">Ok</Button>
+        </Grid>
+    </Grid>
+</my:VPanelDlg>

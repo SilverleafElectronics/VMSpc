@@ -12,17 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using VMSpc.XmlFileManagers;
-using VMSpc.DlgWindows;
+using VMSpc.UI.DlgWindows;
 using VMSpc.Panels;
-using VMSpc.CustomComponents;
+using VMSpc.UI.CustomComponents;
 using VMSpc.DevHelpers;
 using System.Timers;
 using static VMSpc.Constants;
-using static VMSpc.XmlFileManagers.ParamDataManager;
 using System.Globalization;
 
-namespace VMSpc.CustomComponents
+namespace VMSpc.UI.CustomComponents
 {
     public class VMSBorder : Border
     {

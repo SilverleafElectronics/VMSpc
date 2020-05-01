@@ -34,7 +34,7 @@ namespace VMSpc.JsonFileManagers
             {
                 if (panel.GetType() == typeof(SimpleGaugeSettings))
                 {
-                    panel.panelId = VEnum.UI.PanelType.SIMPLE_GAUGE;
+                    panel.panelId = Enums.UI.PanelType.SIMPLE_GAUGE;
                 }
             }
         }
@@ -47,31 +47,6 @@ namespace VMSpc.JsonFileManagers
                 WallPaperFileName = null,
                 PanelList = new List<PanelSettings>()
                 {
-                    new SimpleGaugeSettings()
-                    {
-                        number = 1,
-                        panelCoordinates = new PanelCoordinates()
-                        {
-                            topLeftX = 320,
-                            topLeftY = 530,
-                            bottomRightX = 793,
-                            bottomRightY = 738
-                        },
-                        alignment = VEnum.UI.UIPosition.CENTER,
-                        backgroundColor = Colors.White,
-                        pid = 12,
-                        showAbbreviation = false,
-                        showGraph = true,
-                        showInMetric = false,
-                        showName = true,
-                        showSpot = true,
-                        showUnit = true,
-                        showValue = true,
-                        panelId = VEnum.UI.PanelType.SIMPLE_GAUGE,
-                        useGlobalColorPalette = true
-                    },
-                    //new RadialGaugeSettings(),
-                    //new ScanGaugeSettings()
                 }
             };
         }
@@ -96,8 +71,25 @@ namespace VMSpc.JsonFileManagers
             //reset all remaining panel numbers to keep them sequential
             for (int i = 1; i <= Contents.PanelList.Count; i++)
             {
-                Contents.PanelList[i - 1].number = (ulong)i;
+                var panel = Contents.PanelList[i - 1];
+                panel.number = (ulong)i;
+                //drop the parent panel numbers to avoid shifting them when panels are deleted (see example)
+                if (panel.parentPanelNumber > number)
+                {
+                    panel.parentPanelNumber--;
+                }
             }
         }
     }
 }
+
+/*
+
+    Example:
+    panel_A.number = 1;
+    panel_B.number = 2;
+    panel_C.number = 3;
+    panel_C.parentPanelNumber = 2
+    delete panel_A, causing panel_B.number = 1 and panel_C.number = 2;
+    panel_C.parentPanelNumber now equals panel_C.number, which is bad in a stack overflow exception causing kinda way
+*/

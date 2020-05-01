@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VMSpc.UI.TireMaps;
-using VMSpc.VEnum.Parsing;
+using VMSpc.Enums.Parsing;
 
 namespace VMSpc.JsonFileManagers
 {
@@ -30,10 +30,11 @@ namespace VMSpc.JsonFileManagers
             comPort;
         public string
             screenFilePath,
+            meterFilePath,
             jibPlayerFilePath,
             rawLogFilePath,
             ipAddress,
-            engineName;
+            engineFilePath;
         public JibType 
             jibType;
         public EngineModel
@@ -44,11 +45,18 @@ namespace VMSpc.JsonFileManagers
             globalParseBehavior;
         public TireMapType
             tireMapType;
+        public int
+            selectedColorPaletteId;
+        public double
+            WindowHeight,
+            WindowWidth,
+            WindowTop,
+            WindowLeft;
     }
 
     public class SettingsReader : JsonFileReader<SettingsContents>
     {
-        public SettingsReader() : base(cwd + "/configuration/settings.json")
+        public SettingsReader() : base("\\configuration\\settings.json")
         {
         }
 
@@ -56,6 +64,7 @@ namespace VMSpc.JsonFileManagers
         {
             return new SettingsContents()
             {
+                selectedColorPaletteId = 1,
                 lockAllGauges = false,
                 autoRestartFlag = true,
                 showSplashScreen = false,
@@ -71,16 +80,17 @@ namespace VMSpc.JsonFileManagers
                 ipPort = 51966,
                 comPort = 1,
 
-                engineName = "",
+                engineFilePath = "\\engines\\Caterpillar 3126 (250 Hp).ENG",
                 ipAddress = "169.254.0.2",
-                jibPlayerFilePath = Directory.GetCurrentDirectory() + "/rawlogs/j1939_demo.log",
-                rawLogFilePath = Directory.GetCurrentDirectory() + "/rawlogs/j1939_demo.log",
-                screenFilePath = Directory.GetCurrentDirectory() + "/configuration/screens/default.scr.json",
+                jibPlayerFilePath = "\\rawlogs\\j1708_demo.vms",
+                rawLogFilePath = "\\rawlogs\\j1708_demo.vms",
+                screenFilePath = "\\configuration\\screens\\default.scr.json",
+                meterFilePath = "\\configuration\\odometer.json",
 
                 engineModel = EngineModel.NONE,
                 tpmsType = TpmsType.NONE,
                 globalParseBehavior = ParseBehavior.PARSE_ALL,
-                jibType = JibType.USB,
+                jibType = JibType.LOGPLAYER,
                 tireMapType = TireMapType.SIX_WHEEL,
             };
         }

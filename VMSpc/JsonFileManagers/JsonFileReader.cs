@@ -9,17 +9,15 @@ using System.IO;
 namespace VMSpc.JsonFileManagers
 {
     public interface IJsonContents { }
-    public abstract class JsonFileReader<T>
+    public abstract class JsonFileReader<T> : FileOpener
         where T : IJsonContents
     {
-        private string filepath;
         public T Contents;
         protected static readonly JsonSerializerSettings serializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
-        protected static readonly string cwd = Directory.GetCurrentDirectory();
         public JsonFileReader(string filepath)
+            :base(filepath)
         {
-            this.filepath = filepath;
-            if (File.Exists(filepath))
+            if (!IsNullOrEmpty(filepath))
             {
                 LoadJson(filepath);
             }
@@ -32,7 +30,7 @@ namespace VMSpc.JsonFileManagers
         public virtual void LoadJson(string filepath)
         {
             string rawJson;
-            using (StreamReader reader = new StreamReader(filepath))
+            using (StreamReader reader = GetStreamReader())
             {
                 rawJson = reader.ReadToEnd();
             }
@@ -46,7 +44,7 @@ namespace VMSpc.JsonFileManagers
 
         public void SaveJson()
         {
-            using (StreamWriter sw = new StreamWriter(filepath))
+            using (StreamWriter sw = GetStreamWriter())
             {
                 string json = JsonConvert.SerializeObject(Contents, Formatting.Indented, serializerSettings);
                 sw.Write(json);

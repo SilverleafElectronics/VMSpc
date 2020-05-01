@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using VMSpc.JsonFileManagers;
 using VMSpc.UI.CustomComponents;
+using static VMSpc.JsonFileManagers.ConfigurationManager;
 
 namespace VMSpc.UI.GaugeComponents
 {
@@ -18,25 +19,25 @@ namespace VMSpc.UI.GaugeComponents
         protected int numLines;
         protected int previousLineNumber;
         protected ColorDelimiter[] MaxColorBorders;
-        //these are not customizable
-        private static readonly SolidColorBrush
-            RedBrush = new SolidColorBrush(Colors.Red),
-            YellowBrush = new SolidColorBrush(Colors.Yellow),
-            GreenBrush = new SolidColorBrush(Colors.Green);
-        //these depend on configuration. SolidFillColor is only used in configs that don't use Red/Yellow/Green schemes
+        //these are only customizable at the global level
+        private readonly SolidColorBrush
+            RedBrush = new SolidColorBrush(ConfigManager.ColorPalettes.GetSelectedPalette().Red),
+            YellowBrush = new SolidColorBrush(ConfigManager.ColorPalettes.GetSelectedPalette().Yellow),
+            GreenBrush = new SolidColorBrush(ConfigManager.ColorPalettes.GetSelectedPalette().Green);
+        //Not yet implemented - these depend on configuration. SolidFillColor is only used in configs that don't use Red/Yellow/Green schemes
         public SolidColorBrush
             EmptyColor,
             SolidValueColor;
 
         public Orientation Orientation { get; set; }
 
-        public BarComponent(ushort pid, JParameter parameter) : base(pid)
+        public BarComponent(ushort pid) : base(pid)
         {
             GaugeLines = new List<ColoredLine>();
             minGaugeValue = parameter.GaugeMin;
             maxGaugeValue = parameter.GaugeMax;
             EmptyColor = new SolidColorBrush(Colors.Black);
-            SolidValueColor = new SolidColorBrush(Colors.Green);
+            SolidValueColor = null;
             MaxColorBorders = new ColorDelimiter[]
             {
                 new ColorDelimiter(parameter.LowRed, RedBrush),
@@ -57,7 +58,7 @@ namespace VMSpc.UI.GaugeComponents
         public override void Update()
         {
             int cursor = previousLineNumber;
-            int target = ValueToLineIndex(pidValue);
+            int target = ValueToLineIndex(currentValue);
             bool increment = (target > cursor);
             while (cursor != target)
             {
@@ -84,14 +85,21 @@ namespace VMSpc.UI.GaugeComponents
             var ColorDelimiterIndex = 0;
             for (int i = 0; i < numLines; i++)
             {
-                while ((LineIndexToValue(i) >= MaxColorBorders[ColorDelimiterIndex].MaxValue) || (MaxColorBorders[ColorDelimiterIndex].MaxValue == 0))
+                if (SolidValueColor == null) //adds lines on a red-yellow-green scheme
                 {
-                    if (ColorDelimiterIndex < MaxColorBorders.Length)
+                    while ((LineIndexToValue(i) >= MaxColorBorders[ColorDelimiterIndex].MaxValue) || (MaxColorBorders[ColorDelimiterIndex].MaxValue == 0))
                     {
-                        ColorDelimiterIndex++;
+                        if (ColorDelimiterIndex < MaxColorBorders.Length)
+                        {
+                            ColorDelimiterIndex++;
+                        }
                     }
+                    AddLine(i, MaxColorBorders[ColorDelimiterIndex].Brush);
                 }
-                AddLine(i, MaxColorBorders[ColorDelimiterIndex].Brush);
+                else //adds the designated SolidValueColor
+                {
+                    AddLine(i, SolidValueColor);
+                }
             }
         }
 
@@ -100,8 +108,6 @@ namespace VMSpc.UI.GaugeComponents
         /// </summary>
         protected void AddLine(int position, SolidColorBrush ValueFillColor)
         {
-            var y1 = ResolveY1(position);
-            var y2 = ResolveY2(position);
             ColoredLine line = new ColoredLine()
             {
                 StrokeThickness = 2,
@@ -119,19 +125,19 @@ namespace VMSpc.UI.GaugeComponents
 
         private double ResolveX1(int position)
         {
-            return (Orientation == Orientation.Horizontal) ? position : Width;
+            return (Orientation == Orientation.Horizontal) ? position : 0;
         }
         private double ResolveX2(int position)
         {
-            return (Orientation == Orientation.Horizontal) ? position : 0;
+            return (Orientation == Orientation.Horizontal) ? position : Width;
         }
         private double ResolveY1(int position)
         {
-            return (Orientation == Orientation.Vertical) ? position : Height;
+            return (Orientation == Orientation.Vertical) ? (Height - position) : Height;
         }
         private double ResolveY2(int position)
         {
-            return (Orientation == Orientation.Vertical) ? position : 0;
+            return (Orientation == Orientation.Vertical) ? (Height - position) : 0;
         }
 
         private int ValueToLineIndex(double value)

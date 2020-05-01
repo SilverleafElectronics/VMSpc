@@ -30,7 +30,7 @@ namespace VMSpc.Parsers
         {
             J1708Message j1708Message = (canMessage as J1708Message);
             foreach (var pair in j1708Message.data)
-            {
+            { 
                 J1708ParseMethodMap[pair.Key].ParseMethod(pair.Key, pair.Value, J1708ParseMethodMap[pair.Key]);
             }
         }
@@ -66,7 +66,7 @@ namespace VMSpc.Parsers
             SetValueSPN(PID, rawValue, metricValue, standardValue, J1708);
         }
 
-        #endregion //Standard Converters
+        #endregion Standard Converters
 
         #region Custom Converters
 
@@ -178,7 +178,7 @@ namespace VMSpc.Parsers
 
         }
 
-        #endregion //Custom Converters
+        #endregion Custom Converters
 
 
         #region Map Definition Methods
@@ -192,7 +192,6 @@ namespace VMSpc.Parsers
             J1708ParseMethodMap.Add(retarderOilTemp,               new J1708ParsingHelper(ByteConverter,   0, -17.77, 2.0,   0.555));
             J1708ParseMethodMap.Add(retarderStatus,                new J1708ParsingHelper(ByteConverter,   0, 0,      1,     1    ));
             J1708ParseMethodMap.Add(percentAcceleratorPosition,    new J1708ParsingHelper(ByteConverter,   0, 0,      0.4,   1    ));
-            J1708ParseMethodMap.Add(voltage,                       new J1708ParsingHelper(ByteConverter,   0, 0,      0.4,   1    ));
             J1708ParseMethodMap.Add(cruiseSpeed,                   new J1708ParsingHelper(ByteConverter,   0, 0,      0.5,   1.609));
             J1708ParseMethodMap.Add(coolantTemp,                   new J1708ParsingHelper(ByteConverter,   0, -17.7,  1,     0.555));
             J1708ParseMethodMap.Add(engineLoad,                    new J1708ParsingHelper(ByteConverter,   0, 0,      0.5,   1    ));
@@ -211,6 +210,8 @@ namespace VMSpc.Parsers
             J1708ParseMethodMap.Add(fuelTemp,                      new J1708ParsingHelper(DoubleConverter, 0, 0,      1,           1,     64));
             J1708ParseMethodMap.Add(instantMPG,                    new J1708ParsingHelper(DoubleConverter, 0, 0,      0.00390625,  0.425, 1));
             J1708ParseMethodMap.Add(airInletTemp,                  new J1708ParsingHelper(DoubleConverter, 0, -17.77, 0.25,        0.555, 64));
+            J1708ParseMethodMap.Add(voltage,                       new J1708ParsingHelper(DoubleConverter,   0, 0,      0.05,        1 ,    12.8));
+            J1708ParseMethodMap.Add(ambientTemp,                   new J1708ParsingHelper(DoubleConverter, -459.4, -273.0, 0.05625, 0.03125));
 
             /*-------------------------   These require custom conversions ---------------- */
             J1708ParseMethodMap.Add(rangeSelected,                 new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
@@ -224,7 +225,22 @@ namespace VMSpc.Parsers
             J1708ParseMethodMap.Add(multipartMessage,              new J1708ParsingHelper(CustomConverter, 0, 0, 0, 0));
         }
 
-        #endregion //Map Definition Methods
+        /*
+
+		case 168: //voltage
+			tempS = msg->data[++pos] * 0.05f; //first byte
+			tempR = msg->data[pos];
+			tempS += msg->data[++pos] * 12.8f; //second byte
+			tempR += msg->data[pos];
+			tempM = tempS;
+			p1939->setValueSPN(pid, (uint32_t)tempR, tempM, tempS);
+			pos++;
+			bytes_unprocessed -= 3;
+			break;
+
+        */
+
+        #endregion Map Definition Methods
 
         public struct J1708ParsingHelper
         {

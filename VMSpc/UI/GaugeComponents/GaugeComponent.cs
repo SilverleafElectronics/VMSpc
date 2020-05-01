@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VMSpc.CustomComponents;
-using static VMSpc.EventBridge;
+using VMSpc.UI.CustomComponents;
+using VMSpc.Common;
 
 namespace VMSpc.UI.GaugeComponents
 {
@@ -24,12 +24,22 @@ namespace VMSpc.UI.GaugeComponents
 
         protected void SubscribeToEvent(uint eventID)
         {
-            EventProcessor.SubscribeToEvent(this, eventID);
+            EventBridge.EventProcessor.SubscribeToEvent(this, eventID);
+        }
+
+        protected void SubscribeToEvent(uint eventID, byte publisherInstance)
+        {
+            EventBridge.EventProcessor.SubscribeToEvent(this, eventID, publisherInstance);
         }
 
         protected void UnsubscribeFromEvent(uint eventID)
         {
-            EventProcessor.UnsubscribeFromEvent(this, eventID);
+            EventBridge.EventProcessor.UnsubscribeFromEvent(this, eventID);
+        }
+
+        protected void UnsubscribeFromEvent(uint eventID, byte publisherInstance)
+        {
+            EventBridge.EventProcessor.UnsubscribeFromEvent(this, eventID, publisherInstance);
         }
 
         protected abstract void HandleNewData(VMSEventArgs e);

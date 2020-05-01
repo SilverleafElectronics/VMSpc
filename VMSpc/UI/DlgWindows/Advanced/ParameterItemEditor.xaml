@@ -1,0 +1,249 @@
+﻿<parent:VMSDialog 
+        x:Class="VMSpc.UI.DlgWindows.Advanced.ParameterItemEditor"
+        xmlns:parent ="clr-namespace:VMSpc.UI.DlgWindows"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VMSpc.UI.DlgWindows.Advanced"
+        mc:Ignorable="d"
+        Title="ParameterItemEditor" Height="600" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75" />
+            <RowDefinition Height="75" />
+            <RowDefinition Height="75" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="100" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="250" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Gauge Name:</Label>
+            <TextBox 
+                Grid.Column="1" 
+                x:Name="GaugeNameEditBox" 
+                Height="25"
+                VerticalContentAlignment="Center"
+                />
+            <Label Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Gauge Abbreviation:</Label>
+            <TextBox 
+                Grid.Column="3" 
+                x:Name="GaugeAbbreviationEditBox" 
+                Height="25" 
+                Width="150" 
+                HorizontalAlignment="Left"
+                VerticalContentAlignment="Center"
+                />
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">PID:</Label>
+                <TextBox 
+                    Grid.Column="1" 
+                    x:Name="PIDEditBox"
+                    Height="25" 
+                    Width="50" 
+                    HorizontalAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    />
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Unit:</Label>
+                <TextBox Grid.Column="1" 
+                         x:Name="UnitEditBox"
+                         Height="25" 
+                         Width="100" 
+                         HorizontalAlignment="Left" 
+                         VerticalContentAlignment="Center"
+                         />
+            </Grid>
+            <Grid Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Metric Unit:</Label>
+                <TextBox 
+                    Grid.Column="1" 
+                    x:Name="MetricUnitEditBox"
+                    Height="25" 
+                    Width="100" 
+                    HorizontalAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    />
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Value Offset:</Label>
+                <TextBox 
+                    Grid.Column="1" 
+                    x:Name="ValueOffsetEditBox"
+                    Height="25" 
+                    Width="100" 
+                    HorizontalAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    />
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Value Multiplier:</Label>
+                <TextBox 
+                    Grid.Column="1" 
+                    x:Name="ValueMultiplierEditBox"
+                    Height="25" 
+                    Width="100" 
+                    HorizontalAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    />
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="75"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Gauge Minimum:</Label>
+                    <TextBox 
+                    Grid.Column="1" 
+                    x:Name="GaugeMinimumEditBox"
+                    Height="25" 
+                    Width="100" 
+                    HorizontalAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    />
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Low Red Line:</Label>
+                    <TextBox 
+                    Grid.Column="1" 
+                    x:Name="LowRedLineEditBox"
+                    Height="25" 
+                    Width="100" 
+                    HorizontalAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    />
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Low Yellow Line:</Label>
+                    <TextBox 
+                    Grid.Column="1" 
+                    x:Name="LowYellowLineEditBox"
+                    Height="25" 
+                    Width="100" 
+                    HorizontalAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    />
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="75"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Gauge Maximum:</Label>
+                    <TextBox 
+                    Grid.Column="1"
+                    x:Name="GaugeMaximumEditBox"
+                    Height="25" 
+                    Width="100" 
+                    HorizontalAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    />
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">High Red Line:</Label>
+                    <TextBox 
+                    Grid.Column="1"
+                    x:Name="HighRedLineEditBox"
+                    Height="25" 
+                    Width="100" 
+                    HorizontalAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    />
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">High Yellow Line:</Label>
+                    <TextBox 
+                    Grid.Column="1"
+                    x:Name="HighYellowLineEditBox"
+                    Height="25" 
+                    Width="100" 
+                    HorizontalAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    />
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" x:Name="CancelButton" Width="125" Height="25" Click="CancelButton_Click">Cancel</Button>
+            <Button Grid.Column="1" x:Name="OkButton" Width="125" Height="25" Click="OkButton_Click">OK</Button>
+        </Grid>
+    </Grid>
+</parent:VMSDialog>

@@ -19,12 +19,12 @@ namespace VMSpc.UI.GaugeComponents
         private Timer ClockTimer;
         private DateTime lastDrawnTime;
         private bool textIsScaled;
-        public bool showAmPm { get; set; }
+        public bool useMilitaryTime { get; set; }
         private bool TimerEnabled { get; set; }
 
-        public ClockComponent(bool showAmPm) : base()
+        public ClockComponent(bool useMilitaryTime) : base()
         {
-            this.showAmPm = showAmPm;
+            this.useMilitaryTime = useMilitaryTime;
             ClockTimer = Constants.CREATE_TIMER(UpdateClock, 250);
             ClockTimer.Start();
             Enable();
@@ -62,9 +62,9 @@ namespace VMSpc.UI.GaugeComponents
 
         private void SetTime(DateTime currentTime)
         {
-            if (showAmPm)
+            if (!useMilitaryTime)
             {
-                Text = currentTime.ToString("HH:mm:ss tt", CultureInfo.InvariantCulture);
+                Text = currentTime.ToString("hh:mm:ss tt", CultureInfo.InvariantCulture);
             }
             else
             {

@@ -1,64 +1,83 @@
-﻿<!-- Note the line - xmlns:cs="clr-namespace:VMSpc.CustomComponents" - this is used to import VMSCanvas. Use similar conventions for other imports -->
+﻿<!-- Note the line - xmlns:cs="clr-namespace:VMSpc.UI.CustomComponents" - this is used to import VMSCanvas. Use similar conventions for other imports -->
 <Window x:Class="VMSpc.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:cs="clr-namespace:VMSpc.CustomComponents"
+        xmlns:cs="clr-namespace:VMSpc.UI.CustomComponents"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VMSpc"
         xmlns:self="clr-namespace:VMSpc"
         mc:Ignorable="d"
-        Title="VMSpc" Height="800" Width="1500">
+        Title="VMSpc" Height="800" Width="1500" >
     <Window.CommandBindings>
         <CommandBinding Command="Close" CanExecute="CloseCommand_CanExecute" Executed="CloseCommand_Executed" />
         <CommandBinding Command="self:MainCommands.NewSimpleGauge" CanExecute="NewSimpleGaugeCommand_CanExecute" Executed="NewSimpleGaugeCommand_Executed" />
         <CommandBinding Command="self:MainCommands.NewScanGauge" CanExecute="NewScanGaugeCommand_CanExecute" Executed="NewScanGaugeCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.NewRadialGauge" CanExecute="NewRadialGaugeCommand_CanExecute" Executed="NewRadialGaugeCommand_Executed" />
         <CommandBinding Command="self:MainCommands.NewMultiBar" CanExecute="NewMultiBarCommand_CanExecute" Executed="NewMultiBarCommand_Executed" />
         <CommandBinding Command="self:MainCommands.NewOdometer" CanExecute="NewOdometerCommand_CanExecute" Executed="NewOdometerCommand_Executed" />
         <CommandBinding Command="self:MainCommands.NewTextPanel" CanExecute="NewTextPanelCommand_CanExecute" Executed="NewTextPanelCommand_Executed" />
         <CommandBinding Command="self:MainCommands.NewImagePanel" CanExecute="NewImagePanel_CanExecute" Executed="NewImagePanel_Executed" />
         <CommandBinding Command="self:MainCommands.NewDiagnosticPanel" CanExecute="NewDiagnosticPanel_CanExecute" Executed="NewDiagnosticPanel_Executed" />
-        <CommandBinding Command="self:MainCommands.NewTirePanel" CanExecute="NewTirePanel_CanExecute" Executed="NewTirePanel_Executed" />
+        <!--<CommandBinding Command="self:MainCommands.NewTirePanel" CanExecute="NewTirePanel_CanExecute" Executed="NewTirePanel_Executed" />-->
+        <CommandBinding Command="self:MainCommands.NewTransmissionIndicator" CanExecute="NewTransmissionIndicator_CanExecute" Executed="NewTransmissionIndicator_Executed" />
+        <CommandBinding Command="self:MainCommands.NewTankMinder" CanExecute="NewTankMinder_CanExecute" Executed="NewTankMinder_Executed" />
         <CommandBinding Command="self:MainCommands.CommSettings" CanExecute="CommSettingsCommand_CanExecute" Executed="CommSettingsCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.ChangeEngine" CanExecute="ChangeEngine_CanExecute" Executed="ChangeEngine_Executed" />
         <CommandBinding Command="self:MainCommands.About" CanExecute="NewSimpleGaugeCommand_CanExecute" Executed="AboutCommand_Executed" />
         <CommandBinding Command="self:MainCommands.RawLog" CanExecute="RawLogCommand_CanExecute" Executed="RawLogCommand_Executed" />
         <CommandBinding Command="self:MainCommands.ToggleClipping" CanExecute="ToggleClippingCommand_CanExecute" Executed="ToggleClippingCommand_Executed" />
         <CommandBinding Command="self:MainCommands.DeleteGauge" CanExecute="DeleteGaugeCommand_CanExecute" Executed="DeleteGaugeCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.AttachGauge" CanExecute="AttachGaugeCommand_CanExecute" Executed="AttachGaugeCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.ColorPalette" CanExecute="ColorPalette_CanExecute" Executed="ColorPalette_Executed" />
+        <CommandBinding Command="self:MainCommands.ParameterEditor" CanExecute="ParameterEditor_CanExecute" Executed="ParameterEditor_Executed" />
+        <CommandBinding Command="self:MainCommands.ViewDiagnostics" CanExecute="ViewDiagnostics_CanExecute" Executed="ViewDiagnostics_Executed" />
+        <CommandBinding Command="self:MainCommands.Layouts" CanExecute="Layouts_CanExecute" Executed="Layouts_Executed" />
     </Window.CommandBindings>
     <Grid>
         <DockPanel Name="DockMenu" Height="Auto" Width="Auto">
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
-                    <MenuItem Header="_New Layout" />
-                    <MenuItem Header="_Open Layout" />
-                    <MenuItem Header="_Save Layout" />
-                    <MenuItem Header="_Save Layout As" />
+                    <MenuItem Command="self:MainCommands.Layouts"/>
                     <Separator />
                     <MenuItem Header="_Exit" Command="Close" />
                 </MenuItem>
                 <MenuItem Header="_Gauges">
                     <MenuItem Command="self:MainCommands.NewSimpleGauge" />
                     <MenuItem Command="self:MainCommands.NewScanGauge" />
+                    <MenuItem Command="self:MainCommands.NewRadialGauge" />
                     <MenuItem Command="self:MainCommands.NewMultiBar" />
                     <MenuItem Command="self:MainCommands.NewOdometer" />
                     <MenuItem Command="self:MainCommands.NewTextPanel" />
                     <MenuItem Command="self:MainCommands.NewImagePanel" />
                     <MenuItem Command="self:MainCommands.NewDiagnosticPanel" />
                     <MenuItem Command="self:MainCommands.NewTirePanel" />
+                    <MenuItem Command="self:MainCommands.NewTransmissionIndicator" />
+                    <MenuItem Command="self:MainCommands.NewTankMinder" />
                     <MenuItem Command="self:MainCommands.DeleteGauge" />
+                    <MenuItem Command="self:MainCommands.AttachGauge" />
                     <!--<MenuItem Command="self:MainCommands.DeleteGauge" />LEAVECOMMENTED-->
                 </MenuItem>
                 <MenuItem Header="_Advanced">
                     <MenuItem Header="_Communications" Command="self:MainCommands.CommSettings" />
+                    <MenuItem Header="_Change Engine" Command="self:MainCommands.ChangeEngine" />
                     <MenuItem Header="_Raw Log" Command="self:MainCommands.RawLog" />
                     <MenuItem Command="self:MainCommands.ToggleClipping" Name="ClipToggle" />
+                    <MenuItem Command="self:MainCommands.ParameterEditor" />
+                </MenuItem>
+                <MenuItem Header="_Settings">
+                    <MenuItem Header="_Color Palette" Command="self:MainCommands.ColorPalette" />
+                </MenuItem>
+                <MenuItem Header="_View">
+                    <MenuItem Header="_Maintenance" />
+                    <MenuItem Header="_View Diagnostics" Command="self:MainCommands.ViewDiagnostics" />
                 </MenuItem>
                 <MenuItem Header="_Help">
                     <MenuItem Command="self:MainCommands.About" />
                 </MenuItem>
             </Menu>
         </DockPanel>
-        <cs:PanelGrid x:Name="ContentGrid" Width="Auto" Height="Auto" Background="White" Margin="5,18,5,5">
+        <cs:PanelGrid x:Name="ContentGrid" Width="Auto" Height="Auto" Margin="5,18,5,5">
             <cs:PanelGrid.Resources>
                 <Style TargetType="cs:VMSCanvas">
                     <Setter Property="Background" Value="Crimson" />

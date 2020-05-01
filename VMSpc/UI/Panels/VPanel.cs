@@ -12,15 +12,25 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using VMSpc.DlgWindows;
+using VMSpc.UI.DlgWindows;
 using VMSpc.Panels;
-using VMSpc.CustomComponents;
+using VMSpc.UI.CustomComponents;
 using VMSpc.DevHelpers;
 using System.Timers;
 using static VMSpc.Constants;
 using VMSpc.JsonFileManagers;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
 using System.Globalization;
+using System.Windows.Controls;
+using VMSpc.Enums.UI;
+
+/*
+ * TODO - this class is wayyy too big. Factor out the following into helper classes:
+ *  - Sliding
+ *  - Resizing
+ *  - probably a PanelMovement class used by Sliding/Resising (also, remove all movement functionality from PanelGrid.cs)
+ *  - ChildPanelHandler - should interact with PanelMovement somehow
+ */
 
 namespace VMSpc.Panels
 {
@@ -29,11 +39,46 @@ namespace VMSpc.Panels
     /// </summary>
     public abstract class VPanel
     {
-        public char cID;
+        public PanelType panelId { get; set; }
         protected MainWindow mainWindow;
         protected PanelSettings panelSettings;
         public Border border;
         public VMSCanvas canvas;
+
+        public ulong ParentPanelNumber
+        {
+            get
+            {
+                return panelSettings.parentPanelNumber;
+            }
+            set
+            {
+                panelSettings.parentPanelNumber = value;
+            }
+        }
+        private VPanel _ParentPanel { get; set; }
+        private VPanel ParentPanel
+        {
+            get 
+            {
+                return _ParentPanel;
+            }
+            set
+            {
+                _ParentPanel = value;
+                if (value != null)
+                {
+                    ParentPanelNumber = value.number;
+                }
+                else
+                {
+                    ParentPanelNumber = 0;
+                }
+            }
+        }
+        private List<VPanel> ChildPanels;
+        private ParentPaddingRelation ParentPadding;
+
         private double BorderThickness;
 
         private int resizeType;
@@ -42,6 +87,37 @@ namespace VMSpc.Panels
         public double topLimit;
         public double rightLimit;
         public double bottomLimit;
+
+        public double Top
+        {
+            get { return Canvas.GetTop(border); }
+            set { Canvas.SetTop(border, value); Canvas.SetBottom(border, value + Height); }
+        }
+        public double Right
+        {
+            get { return Canvas.GetRight(border); }
+            set { Canvas.SetRight(border, value); }
+        }
+        public double Bottom
+        {
+            get { return Canvas.GetBottom(border); }
+            set { Canvas.SetBottom(border, value); }
+        }
+        public double Left
+        {
+            get { return Canvas.GetLeft(border); }
+            set { Canvas.SetLeft(border, value); Canvas.SetRight(border, value + Width); }
+        }
+        public double Height
+        {
+            get { return border.Height; }
+            set { border.Height = value; Bottom = Top + Height; }
+        }
+        public double Width
+        {
+            get { return border.Width; }
+            set { border.Width = value; Right = Left + Width; }
+        }
 
         public bool isMoving, isResizing, isHighlighted;
 
@@ -55,26 +131,41 @@ namespace VMSpc.Panels
         {
             this.mainWindow = mainWindow;
             this.panelSettings = panelSettings;
+            ParentPadding = new ParentPaddingRelation()
+            {
+                TopPadding = 0,
+                RightPadding = 0,
+                BottomPadding = 0,
+                LeftPadding = 0
+            };
             number = panelSettings.number;
+            panelId = panelSettings.panelId;
             BorderThickness = 5;
             isMoving = false;
             isResizing = false;
             resizeType = RESIZE_NONE;
             dlgWindow = null;
             InitLimits();
-            border = new Border() { BorderThickness = new Thickness(BorderThickness) };
+            border = new Border()
+            {
+                BorderThickness = new Thickness(BorderThickness),
+                BorderBrush = new SolidColorBrush(panelSettings.borderColor),
+            };
             canvas = new VMSCanvas();
             ApplyBorderDimensions();
             ApplyCanvasDimensions();
             border.Child = canvas;
             GenerateCustomEventHandlers();
-            panelTimer = CREATE_TIMER(OnUpdateTimedEvent, 50);
+            panelTimer = CREATE_TIMER(OnUpdateTimedEvent, 500);
+            ChildPanels = new List<VPanel>();
         }
 
         public void ApplyBorderDimensions()
         {
-            border.Width = panelSettings.panelCoordinates.bottomRightX - panelSettings.panelCoordinates.topLeftX;
-            border.Height = panelSettings.panelCoordinates.bottomRightY - panelSettings.panelCoordinates.topLeftY;
+            double width = panelSettings.panelCoordinates.bottomRightX - panelSettings.panelCoordinates.topLeftX;
+            double height = panelSettings.panelCoordinates.bottomRightY - panelSettings.panelCoordinates.topLeftY;
+            border.Width = (width > 0) ? width : 5d;
+            border.Height = (height > 0) ? height : 5d;
             Canvas.SetTop(border, panelSettings.panelCoordinates.topLeftY);
             Canvas.SetLeft(border, panelSettings.panelCoordinates.topLeftX);
             Canvas.SetRight(border, Canvas.GetLeft(border) + border.Width);
@@ -83,17 +174,19 @@ namespace VMSpc.Panels
 
         public void ApplyCanvasDimensions()
         {
-            Canvas.SetTop(canvas,    Canvas.GetTop(border) - BorderThickness);
-            Canvas.SetLeft(canvas,   Canvas.GetLeft(border) - BorderThickness);
-            Canvas.SetRight(canvas,  Canvas.GetRight(border) - BorderThickness);
+            Canvas.SetTop(canvas, Canvas.GetTop(border) - BorderThickness);
+            Canvas.SetLeft(canvas, Canvas.GetLeft(border) - BorderThickness);
+            Canvas.SetRight(canvas, Canvas.GetRight(border) - BorderThickness);
             Canvas.SetBottom(canvas, Canvas.GetBottom(border) - BorderThickness);
-            canvas.Width = border.Width - (BorderThickness * 2);
-            canvas.Height = border.Height - (BorderThickness * 2);
+            double width = border.Width - (BorderThickness * 2);
+            double height = border.Height - (BorderThickness * 2);
+            canvas.Width = (width > 0) ? width : 1d;
+            canvas.Height = (height > 0) ? height : 1d;
         }
 
 
         public virtual void Init()
-        { 
+        {
             canvas.Background = new SolidColorBrush(panelSettings.backgroundColor);
         }
 
@@ -121,10 +214,55 @@ namespace VMSpc.Panels
                 bool? result = dlgWindow.ShowDialog(this);
                 if (result == true)
                 {
-                    GeneratePanel();
+                    Refresh();
                     ConfigManager.Screen.SaveConfiguration();
                 }
             }
+        }
+
+        public void AcquireChild(VPanel panel)
+        {
+            ChildPanels.Add(panel);
+        }
+
+        public void LoseChild(VPanel panel)
+        {
+            ChildPanels.Remove(this);
+        }
+
+        public void BecomeChild(VPanel panel)
+        {
+            if (ChildPanels.Contains(panel))    //avoid circular dependencies
+                return;
+            ParentPanel?.LoseChild(this);
+            ParentPanel = panel;
+            panel.AcquireChild(this);
+            AdjustParentPadding();
+        }
+
+        public void PromoteToFront()
+        {
+            SetZIndex((int)(panelSettings.number + 10));
+            SetZIndex((int)(panelSettings.number + 10));
+        }
+
+        public void SetZIndex(int zIndex)
+        {
+            Panel.SetZIndex(this.canvas, zIndex);
+            Panel.SetZIndex(this.border, zIndex);
+            foreach (var child in ChildPanels)
+            {
+                child.SetZIndex(zIndex + 1);
+            }
+        }
+
+        public bool IsInsidePanel(Point point)
+        {
+            return
+                (point.X > (Canvas.GetLeft(border))) &&
+                (point.X < (Canvas.GetRight(border))) &&
+                (point.Y > (Canvas.GetTop(border))) &&
+                (point.Y < (Canvas.GetBottom(border)));
         }
 
         public void Highlight()
@@ -134,8 +272,11 @@ namespace VMSpc.Panels
 
         public void UnHighlight()
         {
-            border.BorderBrush = Brushes.Black;
+            border.BorderBrush = new SolidColorBrush(panelSettings.borderColor);
         }
+
+
+        #region Movement
 
         public void OnMouseOverBorder(object sender, MouseEventArgs e)
         {
@@ -157,11 +298,25 @@ namespace VMSpc.Panels
 
             switch (resizeType)
             {
-                case RESIZE_LEFT: case RESIZE_RIGHT: Mouse.OverrideCursor = Cursors.SizeWE; break;
-                case RESIZE_TOP: case RESIZE_BOTTOM: Mouse.OverrideCursor = Cursors.SizeNS; break;
-                case RESIZE_TOPLEFT: case RESIZE_BOTTOMRIGHT: Mouse.OverrideCursor = Cursors.SizeNWSE; break;
-                case RESIZE_BOTTOMLEFT: case RESIZE_TOPRIGHT: Mouse.OverrideCursor = Cursors.SizeNESW; break;
-                default: Mouse.OverrideCursor = Cursors.Arrow;  break;
+                case RESIZE_LEFT: 
+                case RESIZE_RIGHT: 
+                    Mouse.OverrideCursor = Cursors.SizeWE; 
+                    break;
+                case RESIZE_TOP: 
+                case RESIZE_BOTTOM: 
+                    Mouse.OverrideCursor = Cursors.SizeNS; 
+                    break;
+                case RESIZE_TOPLEFT: 
+                case RESIZE_BOTTOMRIGHT: 
+                    Mouse.OverrideCursor = Cursors.SizeNWSE; 
+                    break;
+                case RESIZE_BOTTOMLEFT: 
+                case RESIZE_TOPRIGHT: 
+                    Mouse.OverrideCursor = Cursors.SizeNESW; 
+                    break;
+                default: 
+                    Mouse.OverrideCursor = Cursors.Arrow; 
+                    break;
             }
         }
 
@@ -175,7 +330,16 @@ namespace VMSpc.Panels
         public void ProcessMouseRelease()
         {
             if (isResizing)
-                GeneratePanel();
+            {
+                Refresh();
+                AdjustChildren(AdjustmentFor.Resizing);
+                AdjustParentPadding();
+            }
+            else
+            {
+                AdjustChildren(AdjustmentFor.Movement);
+                AdjustParentPadding();
+            }
             isMoving = false;
             isResizing = false;
         }
@@ -215,34 +379,101 @@ namespace VMSpc.Panels
                 default:
                     break;
             }
+            //AdjustChildren(AdjustmentFor.Resizing);
             ApplyCanvasDimensions();
-            //GeneratePanel();
         }
 
-        private void ResizeTop(double newTop)
+        public void ResizeTop(double newTop)
         {
             var oldBottom = Canvas.GetBottom(border);
             Canvas.SetTop(border, newTop);
-            border.Height = oldBottom - newTop;
+            Height = oldBottom - newTop;
         }
 
-        private void ResizeRight(double newRight)
+        public void IncrementTop()
         {
-            border.Width = (newRight - Canvas.GetLeft(border));
+            Top -= 1;
+            Height += 1;
+            ApplyCanvasDimensions();
+            AdjustParentPadding();
+            AdjustChildren(AdjustmentFor.Resizing);
+        }
+
+        public void DecrementTop()
+        {
+            Top += 1;
+            Height -= 1;
+            ApplyCanvasDimensions();
+            AdjustParentPadding();
+            AdjustChildren(AdjustmentFor.Resizing);
+        }
+
+        public void ResizeRight(double newRight)
+        {
+            Width = (newRight - Canvas.GetLeft(border));
             Canvas.SetRight(border, (Canvas.GetLeft(canvas) + border.Width));
         }
 
-        private void ResizeBottom(double newBottom)
+        public void IncrementRight()
         {
-            border.Height = (newBottom - Canvas.GetTop(border));
-            Canvas.SetBottom(border, (Canvas.GetTop(canvas) + border.Height));
+            Width++;
+            ApplyCanvasDimensions();
+            AdjustParentPadding();
+            AdjustChildren(AdjustmentFor.Resizing);
         }
-        
-        private void ResizeLeft(double newLeft)
+
+        public void DecrementRight()
+        {
+            Width--;
+            ApplyCanvasDimensions();
+            AdjustParentPadding();
+            AdjustChildren(AdjustmentFor.Resizing);
+        }
+
+        public void ResizeBottom(double newBottom)
+        {
+            Height = (newBottom - Canvas.GetTop(border));
+        }
+
+        public void IncrementBottom()
+        {
+            Height++;
+            ApplyCanvasDimensions();
+            AdjustParentPadding();
+            AdjustChildren(AdjustmentFor.Resizing);
+        }
+
+        public void DecrementBottom()
+        {
+            Height--;
+            ApplyCanvasDimensions();
+            AdjustParentPadding();
+            AdjustChildren(AdjustmentFor.Resizing);
+        }
+
+        public void ResizeLeft(double newLeft)
         {
             var oldRight = Canvas.GetRight(border);
             Canvas.SetLeft(border, newLeft);
-            border.Width = oldRight - newLeft;
+            Width = oldRight - newLeft;
+        }
+
+        public void IncrementLeft()
+        {
+            Left -= 1;
+            Width += 1;
+            ApplyCanvasDimensions();
+            AdjustParentPadding();
+            AdjustChildren(AdjustmentFor.Resizing);
+        }
+
+        public void DecrementLeft()
+        {
+            Left += 1;
+            Width -= 1;
+            ApplyCanvasDimensions();
+            AdjustParentPadding();
+            AdjustChildren(AdjustmentFor.Resizing);
         }
 
         public void Slide(Key direction)
@@ -262,6 +493,7 @@ namespace VMSpc.Panels
                     BoundlessSetVertical(Canvas.GetTop(border) + 1);
                     break;
             }
+            AdjustChildren(AdjustmentFor.Movement);
         }
 
         private bool IsWithinBoundary(double targetPosition, double boundaryLimit, double value)
@@ -341,6 +573,9 @@ namespace VMSpc.Panels
             }
         }
 
+        /// <summary>
+        /// Moves the panel vertically if doing so will not trespass on another panel's territory. The panel can move freely if Clipping is disabled.
+        /// </summary>
         public void SetVertical(double newTop)
         {
             double clipSide;
@@ -351,18 +586,28 @@ namespace VMSpc.Panels
                     ClipVertical(clipSide);
                 else
                 {
-                    Canvas.SetTop(border, newTop);
-                    Canvas.SetBottom(border, newTop + border.Height);
+                    Top = newTop;
+                    Bottom = newTop + border.Height;
+                    //AdjustChildren(AdjustmentFor.Movement);
                 }
+                AdjustParentPadding();
             }
         }
 
+        /// <summary>
+        /// Moves the panel vertically regardless of clipping or the position of neighboring panels
+        /// </summary>
         public void BoundlessSetVertical(double newTop)
         {
-            Canvas.SetTop(border, newTop);
-            Canvas.SetBottom(border, newTop + border.Height);
+            Top = newTop;
+            Bottom = newTop + border.Height;
+            //AdjustChildren(AdjustmentFor.Movement);
+            AdjustParentPadding();
         }
 
+        /// <summary>
+        /// Moves the panel horizontally if doing so will not trespass on another panel's territory. The panel can move freely if Clipping is disabled.
+        /// </summary>
         public void SetHorizontal(double newLeft)
         {
             double clipSide;
@@ -373,16 +618,99 @@ namespace VMSpc.Panels
                     ClipHorizontal(clipSide);
                 else
                 {
-                    Canvas.SetLeft(border, newLeft);
-                    Canvas.SetRight(border, newLeft + border.Width);
+                    Left = newLeft;
+                    Right = newLeft + border.Width;
+                    //AdjustChildren(AdjustmentFor.Movement);
                 }
+                AdjustParentPadding();
             }
         }
 
+        /// <summary>
+        /// Moves the panel horizontally regardless of clipping or the position of neighboring panels
+        /// </summary>
+        /// <param name="newTop"></param>
         public void BoundlessSetHorizontal(double newLeft)
         {
-            Canvas.SetLeft(border, newLeft);
-            Canvas.SetRight(border, newLeft + border.Width);
+            Left = newLeft;
+            Right = newLeft + border.Width;
+            //AdjustChildren(AdjustmentFor.Movement);
+            AdjustParentPadding();
+        }
+
+        public enum AdjustmentFor
+        {
+            Movement,
+            Resizing,
+        }
+
+        private void AdjustChildren(AdjustmentFor For)
+        {
+            foreach (var child in ChildPanels)
+                child.Adjust(For);
+        }
+
+        public void Adjust(AdjustmentFor For)
+        {
+            if (ParentPanel == null)
+                return;
+            switch (For)
+            {
+                case AdjustmentFor.Movement:
+                    Left = ParentPanel.Left + ParentPadding.LeftPadding;
+                    Top = ParentPanel.Top + ParentPadding.TopPadding;
+                    AdjustParentPadding();
+                    ApplyCanvasDimensions();
+                    //Right = ParentPanel.Right + ParentPadding.RightPadding;
+                    //Bottom = ParentPanel.Bottom + ParentPadding.BottomPadding;
+                    break;
+                case AdjustmentFor.Resizing:
+                    double oldHeight = Height;
+                    double oldWidth = Width;
+                    Height = ParentPanel.Height * ParentPadding.HeightRatio;
+                    Width = ParentPanel.Width * ParentPadding.WidthRatio;
+                    Left = (ParentPadding.LeftPaddingRatio * ParentPanel.Width);
+                    Top = (ParentPadding.TopPaddingRatio * ParentPanel.Height);
+                    AdjustParentPadding();
+                    //Left += ((Width - oldWidth) / 2);
+                    //Top += ((Height - oldHeight) / 2);
+                    ApplyCanvasDimensions();
+                    Refresh();
+                    break;
+            }
+            AdjustChildren(For);
+        }
+
+        public struct ParentPaddingRelation
+        {
+            public double
+                TopPadding,
+                RightPadding,
+                BottomPadding,
+                LeftPadding;
+            public double
+                LeftPaddingRatio,
+                TopPaddingRatio,
+                HeightRatio,
+                WidthRatio;
+        }
+
+        /// <summary>
+        /// Called on the child panel by the child panel when it has been resized or moved to maintain the padding between itself and its parent
+        /// </summary>
+        /// <param name="For"></param>
+        private void AdjustParentPadding()
+        {
+            if (ParentPanel == null)
+                return;
+            ParentPadding.LeftPadding = Left - ParentPanel.Left;
+            ParentPadding.TopPadding = Top - ParentPanel.Top;
+            ParentPadding.RightPadding = ParentPanel.Right - Right;
+            ParentPadding.BottomPadding = ParentPanel.Bottom - Bottom;
+            ParentPadding.LeftPaddingRatio = Left / ParentPanel.Width;
+            ParentPadding.TopPaddingRatio = Top / ParentPanel.Height;
+            ParentPadding.HeightRatio = Height / ParentPanel.Height;
+            ParentPadding.WidthRatio = Width / ParentPanel.Width;
         }
 
         /// <summary>
@@ -443,6 +771,15 @@ namespace VMSpc.Panels
             }
         }
 
+        #endregion Movement
+
+        public void Refresh()
+        {
+            GeneratePanel();
+            foreach (var child in ChildPanels)
+                child.Refresh();
+        }
+
         public abstract void GeneratePanel();
 
         public abstract void UpdatePanel();
@@ -465,6 +802,10 @@ namespace VMSpc.Panels
             panelSettings.panelCoordinates.bottomRightY = (int)Canvas.GetBottom(border);
             panelSettings.panelCoordinates.topLeftX = (int)Canvas.GetLeft(border);
             panelSettings.panelCoordinates.topLeftY = (int)Canvas.GetTop(border);
+            VMSConsole.PrintLine("Top: " + Canvas.GetTop(border));
+            VMSConsole.PrintLine("Bottom: " + Canvas.GetBottom(border));
+            VMSConsole.PrintLine("Left: " + Canvas.GetLeft(border));
+            VMSConsole.PrintLine("Right: " + Canvas.GetRight(border));
         }
 
         private void OnUpdateTimedEvent()

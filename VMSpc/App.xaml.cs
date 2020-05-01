@@ -10,6 +10,8 @@ using VMSpc.Parsers;
 using static VMSpc.Parsers.PIDWrapper;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
 using VMSpc.UI;
+using VMSpc.JsonFileManagers;
+using System.Security.Permissions;
 
 namespace VMSpc
 {
@@ -27,6 +29,7 @@ namespace VMSpc
         //private PanelManager panelmanager;
         DateTime appstart;
         MainWindow wnd;
+        private static bool ShowingException = false;
         public long startcounter;
         public App()
         {
@@ -46,6 +49,15 @@ namespace VMSpc
         private void ActivateStaticClasses()
         {
             ConfigManager.LoadConfiguration();
+            var engineFilePointer = new FileOpener(ConfigManager.Settings.Contents.engineFilePath);
+            if (engineFilePointer.Exists())
+            {
+                EngineSpec.SetEngineFile(engineFilePointer.absoluteFilepath);
+            }
+            else
+            {
+                MessageBox.Show("No engine files can be found. Horsepower and Torque settings will be inaccurate");
+            }
             SPNDefinitions.Activate();      //in VMSpc/Parsers/J1939/SPNDefinitions.cs - Defines every SPN object
             PIDManager.Activate();          //in VMSpc/Parsers/J1708/PIDWrapper.cs     - Creates a PID object for all J1708 PIDs and attaches them to PIDList
             PresenterWrapper.Activate();    //in VMSpc/Parsers/PresenterWrapper.cs     - Attaches all TSPNDatum objects to a presenter object, which is then stored in PresenterList
@@ -55,10 +67,18 @@ namespace VMSpc
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            AddAccessPermissions();
             ShowSplashScreen();
             ActivateStaticClasses();
             VMSpcStart();
             AddGlobalEventHandlers();
+        }
+
+        private void AddAccessPermissions()
+        {
+            FileIOPermission permissions = new FileIOPermission(FileIOPermissionAccess.Write | FileIOPermissionAccess.Read, FileOpener.BaseDirectory + "\\");
+            permissions.AllLocalFiles = FileIOPermissionAccess.Read | FileIOPermissionAccess.Write;
+            permissions.Demand();
         }
 
         private void AddGlobalEventHandlers()
@@ -100,9 +120,14 @@ namespace VMSpc
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            ExceptionWindow exceptionWindow = new ExceptionWindow(e);
-            exceptionWindow.ShowDialog();
-            wnd.Close();
+            if (!ShowingException)  //If an exception causes a cascade of accompanying exceptions in other threads (shouldn't happen), only allow the first one to show
+            {
+                ShowingException = true;
+                ExceptionWindow exceptionWindow = new ExceptionWindow(e);
+                exceptionWindow.ShowDialog();
+                wnd.Close();
+                Current.Shutdown();
+            }
         }
     }
 }

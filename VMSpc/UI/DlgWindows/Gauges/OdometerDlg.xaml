@@ -1,0 +1,104 @@
+﻿<my:VPanelDlg 
+        x:Class="VMSpc.UI.DlgWindows.OdometerDlg"
+        WindowStartupLocation="CenterOwner"          
+        ResizeMode="NoResize"
+        xmlns:my="clr-namespace:VMSpc.UI.DlgWindows"
+        xmlns:custom="clr-namespace:VMSpc.UI.CustomComponents"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Odometer Properties" Height="400" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <CheckBox Grid.Column="0" x:Name="ShowCaptionsCheckbox" VerticalContentAlignment="Center" HorizontalAlignment="Center">Show Captions</CheckBox>
+            <Button Grid.Column="2" x:Name="ResetTripButton" Click="ResetTripButton_Click" Width="125" Height="25">Reset Trip</Button>
+            <Button Grid.Column="3" x:Name="OkayButton" Click="OkayButton_Click" Width="125" Height="25">OK</Button>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <CheckBox Grid.Column="0" x:Name="ShowUnitsCheckbox" VerticalContentAlignment="Center" HorizontalAlignment="Center">Show Units</CheckBox>
+            <CheckBox Grid.Column="1" x:Name="ShowInMetricCheckbox" VerticalContentAlignment="Center" HorizontalAlignment="Center">Show In Metric</CheckBox>
+            <Button Grid.Column="2" x:Name="ViewHistoryButton" Click="ViewHistoryButton_Click" Width="125" Height="25">View History</Button>
+            <Button Grid.Column="3" x:Name="CancelButton" Click="CancelButton_Click" Width="125" Height="25">Cancel</Button>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <!--<ColumnDefinition Width="*" />-->
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" x:Name="StartFromDayOneButton" Click="StartFromDayOneButton_Click" Width="125" Height="25">Start From Day One</Button>
+            <!--<Button Grid.Column="1" x:Name="ChangeDataFileButton" Click="ChangeDataFileButton_Click" Width="125" Height="25">Change Data FIle</Button>-->
+        </Grid>
+        <GroupBox Grid.Row="3" Header="Layout">
+            <Grid Name="RadioOrientation">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <RadioButton VerticalAlignment="Center" Grid.Column="0" Name="VerticalLayoutRadio">Vertical</RadioButton>
+                <RadioButton VerticalAlignment="Center" Grid.Column="1" Name="HorizontalLayoutRadio">Horizontal</RadioButton>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Text Alignment" Grid.Row="4">
+            <Grid Name="RadioAlignment">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <RadioButton Name="LeftAlignmentRadio" VerticalAlignment="Center" Grid.Column="0">Left</RadioButton>
+                <RadioButton Name="CenterAlignmentRadio" VerticalAlignment="Center" Grid.Column="1">Center</RadioButton>
+                <RadioButton Name="RightAlignmentRadio" VerticalAlignment="Center" Grid.Column="2">Right</RadioButton>
+            </Grid>
+        </GroupBox>
+        <Grid Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <CheckBox Grid.Column="0" x:Name="ShowDistanceCheckbox" VerticalContentAlignment="Center" HorizontalAlignment="Center">Show Distance</CheckBox>
+            <CheckBox Grid.Column="1" x:Name="ShowRuntimeCheckbox" VerticalContentAlignment="Center" HorizontalAlignment="Center">Show Runtime</CheckBox>
+            <CheckBox Grid.Column="2" x:Name="ShowAverageSpeedCheckbox" VerticalContentAlignment="Center" HorizontalAlignment="Center">Show Average Speed</CheckBox>
+        </Grid>
+        <Grid Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <CheckBox Grid.Column="0" x:Name="ShowFuelUsedCheckbox" VerticalContentAlignment="Center" HorizontalAlignment="Center">Show Fuel Used</CheckBox>
+            <CheckBox Grid.Column="1" x:Name="ShowEconomyCheckbox" VerticalContentAlignment="Center" HorizontalAlignment="Center">Show Economy</CheckBox>
+        </Grid>
+        <Grid Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" x:Name="ChangeBorderColorButton" Click="ChangeBorderColorButton_Click" Width="125" Height="25">Border Color</Button>
+            <Button Grid.Column="1" x:Name="ChangeBackgroundColorButton" Click="ChangeBackgroundColorButton_Click" Width="125" Height="25">Background Color</Button>
+        </Grid>
+    </Grid>
+</my:VPanelDlg>

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VMSpc.JsonFileManagers;
 using VMSpc.Parsers;
+using VMSpc.Common;
 using VMSpc.Parsers.SpecialParsers.TireParsers;
 
 namespace VMSpc
@@ -16,12 +18,24 @@ namespace VMSpc
     {
         void ConsumeEvent(VMSEventArgs e);
     }
+
+    public interface IGUIEventConsumer : IEventConsumer { }
+
     public abstract class VMSEventArgs : EventArgs
     {
         public uint eventID;
         public VMSEventArgs(uint eventID)
         {
             this.eventID = eventID;
+        }
+    }
+    public abstract class InstancedVMSEventArgs : VMSEventArgs
+    {
+        public uint instance;
+        public InstancedVMSEventArgs(uint eventID, byte instance)
+            : base(EventBridge.GetInstancedEvent(eventID, instance))
+        {
+            this.instance = instance;
         }
     }
     public class VMSDataEventArgs : VMSEventArgs
@@ -33,75 +47,44 @@ namespace VMSpc
             this.value = value;
         }
     }
+
+    public class AlarmEventArgs : VMSEventArgs
+    {
+        public AlarmSettings alarmSettings;
+        public AlarmEventArgs(uint eventID, AlarmSettings alarmSettings)
+            :base(eventID)
+        {
+
+        }
+    }
+
+    public class InstancedVMSDataEventArgs : InstancedVMSEventArgs
+    {
+        public double value;
+        public InstancedVMSDataEventArgs(uint eventID, byte instance, double value)
+            : base(eventID, instance)
+        {
+            this.value = value;
+        }
+    }
+
     public class DiagnosticEventArgs : VMSEventArgs
     {
         public DiagnosticRecord record;
         public DiagnosticEventArgs(DiagnosticRecord record)
-            : base(Constants.DIAGNOSTIC_BASE)
+            : base(EventIDs.DIAGNOSTIC_BASE)
         {
             this.record = record;
         }
     }
+
     public class TireEventArgs : VMSEventArgs
     {
         public Tire tire;
         public TireEventArgs(Tire tire)
-            : base(Constants.TIRE_BASE | (uint)tire.Index)
+            : base(EventIDs.TIRE_BASE | (uint)tire.Index)
         {
             this.tire = tire;
-        }
-    }
-    public sealed class EventBridge
-    {
-        private Dictionary<uint, List<IEventConsumer>> eventRegistry;
-        static EventBridge() { }
-        private EventBridge() 
-        {
-            eventRegistry = new Dictionary<uint, List<IEventConsumer>>();
-
-        }
-        ~EventBridge() { }
-
-        public static EventBridge EventProcessor { get; } = new EventBridge();
-
-        public void SubscribeToEvent(IEventConsumer consumer, uint eventID)
-        {
-            if (!eventRegistry.ContainsKey(eventID))
-            {
-                eventRegistry[eventID] = new List<IEventConsumer>();
-            }
-            eventRegistry[eventID].Add(consumer);
-        }
-
-        public void UnsubscribeFromEvent(IEventConsumer consumer, uint eventID)
-        {
-            //If the event isn't in the dictionary. This shouldn't ever happen
-            if (!eventRegistry.ContainsKey(eventID))
-            {
-                return;
-            }
-            eventRegistry[eventID].Remove(consumer);
-        }
-
-        void HandleVMSEvent(object sender, VMSEventArgs e)
-        {
-            PublishEvent(e);
-        }
-
-        public void PublishEvent(VMSEventArgs e)
-        {
-            if (eventRegistry.ContainsKey(e.eventID))
-            {
-                foreach (var consumer in eventRegistry[e.eventID])
-                {
-                    consumer.ConsumeEvent(e);
-                }
-            }
-        }
-
-        public void AddEventPublisher(IEventPublisher publisher)
-        {
-            publisher.RaiseVMSEvent += HandleVMSEvent;
         }
     }
 }

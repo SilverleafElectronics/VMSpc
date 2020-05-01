@@ -7,8 +7,9 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows;
-using VMSpc.VEnum.Parsing;
+using VMSpc.Enums.Parsing;
 using VMSpc.Extensions.UI;
+using VMSpc.Common;
 
 namespace VMSpc.UI.GaugeComponents
 {
@@ -36,7 +37,7 @@ namespace VMSpc.UI.GaugeComponents
             currentPressure = 0;
             lastPressure = -1;
             tireIndex = index;
-            SubscribeToEvent(Constants.TIRE_BASE | (uint)tireIndex);
+            SubscribeToEvent(EventIDs.TIRE_BASE | (uint)tireIndex);
         }
         public override void Draw()
         {

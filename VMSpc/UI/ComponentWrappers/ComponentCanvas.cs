@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using VMSpc.CustomComponents;
+using VMSpc.UI.CustomComponents;
 using VMSpc.UI.GaugeComponents;
 using System.Windows;
 

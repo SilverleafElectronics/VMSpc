@@ -132,8 +132,8 @@ namespace VMSpc.Parsers
         public static TSPNWord spn_batteryVolts = new TSPNWord(168, 4, 0.05f, 0.0f, 0.05f, 0.0f);
         public static TSPNWord spn_rollingMPG = new TSPNWord(9, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f);
         public static TSPNWord spn_recentMPG = new TSPNWord(502, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f);
-        public static TSPNWord spn_torque = new TSPNWord(510, 0, 1.0f, 0.0f, 1.35581795f, 0.0f);
-        public static TSPNWord spn_horsepower = new TSPNWord(509, 0, 1.0f, 0.0f, 0.745699872f, 0.0f);
+        public static TSPNEngineDependentDatum spn_torque = new TSPNTorque(510);
+        public static TSPNEngineDependentDatum spn_horsepower = new TSPNTorque(509);
         public static TSPNWord spn_reciprocalMPG = new TSPNWord(603, 2, 0.00000046f * 100 * 100, 0.0f, 0.0000001953125f * 100 * 100, 0.0f, 235.215f); //235.215 is conversion per gallon
         public static TSPNWord spn_rollingLPK = new TSPNWord(601, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f, 235.215f);
         public static TSPNWord spn_recentLPK = new TSPNWord(602, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f, 235.215f);

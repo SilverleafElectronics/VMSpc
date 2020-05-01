@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using VMSpc.UI.TireMaps;
-using VMSpc.VEnum.UI;
+using VMSpc.Enums.UI;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace VMSpc.JsonFileManagers
 {
@@ -39,14 +41,19 @@ namespace VMSpc.JsonFileManagers
         public PanelType
             panelId;
         public Color
-            backgroundColor;
+            backgroundColor,
+            captionColor,
+            valueTextColor;
+        public ulong
+            parentPanelNumber;
         public bool
             showInMetric,
             useGlobalColorPalette;
-        public UIPosition
+        public HorizontalAlignment 
             alignment;
         public PanelCoordinates
             panelCoordinates;
+        public Color borderColor;
         public PanelSettings(PanelType panelId) { /*this.panelId = panelId*/ }
     }
 
@@ -54,7 +61,7 @@ namespace VMSpc.JsonFileManagers
     {
         public bool
             showDate,
-            showAMPM;
+            useMilitaryTime;
         public ClockSettings() : base(PanelType.CLOCK) { }
     }
 
@@ -79,7 +86,7 @@ namespace VMSpc.JsonFileManagers
         public Color
             WarningColor;
         public bool
-            ShowAmPm;
+            useMilitaryTime;
         public DiagnosticGaugeSettings() : base(PanelType.DIAGNOSTIC_ALARM) { }
     }
 
@@ -87,6 +94,8 @@ namespace VMSpc.JsonFileManagers
     {
         public string
             text;
+        public bool
+            wrapText;
         public TextGaugeSettings() : base(PanelType.TEXT) { }
     }
 
@@ -104,8 +113,8 @@ namespace VMSpc.JsonFileManagers
             showMPG,
             showCaptions,
             showUnits;
-        public UILayout
-            layout;
+        public Orientation
+            orientation;
         public string
             fileName;
         public RecordedSettings(PanelType panelId) : base(panelId) { }
@@ -125,10 +134,12 @@ namespace VMSpc.JsonFileManagers
     public class OdometerSettings : RecordedSettings
     {
         public bool
-            showFuelLocked,
+            showFuel,
             showHours,
             showMiles,
             showSpeed;
+        public string
+            dataFileName;
         public OdometerSettings() : base(PanelType.ODOMETER) { }
     }
 

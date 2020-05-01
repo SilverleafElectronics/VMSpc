@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace VMSpc.CustomComponents
+namespace VMSpc.UI.CustomComponents
 {
     class RadialBar : Shape
     {

@@ -1,0 +1,25 @@
+﻿<Window x:Class="VMSpc.UI.CustomComponents.OdometerDataViewer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VMSpc.UI.CustomComponents"
+        mc:Ignorable="d"
+        Title="Odometer Data File Viewer" Height="450" Width="800">
+    <Grid>
+            <DataGrid Name="DG_OdometerDataViewer" 
+                      AutoGenerateColumns="False" 
+                      Width="610" 
+                      Height="400"
+                      ItemsSource="{Binding}">
+                <DataGrid.Columns>
+                <DataGridTextColumn Header="End Date" Binding="{Binding EndDate}" Width="120"/>
+                <DataGridTextColumn Header="Speed" Binding="{Binding Miles}" Width="120"/>
+                <DataGridTextColumn Header="Fuel" Binding="{Binding Fuel}" Width="120"/>
+                <DataGridTextColumn Header="Time Elapsed" Binding="{Binding Time}" Width="120" />
+                <DataGridTextColumn Header="MPG" Binding="{Binding Speed}" Width="120"/>
+                </DataGrid.Columns>
+           
+            </DataGrid>
+        </Grid>
+</Window>

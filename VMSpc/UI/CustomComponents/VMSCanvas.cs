@@ -12,13 +12,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using VMSpc.XmlFileManagers;
-using VMSpc.DlgWindows;
+using VMSpc.UI.DlgWindows;
 using VMSpc.Panels;
 using VMSpc.DevHelpers;
 using System.Globalization;
 
-namespace VMSpc.CustomComponents
+namespace VMSpc.UI.CustomComponents
 {
     public class VMSCanvas : Canvas
     {
@@ -99,7 +98,7 @@ namespace VMSpc.CustomComponents
         /// NOTE: using this method can have unexpected results if there are various levels of nesting. It's advisable to use
         /// The overloaded BalanceTextBlocks instead
         /// </summary>
-        public void BalanceTextBlocks(dynamic parent)
+        /*public void BalanceTextBlocks(dynamic parent)
         {
             double min = Double.MaxValue;
 
@@ -134,22 +133,9 @@ namespace VMSpc.CustomComponents
                 }
             }
         }
-
+        */
         /// <summary> Balances all text blocks in provided array to the same font size.This overload is safer than BalanceTextBlocks(dynamic parent) </summary>
-        public void BalanceTextBlocks(params TextBlock[] blocks)
-        {
-            double min = Double.MaxValue;
-            foreach (TextBlock block in blocks)
-            {
-                if (block.FontSize < min)
-                    min = block.FontSize;
-            }
-            foreach (TextBlock block in blocks)
-            {
-                block.FontSize = min;
-            }
-        }
-
+        /*
         /// <summary> Balances all text blocks in provided List to the same font size.This overload is safer than BalanceTextBlocks(dynamic parent) </summary>
         public void BalanceTextBlocks(List<TextBlock> blocks)
         {
@@ -164,5 +150,6 @@ namespace VMSpc.CustomComponents
                 block.FontSize = min;
             }
         }
+        */
     }
 }

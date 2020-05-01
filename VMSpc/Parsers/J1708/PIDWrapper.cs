@@ -23,6 +23,7 @@ namespace VMSpc.Parsers
         public const byte coolantTemp = 110;
         public const byte engineLoad = 92;
         public const byte fuelRate = 183;
+        public const byte ambientTemp = 171;
         public const byte fuelTemp = 174;
         public const byte instantMPG = 184;
         public const byte airInletTemp = 172;
@@ -68,6 +69,7 @@ namespace VMSpc.Parsers
             PIDList.Add(110, new PID(110, 2, "Coolant Temperature"));
             PIDList.Add(92, new PID(92, 2, "Engine Load"));
             PIDList.Add(183, new PID(183, 3, "Fuel Rate"));
+            PIDList.Add(171, new PID(171, 3, "Ambient Temperature"));
             PIDList.Add(174, new PID(174, 3, "Fuel Temperature"));
             PIDList.Add(184, new PID(184, 3, "Instantaneous MPG"));
             PIDList.Add(172, new PID(172, 3, "Air Inlet Temperature"));

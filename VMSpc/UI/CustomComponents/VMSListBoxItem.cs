@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace VMSpc.CustomComponents
+namespace VMSpc.UI.CustomComponents
 {
     class VMSListBoxItem : ListBoxItem
     {

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using VMSpc.Extensions.UI;
+using VMSpc.JsonFileManagers;
 using VMSpc.UI.CustomComponents;
 using VMSpc.UI.GaugeComponents;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
@@ -23,23 +25,49 @@ namespace VMSpc.UI.ComponentWrappers
             showValue;
         public ushort pid;
         public int borderEdgePadding = 2;
+        protected StackPanel titlePanel;
+
+        protected AlertSpotComponent alertSpot;
 
         protected bool hasGaugeBlock => showGraph;
-        protected bool hasTitleText => showName;
+        protected bool hasTitleText => (showName || showSpot);
         protected bool hasValueText => (showValue || showUnit);
+        protected GaugeSettings gaugeSettings;
 
-        public BarGauge() 
+        public BarGauge(GaugeSettings gaugeSettings) 
             : base()
         {
-
+            this.gaugeSettings = gaugeSettings;
         }
 
         public void Draw()
         {
+            if (showName || showSpot)
+            {
+                AddTitleElements();
+            }
             if (showGraph)
             {
                 AddGraph();
             }
+            if (showUnit || showValue)
+            {
+                AddValueTextBlock();
+            }
+        }
+
+        protected void AddTitleElements()
+        {
+            titlePanel = new StackPanel()
+            {
+                Width = Width,
+                Height = GetTitleHeight(),
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = gaugeSettings.alignment,
+            };
+            Children.Add(titlePanel);
+            SetLeft(titlePanel, 0);
+            SetTop(titlePanel, 0);
             if (showName)
             {
                 AddGaugeTitle();
@@ -48,67 +76,47 @@ namespace VMSpc.UI.ComponentWrappers
             {
                 AddAlertSpot();
             }
-            if (showUnit || showValue)
-            {
-                AddValueTextBlock();
-            }
-        }
-
-        protected void AddValueTextBlock()
-        {
-            var valueBlock = new PIDTextComponent(pid)
-            {
-                Width =  Width,
-                Height = GetValueTextHeight()
-            };
-            var top = GetValueTextTop();
-            SetTop(valueBlock, GetValueTextTop());
-            Children.Add(valueBlock);
-            valueBlock.Draw();
-        }
-
-        protected double GetValueTextHeight()
-        {
-            if (hasGaugeBlock && hasValueText)
-                return Height / 4d;
-            else if (hasGaugeBlock)
-                return Height / 2d;
-            else if (hasValueText)
-                return Height * (3d / 4d);
-            else
-                return Height;
-        }
-
-        protected double GetValueTextTop()
-        {
-            if (hasGaugeBlock && hasTitleText)
-                return Height * (1d / 4d);
-            else if (hasGaugeBlock)
-                return Height;
-            else if (hasTitleText)
-                return Height * (1d / 4d);
-            else
-                return Height;
         }
 
         protected void AddAlertSpot()
         {
-            //TODO
+            alertSpot = new AlertSpotComponent(pid)
+            {
+                Width = GetAlertSpotWidth(),
+                Height = titlePanel.Height,
+            };
+            titlePanel.Children.Add(alertSpot);
+            alertSpot.Draw();
+            SetLeft(alertSpot, 0);
+            SetTop(alertSpot, 0);
+        }
+
+        protected double GetAlertSpotWidth()
+        {
+            if (!showName)
+            {
+                return Width;
+            }
+            else
+            {
+                return Math.Min((Width / 5d), titlePanel.Height);
+            }
         }
 
         protected void AddGaugeTitle()
         {
             var titleBlock = new TextBlock()
             {
-                Width = this.Width,
-                Height = GetTitleHeight()
+                Width = GetTitleWidth(),
+                Height = titlePanel.Height,
+                Foreground = new SolidColorBrush(ConfigManager.ColorPalettes.GetSelectedPalette().Captions),
+                VerticalAlignment = System.Windows.VerticalAlignment.Center,
+                TextAlignment = gaugeSettings.alignment.ToHorizontalAlignment(),
             };
             titleBlock.Text =
                 (showAbbreviation) ? ConfigManager.ParamData.GetParam(pid).Abbreviation
                                                  : ConfigManager.ParamData.GetParam(pid).ParamName;
-            Children.Add(titleBlock);
-            SetLeft(titleBlock, 0);
-            SetTop(titleBlock, 0);
+            titlePanel.Children.Add(titleBlock);
             titleBlock.ScaleText();
         }
 
@@ -119,9 +127,60 @@ namespace VMSpc.UI.ComponentWrappers
             return Height;
         }
 
+        protected double GetTitleWidth()
+        {
+            if (!showSpot)
+            {
+                return Width;
+            }
+            else
+            {
+                return Width - GetAlertSpotWidth();
+            }
+        }
+
+        protected void AddValueTextBlock()
+        {
+            var valueBlock = new PIDTextComponent(pid, gaugeSettings)
+            {
+                Width = Width,
+                Height = GetValueTextHeight(),
+                TextColor = new SolidColorBrush(ConfigManager.ColorPalettes.GetSelectedPalette().GaugeText),
+                TextAlignment = gaugeSettings.alignment.ToHorizontalAlignment(),
+            };
+            var top = GetValueTextTop();
+            SetTop(valueBlock, GetValueTextTop());
+            Children.Add(valueBlock);
+            valueBlock.Draw();
+        }
+
+        protected double GetValueTextHeight()
+        {
+            if (hasGaugeBlock && hasTitleText)
+                return Height - (GetTitleHeight() + GetGaugeHeight());
+            else if (hasGaugeBlock)
+                return Height - GetGaugeHeight();
+            else if (hasTitleText)
+                return Height - (GetTitleHeight());
+            else
+                return Height;
+        }
+
+        protected double GetValueTextTop()
+        {
+            if (hasGaugeBlock && hasTitleText)
+                return Height * (1d / 4d);
+            else if (hasGaugeBlock)
+                return 0;
+            else if (hasTitleText)
+                return Height * (1d / 4d);
+            else
+                return 0;
+        }
+
         protected void AddGraph()
         {
-            var gaugeBlock = new BarComponent(pid, ConfigManager.ParamData.GetParam(pid))
+            var gaugeBlock = new BarComponent(pid)
             {
                 Width = this.Width - (borderEdgePadding * 2),
                 Height = GetGaugeHeight() - (borderEdgePadding * 2),

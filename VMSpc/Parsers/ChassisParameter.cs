@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VMSpc.Common;
+using static VMSpc.JsonFileManagers.ConfigurationManager;
 
 namespace VMSpc.Parsers
 {
-    public sealed class ChassisParameter
+    public sealed class ChassisParameter : IEventConsumer
     {
         public byte cruiseStatus;
         public byte cruiseAdjust;
@@ -38,7 +40,23 @@ namespace VMSpc.Parsers
         /// A singleton ChassisParameter object. Used for tracking chassis components
         /// </summary>
         public static ChassisParameter ChassisParam { get; set; } = new ChassisParameter();
-        public ChassisParameter() { }
+        public ChassisParameter() 
+        {
+            EventBridge.EventProcessor.SubscribeToEvent(this, EventIDs.PID_BASE | 247); //hourmeter
+            EventBridge.EventProcessor.SubscribeToEvent(this, EventIDs.PID_BASE | 250); //fuelmeter
+            EventBridge.EventProcessor.SubscribeToEvent(this, EventIDs.PID_BASE | ConfigManager.Settings.Contents.odometerPid);
+        }
 
+        public void ConsumeEvent(VMSEventArgs e)
+        {
+            var eventID = e.eventID & 0xFF;
+            var ev = (e as VMSDataEventArgs);
+            if (eventID == 247)
+                hourmeter = ev.value;
+            else if (eventID == 250)
+                fuelmeter = ev.value;
+            else if (eventID == ConfigManager.Settings.Contents.odometerPid)
+                odometer = ev.value;
+        }
     }
 }

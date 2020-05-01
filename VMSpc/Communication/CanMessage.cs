@@ -70,8 +70,6 @@ namespace VMSpc.Communication
             }
             catch (Exception ex)
             {
-                //VMSConsole.PrintLine("ERROR: " + ex.Message);
-                //VMSConsole.PrintLine(rawMessage);
                 messageType = INVALID_CAN_MESSAGE;
             }
         }
@@ -118,6 +116,12 @@ namespace VMSpc.Communication
     #region J1708Message
     public class J1708Message : CanMessage
     {
+        public static byte ENGINE_HEADER = 0x80;
+        public static byte TRANSMISSION_HEADER = 0x82;
+        public static byte ABS_HEADER = 0x88;
+
+        //public byte 
+
         public Dictionary<byte, byte[]> data; 
         public J1708Message(string message) : base(message)
         {
@@ -151,8 +155,14 @@ namespace VMSpc.Communication
         /// </summary>
         public Dictionary<byte, byte[]> SplitMessageByPID()
         {
+            
+            //while (rawData.Count > 0)
+            //{
+            //
+            //}
+            
             Dictionary<byte, byte[]> MessageList = new Dictionary<byte, byte[]>();
-            int pos = 1;
+            int pos = 1;//((rawData[0] == ENGINE_HEADER) || (rawData[0] == TRANSMISSION_HEADER) || (rawData[0] == ABS_HEADER)) ? 1 : 0;
             int bytesUnprocessed = (messageLength / 2) - 1;
             bool done = false;
             while (!done)
@@ -186,6 +196,7 @@ namespace VMSpc.Communication
                     done = true;
             }
             return MessageList;
+            
         }
 
         /// <summary>

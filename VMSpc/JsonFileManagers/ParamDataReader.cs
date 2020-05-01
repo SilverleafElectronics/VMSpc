@@ -23,6 +23,7 @@ namespace VMSpc.JsonFileManagers
         public double HighYellow;
         public double HighRed;
         public string Format;
+        public byte DecimalCount;
         public double Offset;
         public double Multiplier;
         public double LastValue => (PresenterList[Pid].datum.seen) ? PresenterList[Pid].datum.value * Multiplier + Offset : DUB_NODATA;
@@ -34,10 +35,15 @@ namespace VMSpc.JsonFileManagers
     }
     public class ParamDataReader : JsonFileReader<ParameterContents>
     {
-        public ParamDataReader() : base(cwd + "/configuration/ParamData.json")
+        public ParamDataReader() : base("\\configuration\\ParamData.json")
         {
-
+            ConvertStringFormatters();
         }
+
+        private void ConvertStringFormatters()
+        {
+        }
+
         protected override ParameterContents GetDefaultContents()
         {
             return JsonConvert.DeserializeObject<ParameterContents>(JsonDefaults.ParamDataDefaults.defaults, serializerSettings);
@@ -51,6 +57,53 @@ namespace VMSpc.JsonFileManagers
                     return param;
             }
             return null;
+        }
+
+        public void AddParam(JParameter parameter)
+        {
+            try
+            {
+                PresenterList.Add(parameter.Pid, new Parsers.TSPNPresenterFloat(
+                    new Parsers.TSPNUint(parameter.Pid, 0, parameter.Multiplier, parameter.Offset, parameter.Multiplier, parameter.Offset),
+                    parameter.ParamName,
+                    parameter.Pid,
+                    parameter.Unit,
+                    parameter.MetricUnit,
+                    parameter.DecimalCount,
+                    false
+                    )); //TODO - we need to tie ALL parameters into the parser like this
+                Contents.Parameters.Add(parameter);
+            }
+            catch (Exception ex)
+            {
+                //throw new Exception("Could not add paramter");
+            }
+        }
+
+        public void ProcessUpdates(JParameter parameter)
+        {
+            if (parameter.DecimalCount > 0)
+            {
+                parameter.Format = "{0:0.";
+                for (int i = 0; i < parameter.DecimalCount; i++)
+                    parameter.Format += "#";
+                parameter.Format += "}";
+            }
+            else
+            {
+                parameter.Format = "{0: 0}";
+            }
+        }
+
+        //TODO
+        public void ChangeParameterPID(JParameter parameter)
+        {
+            //PresenterList[parameter.Pid].datum.
+        }
+
+        public double GetConvertedValue(JParameter param, double value)
+        {
+            return ((value * param.Multiplier) + param.Offset);
         }
     }
 }

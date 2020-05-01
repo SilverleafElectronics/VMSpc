@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 using VMSpc.Parsers;
 using static VMSpc.Constants;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
-using VMSpc.VEnum.Parsing;
+using VMSpc.Enums.Parsing;
 using System.Threading;
 
 namespace VMSpc.Communication
@@ -34,7 +34,17 @@ namespace VMSpc.Communication
         private J1939Parser j1939Parser;
 
         public string logDataQueue;
-        public string LogRecordingFile;
+        public string LogRecordingFile
+        {
+            get
+            {
+                return ConfigManager.Settings.Contents.rawLogFilePath;
+            }
+            set
+            {
+                ConfigManager.Settings.Contents.rawLogFilePath = value;
+            }
+        }
         public bool LogRecordingEnabled;
         public byte LogType;
 
@@ -46,12 +56,12 @@ namespace VMSpc.Communication
 
             LogRecordingEnabled = false;
             LogType = LOGTYPE_RAWLOG;
-            LogRecordingFile = null; //CHANGEME - retrieve from config
             logDataQueue = "";
 
             j1939Parser = new J1939Parser();
             j1708Parser = new J1708Parser();
 
+            ValidateDataReader();
             CreateDataReader();
         }
 
@@ -61,6 +71,11 @@ namespace VMSpc.Communication
         }
 
         #region Common Logic
+
+        private void ValidateDataReader()
+        {
+
+        }
 
         private void CreateDataReader()
         {

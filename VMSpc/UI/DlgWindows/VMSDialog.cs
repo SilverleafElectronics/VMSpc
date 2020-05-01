@@ -19,9 +19,10 @@ using VMSpc.Panels;
 using System.Timers;
 using System.Reflection;
 using System.ComponentModel;
-using VMSpc.VEnum;
+using VMSpc.Enums;
+using VMSpc.UI.CustomComponents;
 
-namespace VMSpc.DlgWindows
+namespace VMSpc.UI.DlgWindows
 {
     public class VMSDialog : Window
     {
@@ -36,6 +37,21 @@ namespace VMSpc.DlgWindows
         protected virtual void ApplyBindings()
         {
             DataContext = this;
+        }
+
+        /// <summary>
+        /// Opens a Color Picker window and returns the newly-selected color. Returns true if the color was changed. Returs false if the user cancelled the operation
+        /// </summary>
+        /// <returns></returns>
+        protected virtual bool ChangeColor(ref Color SelectedColor)
+        {
+            var colorPicker = new ColorPicker(SelectedColor);
+            if (colorPicker.ShowDialog() == true)
+            {
+                SelectedColor = colorPicker.SelectedColor;
+                return true;
+            }
+            return false;
         }
 
         /// <summary>

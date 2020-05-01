@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
 using System.Reflection;
+using System.Windows;
 
 namespace VMSpc.JsonFileManagers
 {
@@ -17,6 +18,10 @@ namespace VMSpc.JsonFileManagers
         public SettingsReader Settings;
         public ScreenReader Screen;
         public ParamDataReader ParamData;
+        public MeterReader Meters;
+        public ColorPalettesReader ColorPalettes;
+        public AlarmsReader AlarmsReader;
+        public DiagnosticLogReader DiagnosticLogReader;
 
         static ConfigurationManager() { }
         private ConfigurationManager() { }
@@ -29,10 +34,22 @@ namespace VMSpc.JsonFileManagers
 
         public void LoadConfiguration()
         {
-            CreateDirectories();
-            Settings = new SettingsReader();
-            Screen = new ScreenReader(Settings.Contents.screenFilePath);
-            ParamData = new ParamDataReader();
+            try
+            {
+                CreateDirectories();
+                VerifyEngineDirectory();
+                Settings = new SettingsReader();
+                Screen = new ScreenReader(Settings.Contents.screenFilePath);
+                Meters = new MeterReader(Settings.Contents.meterFilePath);
+                ParamData = new ParamDataReader();
+                ColorPalettes = new ColorPalettesReader();
+                AlarmsReader = new AlarmsReader();
+                DiagnosticLogReader = new DiagnosticLogReader();
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+
+            }
         }
 
         /// <summary>
@@ -40,13 +57,48 @@ namespace VMSpc.JsonFileManagers
         /// </summary>
         public void CreateDirectories()
         {
-            string cwd = Directory.GetCurrentDirectory();
-            Directory.CreateDirectory(cwd + "/configuration");
-            Directory.CreateDirectory(cwd + "/configuration/odometer_files");
-            Directory.CreateDirectory(cwd + "/configuration/screens");
-            Directory.CreateDirectory(cwd + "/history_files");
-            Directory.CreateDirectory(cwd + "/rawlogs");
+            FileOpener.CreateDirectory("\\configuration");
+            FileOpener.CreateDirectory("\\configuration\\odometers");
+            FileOpener.CreateDirectory("\\configuration\\screens");
+            FileOpener.CreateDirectory("\\configuration\\tankminders");
+            FileOpener.CreateDirectory("\\history_files");
+            FileOpener.CreateDirectory("\\engines");
+            FileOpener.CreateDirectory("\\Logs");
+            if (!FileOpener.DirectoryExists("\\rawlogs"))
+            {
+                FileOpener.CreateDirectory("\\rawlogs");
+                FileOpener.WriteAllText("\\rawlogs\\j1708_demo.vms", FileSaveDefaults.DefaultRawLog.GetDefaultRawLog);
+            }
+            else
+            {
+                FileOpener.CreateDirectory("\\rawlogs");
+            }
         }
+
+        public void VerifyEngineDirectory()
+        {
+            if (FileOpener.IsDirectoryEmpty("\\engines"))
+            {
+                bool downloadEngines = MessageBox.Show(
+                    "No engine files are available. Do you want VMSpc to automatically download them now (requires internet connection)?",
+                    "No Engine Files",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question
+                    ) == MessageBoxResult.Yes;
+                if (downloadEngines)
+                {
+                    if (EngineDownloader.DownloadEngines())
+                    {
+                        MessageBox.Show("Successfully downloaded Engines");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to download Engines. Verify that you have internet connection.");
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Outputs all current configuration to their corresponding Json files
         /// </summary>
@@ -54,6 +106,9 @@ namespace VMSpc.JsonFileManagers
         {
             Settings.SaveJson();
             Screen.SaveJson();
+            Meters.SaveJson();
+            ParamData.SaveJson();
+            ColorPalettes.SaveJson();
         }
     }
 }

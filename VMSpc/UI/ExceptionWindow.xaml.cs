@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using VMSpc.Recorders;
+using VMSpc.Loggers;
 
 namespace VMSpc.UI
 {
@@ -27,7 +27,7 @@ namespace VMSpc.UI
             this.exception = exception;
             InitializeComponent();
             ExceptionHeader.Text = $"An unhandled exception just occurred: {exception.Exception.Message}" +
-                                    "\nPlease select \"Copy\" if you want to copy the message to send it to us. Doing so will also place the error in a log file" +
+                                    "\nPlease select \"Copy\" if you want to copy the message to send it to us." +
                                     "\nSelect \"Close\" to stop the application.";
             ExceptionBody.Text = exception.Exception.ToString();
         }
@@ -42,7 +42,7 @@ namespace VMSpc.UI
             if (exception != null)
             {
                 Clipboard.SetText(exception.ToString());
-                ErrorRecorder.GenerateErrorRecord(exception);
+                ErrorLogger.GenerateErrorRecord(exception);
             }
         }
     }

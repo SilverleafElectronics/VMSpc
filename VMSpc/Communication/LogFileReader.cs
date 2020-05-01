@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using VMSpc.DevHelpers;
+using VMSpc.JsonFileManagers;
 using static VMSpc.Constants;
-using static VMSpc.XmlFileManagers.SettingsManager;
 
 namespace VMSpc.Communication
 {
@@ -31,7 +31,7 @@ namespace VMSpc.Communication
         }
         public override void InitDataReader()
         {
-            logReader = new StreamReader(LogPlayerFilePath);
+            logReader = new FileOpener(LogPlayerFilePath).GetStreamReader();
             logReadTimer = CREATE_TIMER(ReadLogEntry, 100);
         }
 

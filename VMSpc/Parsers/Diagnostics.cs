@@ -4,7 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VMSpc.VEnum.Parsing;
+using VMSpc.Enums.Parsing;
+using VMSpc.Common;
 
 namespace VMSpc.Parsers
 {

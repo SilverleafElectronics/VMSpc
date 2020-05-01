@@ -1,0 +1,59 @@
+﻿<Window x:Class="VMSpc.UI.CustomComponents.ColorPicker"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:VMSpc.UI.CustomComponents"
+      mc:Ignorable="d" 
+      d:DesignHeight="550" d:DesignWidth="800"
+      Title="Color Picker">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="400" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0" 
+                 Name="ColorPickerScroller" 
+                 Background="White">
+            <StackPanel Name="ColorPickerStack">
+                <Grid Name="ColorPickerGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                    </Grid.RowDefinitions>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label VerticalAlignment="Center"  Width="100">Sort By:</Label>
+                <ComboBox Name="SortBySelector" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" SelectionChanged="SortBySelector_SelectionChanged" >
+                    <ComboBoxItem IsSelected="True" Tag="Hue">Hue</ComboBoxItem>
+                    <ComboBoxItem Tag="Brightness">Brightness</ComboBoxItem>
+                    <ComboBoxItem Tag="Name">Name</ComboBoxItem>
+                    <ComboBoxItem Tag="RGB">RGB</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label VerticalAlignment="Center"  Width="100">Sort By:</Label>
+                <ComboBox Name="SortOrderSelector" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" SelectionChanged="SortOrderSelector_SelectionChanged">
+                    <ComboBoxItem IsSelected="True" Tag="Ascending">Ascending</ComboBoxItem>
+                    <ComboBoxItem Tag="Descending">Descending</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            <Button Grid.Column="0" Grid.Row="1" Height="30" Width="100" Name="CancelButton" Click="CancelButton_Click">Cancel</Button>
+            <Button Grid.Column="1" Grid.Row="1" Height="30" Width="100" Name="OkButton" Click="OkButton_Click">Ok</Button>
+        </Grid>
+    </Grid>
+</Window>

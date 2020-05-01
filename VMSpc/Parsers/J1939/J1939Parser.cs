@@ -7,7 +7,6 @@ using VMSpc.Communication;
 using static VMSpc.Constants;
 using static VMSpc.Parsers.PGNMapper;
 using VMSpc.DevHelpers;
-using static VMSpc.XmlFileManagers.SettingsManager;
 
 namespace VMSpc.Parsers
 {

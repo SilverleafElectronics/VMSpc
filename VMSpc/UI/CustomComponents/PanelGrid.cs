@@ -13,17 +13,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 //using VMSpc.XmlFileManagers;
-using VMSpc.DlgWindows;
+using VMSpc.UI.DlgWindows;
 using VMSpc.Panels;
 using VMSpc.DevHelpers;
 using System.Timers;
 using static VMSpc.Constants;
 using VMSpc.JsonFileManagers;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
-using VMSpc.VEnum.UI;
+using VMSpc.Enums.UI;
 using VMSpc.UI.Panels;
+using VMSpc.UI.Managers.Alarms;
+using VMSpc.Common;
 
-namespace VMSpc.CustomComponents
+namespace VMSpc.UI.CustomComponents
 {
     /// <summary>
     /// Acts as manager of all child panels in the UI
@@ -40,8 +42,38 @@ namespace VMSpc.CustomComponents
         private Double lastCursorY;
         private Double canvasStartTop;
         private Double canvasStartLeft;
-        private VPanel selectedChild;
-        private VPanel highlightedChild;
+
+        private VPanel SelectedChild;
+        private VPanel selectedChild
+        {
+            get { return SelectedChild; }
+            set { SelectedChild = value; }
+        }
+
+        private VPanel HighlightedChild;
+        private VPanel highlightedChild
+        {
+            get { return HighlightedChild; }
+            set
+            {
+                HighlightedChild?.UnHighlight();
+                HighlightedChild = value;
+                HighlightedChild?.Highlight();
+            }
+        }
+
+        public bool CanAttachGauge => highlightedChild != null;
+        private VPanel PanelToAttach;
+        private bool inAttachMode;
+        public bool InAttachMode 
+        { 
+            get { return inAttachMode; }
+            set
+            {
+                inAttachMode = value;
+                PanelToAttach = (value) ? highlightedChild : null;
+            }
+        }
 
         private int movementType;
 
@@ -56,6 +88,7 @@ namespace VMSpc.CustomComponents
         private void Init()
         {
             isDragging = false;
+            InAttachMode = false;
             canvasStartTop = Double.NaN;
             canvasStartLeft = Double.NaN;
             movementType = MOVEMENT_NONE;
@@ -64,10 +97,16 @@ namespace VMSpc.CustomComponents
         public void InitPanels(MainWindow mainWindow)
         {
             this.mainWindow = mainWindow;
-            foreach(var panelSettings in Screen.Contents.PanelList)
+            Children.Clear();
+            PanelList.Clear();
+            Background = new SolidColorBrush(ConfigManager.ColorPalettes.GetSelectedPalette().MainBackground);
+            EventBridge.EventProcessor.RemoveGUIRegistryItems();
+            AlarmManager.LoadAlarms();
+            foreach (var panelSettings in Screen.Contents.PanelList)
             {
                 AddPanel(panelSettings);
             }
+            SetPanelParents();
         }
 
         public void CreateNewPanel(PanelSettings panelSettings)
@@ -78,14 +117,11 @@ namespace VMSpc.CustomComponents
 
         public void DeletePanel()
         {
-            if (NOT_NULL(highlightedChild))
+            if (highlightedChild != null)
+            Screen.DeletePanel(highlightedChild.number);
             {
-                highlightedChild.UnHighlight();
-                Children.Clear();
-                PanelList.Clear();
-                Screen.DeletePanel(highlightedChild.number);
-                InitPanels(mainWindow);
                 highlightedChild = null;
+                InitPanels(mainWindow);
             }
         }
 
@@ -95,41 +131,43 @@ namespace VMSpc.CustomComponents
             switch (panelSettings.panelId)
             {
                 case PanelType.SIMPLE_GAUGE:
-                    panel = new VSimpleGauge(mainWindow, (SimpleGaugeSettings)panelSettings);
+                    panel = new SimpleGauge(mainWindow, (SimpleGaugeSettings)panelSettings);
                     break;
                 case PanelType.SCAN_GAUGE:
                     panel = new ScanGauge(mainWindow, (ScanGaugeSettings)panelSettings);
                     break;
                 case PanelType.ODOMETER:
-                    //panel = new VOdometer(mainWindow, (OdometerSettings)panelSettings);
+                    panel = new OdometerPanel(mainWindow, (OdometerSettings)panelSettings);
                     break;
                 case PanelType.TRANSMISSION_GAUGE:
+                    panel = new TransmissionIndicator(mainWindow, (TransmissionGaugeSettings)panelSettings);
                     break;
                 case PanelType.MULTIBAR:
-                    //panel = new VMultiBar(mainWindow, (MultiBarSettings)panelSettings);
+                    panel = new MultiBar(mainWindow, (MultiBarSettings)panelSettings);
                     break;
                 case PanelType.HISTOGRAM:
                     break;
                 case PanelType.CLOCK:
                     break;
                 case PanelType.IMAGE:
-                    panel = new VImagePanel(mainWindow, (PictureSettings)panelSettings);
+                    panel = new ImagePanel(mainWindow, (PictureSettings)panelSettings);
                     break;
                 case PanelType.TEXT:
-                    panel = new VTextPanel(mainWindow, (TextGaugeSettings)panelSettings);
+                    panel = new TextPanel(mainWindow, (TextGaugeSettings)panelSettings);
                     break;
                 case PanelType.TANK_MINDER:
+                    panel = new TankMinderPanel(mainWindow, (TankMinderSettings)panelSettings);
                     break;
                 case PanelType.TIRE_GAUGE:
-                    panel = new VTirePanel(mainWindow, (TireGaugeSettings)panelSettings);
+                    panel = new TirePanel(mainWindow, (TireGaugeSettings)panelSettings);
                     break;
                 case PanelType.MESSAGE:
                     break;
                 case PanelType.DIAGNOSTIC_ALARM:
-                    panel = new VDiagAlarmPanel(mainWindow, (DiagnosticGaugeSettings)panelSettings);
+                    panel = new DiagAlarmPanel(mainWindow, (DiagnosticGaugeSettings)panelSettings);
                     break;
                 case PanelType.RADIAL_GAUGE:
-                    panel = new VRadialGauge(mainWindow, (RadialGaugeSettings)panelSettings);
+                    panel = new RadialGauge(mainWindow, (RadialGaugeSettings)panelSettings);
                     break;
                 default:
                     break;
@@ -138,10 +176,21 @@ namespace VMSpc.CustomComponents
             {
                 PanelList.Add(panel);
                 Children.Add(panel.border);
-                SetZIndex(panel.canvas, (int)(panelSettings.number + 10));
-                SetZIndex(panel.border, (int)(panelSettings.number + 10));
+                panel.PromoteToFront();
                 panel.Init();
-                panel.GeneratePanel();
+                panel.Refresh();
+            }
+        }
+
+        private void SetPanelParents()
+        {
+            foreach (var panel in PanelList)
+            {
+                if (panel.ParentPanelNumber != 0 && panel.ParentPanelNumber != panel.number)
+                {
+                    var parentPanel = PanelList.Find(x => (x.number == panel.ParentPanelNumber));
+                    panel.BecomeChild(parentPanel);
+                }
             }
         }
 
@@ -163,6 +212,17 @@ namespace VMSpc.CustomComponents
         {
             base.OnMouseLeftButtonDown(e);
             isDragging = false;
+            var panel = GetClickedPanel(e);
+            if (InAttachMode)
+            {
+                if (SetSelectedChild(e.Source))
+                {
+                    selectedChild.isMoving = selectedChild.isResizing = false;
+                    PanelToAttach?.BecomeChild(selectedChild);
+                    selectedChild = PanelToAttach;
+                    InAttachMode = false;
+                }
+            }
             if (SetSelectedChild(e.Source))
             {
                 cursorStartPoint = e.GetPosition(this);
@@ -176,6 +236,57 @@ namespace VMSpc.CustomComponents
             }
         }
 
+        protected void WritePoint(MouseButtonEventArgs e)
+        {
+            VMSConsole.PrintLine($"X: {e.GetPosition(this).X}");
+            VMSConsole.PrintLine($"Y: {e.GetPosition(this).Y}");
+        }
+
+        protected VPanel GetClickedPanel(dynamic src)
+        {
+            if (src == null)
+            {
+                return null;
+            }
+            try
+            {
+                foreach (VPanel panel in PanelList)
+                {
+                    dynamic source = src;
+                    if (source.GetType() == panel.border.GetType())
+                    {
+                        if (panel.border == source)
+                        {
+                            movementType = MOVEMENT_RESIZE;
+                            selectedChild.isResizing = true;
+                            return panel;
+                        }
+                    }
+                    else
+                    {
+                        while (source.GetType() != panel.canvas.GetType())
+                        {
+                            if (source.GetType() == mainWindow.GetType())
+                            {
+                                return panel;
+                            }
+                            source = VisualTreeHelper.GetParent(source);
+                        }
+                        if (panel.canvas == source)
+                        {
+                            movementType = MOVEMENT_MOVE;
+                            return panel;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+            return null;
+        }
+
         /// <summary>
         /// Sets selectedChild to the source of the click. If the user has clicked outside of the panel, selectedChild is set to null
         /// </summary>
@@ -186,12 +297,7 @@ namespace VMSpc.CustomComponents
             {
                 if (src == null)
                     return false;
-                if (NOT_NULL(highlightedChild))
-                {
-                    highlightedChild.UnHighlight();
-                    highlightedChild = null;
-                }
-                selectedChild = null;
+                highlightedChild = null;
                 foreach (VPanel panel in PanelList)
                 {
                     dynamic source = src;
@@ -199,10 +305,9 @@ namespace VMSpc.CustomComponents
                     {
                         if (panel.border == source)
                         {
-                            selectedChild = highlightedChild = panel;
+                            highlightedChild = selectedChild = panel;
                             movementType = MOVEMENT_RESIZE;
                             selectedChild.isResizing = true;
-                            selectedChild.Highlight();
                             SetZIndices();
                             return true;
                         }
@@ -223,7 +328,6 @@ namespace VMSpc.CustomComponents
                             selectedChild = highlightedChild = panel;
                             selectedChild.isMoving = true;
                             movementType = MOVEMENT_MOVE;
-                            selectedChild.Highlight();
                             SetZIndices();
                             return true;
                         }
@@ -247,12 +351,10 @@ namespace VMSpc.CustomComponents
                 if (oldZIndex > curMax) curMax = oldZIndex;
                 if (oldZIndex > currentZIndex)
                 {
-                    SetZIndex(panel.canvas, oldZIndex - 1);
-                    SetZIndex(panel.border, oldZIndex - 1);
+                    panel.SetZIndex(oldZIndex - 1);
                 }
             }
-            SetZIndex(selectedChild.canvas, curMax);
-            SetZIndex(selectedChild.border, curMax);
+            selectedChild.SetZIndex(curMax);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -275,10 +377,48 @@ namespace VMSpc.CustomComponents
             MovePanel(selectedChild, newTop, newLeft, newCursorPoint);
         }
 
-        public void ProcessArrowNavigation(Key direction)
+        public void ProcessArrowNavigation(Key direction, bool isAltDown, bool isControlDown, bool isShiftDown)
         {
-            if (NOT_NULL(highlightedChild))
-                highlightedChild.Slide(direction);
+            if (isShiftDown)
+            {
+                switch (direction)
+                {
+                    case Key.Left:
+                        if (isControlDown)
+                            highlightedChild?.DecrementRight();
+                        else
+                            highlightedChild?.IncrementLeft();
+                        break;
+                    case Key.Up:
+                        if (isControlDown)
+                            highlightedChild?.DecrementBottom();
+                        else
+                            highlightedChild?.IncrementTop();
+                        break;
+                    case Key.Right:
+                        if (isControlDown)
+                            highlightedChild?.DecrementLeft();
+                        else
+                            highlightedChild?.IncrementRight();
+                        break;
+                    case Key.Down:
+                        if (isControlDown)
+                            highlightedChild?.DecrementTop();
+                        else
+                            highlightedChild?.IncrementBottom();
+                        break;
+                }
+            }
+            else
+            {
+                highlightedChild?.Slide(direction);
+            }
+        }
+
+        public void ProcessArrowRelease()
+        {
+            highlightedChild?.Refresh();
+            SavePanels();
         }
 
         private void MovePanel(VPanel panel, double newTop, double newLeft, Point newCursorPoint)
@@ -316,7 +456,6 @@ namespace VMSpc.CustomComponents
             foreach (var panel in PanelList)
                 panel.SaveSettings();
             Screen.SaveConfiguration();
-
         }
     }
 }
