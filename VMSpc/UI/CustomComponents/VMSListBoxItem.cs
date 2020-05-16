@@ -10,7 +10,7 @@ namespace VMSpc.UI.CustomComponents
 {
     class VMSListBoxItem : ListBoxItem
     {
-        public ushort ID;
+        public ushort ID { get; set; }
         public VMSListBoxItem() : base()
         {
         }

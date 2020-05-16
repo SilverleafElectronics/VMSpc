@@ -100,7 +100,7 @@ namespace VMSpc.UI.CustomComponents
             Children.Clear();
             PanelList.Clear();
             Background = new SolidColorBrush(ConfigManager.ColorPalettes.GetSelectedPalette().MainBackground);
-            EventBridge.EventProcessor.RemoveGUIRegistryItems();
+            EventBridge.Instance.RemoveGUIRegistryItems();
             AlarmManager.LoadAlarms();
             foreach (var panelSettings in Screen.Contents.PanelList)
             {
@@ -238,8 +238,8 @@ namespace VMSpc.UI.CustomComponents
 
         protected void WritePoint(MouseButtonEventArgs e)
         {
-            VMSConsole.PrintLine($"X: {e.GetPosition(this).X}");
-            VMSConsole.PrintLine($"Y: {e.GetPosition(this).Y}");
+            //VMSConsole.PrintLine($"X: {e.GetPosition(this).X}");
+            //VMSConsole.PrintLine($"Y: {e.GetPosition(this).Y}");
         }
 
         protected VPanel GetClickedPanel(dynamic src)

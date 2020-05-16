@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VMSpc.AdvancedParsers;
 using VMSpc.Parsers;
 
 namespace VMSpc.JsonFileManagers
 {
     public class DiagnosticLogContents : IJsonContents
     {
-        public List<DiagnosticRecord> DiagnosticRecords { get; set; }
+        public List<DiagnosticMessage> DiagnosticRecords { get; set; }
     }
 
     public class DiagnosticLogReader : JsonFileReader<DiagnosticLogContents>
@@ -23,7 +24,7 @@ namespace VMSpc.JsonFileManagers
         {
             return new DiagnosticLogContents()
             { 
-                DiagnosticRecords = new List<DiagnosticRecord>()
+                DiagnosticRecords = new List<DiagnosticMessage>()
             };
 
         }

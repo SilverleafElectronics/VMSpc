@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using VMSpc.JsonFileManagers;
 using VMSpc.Parsers;
 using VMSpc.Common;
+using VMSpc.AdvancedParsers;
 
 namespace VMSpc.UI.Managers
 {
@@ -33,7 +34,12 @@ namespace VMSpc.UI.Managers
         {
             this.odometerSettings = odometerSettings;
             odometerReader = new OdometerReader(odometerSettings.fileName);
-
+            startDistance = odometerReader.Contents.StartMiles;
+            startFuel = odometerReader.Contents.StartGallons;
+            startHours = odometerReader.Contents.StartHours;
+            currentDistance = startDistance;
+            currentFuel = startFuel;
+            currentHours = startHours;
         }
 
         protected override void UpdateValues()
@@ -61,49 +67,37 @@ namespace VMSpc.UI.Managers
 
         private void UpdateDistance()
         {
-            currentDistance = ChassisParameter.ChassisParam.odometer - startDistance;
+            currentDistance = ChassisParameters.Instance.CurrentMiles - startDistance;
             if (odometerSettings.showInMetric)
             {
                 currentDistance *= 1.609344;
             }
-            if (lastDistance != startDistance)
-            {
-                PublishEvent(EventIDs.DISTANCE_TRAVELLED_EVENT, currentDistance);
-            }
-            lastDistance = startDistance;
+            PublishEvent(EventIDs.DISTANCE_TRAVELLED_EVENT, currentDistance);
+            lastDistance = currentDistance;
         }
 
         private void UpdateHours()
         {
-            currentHours = ChassisParameter.ChassisParam.hourmeter - startHours;
-            if (currentHours != lastHours)
-            {
-                PublishEvent(EventIDs.HOURS_EVENT, currentHours);
-            }
+            currentHours = ChassisParameters.Instance.CurrentEngineHours - startHours;
+            PublishEvent(EventIDs.HOURS_EVENT, currentHours);
             lastHours = currentHours;
         }
 
         private void UpdateFuel()
         {
-            currentFuel = ChassisParameter.ChassisParam.fuelmeter - startFuel;
+            currentFuel = ChassisParameters.Instance.CurrentFuel - startFuel;
             if (odometerSettings.showInMetric)
             {
                 currentFuel = (currentFuel * 3.78541);
             }
-            if (currentFuel != lastFuel)
-            {
-                PublishEvent(EventIDs.FUEL_READING_EVENT, currentFuel);
-            }
+            PublishEvent(EventIDs.FUEL_READING_EVENT, currentFuel);
             lastFuel = currentFuel;
         }
 
         private void UpdateSpeed()
         {
             currentSpeed = (currentHours > 0) ? (currentDistance / currentHours) : 0;
-            if (lastSpeed != currentSpeed)
-            {
-                PublishEvent(EventIDs.AVERAGE_SPEED_EVENT, currentSpeed);
-            }
+            PublishEvent(EventIDs.AVERAGE_SPEED_EVENT, currentSpeed);
             lastSpeed = currentSpeed;
         }
     }

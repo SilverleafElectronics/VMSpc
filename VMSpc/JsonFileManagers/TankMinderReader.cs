@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VMSpc.AdvancedParsers;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
-using static VMSpc.Parsers.PresenterWrapper;
 
 namespace VMSpc.JsonFileManagers
 {
@@ -24,8 +24,8 @@ namespace VMSpc.JsonFileManagers
         }
         protected override TankMinderContents GetDefaultContents()
         {
-            var miles = GetStandardValueSPN(ConfigManager.Settings.Contents.odometerPid);
-            var gallons = GetStandardValueSPN(250);
+            var miles = ChassisParameters.Instance.CurrentMiles;
+            var gallons = ChassisParameters.Instance.CurrentFuel;
             return new TankMinderContents()
             {
                 StartMiles = miles,

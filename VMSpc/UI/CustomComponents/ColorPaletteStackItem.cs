@@ -97,6 +97,7 @@ namespace VMSpc.UI.CustomComponents
             public event EventHandler CanExecuteChanged;
             public EditCommand(Predicate<object> canExecute, Action<object> execute)
             {
+                CanExecuteChanged?.Invoke(canExecute, new EventArgs());
                 _canExecute = canExecute;
                 _execute = execute;
             }
@@ -120,6 +121,7 @@ namespace VMSpc.UI.CustomComponents
             public event EventHandler CanExecuteChanged;
             public DeleteCommand(Predicate<object> canExecute, Action<object> execute)
             {
+                CanExecuteChanged?.Invoke(canExecute, new EventArgs());
                 _canExecute = canExecute;
                 _execute = execute;
             }

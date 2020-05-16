@@ -39,6 +39,12 @@ namespace VMSpc.JsonFileManagers
             }
         }
 
+        public override void Reload(string filepath)
+        {
+            base.Reload(filepath);
+            ResolveBuggyIds();
+        }
+
         protected override ScreenContents GetDefaultContents()
         {
             return new ScreenContents()

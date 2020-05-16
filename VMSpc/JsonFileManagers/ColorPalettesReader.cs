@@ -79,30 +79,6 @@ namespace VMSpc.JsonFileManagers
                         Yellow = Colors.Yellow,
                         Red = Colors.Red,
                     },
-                    new ColorPalette()
-                    {
-                        Id = 2,
-                        PaletteName = "Optional number 1",
-                        MainBackground = Colors.White,
-                        GaugeBackground = Colors.White,
-                        Captions = Colors.Blue,
-                        GaugeText = Colors.Black,
-                        Green = Colors.Green,
-                        Yellow = Colors.Yellow,
-                        Red = Colors.Red,
-                    },
-                    new ColorPalette()
-                    {
-                        Id = 3,
-                        PaletteName = "Optional Number 2",
-                        MainBackground = Colors.White,
-                        GaugeBackground = Colors.White,
-                        Captions = Colors.Blue,
-                        GaugeText = Colors.Black,
-                        Green = Colors.Green,
-                        Yellow = Colors.Yellow,
-                        Red = Colors.Red,
-                    }
                 },
             };
         }

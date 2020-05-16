@@ -13,7 +13,6 @@ using static VMSpc.Constants;
 using VMSpc.UI.GaugeComponents;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
 using VMSpc.UI.ComponentWrappers;
-using VMSpc.UI.DlgWindows;
 using VMSpc.Extensions.UI;
 using System.Windows.Media;
 

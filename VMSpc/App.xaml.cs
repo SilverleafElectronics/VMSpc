@@ -12,6 +12,10 @@ using static VMSpc.JsonFileManagers.ConfigurationManager;
 using VMSpc.UI;
 using VMSpc.JsonFileManagers;
 using System.Security.Permissions;
+using VMSpc.Common;
+using VMSpc.AdvancedParsers;
+using VMSpc.AdvancedParsers.Tires;
+using VMSpc.Loggers;
 
 namespace VMSpc
 {
@@ -29,6 +33,12 @@ namespace VMSpc
         //private PanelManager panelmanager;
         DateTime appstart;
         MainWindow wnd;
+
+        private PIDValueStager _PIDValueStager;
+        private EngineDataParser _EngineDataParser;
+        private Acceleration _Acceleration;
+        private Trackers _Trackers;
+
         private static bool ShowingException = false;
         public long startcounter;
         public App()
@@ -48,7 +58,16 @@ namespace VMSpc
         /// </summary>
         private void ActivateStaticClasses()
         {
+            EventBridge.Initialize();
+            DiagnosticsParser.Initialize();
+            CanMessageHandler.Initialize();
             ConfigManager.LoadConfiguration();
+            RawLogger.Initialize();
+            _PIDValueStager = new PIDValueStager();
+            _EngineDataParser = new EngineDataParser();
+            _Acceleration = new Acceleration();
+            _Trackers = new Trackers();
+            ChassisParameters.Initialize();
             var engineFilePointer = new FileOpener(ConfigManager.Settings.Contents.engineFilePath);
             if (engineFilePointer.Exists())
             {
@@ -59,10 +78,9 @@ namespace VMSpc
                 MessageBox.Show("No engine files can be found. Horsepower and Torque settings will be inaccurate");
             }
             SPNDefinitions.Activate();      //in VMSpc/Parsers/J1939/SPNDefinitions.cs - Defines every SPN object
-            PIDManager.Activate();          //in VMSpc/Parsers/J1708/PIDWrapper.cs     - Creates a PID object for all J1708 PIDs and attaches them to PIDList
-            PresenterWrapper.Activate();    //in VMSpc/Parsers/PresenterWrapper.cs     - Attaches all TSPNDatum objects to a presenter object, which is then stored in PresenterList
             //Odometer.Activate();
             //ParamData.Activate();
+            TireManager.Initialize();
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
@@ -100,6 +118,7 @@ namespace VMSpc
 
         private void ShowSplashScreen()
         {
+            /*
             if (false) //CHANGEME - to if (SettingsManager.showSplashScreen == true)
             {
                 SplashScreen splashScreen = new SplashScreen("./Resources/silverleaf_300x200.bmp");
@@ -110,6 +129,7 @@ namespace VMSpc
                 if (elapsed < 3000)
                     System.Threading.Thread.Sleep((int)(3000 - elapsed));
             }
+            */
         }
 
         private void VMSpcStart()

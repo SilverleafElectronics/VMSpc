@@ -32,7 +32,7 @@ namespace VMSpc.UI.DlgWindows
         private VMSComm commreader;
         public int testSelection;
 
-        private int dataReaderType;
+        //private int dataReaderType;
         
         public CommDlg(VMSComm commreader) : base()
         {

@@ -25,6 +25,7 @@ namespace VMSpc.UI.GaugeComponents
         public ClockComponent(bool useMilitaryTime) : base()
         {
             this.useMilitaryTime = useMilitaryTime;
+            //VerticalContentAlignment = VerticalAlignment.Center;
             ClockTimer = Constants.CREATE_TIMER(UpdateClock, 250);
             ClockTimer.Start();
             Enable();

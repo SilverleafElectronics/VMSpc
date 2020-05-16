@@ -16,17 +16,18 @@ namespace VMSpc.Extensions.UI
         /// Scales the given textblock to the maximum possible font size for the bounding area. An optional font size seed can 
         /// be provided for performance. Note this will automatically pad text for you by subtracting from the bounding area's height or width.
         /// </summary>
-        public static void ScaleText(this TextBlock textBlock, double maxWidth, double maxHeight, int seed = 12, int maxCharacters=0)
+        /// 
+        public static void ScaleText(this TextBlock textBlock, double maxWidth, double maxHeight, int maxCharacters=0)
         {
-            textBlock.FontSize = seed;
             if (string.IsNullOrEmpty(textBlock.Text) && maxCharacters == 0)
                 return;
             string originalText = textBlock.Text;
             if (maxCharacters > 0)
             {
-                textBlock.Text = "";
+                StringBuilder text = new StringBuilder();
                 for (int i = 0; i < maxCharacters; i++)
-                    textBlock.Text += "W";
+                    text.Append('W');
+                textBlock.Text = text.ToString();
             }
             Size size = CalculateStringSize(textBlock);
             SlideFontSize(textBlock, size, maxWidth, maxHeight);
@@ -34,12 +35,12 @@ namespace VMSpc.Extensions.UI
         }
 
         /// <summary>
-        /// Scales the text in a TextBlock using the TextBlock's dimensions as the maximum bounding area.
+        /// Scales the TextBlock's font to the maximum size allowed given the text length and the TextBlock's dimensions
         /// </summary>
         /// <param name="textBlock"></param>
-        public static void ScaleText(this TextBlock textBlock, int seed = 12, int maxCharacters = 0)
+        public static void ScaleText(this TextBlock textBlock, int maxCharacters = 0)
         {
-            textBlock.ScaleText(textBlock.Width, textBlock.Height, seed, maxCharacters);
+            textBlock.ScaleText(textBlock.Width, textBlock.Height, maxCharacters);
         }
 
         public static void SlideFontSize(TextBlock textBlock, Size size, double maxWidth, double maxHeight)
@@ -56,6 +57,18 @@ namespace VMSpc.Extensions.UI
             }
             textBlock.FontSize--;
         }
+
+        /// <summary>
+        /// Guesses at the maximum allowed size by dividing the 
+        /// </summary>
+        /// <param name="textBlock"></param>
+        /// <returns></returns>
+        //public static Size CalculateSeedSize(TextBlock textBlock)
+        //{
+        //
+        //}
+        //
+        //public static Size CalculateStringSize(string text, )
 
         public static Size CalculateStringSize(TextBlock textBlock)
         {

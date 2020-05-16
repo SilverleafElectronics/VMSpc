@@ -13,7 +13,7 @@ namespace VMSpc.Parsers.SpecialParsers.TireParsers
         public Tire(int Index)
         {
             this.Index = Index;
-            EventBridge.EventProcessor.AddEventPublisher(this);
+            EventBridge.Instance.AddEventPublisher(this);
         }
         public int Index { get; set; }
         public ulong Id { get; set; }

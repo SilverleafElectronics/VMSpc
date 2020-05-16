@@ -27,12 +27,6 @@ namespace VMSpc.Communication
         public ulong badMessageCount;
         public string BadMessageCount { get { return ("" + badMessageCount); } }
 
-        private Thread dataReaderThread;
-        private MessageExtractor extractor;
-
-        private J1708Parser j1708Parser;
-        private J1939Parser j1939Parser;
-
         public string logDataQueue;
         public string LogRecordingFile
         {
@@ -52,17 +46,31 @@ namespace VMSpc.Communication
         public VMSComm()
         {
             messageCount = badMessageCount = 0;
-            extractor = new MessageExtractor();
 
             LogRecordingEnabled = false;
             LogType = LOGTYPE_RAWLOG;
             logDataQueue = "";
 
-            j1939Parser = new J1939Parser();
-            j1708Parser = new J1708Parser();
-
             ValidateDataReader();
             CreateDataReader();
+        }
+
+        /// <summary>
+        /// Sends full messages to the JIB that abide the message protocols for the specified DataBus message type
+        /// </summary>
+        /// <param name="message"></param>
+        public void SendMessage(OutgoingMessage message)
+        {
+            dataReader.SendMessage(message);
+        }
+
+        /// <summary>
+        /// Sends simple string messages to the JIB
+        /// </summary>
+        /// <param name="message"></param>
+        public void SendMessage(string message)
+        {
+            dataReader.SendMessage(message);
         }
 
         ~VMSComm()
@@ -82,16 +90,16 @@ namespace VMSpc.Communication
             switch(ConfigManager.Settings.Contents.jibType)
             {
                 case JibType.SERIAL:
-                    dataReader = new SerialPortReader(ProcessData);
+                    dataReader = new SerialPortReader();
                     break;
                 case JibType.USB:
-                    dataReader = new CommPortReader(ProcessData, ConfigManager.Settings.Contents.comPort);
+                    dataReader = new CommPortReader(ConfigManager.Settings.Contents.comPort);
                     break;
                 case JibType.WIFI:
-                    dataReader = new WifiSocketReader(ProcessData);
+                    dataReader = new WifiSocketReader();
                     break;
                 case JibType.LOGPLAYER:
-                    dataReader = new LogFileReader(ProcessData, ConfigManager.Settings.Contents.jibPlayerFilePath);
+                    dataReader = new LogFileReader(ConfigManager.Settings.Contents.jibPlayerFilePath);
                     break;
                 default:
                     break;
@@ -103,7 +111,7 @@ namespace VMSpc.Communication
         {
             //dataReaderThread = new Thread(dataReader.InitDataReader);
             //dataReaderThread.Start();
-            dataReader.InitDataReader();
+            dataReader?.InitDataReader();
         }
 
         public void StopComm()
@@ -113,49 +121,6 @@ namespace VMSpc.Communication
                 dataReader.CloseDataReader();
                 //dataReaderThread.Abort();
                 dataReader = null;
-            }
-        }
-
-        /// <summary>
-        /// Receives the message from the data reader, gets the message as a CanMessage from the MessageExtractor, and passes the parsed message to the appropriate parser
-        /// </summary>
-        private void ProcessData(string message)
-        {
-            CanMessage canMessage = extractor.GetMessage(message);
-            if (LogRecordingEnabled)
-                AddLogRecord(message, canMessage);
-            if (canMessage == null || canMessage.messageType == INVALID_CAN_MESSAGE)
-            {
-                badMessageCount++;
-                return;
-            }
-            if (canMessage.messageType == J1939 && ConfigManager.Settings.Contents.globalParseBehavior != ParseBehavior.IGNORE_1939)
-                j1939Parser.Parse((J1939Message)canMessage);
-            else if (canMessage.messageType == J1708 && ConfigManager.Settings.Contents.globalParseBehavior != ParseBehavior.IGNORE_1708)
-                j1708Parser.Parse((J1708Message)canMessage);
-            messageCount++;
-        }
-
-        private void AddLogRecord(string message, CanMessage canMessage)
-        {
-            string logEntry = "" + message;
-            if (LogType == LOGTYPE_PARSEREADY || LogType == LOGTYPE_FULL)
-                logEntry += canMessage.ToString();
-            if (LogType == LOGTYPE_FULL)
-            {
-                if (canMessage.messageType == J1939 && ConfigManager.Settings.Contents.globalParseBehavior != ParseBehavior.IGNORE_1939)
-                    logEntry += canMessage.ToParsedString(j1939Parser);
-                else if (canMessage.messageType == J1708 && ConfigManager.Settings.Contents.globalParseBehavior != ParseBehavior.IGNORE_1708)
-                    logEntry += canMessage.ToParsedString(j1708Parser);
-            }
-            logEntry += "\nEnd of Message\n\n";
-            logDataQueue += logEntry;
-            if (logDataQueue.Length >= 2000)
-            {
-                string outputStream = String.Copy(logDataQueue);
-                logDataQueue = "";
-                using (StreamWriter logWriter = new StreamWriter(LogRecordingFile, true))
-                    logWriter.WriteLine(outputStream);
             }
         }
 

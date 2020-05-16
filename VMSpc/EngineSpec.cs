@@ -16,6 +16,8 @@ namespace VMSpc
         private static ushort[] TorqueMap     = new ushort[12];
         private static ushort[] HorsepowerMap = new ushort[12];
 
+        private static bool IsNewEngine = false;
+
         private static double
             currentRPMs,
             currentLoadPercent,
@@ -35,6 +37,7 @@ namespace VMSpc
 
         public static void SetEngineFile(string EngineFilePath)
         {
+            IsNewEngine = true;
             IntPtr ptr = CreateFile(EngineFilePath,
                 GenericRead, FileShareRead | FileShareWrite, IntPtr.Zero, OpenExisting, 0, IntPtr.Zero);
 
@@ -91,9 +94,12 @@ namespace VMSpc
                 var mapIndex = GetHighRpmIndex(rpm);
                 ushort highRPM = RPMMap[mapIndex];
                 ushort lowRPM = RPMMap[mapIndex - 1];
-                currentTorque = InferFromMappedValues(TorqueMap[mapIndex - 1], TorqueMap[mapIndex], lowRPM, highRPM);
-                currentHorsepower = InferFromMappedValues(HorsepowerMap[mapIndex - 1], HorsepowerMap[mapIndex], lowRPM, highRPM);
-
+                ushort highTorque = TorqueMap[mapIndex];
+                ushort lowTorque = TorqueMap[mapIndex - 1];
+                ushort highHP = HorsepowerMap[mapIndex];
+                ushort lowHP = HorsepowerMap[mapIndex - 1];
+                currentTorque = InferFromMappedValues(lowTorque, highTorque, lowRPM, highRPM);
+                currentHorsepower = InferFromMappedValues(lowHP, highHP, lowRPM, highRPM);
             }
         }
 
@@ -104,6 +110,11 @@ namespace VMSpc
 
         private static bool IsNewValues(double rpm, double loadPercent)
         {
+            if (IsNewEngine)
+            {
+                IsNewEngine = false;
+                return true;
+            }
             return (rpm != currentRPMs) && (loadPercent != currentLoadPercent);
         }
 
@@ -111,7 +122,7 @@ namespace VMSpc
         {
             if (rpm < RPMMap[0] || rpm > RPMMap[11])
             {
-                return 0;
+                return 1;
             }
             for (int i = 1; i < 12; i++)
             {

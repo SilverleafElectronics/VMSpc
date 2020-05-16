@@ -26,6 +26,18 @@ namespace VMSpc.Enums.UI
         TIRE_GAUGE = 14,
     };
 
+    public enum TireMapType
+    {
+        [Description("6 Wheel")]
+        SIX_WHEEL = 0,
+        [Description("8 Wheel")]
+        EIGHT_WHEEL = 1,
+        [Description("6 + 4 Wheel")]
+        SIX_PLUS_4 = 2,
+        [Description("8 + 4 Wheel")]
+        EIGHT_PLUS_4 = 3,
+    }
+
     /// <summary>
     /// Operators to be used to determine a truthy result of comparing two operands
     /// </summary>

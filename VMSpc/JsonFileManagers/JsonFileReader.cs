@@ -15,8 +15,21 @@ namespace VMSpc.JsonFileManagers
         public T Contents;
         protected static readonly JsonSerializerSettings serializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
         public JsonFileReader(string filepath)
-            :base(filepath)
+            : base(filepath)
         {
+            if (!IsNullOrEmpty(filepath))
+            {
+                LoadJson(filepath);
+            }
+            else
+            {
+                SaveDefault();
+            }
+        }
+
+        public virtual void Reload(string filepath)
+        {
+            this.filepath = filepath;
             if (!IsNullOrEmpty(filepath))
             {
                 LoadJson(filepath);

@@ -12,6 +12,8 @@ using VMSpc.DevHelpers;
 using static VMSpc.Constants;
 using System.Collections.Concurrent;
 using VMSpc.JsonFileManagers;
+using VMSpc.Enums.Parsing;
+using VMSpc.Extensions.Standard;
 
 namespace VMSpc.Communication
 {
@@ -24,12 +26,13 @@ namespace VMSpc.Communication
         private SerialDataReceivedEventHandler dataReceivedHandler;
         private ConcurrentQueue<string> messagesToSend;
         private delegate void SplitDataIntoProcess();
+        private readonly char[] J1708HexToAsciiMap = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
         int quietlyTryReconnect;
         System.Timers.Timer quietReconnectTimer;
 
-        public CommPortReader(Action<string> DataProcessor, ushort comPort)
-            : base(DataProcessor)
+        public CommPortReader(ushort comPort)
+            : base()
         {
             this.comPort = comPort;
             messagesToSend = new ConcurrentQueue<string>();
@@ -59,7 +62,7 @@ namespace VMSpc.Communication
                 quietlyTryReconnect = 0;
                 base.InitDataReader();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ushort newPort = FindVmsPort();
                 if (newPort == comPort && quietlyTryReconnect == 1)
@@ -94,7 +97,7 @@ namespace VMSpc.Communication
                         foreach (string message in buffer.Split('\n'))
                         {
                             messagesReceived++;
-                            DataProcessor(message);
+                            OnDataReceived(message);
                         }
                     }
                     catch
@@ -125,6 +128,30 @@ namespace VMSpc.Communication
             }
             catch { } //do something useful here
         }
+        public override void SendMessage(OutgoingMessage message)
+        {
+            switch (message.DataBusType)
+            {
+                case DataBusType.J1708:
+                    var j1708message = (message as OutgoingJ1708Message);
+                    j1708message.GenerateChecksum();
+                    j1708message.CheckSum = (byte)(0x100 - j1708message.CheckSum);
+                    var messageArr = j1708message.ToByteArray();
+                    StringBuilder messageBuilder = new StringBuilder("S");
+                    for (int i = 0; i < messageArr.Length; i++)
+                    {
+                        messageBuilder.Append(J1708HexToAsciiMap[(byte)(messageArr[i] / 0x10)]);
+                        messageBuilder.Append(J1708HexToAsciiMap[(byte)(messageArr[i] / 0x0F)]);
+                    }
+                    messageBuilder.Append((char)0x0D);
+                    messageBuilder.Append((char)0x0A);
+                    SendMessage(messageBuilder.ToString());
+                    break;
+                case DataBusType.J1939:
+                    break;
+            }
+        }
+
         public override void SendMessage(string message)
         {
             messagesToSend.Enqueue(message);

@@ -9,16 +9,15 @@ using static VMSpc.Parsers.SPNDefinitions;
 namespace VMSpc.Parsers
 {
     /// <summary>
-    /// Contains the subsriptions of each TSPNDatum object to the PGN which carries the datum's data. Access the list of associated TSPNDatum objects with PGNMap[`pgn`]
+    /// Contains the subsriptions of each TSPNDatum object to the PGN which carries the parameter. Access the list of associated TSPNDatum objects with PGNMap[`pgn`]
     /// </summary>
     static class PGNMapper
     {
-        public static Dictionary<uint, TSPNDatum[]> PGNMap;
+        public static Dictionary<uint, TSPNDatum[]> PGNMap { get; set; }
         static PGNMapper()
         {
             PGNMap = new Dictionary<uint, TSPNDatum[]>
             {
-                { 0x0F005, new TSPNDatum[] { spn_range, spn_transMode } },
                 { 0x0F004, new TSPNDatum[] { /*spn_torquePercent,*/ spn_rpms } },
                 { 0x0F003, new TSPNDatum[] { spn_accelPos, spn_loadPercent }  },
                 { 0x0F000, new TSPNDatum[] { spn_retarderPct } },
@@ -32,7 +31,8 @@ namespace VMSpc.Parsers
                 { 0x0FEF7, new TSPNDatum[] { spn_batteryVolts } },
                 { 0x0FEEF, new TSPNDatum[] { spn_fuelPressure, spn_oilLevel, spn_oilPressure, spn_crankCasePressure, spn_coolantPressure, spn_coolantLevel } },
                 { 0x0FEC1, new TSPNDatum[] { spn_odometer } },
-                { 0x0FEE9, new TSPNDatum[] { spn_fuel } },
+                { 0x0FEE5, new TSPNDatum[] { spn_engineHours} },
+                { 0x0FEE9, new TSPNDatum[] { spn_totalFuel } },
                 { 0xFEDC,  new TSPNDatum[] { spn_idleHours, spn_idleFuel } },
                 { 0xFEDB,  new TSPNDatum[] { spn_injectorRailPressure } },
                 { 0xFDB3,  new TSPNDatum[] { spn_dpfOutletTemp } },
@@ -44,7 +44,6 @@ namespace VMSpc.Parsers
                 { 0xFEFF,  new TSPNDatum[] { spn_waterInFuel } },
                 { 0x0F002, new TSPNDatum[] { spn_outputShaftSpeed, spn_clutchSlipPercent, spn_inputShaftSpeed } },
                 { 0x0FEF8, new TSPNDatum[] { spn_transTemp } },
-                { 0xFECA,  new TSPNDatum[] { spn_diagnostic1939 } },
                 { 0xFD7C,  new TSPNDatum[] { spn_dpfLamp, spn_dpfActiveStatus, spn_dpfInhibitClutch, spn_dpfInhibitSwitch, spn_dpfInhibitStatus, spn_dpfInhibitSpeed, spn_dpfInhibitOffidle,
                                              spn_dpfInhibitPTO, spn_dpfInhibitParkbrake, spn_dpfHighTempLamp } },
                 { 0x0FEFB, null },

@@ -14,6 +14,10 @@ using VMSpc.UI.CustomComponents;
 using System.Timers;
 using VMSpc.UI.GaugeComponents;
 using VMSpc.Common;
+using VMSpc.AdvancedParsers;
+using VMSpc.Extensions.UI;
+using VMSpc.DevHelpers;
+using System.Windows.Shapes;
 
 namespace VMSpc.UI.Panels
 {
@@ -26,15 +30,16 @@ namespace VMSpc.UI.Panels
         private SolidColorBrush
             OkColor,
             WarningColor;
-        private List<DiagnosticRecord> DisplayedRecords;
+        private List<DiagnosticMessage> DisplayedRecords;
+        private int maxDisplayedRecords => (int)(canvas.Height / 20);
         private int numDisplayedRecords;
         private bool inWarningMode;
         public DiagAlarmPanel(MainWindow mainWindow, DiagnosticGaugeSettings panelSettings)
             : base(mainWindow, panelSettings)
         {
             this.panelSettings = panelSettings;
-            EventBridge.EventProcessor.SubscribeToEvent(this, EventIDs.DIAGNOSTIC_BASE);
-            DisplayedRecords = new List<DiagnosticRecord>();
+            EventBridge.Instance.SubscribeToEvent(this, EventIDs.DIAGNOSTIC_BASE);
+            DisplayedRecords = DiagnosticsParser.Instance.ActiveDiagnosticMessages.ToList();
             inWarningMode = false;
             numDisplayedRecords = 0;
         }
@@ -46,10 +51,10 @@ namespace VMSpc.UI.Panels
 
         public void Update(DiagnosticEventArgs e)
         {
-            if (e == null || e.record == null)
+            if (e == null || e.message == null)
                 return;
-            AddRecord(e.record);
-            DisplayedRecords.Add(e.record);
+            AddRecord(e.message);
+            DisplayedRecords.Add(e.message);
         }
 
         public override void GeneratePanel()
@@ -58,6 +63,7 @@ namespace VMSpc.UI.Panels
             OkColor = new SolidColorBrush(panelSettings.backgroundColor);
             WarningColor = new SolidColorBrush(panelSettings.WarningColor);
             numDisplayedRecords = 0;
+            inWarningMode = false;
             recordStack = new StackPanel()
             {
                 Width = canvas.Width,
@@ -71,9 +77,9 @@ namespace VMSpc.UI.Panels
             };
             canvas.Children.Add(recordStack);
             recordStack.Children.Add(Clock);
-            foreach (DiagnosticRecord record in DisplayedRecords)
+            foreach (var record in DisplayedRecords)
             {
-                if (record != null)
+                if (record != null && !record.Acknowledged)
                 {
                     AddRecord(record);
                     inWarningMode = true;
@@ -82,38 +88,26 @@ namespace VMSpc.UI.Panels
             SetBackground();
         }
 
-        private void AddRecord(DiagnosticRecord record)
+        private void AddRecord(DiagnosticMessage message)
         {
-            var entry = new RecordEntry(record, canvas.Width, (canvas.Height / (3)), RemoveRecord);
-            recordStack.Children.Add(entry);
-            if (!inWarningMode)
+            if (numDisplayedRecords < maxDisplayedRecords)
             {
-                inWarningMode = true;
-                SetBackground();
+                var entry = new RecordEntry(message, canvas.Width, (canvas.Height / maxDisplayedRecords), RemoveRecord);
+                recordStack.Children.Add(entry);
+                if (!inWarningMode)
+                {
+                    inWarningMode = true;
+                    SetBackground();
+                }
+                numDisplayedRecords++;
+                //AdjustRecordHeight();
             }
-            numDisplayedRecords++;
-            AdjustRecordHeight();
         }
 
-        private void RemoveRecord(DiagnosticRecord record)
+        private void RemoveRecord(DiagnosticMessage message)
         {
-            foreach (var child in recordStack.Children)
-            {
-                var recordEntry = (child as RecordEntry);
-                if (recordEntry != null && recordEntry.record.spn == record.spn)
-                {
-                    recordStack.Children.Remove(recordEntry);
-                    DisplayedRecords.Remove(recordEntry.record);
-                    break;
-                }
-            }
-            numDisplayedRecords--;
-            if (numDisplayedRecords == 0 && inWarningMode)
-            {
-                inWarningMode = false;
-                SetBackground();
-            }
-            AdjustRecordHeight();
+            message.Acknowledged = true;
+            GeneratePanel();
         }
 
         private void AdjustRecordHeight()
@@ -137,7 +131,6 @@ namespace VMSpc.UI.Panels
                 {
                     recordStack.Children.Remove(Clock);
                 }
-
             }
             else
             {
@@ -151,7 +144,6 @@ namespace VMSpc.UI.Panels
 
         public override void UpdatePanel()
         {
-
         }
 
         protected override VMSDialog GenerateDlg()
@@ -160,47 +152,127 @@ namespace VMSpc.UI.Panels
         }
     }
 
-    public class RecordEntry : VMSCanvas
+    public class RecordEntry : Grid
     {
-        public readonly DiagnosticRecord record;
-        private TextBlock textBlock;
-        private Button clearButton;
-        private Action<DiagnosticRecord> RemoveRecord;
-        public RecordEntry(DiagnosticRecord record, double width, double height, Action<DiagnosticRecord> RemoveRecord)
+        private Action<DiagnosticMessage> ClearMethod;
+        public DiagnosticMessage message { get; private set; }
+
+        private static SolidColorBrush
+            AlertToggle1 = new SolidColorBrush(Colors.White),
+            AlertToggle2 = new SolidColorBrush(Colors.Yellow);
+        private TogglingEllipse 
+            AlertSignal; 
+        private TextBlock
+            SourceBlock,
+            TypeBlock,
+            IDBlock,
+            MIDBlock,
+            ComponentBlock,
+            ModeBlock,
+            DateBlock;
+        private Button
+            ClearButton;
+        public RecordEntry(DiagnosticMessage message, double width, double height, Action<DiagnosticMessage> ClearMethod)
         {
-            this.record = record;
             Width = width;
             Height = height;
-            textBlock = new TextBlock()
-            {
-                Text = this.record.ToString(),
-                Width = (width * 0.875),
-                Height = height,
-                VerticalAlignment = VerticalAlignment.Center,
-            };
-            clearButton = new Button()
-            {
-                Content = "Clear",
-                Width = (width / 8),
-                Height = height,
-            };
-            AddChildren(textBlock, clearButton);
-            SetLeft(textBlock, 0);
-            SetLeft(clearButton, (width * 0.875));
-            clearButton.Click += RemoveButton_Click;
-            this.RemoveRecord = RemoveRecord;
+            this.ClearMethod = ClearMethod;
+            this.message = message;
+            AddColumns();
         }
 
-        private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        protected void AddColumns()
         {
-            RemoveRecord(record);
+            ColumnDefinitions.Clear();
+            Children.Clear();
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(Width / 25d)});    //Alert signal
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(Width / 25d)});    //Source
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(Width / 25d)});    //Type
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(Width / 25d)});    //ID
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(Width / 25d)});    //MID
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(Width * (11d / 25d))});    //Component
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(Width * (6d / 25d))});    //Mode string
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(Width * (2d / 25d))});    //Time Stamp
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(Width * (1d / 25d))});    //Button
+
+
+            AddAlertSignal();
+            AddColumn(ref SourceBlock, message.SourceString, 1);
+            AddColumn(ref TypeBlock, message.TypeString, 2);
+            AddColumn(ref IDBlock, message.IDString, 3);
+            AddColumn(ref MIDBlock, message.MidString, 4);
+            AddColumn(ref ComponentBlock, message.Component, 5);
+            AddColumn(ref ModeBlock, message.FmiString, 6);
+            AddColumn(ref DateBlock, message.TimeStamp.ToString("t"), 7);
+            AddButton();
+            SourceBlock.ScaleText(Width / 25d, Height);
+            TypeBlock.ScaleText(Width / 25d, Height);
+            IDBlock.ScaleText(Width / 25d, Height);
+            MIDBlock.ScaleText(Width / 25d, Height);
+            var blockWidth = (Width * (12d / 25d));
+            ComponentBlock.ScaleText(blockWidth, Height);
+            ModeBlock.ScaleText(Width * (6d / 25d), Height);
+            DateBlock.ScaleText(Width / 25d, Height);
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            ClearMethod(message);
+        }
+
+        protected void AddAlertSignal()
+        {
+            AlertSignal = new TogglingEllipse()
+            {
+                VerticalAlignment = VerticalAlignment.Top,
+                Width = Width / 35d,
+                Height = Width / 35d,
+                ToggleBrush1 = AlertToggle1,
+                ToggleBrush2 = AlertToggle2,
+                ToggleInterval = 1000,
+                Background = new SolidColorBrush(Colors.Pink),
+            };
+            Children.Add(AlertSignal);
+            SetColumn(AlertSignal, 0);
+        }
+
+        protected void AddColumn(ref TextBlock block, string text, int index)
+        {
+            block = new TextBlock()
+            {
+                Text = text,
+                Height = this.Height,
+                TextAlignment = TextAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                FontWeight = FontWeights.Bold,
+                FontSize = 12,
+            };
+            Children.Add(block);
+            SetColumn(block, index);
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(Width / 25) });    //Alert signal
+        }
+
+        private void AddButton()
+        {
+            ClearButton = new Button()
+            {
+                Content = "Clear",
+                MaxHeight = 20,
+                MaxWidth = 40,
+                Margin = new Thickness(0, 1, 0, 0),
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left,
+            };
+            Children.Add(ClearButton);
+            SetColumn(ClearButton, 8);
+            ClearButton.Click += ClearButton_Click;
         }
 
         public void SetHeight(double height)
         {
             this.Height = height;
-            textBlock.Height = this.Height;
-            clearButton.Height = this.Height;
+            AddColumns();
         }
     }
+
 }

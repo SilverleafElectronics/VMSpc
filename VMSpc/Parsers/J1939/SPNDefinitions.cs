@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VMSpc.Enums.Parsing;
 
 namespace VMSpc.Parsers
 {
@@ -59,8 +60,6 @@ namespace VMSpc.Parsers
         public const ushort torquePercent = 92;
         public const ushort rpms = 190;
         */
-
-        
 
         public static TSPNFlag spn_dpfActiveStatus = new TSPNFlag(0, 1, 2);
         public static TSPNFlag spn_dpfActiveError = new TSPNFlag(0, 1, 2);  // set to 1 when dpf_active is 10b
@@ -132,59 +131,31 @@ namespace VMSpc.Parsers
         public static TSPNWord spn_batteryVolts = new TSPNWord(168, 4, 0.05f, 0.0f, 0.05f, 0.0f);
         public static TSPNWord spn_rollingMPG = new TSPNWord(9, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f);
         public static TSPNWord spn_recentMPG = new TSPNWord(502, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f);
-        public static TSPNEngineDependentDatum spn_torque = new TSPNTorque(510);
-        public static TSPNEngineDependentDatum spn_horsepower = new TSPNTorque(509);
         public static TSPNWord spn_reciprocalMPG = new TSPNWord(603, 2, 0.00000046f * 100 * 100, 0.0f, 0.0000001953125f * 100 * 100, 0.0f, 235.215f); //235.215 is conversion per gallon
         public static TSPNWord spn_rollingLPK = new TSPNWord(601, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f, 235.215f);
         public static TSPNWord spn_recentLPK = new TSPNWord(602, 0, 0.01f, 0.0f, 0.00425143707f, 0.0f, 235.215f);
 
-        public static TSPNAcceleration spn_acceleration = new TSPNAcceleration(10, 1000);
-        public static TSPNPeakRecorder  spn_braking = new TSPNPeakRecorder(11, 1000, Constants.DoubleArrayMaxNegative);
-        public static TSPNPeakRecorder  spn_peakAcceleration = new TSPNPeakRecorder(12, 1000, Constants.DoubleArrayMax);
-
         public static TSPNUint spn_idleFuel = new TSPNUint(236, 0, 0.132086f, 0.0f, 0.5f, 0.0f);
         public static TSPNUint spn_idleHours = new TSPNUint(235, 4, 0.05f, 0.0f, 0.05f, 0.0f);
-        
-        public static TSPNInferred spn_odometer = new TSPNInferred(245, 0, 0.003106856f, 0.0f, 0.005f, 0, 2000000);
-        public static TSPNInferred spn_odometerALT = new TSPNInferred(244, 0, 0.003106856f, 0.0f, 0.005f, 0, 2000000);
-        public static TSPNInferred spn_hours = new TSPNInferred(247, 0, 0.05f, 0.0f, 0.05f, 0.0f, 50000);
-        public static TSPNInferred spn_fuel = new TSPNInferred(250, 4, 0.132086f, 0.0f, 0.5f, 0.0f, 250000);
-
-
-        /// <summary> Dictionary that maps all SPNs to correlating MaxTrackers. </summary>
-        public static Dictionary<ushort, List<TSPNTracker>> SPNTrackers = new Dictionary<ushort, List<TSPNTracker>>();
-
-          /***************These are not "real" SPNs. Continue incrementing if adding more is needed*******************/
-        public static TSPNMaxTracker spn_MaxCoolant = new TSPNMaxTracker(503, spn_coolantTemp, 2000, 12000, 999.9);
-        public static TSPNMaxTracker spn_MaxTransmission = new TSPNMaxTracker(504, spn_transTemp, 2000, 12000, 999.9);
-        public static TSPNMaxTracker spn_MaxOil = new TSPNMaxTracker(505, spn_oilTemp, 2000, 12000, 999.9);
-        public static TSPNMaxTracker spn_MaxManifoldTemp = new TSPNMaxTracker(506, spn_intakeManifoldTemp, 2000, 12000, 999.9);
-        public static TSPNMaxTracker spn_MaxRPMs = new TSPNMaxTracker(507, spn_rpms, 2000, 12000, 9999.9);
-        public static TSPNMaxTracker spn_MaxSpeed = new TSPNMaxTracker(508, spn_roadSpeed, 2000, 12000, 199.9);
-
-        public static TSPNAverageTracker spn_AvgEconomy = new TSPNAverageTracker(511, spn_odometer, spn_fuel);
-        public static TSPNAverageTracker spn_AvgSpeed = new TSPNAverageTracker(512, spn_odometer, spn_hours);
-        /*********************************************End of "fake" SPNs**********************************************/
-
-        public static TSPNDiag spn_diagnostic1939 = new TSPNDiag(0); //TODO - implement once TSPNDiag is implemented
-
-        //special parsing types
-        public static TSPNRange spn_range = new TSPNRange(0);
-        public static TSPNTransMode spn_transMode = new TSPNTransMode(0);
-
-        /// <summary> Called every time a datum is updated. This method will call the Record() function of all trackers assigned to this SPN, if one exists </summary>
-        public static void ProcessDataReceivedEvent(ushort spn)
+        public static TSPNUint spn_odometer = new TSPNUint(PIDWrapper.totalMiles, 0, 0.0031075, 0, 0.005, 0)
         {
-            if (SPNTrackers.ContainsKey(spn))
-                foreach (TSPNTracker tracker in SPNTrackers[spn])
-                    tracker.Record();
-            RegisterDataEvent(spn);
-        }
-
-        private static void RegisterDataEvent(ushort spn)
+            ParseStatus = ParseStatus.PartiallyParsed,
+        };
+        public static TSPNUint spn_odometerCummins = new TSPNUint(PIDWrapper.totalMilesCummins, 0, 0.0031075, 0, 0.005, 0)
         {
+            ParseStatus = ParseStatus.PartiallyParsed,
+        };
+        public static TSPNUint spn_engineHours = new TSPNUint(PIDWrapper.engineHours, 0, 0.05, 0, 0.05, 0)
+        {
+            ParseStatus = ParseStatus.PartiallyParsed,
+        };
+        public static TSPNUint spn_totalFuel = new TSPNUint(PIDWrapper.totalFuel, 4, 0.132086, 0, 0.5, 0)
+        {
+            ParseStatus = ParseStatus.PartiallyParsed,
+        };
 
-        }
+        public static TSPNRetarder spn_retarderSwitch = new TSPNRetarder(47);
+        public static TSPNRetarder spn_retarderStatus = new TSPNRetarder(121);
 
         static SPNDefinitions() { }
 

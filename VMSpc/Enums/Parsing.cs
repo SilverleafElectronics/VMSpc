@@ -19,6 +19,20 @@ namespace VMSpc.Enums.Parsing
         [Description("Log Player")]
         LOGPLAYER = 4
     };
+    public enum OdometerType
+    {
+        [Description("Standard")]
+        Standard = 0,
+        [Description("Cummins")]
+        Cummins = 1,
+    }
+    public enum J1708DiagnosticIDType
+    {
+        [Description("PID")]
+        PID,
+        [Description("SID")]
+        SID
+    }
     public enum EngineModel
     {
         NONE = 0
@@ -53,8 +67,17 @@ namespace VMSpc.Enums.Parsing
         [Description("Prioritize J1939 Data")]
         PRIORITIZE_1939 = 4,
         [Description("Prioritize J1708 Data")]
-        PRIORITIZE_1708 = 5
+        PRIORITIZE_1708 = 5,
     };
+    public enum ParseStatus
+    {
+        [Description("Parsed")]
+        Parsed = 0,
+        [Description("Not Parsed")]
+        NotParsed = 1,
+        [Description("Partially Parsed")]
+        PartiallyParsed = 2,
+    }
     public enum DataBusType
     {
         [Description("None")]
@@ -64,6 +87,22 @@ namespace VMSpc.Enums.Parsing
         [Description("J1939")]
         J1939 = 2,
     };
+    public enum MessageError
+    {
+        Ok = 0,
+        UnrecognizedMessage,
+        J1708ChecksumFailure,
+        J1708InvalidMessage,
+        J1939ChecksumFailure,
+        J1939InvalidMessage,
+        Unkown,
+    }
+    public enum VMSDataSource
+    {
+        None,
+        J1708,
+        J1939,
+    }
 }
 
 namespace VMSpc.Enums

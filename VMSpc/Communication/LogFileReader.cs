@@ -21,8 +21,8 @@ namespace VMSpc.Communication
         private int RecordIndex;
         private bool Reloading;
 
-        public LogFileReader(Action<string> DataProcessor, string logPlayerFilePath)
-            : base(DataProcessor)
+        public LogFileReader(string logPlayerFilePath)
+            : base()
         {
             LogPlayerFilePath = logPlayerFilePath;
             RecordBuffer = new string[100];
@@ -49,7 +49,7 @@ namespace VMSpc.Communication
                 }
                 Application.Current.Dispatcher.Invoke(delegate
                 {
-                    DataProcessor(RecordBuffer[RecordIndex]);
+                    OnDataReceived(RecordBuffer[RecordIndex]);
                 });
                 RecordIndex++;
             }
@@ -68,10 +68,16 @@ namespace VMSpc.Communication
 
             }
         }
+
+        public override void SendMessage(OutgoingMessage message)
+        {
+        }
         public override void SendMessage(string message)
         {
-            throw new NotImplementedException();
         }
+
+
+
         private void ReloadBuffer()
         {
             Reloading = true;

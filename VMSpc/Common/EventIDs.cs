@@ -10,7 +10,7 @@ namespace VMSpc.Common
     {
 
         /*
-        * Event ID Structure (For all but Simple Events):
+        * Event ID Anatomy (For all events, Complex Event Bases, unless specified otherwise):
         * 0x{EventBase(1 byte)}{EventInstance(1 byte)}{EventSubID(2 bytes)}
         * byte 0-1 - sub-identifier (e.g., PID)
         * byte 2 - instance
@@ -25,8 +25,8 @@ namespace VMSpc.Common
         * Any additional values accompanying a published event should be included as a separate property of the event. For instance,
         * PID Events (VMSDataEventArgs) publish the `value` as a separate field of the event object.
         * 
-        * NOTE: Simple Events (see below) must have a base of 0xFD000000. The remaining 6 bits are to be used as unique identifiers, and 
-        * don't follow the instancing/sub-ID scheme mentioned above. They start at 0xFE000001 and should increment from there.
+        * NOTE: Simple Events (see below) must have a base of 0xFD000000000000. The remaining 56 bits are to be used as unique identifiers, and 
+        * don't follow the instancing/sub-ID scheme mentioned above. They start at 0xFE00000000000001 and should increment from there.
         * 
         */
 
@@ -34,21 +34,21 @@ namespace VMSpc.Common
         //gets published with these can have an associated value item (e.g., NEW_COMM_DATA_EVENT), but usually does not.
         #region Simple Events
 
-            public static uint GUI_RESET_EVENT => 0xFE000001;
-            public static uint NEW_COMM_DATA_EVENT => 0xFE000002;
-            public static uint J1708_CHECKSUM_ERROR_EVENT => 0xFE000003;
+        public static ulong GUI_RESET_EVENT => 0xFE00000000000001;
+        public static ulong NEW_COMM_DATA_EVENT => 0xFE00000000000002;
+        public static ulong COMM_DATA_ERROR_EVENT => 0xFE00000000000003;
+
 
         #endregion Simple Events
 
-        //Instanced Events - These base events that can only use the Event Base ID and the instance. i.e., the LSWord is not used. 
-        //The MSByte in these events must be in the range 129-253 (0x81 - 0xFD)
+        //Instanced Events - These base events only carry an Event Identifier and an instance. 
         #region Instanced Event Bases
-            public static uint CURRENT_MPG_EVENT => 0x81000000;
-            public static uint DISTANCE_REMAINING_EVENT => 0x82000000;
-            public static uint FUEL_READING_EVENT => 0x83000000;
-            public static uint DISTANCE_TRAVELLED_EVENT => 0x84000000;
-            public static uint HOURS_EVENT => 0x85000000;
-            public static uint AVERAGE_SPEED_EVENT => 0x86000000;
+        public static ulong CURRENT_MPG_EVENT => 0xFD00000100000000;
+        public static ulong DISTANCE_REMAINING_EVENT => 0xFD00000200000000;
+        public static ulong FUEL_READING_EVENT => 0xFD00000300000000;
+        public static ulong DISTANCE_TRAVELLED_EVENT => 0xFD00000400000000;
+        public static ulong HOURS_EVENT => 0xFD00000500000000;
+        public static ulong AVERAGE_SPEED_EVENT => 0xFD00000600000000;
 
         #endregion Instanced Event Bases
 
@@ -56,12 +56,73 @@ namespace VMSpc.Common
         //The MSByte in these events must be in the range 1-128 (0x01 - 0x80)
         #region Complex Event Bases
 
-            public static uint PID_BASE => 0x01000000;
-            public static uint DIAGNOSTIC_BASE => 0x02000000;
-            public static uint TIRE_BASE => 0x03000000;
-            public static uint ALARM_BASE => 0x04000000;
+        public static ulong PID_BASE => 0x0100000000000000;
+        public static ulong DIAGNOSTIC_BASE => 0x0200000000000000;
+        public static ulong TIRE_BASE => 0x0300000000000000;
+        public static ulong ALARM_BASE => 0x0400000000000000;
+        
+        /// <summary>
+        /// Data published for use by UI Elements. This should always be OR'd with a PID in the LSWord
+        /// </summary>
+        public static ulong PARSED_DATA_EVENT => 0x0500000000000000;
+        /// <summary>
+        /// Data published for use by Advanced J1939 Parsers. Byte 0 = 0x06; Byte 1 = Source Address (optional. subscribing to 0xFF SA will catch all); Bytes 2-8 = PGN, Bytes 7-15 are unused
+        /// </summary>
+        public static ulong J1939_RAW_DATA_EVENT => 0x0600000000000000;
+        /// <summary>
+        /// /Returns a J1939_RAW_DATA_EVENT with the specified PGN and SourceAddress applied. Leaving the SourceAdress at the default 0xFF will catch all Source Addresses
+        /// </summary>
+        /// <param name="pgn"></param>
+        /// <param name="SourceAddress"></param>
+        /// <returns></returns>
+        public static ulong Get_J1939RawDataEvent(uint pgn, byte SourceAddress = 0xFF)
+        {
+            ulong e = J1939_RAW_DATA_EVENT | ((ulong)pgn << 24);
+            e |= ((ulong)SourceAddress << 48);
+            return e;
+        }
+        /// <summary>
+        /// Gets the PGN from a J1939RawDataEvent
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        //TODO
+        public static uint Extract_PGN_J1939RawDataEvent(ulong e)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Gets teh Source Address from a J1939RawDataEvent
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        //TODO
+        public static byte Extract_SourceAddress_J1939RawDataEvent(ulong e)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Data published for use by Advanced J1708 Parsers. Byte 0 = 0x07; Byte 1 = MID (optional. subscribing to 0xFF MID will catch all); Byte 1-2 = PID; Byte 3-15 are unused
+        /// </summary>
+        public static ulong J1708_RAW_DATA_EVENT => 0X0700000000000000;
+        public static ulong Get_J1708RawDataEvent(ushort pid, byte mid = 0xFF)
+        {
+            ulong e = J1708_RAW_DATA_EVENT | ((ulong)pid << 32);
+            e |= ((ulong)mid << 48);
+            return e;
+        }
+        //TODO
+        public static ushort Extract_PID_J1708RawDataEvent(ulong e)
+        {
+            throw new NotImplementedException();
+        }
+        //TODO
+        public static byte Extract_MID_J1708RawDataEvent(ulong e)
+        {
+            throw new NotImplementedException();
+        }
 
-        #endregion Instanced Event Bases
+        #endregion Complex Event Bases
 
     }
 }

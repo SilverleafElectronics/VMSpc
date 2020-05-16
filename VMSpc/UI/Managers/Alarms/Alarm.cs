@@ -154,17 +154,17 @@ namespace VMSpc.UI.Managers.Alarms
 
             private void SubscribeToPid()
             {
-                EventBridge.EventProcessor.SubscribeToEvent(this, EventIDs.PID_BASE | alarmCondition.Pid);
+                EventBridge.Instance.SubscribeToEvent(this, EventIDs.PID_BASE | alarmCondition.Pid);
             }
 
             public void DropCondition()
             {
-                EventBridge.EventProcessor.UnsubscribeFromEvent(this, EventIDs.PID_BASE | alarmCondition.Pid);
+                EventBridge.Instance.UnsubscribeFromEvent(this, EventIDs.PID_BASE | alarmCondition.Pid);
             }
 
             public void ConsumeEvent(VMSEventArgs e)
             {
-                pidValue = (e as VMSDataEventArgs).value;
+                pidValue = (e as VMSPidValueEventArgs).value;
             }
         }
     }

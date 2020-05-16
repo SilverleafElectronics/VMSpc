@@ -18,7 +18,8 @@ namespace VMSpc.UI.Managers
         {
             managerInstance = ManagerEventInstance;
             ManagerEventInstance++;
-            UpdateTimer = Constants.CREATE_TIMER(UpdateValues, 1000);
+            UpdateTimer = Constants.CREATE_TIMER(UpdateValues, 5000);
+            UpdateTimer.Start();
         }
 
         ~ComponentManager()
@@ -33,11 +34,11 @@ namespace VMSpc.UI.Managers
 
         protected abstract void UpdateValues();
 
-        protected void PublishEvent(uint managerEvent, double value)
+        protected void PublishEvent(ulong managerEvent, double value)
         {
-            uint eventID = managerEvent;
+            ulong eventID = managerEvent;
             InstancedVMSDataEventArgs eventArgs = new InstancedVMSDataEventArgs(eventID, managerInstance, value);
-            EventBridge.EventProcessor.PublishEvent(eventArgs);
+            EventBridge.Instance.PublishEvent(eventArgs);
         }
     }
 }

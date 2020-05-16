@@ -8,7 +8,6 @@ using System.Windows.Media.Imaging;
 using VMSpc.UI.DlgWindows;
 using VMSpc.JsonFileManagers;
 using VMSpc.Panels;
-using VMSpc.UI.DlgWindows;
 using VMSpc.UI.GaugeComponents;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
 using System.IO;

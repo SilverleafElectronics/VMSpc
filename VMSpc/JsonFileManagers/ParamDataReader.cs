@@ -4,11 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static VMSpc.Parsers.PresenterWrapper;
 using static VMSpc.Constants;
 
 namespace VMSpc.JsonFileManagers
 {
+    public class PidValue
+    {
+        public double RawValue { get; set; }
+        public double StandardValue { get; set; }
+        public double MetricValue { get; set; }
+        public DateTime TimeReceived { get; set; }
+    }
     public class JParameter
     {
         public string ParamName;
@@ -26,8 +32,10 @@ namespace VMSpc.JsonFileManagers
         public byte DecimalCount;
         public double Offset;
         public double Multiplier;
-        public double LastValue => (PresenterList[Pid].datum.seen) ? PresenterList[Pid].datum.value * Multiplier + Offset : DUB_NODATA;
-        public double LastMetricValue => (PresenterList[Pid].datum.seen) ? PresenterList[Pid].datum.valueMetric : DUB_NODATA;
+        public PidValue J1708Value;
+        public PidValue J1939Value;
+        public double LastValue; //(PresenterList[Pid].datum.seen) ? PresenterList[Pid].datum.value * Multiplier + Offset : DUB_NODATA;
+        public double LastMetricValue; //=> (PresenterList[Pid].datum.seen) ? PresenterList[Pid].datum.valueMetric : DUB_NODATA;
     }
     public class ParameterContents : IJsonContents
     {
@@ -61,23 +69,7 @@ namespace VMSpc.JsonFileManagers
 
         public void AddParam(JParameter parameter)
         {
-            try
-            {
-                PresenterList.Add(parameter.Pid, new Parsers.TSPNPresenterFloat(
-                    new Parsers.TSPNUint(parameter.Pid, 0, parameter.Multiplier, parameter.Offset, parameter.Multiplier, parameter.Offset),
-                    parameter.ParamName,
-                    parameter.Pid,
-                    parameter.Unit,
-                    parameter.MetricUnit,
-                    parameter.DecimalCount,
-                    false
-                    )); //TODO - we need to tie ALL parameters into the parser like this
-                Contents.Parameters.Add(parameter);
-            }
-            catch (Exception ex)
-            {
-                //throw new Exception("Could not add paramter");
-            }
+            //TODO
         }
 
         public void ProcessUpdates(JParameter parameter)
@@ -95,10 +87,9 @@ namespace VMSpc.JsonFileManagers
             }
         }
 
-        //TODO
         public void ChangeParameterPID(JParameter parameter)
         {
-            //PresenterList[parameter.Pid].datum.
+            //TODO
         }
 
         public double GetConvertedValue(JParameter param, double value)

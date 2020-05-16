@@ -4,20 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using VMSpc.Common;
 using static VMSpc.Constants;
 
 namespace VMSpc.Communication
 {
-    abstract class DataReader
+    abstract class DataReader : IEventPublisher
     {
-        public Action<string> DataProcessor;
         public Timer keepJibAwakeTimer;
         public ulong messagesReceived;
         public ulong lastMessageCount;
-        public DataReader(Action<string> DataProcessor)
+
+        public event EventHandler<VMSEventArgs> RaiseVMSEvent;
+
+        public DataReader()
         {
-            this.DataProcessor = DataProcessor;
             messagesReceived = 0;
+            EventBridge.Instance.AddEventPublisher(this);
+        }
+        ~DataReader()
+        {
+
         }
         public abstract void CloseDataReader();
         public virtual void InitDataReader()
@@ -25,10 +32,21 @@ namespace VMSpc.Communication
             KeepJibAwake();
             keepJibAwakeTimer = CREATE_TIMER(KeepJibAwake, 10000);
         }
+
+        public abstract void SendMessage(OutgoingMessage message);
         public abstract void SendMessage(string message);
+
         protected void KeepJibAwake()
         {
             SendMessage("V");
+        }
+
+        protected void OnDataReceived(string data)
+        {
+            RaiseVMSEvent?.Invoke(
+                this,
+                new VMSCommDataEventArgs(data, DateTime.Now)
+            );
         }
     }
 }

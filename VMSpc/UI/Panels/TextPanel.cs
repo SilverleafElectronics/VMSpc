@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using VMSpc.UI.DlgWindows;
 using VMSpc.JsonFileManagers;
 using VMSpc.Panels;
-using VMSpc.UI.DlgWindows;
 using VMSpc.UI.GaugeComponents;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
 using VMSpc.Extensions.UI;

@@ -16,7 +16,7 @@ namespace VMSpc.JsonFileManagers
 
     public class FileOpener
     {
-        private string filepath;
+        protected string filepath;
         public string absoluteFilepath => BaseDirectory + filepath;
         private static string GetBaseDirectory()
         {
@@ -39,7 +39,7 @@ namespace VMSpc.JsonFileManagers
             this.filepath = filepath;
         }
 
-        public static string GetAbsoluteFilePath(string filePath, FilePathType filePathType)
+        public static string GetAbsoluteFilePath(string filePath, FilePathType filePathType = FilePathType.Relative)
         {
             switch (filePathType)
             {

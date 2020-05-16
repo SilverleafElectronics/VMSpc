@@ -341,4 +341,8 @@ C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\VMSpc.exe
 C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\VMSpc.pdb
 C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\CustomComponents\AddFileDlg.g.cs
 C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\CustomComponents\AddFileDlg.baml
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\Advanced\MessageTester.g.cs
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\Advanced\MessageTester.baml
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\Settings\TiresDlg.g.cs
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\Settings\TiresDlg.baml
 C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\VMSpc.csprojAssemblyReference.cache

@@ -11,9 +11,10 @@ namespace VMSpc.Communication
     class WifiSocketReader : DataReader
     {
         Socket wifiReader;
-        public WifiSocketReader(Action<string> DataProcessor)
-            : base(DataProcessor)
+        public WifiSocketReader()
+            : base()
         {
+            wifiReader = new Socket(SocketType.Stream, ProtocolType.Tcp);//TODO
         }
         public override void InitDataReader()
         {
@@ -26,6 +27,11 @@ namespace VMSpc.Communication
             wifiReader.Close();
         }
         public override void SendMessage(string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SendMessage(OutgoingMessage message)
         {
             throw new NotImplementedException();
         }

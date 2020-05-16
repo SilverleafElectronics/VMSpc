@@ -17,6 +17,7 @@ using static VMSpc.Constants;
 using VMSpc.Communication;
 using VMSpc.JsonFileManagers;
 using VMSpc.UI.CustomComponents;
+using VMSpc.Loggers;
 
 namespace VMSpc.UI.DlgWindows.Advanced
 {
@@ -26,6 +27,8 @@ namespace VMSpc.UI.DlgWindows.Advanced
     public partial class RawLogDlg : VMSDialog
     {
         private VMSComm commreader;
+        private static bool LogRecordingEnabled = false;
+        private SettingsContents Settings = ConfigurationManager.ConfigManager.Settings.Contents;
         public RawLogDlg(VMSComm commreader)
         {
             this.commreader = commreader;
@@ -78,7 +81,7 @@ namespace VMSpc.UI.DlgWindows.Advanced
                 }
                 if (okayToUseFile)
                 {
-                    commreader.LogRecordingFile = newFilePath;
+                    Settings.rawLogFilePath = newFilePath;
                     SetCurrentLogFileText();
                 }
             }
@@ -86,22 +89,28 @@ namespace VMSpc.UI.DlgWindows.Advanced
 
         private void ToggleLog_Click(object sender, RoutedEventArgs e)
         {
-            if (commreader.LogRecordingEnabled)
+            if (LogRecordingEnabled)
             {
-                commreader.LogRecordingEnabled = false;
+                LogRecordingEnabled = false;
+                RawLogger.Instance.Stop();
             }
-            else if (!commreader.LogRecordingEnabled)
+            else if (!LogRecordingEnabled)
             {
-                commreader.LogRecordingEnabled = true;
-                MessageBox.Show("Logging Initiated");
+                LogRecordingEnabled = true;
                 //empty the file contents
                 try
                 {
-                    FileOpener.WriteAllText(commreader.LogRecordingFile, string.Empty);
+                    MessageBoxResult messageResult = MessageBox.Show("Do you want to erase existing file contents before logging?", "Start Raw Log", MessageBoxButton.YesNo);
+                    if (messageResult == MessageBoxResult.Yes)
+                    {
+                        FileOpener.WriteAllText(Settings.rawLogFilePath, string.Empty);
+                    }
+                    RawLogger.Instance.Start();
+                    MessageBox.Show("Logging Initiated");
                 }
                 catch (IOException)
                 {
-                    commreader.LogRecordingEnabled = false;
+                    LogRecordingEnabled = false;
                     MessageBox.Show($"The file {commreader.LogRecordingFile} cannot be written to. It is either being used by a different process, or it does not exist.\n" +
                         $"Verify that it exists by clicking the Change Log File button and viewing the available Raw Log files.\n" +
                         $"To verify that it is not being used by VMSpc, go to Advanced->Communications and check that it is not in use by the Log Player");
@@ -112,12 +121,12 @@ namespace VMSpc.UI.DlgWindows.Advanced
 
         private void SetLogButtonText()
         {
-            ToggleLog.Content = (commreader.LogRecordingEnabled) ? "Stop Logging" : "Start Logging";
+            ToggleLog.Content = (LogRecordingEnabled) ? "Stop Logging" : "Start Logging";
         }
 
         private void SetCurrentLogFileText()
         {
-            CurrentLogFile.Text = FileOpener.GetFileName(commreader.LogRecordingFile);
+            CurrentLogFile.Text = Settings.rawLogFilePath;
         }
     }
 }

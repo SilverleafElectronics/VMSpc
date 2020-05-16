@@ -9,11 +9,11 @@ using VMSpc.UI.DlgWindows;
 using VMSpc.Extensions.UI;
 using VMSpc.JsonFileManagers;
 using VMSpc.Panels;
-using VMSpc.UI.DlgWindows;
 using VMSpc.UI.GaugeComponents;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
 using VMSpc.Parsers;
 using System.Windows.Media;
+using VMSpc.AdvancedParsers;
 
 namespace VMSpc.UI.Panels
 {
@@ -59,7 +59,7 @@ namespace VMSpc.UI.Panels
                 Foreground = new SolidColorBrush(panelSettings.valueTextColor),
             };
             GearDisplay.Children.Add(GearSelectedBlock);
-            GearSelectedBlock.ScaleText(12, 2);
+            GearSelectedBlock.ScaleText(2);
         }
 
         private void AddGearAttained()
@@ -73,15 +73,15 @@ namespace VMSpc.UI.Panels
                 Foreground = new SolidColorBrush(panelSettings.valueTextColor),
             };
             GearDisplay.Children.Add(GearAttainedBlock);
-            GearAttainedBlock.ScaleText(12, 2);
+            GearAttainedBlock.ScaleText(2);
         }
 
         public override void UpdatePanel()
         {
-            if ((GearSelectedBlock != null) && ChassisParameter.ChassisParam.rangeSelected != null)
-                GearSelectedBlock.Text = ChassisParameter.ChassisParam.rangeSelected;
-            if (GearAttainedBlock != null && ChassisParameter.ChassisParam.rangeAttained != null)
-                GearAttainedBlock.Text = ChassisParameter.ChassisParam.rangeAttained;
+            if (GearSelectedBlock != null)
+                GearSelectedBlock.Text = ChassisParameters.Instance.RangeSelected;
+            if (GearAttainedBlock != null)
+                GearAttainedBlock.Text = ChassisParameters.Instance.RangeAttained;
         }
 
         protected override VMSDialog GenerateDlg()

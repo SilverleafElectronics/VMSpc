@@ -107,14 +107,14 @@ namespace VMSpc.UI.Panels
 
         protected double GetGaugeHeight()
         {
-            if (false)//(panelSettings.showName)
-            {
-                return canvas.Height - (canvas.Height / 5);
-            }
-            else
-            {
+            //if (false)//(panelSettings.showName)
+            //{
+            //    return canvas.Height - (canvas.Height / 5);
+            //}
+            //else
+            //{
                 return canvas.Height;
-            }
+            //}
         }
 
         protected double GetValueTextTop()

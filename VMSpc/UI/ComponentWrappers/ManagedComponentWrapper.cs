@@ -27,12 +27,12 @@ namespace VMSpc.UI.ComponentWrappers
             showUnit;
         public Orientation 
             orientation;
-        private uint
+        private ulong
             eventID;
         private byte
             publisherInstance;
         private const int BorderDimension = 2;
-        public ManagedComponentWrapper(uint eventID, byte publisherInstance)
+        public ManagedComponentWrapper(ulong eventID, byte publisherInstance)
             : base()
         {
             this.eventID = eventID;

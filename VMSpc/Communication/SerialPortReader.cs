@@ -9,8 +9,8 @@ namespace VMSpc.Communication
 {
     class SerialPortReader : DataReader
     {
-        public SerialPortReader(Action<string> DataProcessor)
-            : base(DataProcessor)
+        public SerialPortReader()
+            : base()
         {
         }
         public override void InitDataReader()
@@ -24,6 +24,11 @@ namespace VMSpc.Communication
             throw new NotImplementedException();
         }
         public override void SendMessage(string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SendMessage(OutgoingMessage message)
         {
             throw new NotImplementedException();
         }

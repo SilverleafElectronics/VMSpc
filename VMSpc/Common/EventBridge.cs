@@ -8,21 +8,33 @@ namespace VMSpc.Common
 {
     public sealed class EventBridge
     {
-        private Dictionary<uint, List<IEventConsumer>> eventRegistry;
+        private Dictionary<ulong, List<IEventConsumer>> eventRegistry;
+
+        public static EventBridge Instance { get; private set; }
+
         static EventBridge() { }
-        private EventBridge()
+        private EventBridge() 
         {
-            eventRegistry = new Dictionary<uint, List<IEventConsumer>>();
+            eventRegistry = new Dictionary<ulong, List<IEventConsumer>>();
+        }
+        public static void Initialize()
+        {
+            Instance = new EventBridge();
         }
 
         /// <summary>
-        /// Empties all event registries. This should be called when items are removed from the GUI, so that they can be garbage collected
+        /// Empties all event registries. This should only be called if the application is completely reset.
         /// </summary>
         public void Reset()
         {
             eventRegistry.Clear();
         }
 
+        /// <summary>
+        /// Empties all event registries with IGUIEventConsumers attached. This should be called when the GUI is reset
+        /// to allow garbage collection of unused GUI elements. Otherwise, a reference to them will be held by the
+        /// eventRegistry, allowing them to persist indefinitely.
+        /// </summary>
         public void RemoveGUIRegistryItems()
         {
             foreach (var registry in eventRegistry)
@@ -33,9 +45,7 @@ namespace VMSpc.Common
 
         ~EventBridge() { }
 
-        public static EventBridge EventProcessor { get; } = new EventBridge();
-
-        public void SubscribeToEvent(IEventConsumer consumer, uint eventID)
+        public void SubscribeToEvent(IEventConsumer consumer, ulong eventID)
         {
             if (!eventRegistry.ContainsKey(eventID))
             {
@@ -47,12 +57,12 @@ namespace VMSpc.Common
         /// <summary>
         /// Subscribe to an instanced event
         /// </summary>
-        public void SubscribeToEvent(IEventConsumer consumer, uint eventID, byte publisherInstance)
+        public void SubscribeToEvent(IEventConsumer consumer, ulong eventID, byte publisherInstance)
         {
             SubscribeToEvent(consumer, GetInstancedEvent(eventID, publisherInstance));
         }
 
-        public void UnsubscribeFromEvent(IEventConsumer consumer, uint eventID)
+        public void UnsubscribeFromEvent(IEventConsumer consumer, ulong eventID)
         {
             //If the event isn't in the dictionary. This shouldn't ever happen
             if (eventRegistry.ContainsKey(eventID))
@@ -64,7 +74,7 @@ namespace VMSpc.Common
         /// <summary>
         /// Unsubscribes to an instanced event
         /// </summary>
-        public void UnsubscribeFromEvent(IEventConsumer consumer, uint eventID, byte publisherInstance)
+        public void UnsubscribeFromEvent(IEventConsumer consumer, ulong eventID, byte publisherInstance)
         {
             UnsubscribeFromEvent(consumer, GetInstancedEvent(eventID, publisherInstance));
         }
@@ -82,11 +92,23 @@ namespace VMSpc.Common
             PublishEvent(e);
         }
 
+        /// <summary>
+        /// Publishes this event to all consumers subscribed to the exact EventID
+        /// </summary>
+        /// <param name="e"></param>
         public void PublishEvent(VMSEventArgs e)
         {
             if (eventRegistry.ContainsKey(e.eventID))
             {
                 foreach (var consumer in eventRegistry[e.eventID])
+                {
+                    consumer.ConsumeEvent(e);
+                }
+            }
+            var generic = e.GetGenericID();
+            if (e.GetGenericID() != e.eventID && eventRegistry.ContainsKey(e.GetGenericID()))
+            {
+                foreach (var consumer in eventRegistry[e.GetGenericID()])
                 {
                     consumer.ConsumeEvent(e);
                 }
@@ -98,6 +120,6 @@ namespace VMSpc.Common
             publisher.RaiseVMSEvent += HandleVMSEvent;
         }
 
-        public static uint GetInstancedEvent(uint eventID, byte instance) => (eventID | (uint)(instance << 16));
+        public static ulong GetInstancedEvent(ulong eventID, byte instance) => (eventID | ((ulong)instance << 16));
     }
 }

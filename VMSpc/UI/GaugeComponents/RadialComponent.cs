@@ -16,16 +16,18 @@ namespace VMSpc.UI.GaugeComponents
         protected List<ColoredLine> GaugeLines;
         protected double minValue, maxValue;
         private int PreviousLineNumber;
+        private int numLines;
         public RadialComponent(ushort pid, double minValue, double maxValue) : base(pid)
         {
             GaugeLines = new List<ColoredLine>();
             this.minValue = minValue;
             this.maxValue = maxValue;
         }
-        public override void Draw()
+        public override void DrawComponentLayout()
         {
             Children.Clear();
             GaugeLines.Clear();
+            numLines = 0;
             var centerPoint = GetCenterPoint(this);
             double factorDelimiter = (Width > Height) ? centerPoint.Y : centerPoint.X;
             var lineStartFactor = factorDelimiter - ((factorDelimiter / 2));
@@ -53,6 +55,7 @@ namespace VMSpc.UI.GaugeComponents
                 GaugeLines.Add(line);
                 Children.Add(line);
                 line.UseEmptyColor();
+                numLines++;
             }
             PreviousLineNumber = 0;
         }
@@ -89,7 +92,12 @@ namespace VMSpc.UI.GaugeComponents
         {
             double range = (maxValue - minValue);
             double positionalValue = (value - minValue) / range;
-            return (int)Math.Floor((positionalValue * 270));
+            int lineIndex =  (int)Math.Floor((positionalValue * 270));
+            if (lineIndex < 0)
+                lineIndex = 0;
+            if (lineIndex >= numLines)
+                lineIndex = numLines - 1;
+            return lineIndex;
         }
 
         static Point GetCenterPoint(Canvas element)

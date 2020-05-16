@@ -9,6 +9,7 @@ using static VMSpc.Constants;
 using VMSpc.UI.DlgWindows;
 using VMSpc.UI.DlgWindows.Advanced;
 using VMSpc.UI.CustomComponents;
+using VMSpc.UI.DlgWindows.Settings;
 //using VMSpc.UI.DlgWindows.Gauges;
 //using VMSpc.UI.DlgWindows.Help;
 //using VMSpc.UI.DlgWindows.Settings;
@@ -45,24 +46,27 @@ namespace VMSpc
             Application.Current.MainWindow = this;
             InitializeComm();
             var contents = ConfigManager.Settings.Contents;
+            
+            if (contents.WindowLeft > SystemParameters.VirtualScreenWidth)
+            {
+                contents.WindowLeft = SystemParameters.VirtualScreenWidth / 4;
+            }
+            if (contents.WindowWidth > SystemParameters.VirtualScreenWidth || contents.WindowWidth < 300)
+            { 
+                contents.WindowWidth = SystemParameters.VirtualScreenWidth / 2;
+            }
+            if (contents.WindowTop > SystemParameters.VirtualScreenHeight)
+            {
+                contents.WindowTop = SystemParameters.VirtualScreenHeight / 4;
+            }
+            if (contents.WindowHeight > SystemParameters.VirtualScreenHeight || contents.WindowHeight < 300)
+            {
+                contents.WindowHeight = SystemParameters.VirtualScreenHeight / 2;
+            }
             Left = contents.WindowLeft;
             Top = contents.WindowTop;
-            if (contents.WindowWidth > SystemParameters.VirtualScreenWidth)
-            {
-                Width = SystemParameters.VirtualScreenWidth;
-            }
-            else
-            {
-                Width = contents.WindowWidth;
-            }
-            if (contents.WindowHeight > SystemParameters.VirtualScreenHeight)
-            {
-                Height = SystemParameters.VirtualScreenHeight;
-            }
-            else
-            {
-                Height = contents.WindowHeight;
-            }
+            Width = contents.WindowWidth;
+            Height = contents.WindowHeight;
         }
 
         ~MainWindow()
@@ -432,6 +436,20 @@ namespace VMSpc
             }
         }
 
+        private void MessageTester_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void MessageTester_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var messageTesterDlg = new MessageTester();
+            if (ShowVMSDlg(messageTesterDlg))
+            {
+                InitializeComm();
+            }
+        }
+
         private void DeleteGaugeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -503,6 +521,20 @@ namespace VMSpc
             }
         }
 
+        private void Tires_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void Tires_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dlg = new TiresDlg();
+            if (ShowVMSDlg(dlg))
+            {
+                GeneratePanels();
+            }
+        }
+
         private void ViewDiagnostics_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -533,12 +565,12 @@ namespace VMSpc
             if ((bool)dlg.ShowDialog())
             {
                 ConfigManager.Settings.Contents.screenFilePath = dlg.ResultFilePath;
+                ConfigManager.Screen.SaveConfiguration();
+                ConfigManager.Screen.Reload(dlg.ResultFilePath);
                 ContentGrid.InitPanels(this);
                 //Common.Helpers.ApplicationControl.Restart();
             }
         }
-
-
     }
 
     #endregion //Event Handlers
@@ -628,6 +660,12 @@ namespace VMSpc
             typeof(MainCommands)
         );
 
+        public static readonly RoutedUICommand MessageTester = new RoutedUICommand(
+            "Message Tester",
+            "MessageTester",
+            typeof(MainCommands)
+        );
+
         public static readonly RoutedUICommand DeleteGauge = new RoutedUICommand(
             "Delete Selected Gauge",
             "DeleteGauge",
@@ -651,6 +689,12 @@ namespace VMSpc
         public static readonly RoutedUICommand ColorPalette = new RoutedUICommand(
             "Color Palette",
             "ColorPalette",
+            typeof(MainCommands)
+        );
+
+        public static readonly RoutedUICommand Tires = new RoutedUICommand(
+            "Tires",
+            "Tires",
             typeof(MainCommands)
         );
 

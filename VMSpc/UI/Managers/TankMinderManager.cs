@@ -3,6 +3,7 @@ using static VMSpc.JsonFileManagers.ConfigurationManager;
 using VMSpc.Common;
 using VMSpc.Parsers;
 using System.Timers;
+using VMSpc.AdvancedParsers;
 
 namespace VMSpc.UI.Managers
 {
@@ -29,16 +30,16 @@ namespace VMSpc.UI.Managers
         {
             this.tankSettings = tankSettings;
             tankMinderReader = new TankMinderReader(tankSettings.fileName);
-            startGallons = ConfigManager.Meters.Contents.Fuelmeter;
-            startMiles = ConfigManager.Meters.Contents.Odometer;
-            currentFuelmeter = ConfigManager.Meters.Contents.Fuelmeter;
-            currentOdometer = ConfigManager.Meters.Contents.Odometer;
+            startGallons = tankMinderReader.Contents.StartGallons;
+            startMiles = tankMinderReader.Contents.StartMiles;
+            currentFuelmeter = startGallons;
+            currentOdometer = startMiles;
         }
 
         protected override void UpdateValues()
         {
-            currentFuelmeter = ChassisParameter.ChassisParam.fuelmeter;
-            currentOdometer = ChassisParameter.ChassisParam.odometer;
+            currentFuelmeter = ChassisParameters.Instance.CurrentFuel;
+            currentOdometer = ChassisParameters.Instance.CurrentMiles;
             UpdateFuel();
             UpdateRecentMPG();
             UpdateMilesToEmpty();
@@ -51,10 +52,7 @@ namespace VMSpc.UI.Managers
             {
                 currentFuel = (currentFuel * 3.78541);
             }
-            if (currentFuel != lastFuel)
-            {
-                PublishEvent(EventIDs.FUEL_READING_EVENT, currentFuel);
-            }
+            PublishEvent(EventIDs.FUEL_READING_EVENT, currentFuel);
             lastFuel = currentFuel;
         }
 
@@ -68,20 +66,14 @@ namespace VMSpc.UI.Managers
             {
                 currentDistanceByFuel = (currentOdometer - startMiles) / (currentFuelmeter - startGallons);
             }
-            if (currentDistanceByFuel != lastDistanceByFuel)
-            {
-                PublishEvent(EventIDs.CURRENT_MPG_EVENT, currentDistanceByFuel);
-            }
+            PublishEvent(EventIDs.CURRENT_MPG_EVENT, currentDistanceByFuel);
             lastDistanceByFuel = currentDistanceByFuel;
         }
 
         private void UpdateMilesToEmpty()
         {
             currentDistanceToEmpty = currentFuel * currentDistanceByFuel;
-            if (currentDistanceToEmpty != lastDistanceToEmpty)
-            {
-                PublishEvent(EventIDs.DISTANCE_REMAINING_EVENT, currentDistanceToEmpty);
-            }
+            PublishEvent(EventIDs.DISTANCE_REMAINING_EVENT, currentDistanceToEmpty);
             lastDistanceToEmpty = currentDistanceToEmpty;
         }
     }

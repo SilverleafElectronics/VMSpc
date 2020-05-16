@@ -9,6 +9,7 @@ using System.Windows;
 using VMSpc.Common;
 using VMSpc.UI.CustomComponents;
 using VMSpc.JsonFileManagers;
+using System.Windows.Threading;
 
 namespace VMSpc.UI.GaugeComponents
 {
@@ -71,17 +72,26 @@ namespace VMSpc.UI.GaugeComponents
         /// </summary>
         public void SubscribeForPID(ushort pid)
         {
-            uint eventID = EventIDs.PID_BASE | (uint)pid;
+            ulong eventID = EventIDs.PID_BASE | (ulong)pid;
             SubscribeToEvent(eventID);
         }
 
         public void UnsubscribeToPID(ushort pid)
         {
-            uint eventID = EventIDs.PID_BASE | (uint)pid;
+            ulong eventID = EventIDs.PID_BASE | (ulong)pid;
             UnsubscribeFromEvent(eventID);
         }
 
-        public override abstract void Draw();
+        public override sealed void Draw()
+        {
+            DrawComponentLayout();
+            if (!double.IsNaN(parameter.LastValue))
+            {
+                HandleNewData(parameter.LastValue);
+            }
+        }
+
+        public abstract void DrawComponentLayout();
         public override abstract void Update();
 
         public override void Enable()
@@ -96,7 +106,11 @@ namespace VMSpc.UI.GaugeComponents
 
         protected override void HandleNewData(VMSEventArgs e)
         {
-            HandleNewData(((VMSDataEventArgs)e).value);
+            //TODO - get this to work properly if there are any issues with performance
+            Action action = () => HandleNewData((e as VMSPidValueEventArgs).value);
+            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, action);
+            //var value = (e as VMSPidValueEventArgs)?.value;
+            //HandleNewData((double)value);
         }
 
         protected void HandleNewData(double newValue)

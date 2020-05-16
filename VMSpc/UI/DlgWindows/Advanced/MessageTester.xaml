@@ -1,0 +1,19 @@
+﻿<parent:VMSDialog 
+        x:Class="VMSpc.UI.DlgWindows.Advanced.MessageTester"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VMSpc.UI.DlgWindows.Advanced"
+        xmlns:parent ="clr-namespace:VMSpc.UI.DlgWindows"
+        mc:Ignorable="d"
+        Title="Message Tester" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBox Name="CurrentMessage" Grid.Row="0" Height="25" Width="300" VerticalContentAlignment="Center" Cursor="IBeam" />
+        <Button Name="SendButton" Grid.Row="1" Click="SendButton_Click" Width="125" Height="25">Send</Button>
+    </Grid>
+</parent:VMSDialog>

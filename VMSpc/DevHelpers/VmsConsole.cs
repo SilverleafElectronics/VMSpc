@@ -25,6 +25,10 @@ namespace VMSpc.DevHelpers
         {
             console.AddLine(logItem);
         }
+        public static void PrintLine(object obj)
+        {
+            PrintLine(obj.ToString());
+        }
         public static void PrintSide(double side)
         {
             switch (side)

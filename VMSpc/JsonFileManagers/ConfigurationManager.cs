@@ -46,7 +46,7 @@ namespace VMSpc.JsonFileManagers
                 AlarmsReader = new AlarmsReader();
                 DiagnosticLogReader = new DiagnosticLogReader();
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
 
             }

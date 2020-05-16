@@ -9,7 +9,6 @@ using System.Windows.Media;
 using VMSpc.UI.DlgWindows;
 using VMSpc.JsonFileManagers;
 using VMSpc.Panels;
-using VMSpc.UI.DlgWindows;
 using VMSpc.UI.GaugeComponents;
 using VMSpc.UI.TireMaps;
 using static VMSpc.JsonFileManagers.ConfigurationManager;

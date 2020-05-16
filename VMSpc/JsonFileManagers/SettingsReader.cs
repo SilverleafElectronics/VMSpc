@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using VMSpc.UI.TireMaps;
 using VMSpc.Enums.Parsing;
+using VMSpc.Enums.UI;
+using System.Windows;
 
 namespace VMSpc.JsonFileManagers
 {
@@ -25,7 +27,6 @@ namespace VMSpc.JsonFileManagers
             lockAllGauges;
         public ushort
             rollingBufferSize,
-            odometerPid,
             ipPort,
             comPort;
         public string
@@ -45,6 +46,8 @@ namespace VMSpc.JsonFileManagers
             globalParseBehavior;
         public TireMapType
             tireMapType;
+        public OdometerType
+            odometerType;
         public int
             selectedColorPaletteId;
         public double
@@ -68,15 +71,20 @@ namespace VMSpc.JsonFileManagers
                 lockAllGauges = false,
                 autoRestartFlag = true,
                 showSplashScreen = false,
-                useClipping = true,
+                useClipping = false,
                 usbDelay = false,
                 requestFuelmenter = true,
                 requestOdometer = true,
                 autoDataLogFlag = false,
                 logWhenEngineOff = false,
 
+                WindowWidth = SystemParameters.VirtualScreenWidth / 2,
+                WindowHeight = SystemParameters.VirtualScreenHeight / 2,
+                WindowLeft = SystemParameters.VirtualScreenWidth / 4,
+                WindowTop = SystemParameters.VirtualScreenHeight / 4,
+
                 rollingBufferSize = 100,
-                odometerPid = 245,
+                odometerType = OdometerType.Standard,
                 ipPort = 51966,
                 comPort = 1,
 
@@ -90,7 +98,7 @@ namespace VMSpc.JsonFileManagers
                 engineModel = EngineModel.NONE,
                 tpmsType = TpmsType.NONE,
                 globalParseBehavior = ParseBehavior.PARSE_ALL,
-                jibType = JibType.LOGPLAYER,
+                jibType = JibType.USB,
                 tireMapType = TireMapType.SIX_WHEEL,
             };
         }

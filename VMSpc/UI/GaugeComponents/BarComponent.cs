@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using VMSpc.DevHelpers;
 using VMSpc.JsonFileManagers;
 using VMSpc.UI.CustomComponents;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
@@ -47,7 +48,7 @@ namespace VMSpc.UI.GaugeComponents
                 new ColorDelimiter(parameter.GaugeMax, RedBrush)
             };
         }
-        public override void Draw()
+        public override void DrawComponentLayout()
         {
             Children.Clear();
             GaugeLines.Clear();
@@ -60,17 +61,28 @@ namespace VMSpc.UI.GaugeComponents
             int cursor = previousLineNumber;
             int target = ValueToLineIndex(currentValue);
             bool increment = (target > cursor);
+            if (cursor > numLines)
+                cursor = GaugeLines.Count;
+            int startCursor = cursor;
             while (cursor != target)
             {
-                if (increment)
+                try
                 {
-                    GaugeLines[cursor].UseValueColor();
-                    cursor++;
+                    if (increment)
+                    {
+                        GaugeLines[cursor].UseValueColor();
+                        cursor++;
+                    }
+                    else
+                    {
+                        GaugeLines[cursor].UseEmptyColor();
+                        cursor--;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    GaugeLines[cursor].UseEmptyColor();
-                    cursor--;
+                    VMSConsole.PrintLine(ex);
+                    VMSConsole.PrintLine(startCursor);
                 }
             }
             previousLineNumber = cursor;
@@ -142,8 +154,21 @@ namespace VMSpc.UI.GaugeComponents
 
         private int ValueToLineIndex(double value)
         {
+            if (range == 0)
+            {
+                return 0;
+            }
+            if (value > maxGaugeValue)
+            {
+                return numLines - 1;
+            }
             double positionalValue = (value - minGaugeValue) / range;
-            return (int)Math.Floor((positionalValue * numLines));
+            int lineIndex = (int)Math.Floor((positionalValue * numLines));
+            if (lineIndex < 0)
+                lineIndex = 0;
+            if (lineIndex >= numLines)
+                lineIndex = numLines - 1;
+            return lineIndex;
         }
 
         private double LineIndexToValue(int lineIndex)

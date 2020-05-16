@@ -61,7 +61,7 @@ namespace VMSpc.UI.CustomComponents
                 {
                     CurrentValue = value;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }

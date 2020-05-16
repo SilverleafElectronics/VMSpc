@@ -7,6 +7,9 @@ using System.Windows.Controls;
 using VMSpc.JsonFileManagers;
 using static VMSpc.Constants;
 using VMSpc.Extensions.UI;
+using VMSpc.Common;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace VMSpc.UI.GaugeComponents
 {
@@ -27,11 +30,11 @@ namespace VMSpc.UI.GaugeComponents
             STALE_DATA = double.NaN,
             VOID_DATA = double.MaxValue;
         public TextBlock valueText;
-        protected uint
+        protected ulong
             eventID;
         protected byte
             publisherInstance;
-        public ManagedComponent(uint eventID, byte publisherInstance)
+        public ManagedComponent(ulong eventID, byte publisherInstance)
             :base()
         {
             cachedValue = VOID_DATA;
@@ -75,14 +78,15 @@ namespace VMSpc.UI.GaugeComponents
             }
             else
             {
-                valueText.Text = currentValue.ToString();
+                valueText.Text = string.Format("{0:0.##}", currentValue);
             }
             lastLength = valueText.Text.Length;
         }
 
         protected override void HandleNewData(VMSEventArgs e)
         {
-            HandleNewData(((VMSDataEventArgs)e).value);
+            var value = (e as InstancedVMSDataEventArgs)?.value;
+            HandleNewData((double)value);
         }
 
         protected void HandleNewData(double newValue)

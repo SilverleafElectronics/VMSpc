@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VMSpc.Parsers;
+using VMSpc.AdvancedParsers;
 using VMSpc.Common;
 
 namespace VMSpc.Loggers
@@ -11,26 +11,26 @@ namespace VMSpc.Loggers
     public sealed class DiagnosticLogger : IEventConsumer
     {
 
-        public List<DiagnosticRecord> DiagnosticRecords;
+        public List<DiagnosticMessage> DiagnosticRecords;
 
         static DiagnosticLogger() { }
 
         private DiagnosticLogger()
         {
-            EventBridge.EventProcessor.SubscribeToEvent(this, EventIDs.DIAGNOSTIC_BASE);
+            EventBridge.Instance.SubscribeToEvent(this, EventIDs.DIAGNOSTIC_BASE);
         }
         public static DiagnosticLogger Recorder { get; } = new DiagnosticLogger();
 
         public void ConsumeEvent(VMSEventArgs e)
         {
-            var record = (e as DiagnosticEventArgs)?.record;
+            var record = (e as DiagnosticEventArgs)?.message;
             if (record != null)
             {
                 AddLogEntry(record);
             }
         }
 
-        private void AddLogEntry(DiagnosticRecord record)
+        private void AddLogEntry(DiagnosticMessage record)
         {
 
         }
@@ -44,15 +44,11 @@ namespace VMSpc.Loggers
         string Component { get; set; }
         string Mode { get; set; }
         string Date { get; set; }
-        public DiagnosticLogRecord(J1708Record record)
+        public DiagnosticLogRecord(J1708DiagnosticMessage record)
         {
-            Source = DiagnosticGuiHelper.CodeTypeAsString(record.mid);
-            Type = ((record.ecode & 0x10) == 0x10) ? "SID" : "PID";
-            MID = string.Format(" {0, 5}", record.spn);
-
         }
 
-        public DiagnosticLogRecord(J1939Record record)
+        public DiagnosticLogRecord(J1939DiagnosticMessage record)
         {
 
         }

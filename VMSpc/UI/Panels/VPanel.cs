@@ -21,7 +21,6 @@ using static VMSpc.Constants;
 using VMSpc.JsonFileManagers;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
 using System.Globalization;
-using System.Windows.Controls;
 using VMSpc.Enums.UI;
 
 /*
@@ -802,10 +801,10 @@ namespace VMSpc.Panels
             panelSettings.panelCoordinates.bottomRightY = (int)Canvas.GetBottom(border);
             panelSettings.panelCoordinates.topLeftX = (int)Canvas.GetLeft(border);
             panelSettings.panelCoordinates.topLeftY = (int)Canvas.GetTop(border);
-            VMSConsole.PrintLine("Top: " + Canvas.GetTop(border));
-            VMSConsole.PrintLine("Bottom: " + Canvas.GetBottom(border));
-            VMSConsole.PrintLine("Left: " + Canvas.GetLeft(border));
-            VMSConsole.PrintLine("Right: " + Canvas.GetRight(border));
+            //VMSConsole.PrintLine("Top: " + Canvas.GetTop(border));
+            //VMSConsole.PrintLine("Bottom: " + Canvas.GetBottom(border));
+            //VMSConsole.PrintLine("Left: " + Canvas.GetLeft(border));
+            //VMSConsole.PrintLine("Right: " + Canvas.GetRight(border));
         }
 
         private void OnUpdateTimedEvent()

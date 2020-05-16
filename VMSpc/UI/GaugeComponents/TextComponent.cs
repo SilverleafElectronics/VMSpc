@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VMSpc.Common;
 
 namespace VMSpc.UI.GaugeComponents
 {

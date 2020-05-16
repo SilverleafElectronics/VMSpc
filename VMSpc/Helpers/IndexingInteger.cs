@@ -29,5 +29,9 @@ namespace VMSpc.Helpers
             return Value == (int)obj;
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

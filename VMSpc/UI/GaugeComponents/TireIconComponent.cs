@@ -81,7 +81,7 @@ namespace VMSpc.UI.GaugeComponents
             };
             border.Child = tirePressureIndicator;
             Children.Add(border);
-            tirePressureIndicator.ScaleText(border.Width, border.Height, 12, 3);
+            tirePressureIndicator.ScaleText(border.Width, border.Height, 3);
         }
 
         public override void Update()

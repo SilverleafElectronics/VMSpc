@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using VMSpc.JsonFileManagers;
 using VMSpc.UI.CustomComponents;
-using static VMSpc.Parsers.ChassisParameter;
+using VMSpc.AdvancedParsers;
 
 namespace VMSpc.UI.DlgWindows
 {
@@ -25,9 +25,9 @@ namespace VMSpc.UI.DlgWindows
         protected new OdometerSettings panelSettings;
         protected OdometerReader OdometerReader;
         protected OdometerDataFileReader OdometerDataFileReader;
-        protected double CurrentDistance => ChassisParam.odometer - OdometerReader.Contents.StartMiles;
-        protected double CurrentHours => ChassisParam.hourmeter - OdometerReader.Contents.StartHours;
-        protected double CurrentFuel => ChassisParam.fuelmeter - OdometerReader.Contents.StartGallons;
+        protected double CurrentDistance => ChassisParameters.Instance.CurrentMiles - OdometerReader.Contents.StartMiles;
+        protected double CurrentHours => ChassisParameters.Instance.CurrentEngineHours - OdometerReader.Contents.StartHours;
+        protected double CurrentFuel => ChassisParameters.Instance.CurrentFuel - OdometerReader.Contents.StartGallons;
         protected double CurrentSpeed => (CurrentHours != 0) ? (CurrentDistance / CurrentHours) : 0;
         protected double CurrentMPG => (CurrentFuel != 0) ? (CurrentDistance / CurrentFuel) : 0;
         public OdometerDlg(OdometerSettings panelSettings)

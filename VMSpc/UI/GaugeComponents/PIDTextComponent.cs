@@ -48,7 +48,7 @@ namespace VMSpc.UI.GaugeComponents
             this.gaugeSettings = gaugeSettings;
         }
 
-        public override void Draw()
+        public override void DrawComponentLayout()
         {
             panel.Width = this.Width;
             panel.Height = this.Height;
@@ -68,7 +68,7 @@ namespace VMSpc.UI.GaugeComponents
                     unitText = " " + (gaugeSettings.showInMetric ? parameter.MetricUnit : parameter.Unit);
                 }
                 var lastLength = textBlock.Text.Length;
-                textBlock.Text = string.Format(parameter.Format + unitText, currentValue);
+                textBlock.Text = GetPIDText(parameter, unitText, currentValue);
                 //Since the format of the gauge is defined, this should only occur when going from "No Data" to a valid value
                 if (textBlock.Text.Length > lastLength)
                 {
@@ -78,6 +78,42 @@ namespace VMSpc.UI.GaugeComponents
             else
             {
                 textBlock.Text = "No Data";
+            }
+        }
+
+        protected static string GetPIDText(JParameter parameter, string unitText, double value)
+        {
+            switch (parameter.Pid)
+            {
+                case 85:
+                    switch (value)
+                    {
+                        case 0:
+                            return "Off";
+                        case 1:
+                            return "On";
+                        case 2:
+                            return "Set";
+                        default:
+                            return "Error";
+                    }
+                case 47:
+                case 121:
+                    switch (value)
+                    {
+                        case 0:
+                            return "Off";
+                        case 1:
+                            return "Low";
+                        case 2:
+                            return "Medium";
+                        case 3:
+                            return "High";
+                        default:
+                            return "Error";
+                    }
+                default:
+                    return string.Format(parameter.Format + unitText, value);
             }
         }
     }

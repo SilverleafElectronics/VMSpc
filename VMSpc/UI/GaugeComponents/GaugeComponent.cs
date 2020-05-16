@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VMSpc.UI.CustomComponents;
 using VMSpc.Common;
+using VMSpc.DevHelpers;
 
 namespace VMSpc.UI.GaugeComponents
 {
@@ -18,28 +19,28 @@ namespace VMSpc.UI.GaugeComponents
             }
             catch (Exception ex)
             {
-
+                VMSConsole.PrintLine(ex.Message);
             }
         }
 
-        protected void SubscribeToEvent(uint eventID)
+        protected void SubscribeToEvent(ulong eventID)
         {
-            EventBridge.EventProcessor.SubscribeToEvent(this, eventID);
+            EventBridge.Instance.SubscribeToEvent(this, eventID);
         }
 
-        protected void SubscribeToEvent(uint eventID, byte publisherInstance)
+        protected void SubscribeToEvent(ulong eventID, byte publisherInstance)
         {
-            EventBridge.EventProcessor.SubscribeToEvent(this, eventID, publisherInstance);
+            EventBridge.Instance.SubscribeToEvent(this, eventID, publisherInstance);
         }
 
-        protected void UnsubscribeFromEvent(uint eventID)
+        protected void UnsubscribeFromEvent(ulong eventID)
         {
-            EventBridge.EventProcessor.UnsubscribeFromEvent(this, eventID);
+            EventBridge.Instance.UnsubscribeFromEvent(this, eventID);
         }
 
-        protected void UnsubscribeFromEvent(uint eventID, byte publisherInstance)
+        protected void UnsubscribeFromEvent(ulong eventID, byte publisherInstance)
         {
-            EventBridge.EventProcessor.UnsubscribeFromEvent(this, eventID, publisherInstance);
+            EventBridge.Instance.UnsubscribeFromEvent(this, eventID, publisherInstance);
         }
 
         protected abstract void HandleNewData(VMSEventArgs e);

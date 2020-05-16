@@ -19,7 +19,6 @@ using VMSpc.UI.DlgWindows;
 using VMSpc.Panels;
 using VMSpc.UI.CustomComponents;
 using static VMSpc.Constants;
-using static VMSpc.Parsers.PresenterWrapper;
 using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -202,6 +201,10 @@ namespace VMSpc
         /// <returns>False if the length is not divisible by 2. True otherwise</returns>
         public static bool BYTE_STRING_TO_BYTE_ARRAY(ref List<byte> byteArr, string byteString, int length)
         {
+            if (byteArr == null)
+            {
+                byteArr = new List<byte>();
+            }
             try
             {
                 if (length % 2 != 0)
@@ -210,7 +213,7 @@ namespace VMSpc
                     byteArr.Add(BinConvert(byteString[i], byteString[i + 1]));
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

@@ -75,24 +75,39 @@
     </ApplicationDefinition>
     <None Include="packages.config" />
     <None Include="README" />
+    <Compile Include="AdvancedParsers\ChassisParameters.cs" />
+    <Compile Include="AdvancedParsers\Tires\PProTireManager.cs" />
+    <Compile Include="AdvancedParsers\Tires\TireManager.cs" />
+    <Compile Include="AdvancedParsers\Tires\TSTTireManager.cs" />
+    <Compile Include="Common\DiagnosticStrings.cs" />
     <Compile Include="Common\EventBridge.cs" />
     <Compile Include="Common\EventIDs.cs" />
     <Compile Include="Common\Events.cs" />
     <Compile Include="Common\Helpers\ApplicationControl.cs" />
+    <Compile Include="Common\ISingleton.cs" />
+    <Compile Include="Common\PGN.cs" />
+    <Compile Include="Common\RVCUpdaters.cs" />
+    <Compile Include="Communication\OutgoingJ1708Message.cs" />
     <Compile Include="EngineDownloader.cs" />
-    <Compile Include="EventManagement\EventDefinitions.cs" />
-    <Compile Include="EventManagement\ManagerEventArgs.cs" />
     <Compile Include="Exceptions\CannotReadEngineFileException.cs" />
     <Compile Include="Common\Helpers\StringFormatBuilder.cs" />
-    <Compile Include="Communication\CanMessage.cs" />
+    <Compile Include="Extensions\Standard\ArrayExtensions.cs" />
+    <Compile Include="Extensions\Standard\ListExtensions.cs" />
+    <Compile Include="Extensions\UI\GridExtensions.cs" />
+    <Compile Include="AdvancedParsers\Acceleration.cs" />
+    <Compile Include="AdvancedParsers\DiagnosticsParser.cs" />
+    <Compile Include="AdvancedParsers\EngineDataParser.cs" />
+    <Compile Include="AdvancedParsers\MaxTrackers.cs" />
+    <Compile Include="AdvancedParsers\UIParser.cs" />
+    <Compile Include="Parsers\CanMessage.cs" />
     <Compile Include="Communication\DataReader.cs" />
     <Compile Include="Communication\LogFileReader.cs" />
-    <Compile Include="Communication\MessageExtractor.cs" />
+    <Compile Include="Parsers\CanMessageSegment.cs" />
+    <Compile Include="Parsers\MessageExtractor.cs" />
     <Compile Include="Communication\SerialPortReader.cs" />
     <Compile Include="Communication\CommPortReader.cs" />
     <Compile Include="Communication\WifiSocketReader.cs" />
     <Compile Include="EngineSpec.cs" />
-    <Compile Include="EventBridge.cs" />
     <Compile Include="Extensions\UI\EnumExtensions.cs" />
     <Compile Include="Extensions\UI\TextBlockExtensions.cs" />
     <Compile Include="Helpers\IndexingInteger.cs" />
@@ -102,6 +117,7 @@
     <Compile Include="JsonFileManagers\FileSaveDefaults\DefaultRawLog.cs" />
     <Compile Include="JsonFileManagers\OdometerDataFileReader.cs" />
     <Compile Include="JsonFileManagers\RawLogOpener.cs" />
+    <Compile Include="PIDValueStager.cs" />
     <Compile Include="UI\CustomComponents\AddFileDlg.xaml.cs">
       <DependentUpon>AddFileDlg.xaml</DependentUpon>
     </Compile>
@@ -112,7 +128,6 @@
     <Compile Include="JsonFileManagers\OdometerReader.cs" />
     <Compile Include="JsonFileManagers\ParamDataReader.cs" />
     <Compile Include="JsonFileManagers\TankMinderReader.cs" />
-    <Compile Include="Parsers\Diagnostics.cs" />
     <Compile Include="Parsers\IDataBus.cs" />
     <Compile Include="Parsers\SpecialParsers\TireParsers\ITireParser.cs" />
     <Compile Include="Parsers\SpecialParsers\TireParsers\PProTire.cs" />
@@ -141,6 +156,7 @@
       <DependentUpon>OdometerDataViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\CustomComponents\PanelGrid.cs" />
+    <Compile Include="UI\CustomComponents\TogglingEllipse.cs" />
     <Compile Include="UI\CustomComponents\ValueLine.cs" />
     <Compile Include="UI\CustomComponents\VMSBorder.cs" />
     <Compile Include="UI\CustomComponents\VMSListBoxItem.cs" />
@@ -149,6 +165,9 @@
       <DependentUpon>DebugConsole.xaml</DependentUpon>
     </Compile>
     <Compile Include="DevHelpers\VmsConsole.cs" />
+    <Compile Include="UI\DlgWindows\Advanced\MessageTester.xaml.cs">
+      <DependentUpon>MessageTester.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\DlgWindows\Advanced\ParameterItemEditor.xaml.cs">
       <DependentUpon>ParameterItemEditor.xaml</DependentUpon>
     </Compile>
@@ -207,6 +226,9 @@
     <Compile Include="UI\DlgWindows\Gauges\TransmissionGaugeDlg.xaml.cs">
       <DependentUpon>TransmissionGaugeDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\DlgWindows\Settings\TiresDlg.xaml.cs">
+      <DependentUpon>TiresDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\DlgWindows\VMSDialog.cs" />
     <Compile Include="UI\DlgWindows\Gauges\VPanelDlg.cs" />
     <Compile Include="Helpers\Pointer.cs" />
@@ -236,7 +258,6 @@
     <Compile Include="UI\Managers\TankMinderManager.cs" />
     <Compile Include="UI\Panels\MultiBar.cs" />
     <Compile Include="UI\Panels\OdometerPanel.cs" />
-    <Compile Include="Parsers\ChassisParameter.cs" />
     <Compile Include="Parsers\J1708\J1708Parser.cs" />
     <Compile Include="Parsers\J1939\J1939Parser.cs" />
     <Compile Include="UI\Panels\ScanGauge.cs" />
@@ -250,7 +271,6 @@
     <Compile Include="Parsers\J1708\PIDWrapper.cs" />
     <Compile Include="Parsers\J1939\SPNDefinitions.cs" />
     <Compile Include="Parsers\J1939\TSPNDatum.cs" />
-    <Compile Include="Parsers\PresenterWrapper.cs" />
     <Compile Include="Parsers\TSPNPresenter.cs" />
     <Compile Include="Resources\Configuration.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -302,6 +322,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\CustomComponents\OdometerDataViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DlgWindows\Advanced\MessageTester.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -390,6 +414,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\DlgWindows\Gauges\TransmissionGaugeDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DlgWindows\Settings\TiresDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

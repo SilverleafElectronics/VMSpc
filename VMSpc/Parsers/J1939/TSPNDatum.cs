@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 using System.Timers;
 using VMSpc.DevHelpers;
 using VMSpc.Common;
-using static VMSpc.Constants;
-using static VMSpc.Parsers.ChassisParameter;
-using static VMSpc.Parsers.PresenterWrapper;
-using static VMSpc.Parsers.PIDWrapper;
-using static VMSpc.Parsers.SPNDefinitions;
+using static VMSpc.Common.RVCUpdaters;
+using VMSpc.Enums.Parsing;
 
 /// <summary>
 /// Update Notes:
@@ -22,7 +19,7 @@ using static VMSpc.Parsers.SPNDefinitions;
 
 namespace VMSpc.Parsers
 {
-    public class TSPNDatum : IEventPublisher
+    public abstract class TSPNDatum
     {
         public uint rawValue;
         public double value, valueMetric;
@@ -30,141 +27,39 @@ namespace VMSpc.Parsers
         public bool seen;
         public bool prioritize1708;
         public ushort spn;
-
-        //public delegate void VmsDataEventHandler(object sender, VMSDataEventArgs a);
-        public event EventHandler<VMSEventArgs> RaiseVMSEvent;
+        public ParseStatus ParseStatus = ParseStatus.Parsed;
+        /// <summary>
+        /// If true, new values must be greater than previous values. Otherwise, they will be discarded
+        /// </summary>
+        public bool enforceIncreasedValues { get; set; }
+        protected uint lastRawValue;
 
         public TSPNDatum(ushort spn)
         {
-            rawValue = 0;
+            rawValue = lastRawValue = 0;
             value = valueMetric = 0.0;
             seen = false;
             prioritize1708 = false;
             this.spn = spn;
-            EventBridge.EventProcessor.AddEventPublisher(this);
         }
 
-        public virtual void Parse(byte address, byte[] data) { }
+        public abstract void Parse(J1939Message message);
 
-        protected virtual void ConvertAndStore()
+        protected virtual void ConvertAndStore(J1939Message message)
         {
-            seen = true;
-            ProcessDataReceivedEvent(spn);
-            OnRaiseCustomEvent(new VMSDataEventArgs((EventIDs.PID_BASE | (uint)spn), value));
+
+            message.CanMessageSegments.Add(
+                new J1939MessageSegment()
+                {
+                    PGN = message.pgn,
+                    Pid = spn,
+                    SourceAddress = message.address,
+                    RawValue = this.rawValue,
+                    StandardValue = this.value,
+                    MetricValue = this.valueMetric,
+                    ParseStatus = this.ParseStatus,
+                });
         }
-
-        protected virtual void OnRaiseCustomEvent(VMSDataEventArgs e)
-        {
-            RaiseVMSEvent?.Invoke(this, e);
-        }
-
-        /// <summary> Method allowing the datum's value to be set externally </summary>
-        public void SetValue(uint raw, double val, double valMetric)
-        {
-            rawValue = raw;
-            value = val;
-            valueMetric = valMetric;
-            seen = true;
-            ProcessDataReceivedEvent(spn);
-            OnRaiseCustomEvent(new VMSDataEventArgs((EventIDs.PID_BASE | (uint)spn), value));
-        }
-
-        #region Update Methods
-
-        /// <summary>
-        /// updates flag according to the input two-bit pattern:
-        ///    00 = sets datum to 0, returns 1
-        ///    01 = sets datum to 1, returns 1
-        ///    10 = sets datum to 0, returns 2 for error (not allowed in RV-C standard)
-        ///    11 = no change,       returns 0
-        /// </summary>
-        protected byte UpdateFlag(ref byte dest, byte src, byte pos)
-        {
-            byte f = (byte)(((src) >> pos) & 0x03);
-            if ((f & 0x02) == 0)
-            {
-                dest = f;
-                return 1;
-            }
-            if (f == 0x02)
-            {
-                dest = 0;
-                return 2;
-            }
-            dest = 0xFF;
-            return 0;
-        }
-
-        protected byte UpdateBits(ref byte dest, byte src, byte pos, byte numbits)
-        {
-            byte f = src;
-            byte mask = (byte)((1 << numbits) - 1);
-            f >>= pos;
-            f &= mask;
-            if (f < (mask - 1))
-            {
-                dest = f;
-                return 1;
-            }
-            if (f < mask)
-            {
-                dest = 0;
-                return 2;
-            }
-            dest = 0xFF;
-            return 0;
-        }
-
-        protected byte UpdateByte(ref byte dest, byte src)
-        {
-            if (src <= RVC_BYTE(RVC_MAXVAL))
-            {
-                dest = src;
-                return 1;
-            }
-            if (src != RVC_BYTE(RVC_NODATA))
-            {
-                dest = 0;
-                return 2;
-            }
-            return 0;
-        }
-
-        protected byte UpdateWord(ref ushort dest, byte[] data, byte pos)
-        {
-            ushort s = (ushort)((data[pos + 1] << 8) | (data[pos]));
-            if (s <= RVC_WORD(RVC_MAXVAL))
-            {
-                dest = s;
-                return 1;
-            }
-            if (s != RVC_WORD(RVC_NODATA))
-            {
-                dest = 0;
-                return 2;
-            }
-            dest = s;
-            return 0;
-        }
-
-        protected byte UpdateUint(ref uint dest, byte[] data, byte pos)
-        {
-            uint s = (uint)((data[pos + 3] << 24) | (data[pos + 2] << 16) | (data[pos + 1] << 8) | (data[pos]));
-            if (s <= RVC_LONG(RVC_MAXVAL))
-            {
-                dest = s;
-                return 1;
-            }
-            if (s != RVC_LONG(RVC_NODATA))
-            {
-                dest = 0;
-                return 2;
-            }
-            dest = s;
-            return 0;
-        }
-
-        #endregion //Update Methods
     }
 
     //Standard, dynamic Datum types
@@ -181,24 +76,27 @@ namespace VMSpc.Parsers
             bitIndex = bit_index;
         }
 
-        public override void Parse(byte address, byte[] data)
+        public override void Parse(J1939Message message)
         {
             byte b = 0;
-            if (UpdateByte(ref b, data[byteIndex]) != 0)
+            if (UpdateByte(ref b, message.rawData[byteIndex]) != 0)
             {
                 b >>= byteIndex;
                 rawValue = (byte)(b & 0x03);
-                ConvertAndStore();
+                ConvertAndStore(message);
             }
         }
 
-        protected override void ConvertAndStore()
+        protected override void ConvertAndStore(J1939Message message)
         {
-            value = valueMetric = rawValue;
-            base.ConvertAndStore();
+            if (!enforceIncreasedValues || rawValue > value)
+            {
+                value = valueMetric = rawValue;
+                base.ConvertAndStore(message);
+            }
         }
     }
-    #endregion //TSPNFlag
+    #endregion TSPNFlag
 
     #region TSPNBits
     public class TSPNBits : TSPNDatum
@@ -214,20 +112,23 @@ namespace VMSpc.Parsers
             length = bit_length;
         }
 
-        public override void Parse(byte address, byte[] data)
+        public override void Parse(J1939Message message)
         {
             byte b = 0;
-            if (UpdateBits(ref b, data[byteIndex], bitIndex, length) != 0)
+            if (UpdateBits(ref b, message.rawData[byteIndex], bitIndex, length) != 0)
             {
                 rawValue = (uint)(b & bitmask[length]);
-                ConvertAndStore();
+                ConvertAndStore(message);
             }
         }
 
-        protected override void ConvertAndStore()
+        protected override void ConvertAndStore(J1939Message message)
         {
-            base.ConvertAndStore();
-            value = valueMetric = rawValue;
+            if (!enforceIncreasedValues || rawValue > value)
+            {
+                value = valueMetric = rawValue;
+                base.ConvertAndStore(message);
+            }
         }
     }
     #endregion //TSPNBits
@@ -247,30 +148,34 @@ namespace VMSpc.Parsers
             metricOffset = metric_offset;
         }
 
-        public override void Parse(byte address, byte[] data)
+        public override void Parse(J1939Message message)
         {
             byte b = 0;
-            if (UpdateByte(ref b, data[byteIndex]) != 0)
+            if (UpdateByte(ref b, message.rawData[byteIndex]) != 0)
             {
                 rawValue = b;
-                ConvertAndStore();
+                ConvertAndStore(message);
             }
         }
 
-        protected override void ConvertAndStore()
+        protected override void ConvertAndStore(J1939Message message)
         {
-            if (recipNum != 0.0)
+            if (rawValue > lastRawValue)
             {
-                value = rawValue * scale + offset;
-                valueMetric = (recipNum / value); //right now only instant mpg recent and rolling mpg use this
-                value = valueMetric; //this only applies to gauges using L/100Km
+                if (recipNum != 0.0)
+                {
+                    value = rawValue * scale + offset;
+                    valueMetric = (recipNum / value); //right now only instant mpg recent and rolling mpg use this
+                    value = valueMetric; //this only applies to gauges using L/100Km
+                }
+                else
+                {
+                    value = rawValue * scale + offset;
+                    valueMetric = rawValue * metricScale + metricOffset;
+                }
+                base.ConvertAndStore(message);
+                lastRawValue = rawValue;
             }
-            else
-            {
-                value = rawValue * scale + offset;
-                valueMetric = rawValue * metricScale + metricOffset;
-            }
-            base.ConvertAndStore();
         }
     }
     #endregion //TSPNByte
@@ -291,13 +196,13 @@ namespace VMSpc.Parsers
             recipNum = recip_numerator;
         }
 
-        public override void Parse(byte address, byte[] data)
+        public override void Parse(J1939Message message)
         {
             ushort temp = 0;
-            if (UpdateWord(ref temp, data, byteIndex) != 0)
+            if (UpdateWord(ref temp, message.rawData.ToArray(), byteIndex) != 0)
             {
                 rawValue = temp;
-                ConvertAndStore();
+                ConvertAndStore(message);
             }
         }
     }
@@ -309,13 +214,13 @@ namespace VMSpc.Parsers
         public TSPNUint(ushort spn, byte byte_index, double scale, double offset, double metric_scale, double metric_offset)
              : base(spn, byte_index, scale, offset, metric_scale, metric_offset) { }
 
-        public override void Parse(byte address, byte[] data)
+        public override void Parse(J1939Message message)
         {
             uint temp = 0;
-            if (UpdateUint(ref temp, data, byteIndex) != 0)
+            if (UpdateUint(ref temp, message.rawData.ToArray(), byteIndex) != 0)
             {
                 rawValue = temp;
-                ConvertAndStore();
+                ConvertAndStore(message);
             }
         }
     }
@@ -326,412 +231,56 @@ namespace VMSpc.Parsers
     //Special Datum types
     #region Special SPNs
 
-    public abstract class TSPNEngineDependentDatum : TSPNDatum, IEventConsumer
-    {
-        protected double
-            currentRpms,
-            currentLoadPercent;
-        public TSPNEngineDependentDatum(ushort spn) : base(spn) 
-        {
-            currentRpms = currentLoadPercent = double.NaN;
-            EventBridge.EventProcessor.SubscribeToEvent(this, (EventIDs.PID_BASE | spn_rpms.spn));
-            EventBridge.EventProcessor.SubscribeToEvent(this, (EventIDs.PID_BASE | spn_loadPercent.spn));
-        }
-        public void ConsumeEvent(VMSEventArgs e)
-        {
-            var pid = e.eventID & 0xFFFF;
-            if (pid == spn_rpms.spn)
-            {
-                currentRpms = (e as VMSDataEventArgs).value;
-            }
-            else if (pid == spn_loadPercent.spn)
-            {
-                currentLoadPercent = (e as VMSDataEventArgs).value;
-            }
-            if (!double.IsNaN(currentLoadPercent) && !double.IsNaN(currentRpms))
-            {
-                value = ResolveValue();
-                rawValue = (uint)Math.Ceiling(value);
-                ConvertAndStore();
-            }
-        }
-        protected abstract double ResolveValue();
-    }
-
-    public class TSPNTorque : TSPNEngineDependentDatum
-    {
-        public TSPNTorque(ushort spn) : base(spn) { }
-        protected override double ResolveValue()
-        {
-            return EngineSpec.CalculateTorque(currentRpms, currentLoadPercent);
-        }
-        protected override void ConvertAndStore()
-        {
-            base.ConvertAndStore();
-        }
-    }
-
-    public class TSPNHorsepower : TSPNEngineDependentDatum
-    {
-        public TSPNHorsepower(ushort spn) : base(spn) { }
-        protected override double ResolveValue()
-        {
-            return EngineSpec.CalculateHorsepower(currentRpms, currentLoadPercent);
-        }
-        protected override void ConvertAndStore()
-        {
-            base.ConvertAndStore();
-        }
-    }
-
-    #region TSPNRange
-
-    public class TSPNRange : TSPNDatum
-    {
-        public TSPNRange(ushort spn) : base(spn) {}
-
-        public override void Parse(byte address, byte[] data)
-        {
-            if (data[4] < 250)
-                ChassisParam.rangeSelected = "" + (char)data[4];
-            if (data[3] < 125)
-                ChassisParam.rangeAttained = "R";
-            else if (data[3] == 125)
-                ChassisParam.rangeAttained = "N";
-            else if (data[3] < 135)
-                ChassisParam.rangeAttained = (char)(data[3] - 125) + "0";
-            else if (data[3] < 161)
-                ChassisParam.rangeAttained = (char)(data[3] - 135) + "a";
-        }
-    }
-    #endregion TSPNRange
-
-    #region TSPNTransMode
-
-    public class TSPNTransMode : TSPNDatum
-    {
-        public TSPNTransMode(ushort spn) : base(spn) { }
-
-        public override void Parse(byte address, byte[] data)
-        {
-            byte temp = data[5];
-            if (temp == 16 || temp == 21 || temp == 32)
-            {
-                rawValue = 1;
-                ChassisParam.mode = 1;
-                ConvertAndStore();
-                seen = true;
-            }
-            else if (temp == 5 || temp == 26 || temp == 31)
-            {
-                rawValue = 2;
-                ConvertAndStore();
-                seen = true;
-            }
-        }
-    }
-
-    #endregion //TSPNTransMode
-
     #region TSPNRetarder
 
     public class TSPNRetarder : TSPNDatum
     {
         public TSPNRetarder(ushort spn) : base(spn) { }
 
-        public override void Parse(byte address, byte[] data)
+        public override void Parse(J1939Message message)
         {
             byte b = 0;
-            if (UpdateByte(ref b, data[1]) != 0)
+            if (UpdateByte(ref b, message.rawData[1]) != 0)
             {
                 if (b < 125)
                     rawValue = (uint)(250 - b);
                 else
                     rawValue = b;
-                ConvertAndStore();
+                ConvertAndStore(message);
             }
         }
     }
 
     #endregion
 
-    #region TSPNCruise (Cruise status)
+    #region TSPNCruiseStatus
 
+    /// <summary>
+    /// Takes the raw value and converts it to one of the associative numeric values for CruiseSetStatus: 0 = "Off", 1 = "On", 2 = "Set"
+    /// </summary>
     public class TSPNCruise : TSPNDatum
     {
-        public byte cruiseStatus;
-        public byte cruiseAdjust;
-        public string cruiseStat;
-
         public TSPNCruise(ushort spn) : base(spn) { }
 
-        public override void Parse(byte address, byte[] data)
+        public override void Parse(J1939Message message)
         {
             byte b = 0;
-            ChassisParam.cruiseAdjust = 0;
-            if (UpdateFlag(ref b, data[3], 0) != 0)
+            if (UpdateFlag(ref b, message.rawData[3], 0) != 0)
             {
-                cruiseStatus = (byte)((cruiseStatus & 0x01) | ((b != 0) ? 2 : 0));
                 if (b == 0)
-                    ChassisParam.cruiseStat = "Off";
+                    rawValue = 0;   //"Off"
                 else
-                    ChassisParam.cruiseStat = "On";
+                    rawValue = 1;   //"On"
             }
-            if (UpdateFlag(ref b, data[3], 2) != 0)
+            if (UpdateFlag(ref b, message.rawData[3], 2) != 0)
             {
-                ChassisParam.cruiseStatus = (byte)((ChassisParam.cruiseStatus & 0x02) | ((b != 0) ? 1 : 0));
-                ChassisParam.cruiseStat = "Set";
+                rawValue = 2;   //"Set"
             }
-            for (byte i = 0; i < 8; i += 2)
-            {
-                if (UpdateFlag(ref b, data[4], i) != 0)
-                    ChassisParam.cruiseAdjust |= b;
-            }
+            ConvertAndStore(message);
         }
     }
 
-    #endregion
-
-    //TSPNOdometer, TSPNHourMeter, and TSPNFuelMeter inherit from this datum
-    #region TSPNInferred (inferred values that get stored in the ChassisParam)
-
-    public class TSPNInferred : TSPNUint
-    {
-        public double lastVal;
-        protected uint maxVal;
-
-        public TSPNInferred(ushort spn, byte byte_index, double scale, double offset, double metric_scale, double metric_offset, uint max_val) 
-            : base(spn, byte_index, scale, offset, metric_scale, metric_offset)
-        {
-            lastVal = 0.0;
-            maxVal = max_val;
-        }
-
-        public override void Parse(byte address, byte[] data)
-        {
-            uint b = 0;
-            if (UpdateUint(ref b, data, 0) != 0)
-            {
-                double temp = b * scale;
-                if ((temp > lastVal) && (temp < maxVal))
-                {
-                    rawValue = b;
-                    ConvertAndStore();
-                    lastVal = value;
-                }
-            }
-        }
-    }
-
-    #endregion //TSPNInferred
-
-    //These spns calculate automatically on a specified timer
-    #region TSPNAutoRunners
-
-    public abstract class TSPNAutoRunner : TSPNDatum
-    {
-        protected Timer calcTimer;
-        public TSPNAutoRunner(ushort spn, int interval) 
-            : base(spn)
-        {
-            calcTimer = CREATE_TIMER(Calculate, interval);
-        }
-
-        protected abstract void Calculate();
-    }
-
-    public class TSPNAcceleration : TSPNAutoRunner
-    {
-        protected double lastSpeed;
-
-        public TSPNAcceleration(ushort spn, int interval)
-            : base(spn, interval)
-        {
-            lastSpeed = Double.NaN;
-        }
-
-        protected override void Calculate()
-        {
-            if (Seen(roadSpeed))
-            {
-                double curSpeed = GetStandardValueSPN(roadSpeed);
-                if (!Double.IsNaN(lastSpeed))
-                {
-                    value = (curSpeed - lastSpeed);
-                    valueMetric = value * 1.60934;
-                    seen = true;
-                }
-                lastSpeed = curSpeed;
-            }
-        }
-    }
-
-    public class TSPNPeakRecorder : TSPNAutoRunner
-    {
-        public static double[] acceleration;
-        protected int index;
-        protected Func<double[], double> compare;
-
-        public TSPNPeakRecorder(ushort spn, int interval, Func<double[], double> compareMethod)
-            :base(spn, interval)
-        {
-            acceleration = new double[10];
-            Constants.ArrayFill(acceleration, 0);
-            compare = compareMethod;
-            index = 0;
-        }
-
-        protected override void Calculate()
-        {
-            if (Seen(roadSpeed))
-            {
-                acceleration[index] = GetStandardValueSPN(10);
-                index = (index + 1) % 10;
-                value = compare(acceleration);
-                valueMetric = value * 1.60934;
-                seen = true;
-            }
-        }
-    }
-
-    #endregion //TSPNAutoRunners
-
-    #region TSPNTracker
-
-    public abstract class TSPNTracker : TSPNDatum
-    {
-        protected TSPNDatum trackedSPN;
-        public TSPNTracker(ushort spn, TSPNDatum trackedSPN)
-            :base(spn)
-        {
-            this.trackedSPN = trackedSPN;
-            if (SPNTrackers.ContainsKey(trackedSPN.spn))
-                SPNTrackers[trackedSPN.spn].Add(this);
-            else
-                SPNTrackers.Add(trackedSPN.spn, new List<TSPNTracker>() { this });
-        }
-
-        public abstract void Record();
-    }
-
-    #region TSPNMaxTracker
-
-    public class TSPNMaxTracker : TSPNTracker
-    {
-        private double maxValue;
-        private TimeValuePair[] valueArray;
-        private ulong timeSpan;
-        private int bufferSize, left, right;
-        uint counter;
-
-        protected struct TimeValuePair
-        {
-            public ulong time;
-            public double valueMetric;
-            public double value;
-            public TimeValuePair(ulong time, double valueMetric, double value) { this.time = time; this.valueMetric = valueMetric; this.value = value; }
-        }
-
-        public TSPNMaxTracker(ushort spn, TSPNDatum trackedSPN, ushort bufferSize, ulong timeSpan, double max = 999999.9)
-            :base(spn, trackedSPN)
-        {
-            maxValue = max;
-            valueArray = new TimeValuePair[bufferSize];
-            valueArray[0] = new TimeValuePair(0, Double.MinValue, Double.MinValue);
-            this.timeSpan = timeSpan;
-            this.bufferSize = bufferSize;
-            left = right = 0;
-        }
-
-        public override void Record()
-        {
-            counter++;
-            TimeValuePair recordStruct = new TimeValuePair(counter, trackedSPN.valueMetric, trackedSPN.value);
-
-            if (recordStruct.value > maxValue)
-                return;
-
-            if (recordStruct.value >= valueArray[right].value)
-            {
-                valueArray[left] = recordStruct;
-                right = left;
-                value = valueArray[right].value;
-                valueMetric = valueArray[right].valueMetric;
-                ConvertAndStore();
-                return;
-            }
-
-            bool roomForMore = valueArray[left].value < recordStruct.value;
-
-            while (valueArray[left].value < recordStruct.value)
-                SafeIndexAdd(ref left, 1, bufferSize);
-
-            SafeIndexAdd(ref left, -1, bufferSize);
-
-            if (left != right)
-                roomForMore = true;
-
-            if (roomForMore)
-                valueArray[left] = recordStruct;
-            else
-            {
-                SafeIndexAdd(ref left, 1, bufferSize);
-                if (valueArray[left].time < (counter - timeSpan))
-                    valueArray[left] = recordStruct;
-            }
-
-            if (counter > timeSpan)
-                while (valueArray[right].time < (counter - timeSpan))
-                    SafeIndexAdd(ref right, -1, bufferSize);
-        }
-    }
-
-    #endregion //TSPNMaxTracker
-
-    #region TSPNAverageTracker
-    /// <summary>
-    /// Specifically made for use with Averages that depend on two values, such as MPG.
-    /// trackedSPN is used as the dividend, second_trackedSPN is the divisor.
-    /// </summary>
-    public class TSPNAverageTracker : TSPNTracker
-    {
-        protected TSPNDatum second_trackedSPN;
-        public TSPNAverageTracker(ushort spn, TSPNDatum trackedSPN, TSPNDatum second_trackedSPN)
-            :base(spn, trackedSPN)
-        {
-            this.second_trackedSPN = second_trackedSPN;
-            if (SPNTrackers.ContainsKey(second_trackedSPN.spn))
-                SPNTrackers[second_trackedSPN.spn].Add(this);
-            else
-                SPNTrackers.Add(second_trackedSPN.spn, new List<TSPNTracker>() { this });
-        }
-
-        public override void Record()
-        {
-            if (!trackedSPN.seen || !second_trackedSPN.seen)
-                return;
-            value = trackedSPN.value / second_trackedSPN.value;
-            valueMetric = trackedSPN.valueMetric / second_trackedSPN.valueMetric;
-            seen = true;
-        }
-    }
-
-    #endregion TSPNAverageTracker
-
-    #endregion //TSPNTracker
-
-    //TODO
-    #region TSPNDiag (diagnostics)
-
-    public class TSPNDiag : TSPNDatum
-    {
-        public TSPNDiag(ushort spn) : base(spn)
-        {
-
-        }
-    }
-
-    #endregion //TSPNDiag (diagnostics)
+    #endregion TSPNCruiseStatus
 
     #endregion //Special SPNs
 

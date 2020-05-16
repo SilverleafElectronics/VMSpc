@@ -85,8 +85,8 @@ namespace VMSpc.Parsers.TireParsers
         }
         private void ProcessByPid(byte pid, byte pos, byte[] data)
         {
-            byte numTires,
-                 error;
+            byte numTires;
+            //byte error;
             PProTire tire;
             switch (pid)
             {

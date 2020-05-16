@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Globalization;
+using VMSpc.Enums.UI;
 
 namespace VMSpc.UI.TireMaps
 {
@@ -72,21 +73,6 @@ namespace VMSpc.UI.TireMaps
             }
         }
     }
-
-    public enum TireMapType
-    {
-        [Description("6 Wheel")]
-        SIX_WHEEL = 0,
-        [Description("8 Wheel")]
-        EIGHT_WHEEL = 1,
-        [Description("6 + 4 Wheel")]
-        SIX_PLUS_4 = 2,
-        [Description("8 + 4 Wheel")]
-        EIGHT_PLUS_4 = 3,
-        [Description("None")]
-        NONE = 4,
-    }
-
 
     public struct TireCell
     {

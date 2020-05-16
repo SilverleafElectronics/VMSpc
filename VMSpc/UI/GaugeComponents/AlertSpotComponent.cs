@@ -26,7 +26,7 @@ namespace VMSpc.UI.GaugeComponents
             RedBrush = new SolidColorBrush(ConfigManager.ColorPalettes.GetSelectedPalette().Red);
         }
 
-        public override void Draw()
+        public override void DrawComponentLayout()
         {
             Children.Clear();
             var min = Math.Min(Width, Height);
