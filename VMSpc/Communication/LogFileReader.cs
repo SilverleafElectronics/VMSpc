@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using VMSpc.DevHelpers;
+using VMSpc.Exceptions;
 using VMSpc.JsonFileManagers;
+using VMSpc.Loggers;
 using static VMSpc.Constants;
 
 namespace VMSpc.Communication
@@ -63,9 +65,9 @@ namespace VMSpc.Communication
                 logReader = null;
                 logReadTimer.Stop();
             }
-            catch
+            catch (Exception ex)
             {
-
+                ErrorLogger.GenerateErrorRecord(ex);
             }
         }
 

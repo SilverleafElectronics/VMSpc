@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using VMSpc.Common;
 using VMSpc.Enums.Parsing;
+using VMSpc.Exceptions;
+using VMSpc.Loggers;
 using static VMSpc.Constants;
 
 namespace VMSpc.Parsers
@@ -42,18 +44,38 @@ namespace VMSpc.Parsers
         {
             var message = RemoveControlCharacters(e.message);
             var type = GetMessageType(message);
-            message = message.Substring(1); //remove the type indicator from the message ('J', 'R', or 'I')
+            if (IsValidMessage(type, message))
+            {
+                message = message.Substring(1); //remove the type indicator from the message ('J', 'R', or 'I')
+                switch (type)
+                {
+                    case VMSDataSource.J1708:
+                        ProcessJ1708Data(message, e);
+                        break;
+                    case VMSDataSource.J1939:
+                        ProcessJ1939Data(message, e);
+                        break;
+                    case VMSDataSource.None:
+
+                        break;
+                }
+            }
+        }
+
+        private bool IsValidMessage(VMSDataSource type, string message)
+        {
+            if (type == VMSDataSource.None || string.IsNullOrEmpty(message) || string.IsNullOrWhiteSpace(message))
+            {
+                return false;
+            }
             switch (type)
             {
                 case VMSDataSource.J1708:
-                    ProcessJ1708Data(message, e);
-                    break;
+                    return J1708Message.IsValidMessage(message);
                 case VMSDataSource.J1939:
-                    ProcessJ1939Data(message, e);
-                    break;
-                case VMSDataSource.None:
-
-                    break;
+                    return J1939Message.IsValidMessage(message);
+                default:
+                    return false;
             }
         }
 
@@ -72,8 +94,9 @@ namespace VMSpc.Parsers
                 PublishNewDataEvent(CanMessage);
             }
             catch (Exception ex)
-            {
+            {   //Todo - trim this down to only invoke CommDataErrorEvent on specific exceptions (ie, from CanMesssage or parser)
                 RaiseVMSEvent?.Invoke(this, new VMSCommDataErrorEventArgs(e, MessageError.UnrecognizedMessage, ex));
+                ErrorLogger.GenerateErrorRecord(ex);
             }
         }
 
@@ -91,9 +114,10 @@ namespace VMSpc.Parsers
                 _J1939Parser.Parse(canMessage);
                 PublishNewDataEvent(canMessage);
             }
-            catch
+            catch (Exception ex)
             {
-
+                RaiseVMSEvent?.Invoke(this, new VMSCommDataErrorEventArgs(e, MessageError.UnrecognizedMessage, ex));
+                ErrorLogger.GenerateErrorRecord(ex);
             }
         }
 
@@ -101,9 +125,32 @@ namespace VMSpc.Parsers
         {
             foreach (var segment in message.CanMessageSegments)
             {
-                segment.TimeParsed = DateTime.Now;
-                var e = new VMSParsedDataEventArgs(segment.Pid, segment);
-                RaiseVMSEvent?.Invoke(this, e);
+                if (segment.ParseStatus == ParseStatus.Parsed)
+                {
+                    segment.TimeParsed = DateTime.Now;
+                    var e = new VMSParsedDataEventArgs(segment.Pid, segment);
+                    RaiseVMSEvent?.Invoke(this, e);
+                }
+                else
+                {
+                    PublishUnparsedData(segment);
+                }
+            }
+        }
+
+        public void PublishUnparsedData(CanMessageSegment segment)
+        {
+            VMSRawDataEventArgs e;
+            switch (segment.DataSource)
+            {
+                case VMSDataSource.J1708:
+                    e = new VMSJ1708RawDataEventArgs(segment as J1708MessageSegment);
+                    RaiseVMSEvent?.Invoke(this, e);
+                    break;
+                case VMSDataSource.J1939:
+                    e = new VMSJ1939RawDataEventArgs(segment as J1939MessageSegment);
+                    RaiseVMSEvent?.Invoke(this, e);
+                    break;
             }
         }
 
@@ -141,14 +188,28 @@ namespace VMSpc.Parsers
         /// <param name="message"></param>
         private static string RemoveControlCharacters(string message)
         {
-            return message
-                .Replace("\r", "")
-                .Replace("\n", "")
-                .Trim();
+            if (string.IsNullOrEmpty(message))
+                return string.Empty;
+            try
+            {
+               var ret = message
+                    .Replace("\r", "")
+                    .Replace("\n", "")
+                    .Trim();
+                return ret;
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         public static VMSDataSource GetMessageType(string message)
         {
+            if (string.IsNullOrEmpty(message))
+            {
+                return VMSDataSource.None;
+            }
             switch (message[0])
             {
                 case 'J':

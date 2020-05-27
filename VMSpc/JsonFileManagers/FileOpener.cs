@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Security.AccessControl;
+using VMSpc.Exceptions;
+using VMSpc.Loggers;
 
 namespace VMSpc.JsonFileManagers
 {
@@ -74,6 +76,10 @@ namespace VMSpc.JsonFileManagers
             catch (IOException)
             {
                 return true;
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.GenerateErrorRecord(ex);
             }
             return false;
         }

@@ -19,6 +19,14 @@ namespace VMSpc.Common
         event EventHandler<VMSEventArgs> RaiseVMSEvent;
     }
 
+    public static class EventPublisherExtensions
+    {
+        //public static void PublishEvent(this IEventPublisher publisher, VMSEventArgs e)
+        //{
+        //    //publisher.RaiseVMSEvent?.Invoke();
+        //}
+    }
+
     /// <summary>
     /// 
     /// </summary>

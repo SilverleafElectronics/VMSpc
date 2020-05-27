@@ -43,7 +43,6 @@ namespace VMSpc.AdvancedParsers.Tires
         private TSTTire[] TSTTires = new TSTTire[20];
         public byte PendingPosition { get; private set; } = 0xFF;
 
-        static byte[] clearPosition = new byte[] { 0xFE, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, (byte)'U', (byte)'I' };
         static byte[] positionToAxle = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x10, 0x11, 0x12, 0x13, 0x20, 0x21, 0x22, 0x23, 0x30, 031, 0x32, 0x33, 0x40, 0x41, 0x42, 0x43 };
 
         public TSTTireManager()
@@ -68,19 +67,25 @@ namespace VMSpc.AdvancedParsers.Tires
         {
             OutgoingJ1939Message message = new OutgoingJ1939Message()
             {
+                USBPrefix = 'T',
                 SA = 0x33,
                 PGN = 0xEF33,
             };
+            message.Data[0] = 0xFC;
+            message.Data[6] = 0x55;
+            message.Data[7] = 0x49;
             if (PendingPosition < MaxTirePositions)
                 TSTTires[PendingPosition].sensorReporting = false;
             PendingPosition = 0xFF;
-            //CommManager.Instance.SendMessage(message);
+            CommunicationManager.Instance.SendMessage(message);
+            RequestConfiguration();
         }
 
         public override void ClearTire(byte instance)
         {
             OutgoingJ1939Message message = new OutgoingJ1939Message()
             {
+                USBPrefix = 'T',
                 SA = 0x33,
                 PGN = 0xEF33,
             };
@@ -90,42 +95,48 @@ namespace VMSpc.AdvancedParsers.Tires
             message.Data[7] = (byte)'I';
 
             TSTTires[instance].sensorReporting = false;
+            CommunicationManager.Instance.SendMessage(message);
         }
 
         public void RequestConfiguration()
         {
             OutgoingJ1939Message message = new OutgoingJ1939Message()
             {
+                USBPrefix = 'T',
                 SA = 0x33,
-                PGN = 0xEF33,
+                PGN = 0xEA33,
             };
             message.Data[0] = 0x43;
             message.Data[1] = 0xFC;
             message.Data[2] = 0x00;
-            //CommManager.Instance.SendMessage(message);
+            CommunicationManager.Instance.SendMessage(message);
             OutgoingJ1939Message message2 = new OutgoingJ1939Message()
             {
+                USBPrefix = 'T',
                 SA = 0x33,
-                PGN = 0xEF33,
+                PGN = 0xEA33,
             };
             message2.Data[0] = 0xB9;
             message2.Data[1] = 0xFD;
             message2.Data[2] = 0x00;
-            //CommManager.Instance.SendMessage(message);
+            CommunicationManager.Instance.SendMessage(message);
         }
 
         public override void LearnTire(byte instance)
         {
             OutgoingJ1939Message message = new OutgoingJ1939Message()
             {
+                USBPrefix = 'T',
                 SA = 0x33,
                 PGN = 0xEF33,
             };
-            message.Data[0] = 0x33;
-            message.Data[1] = 0xFD;
-            message.Data[2] = positionToAxle[instance];
+            //message.Data[0] = 0x33;
+            message.Data[0] = 0xFD;
+            message.Data[1] = positionToAxle[instance];
+            message.Data[6] = 0x55;
+            message.Data[7] = 0x49;
             PendingPosition = instance;
-            //CommManager.Instance.SendMessage(message);
+            CommunicationManager.Instance.SendMessage(message);
         }
 
         public override void Parse(CanMessageSegment segment)

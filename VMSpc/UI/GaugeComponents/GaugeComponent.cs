@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using VMSpc.UI.CustomComponents;
 using VMSpc.Common;
 using VMSpc.DevHelpers;
+using VMSpc.Exceptions;
+using VMSpc.Loggers;
 
 namespace VMSpc.UI.GaugeComponents
 {
@@ -19,7 +21,7 @@ namespace VMSpc.UI.GaugeComponents
             }
             catch (Exception ex)
             {
-                VMSConsole.PrintLine(ex.Message);
+                ErrorLogger.GenerateErrorRecord(ex);
             }
         }
 

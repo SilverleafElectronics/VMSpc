@@ -42,7 +42,6 @@ namespace VMSpc.UI
             if (exception != null)
             {
                 Clipboard.SetText(exception.ToString());
-                ErrorLogger.GenerateErrorRecord(exception);
             }
         }
     }

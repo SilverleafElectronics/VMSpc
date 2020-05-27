@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using VMSpc.JsonFileManagers;
 using System.IO.Compression;
 using System.IO;
+using VMSpc.Exceptions;
+using VMSpc.Loggers;
 
 namespace VMSpc
 {
@@ -63,7 +65,10 @@ namespace VMSpc
             {
                 Cleanup();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                ErrorLogger.GenerateErrorRecord(ex);
+            }
         }
 
         private static void Cleanup()

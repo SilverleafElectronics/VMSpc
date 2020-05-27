@@ -23,6 +23,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using VMSpc.Exceptions;
 
 //These are global constants. For global variables, see Globals.cs
 
@@ -213,9 +214,13 @@ namespace VMSpc
                     byteArr.Add(BinConvert(byteString[i], byteString[i + 1]));
                 return true;
             }
-            catch (Exception)
+            catch (IndexOutOfRangeException)
             {
                 return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 

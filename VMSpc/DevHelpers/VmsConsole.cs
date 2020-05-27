@@ -23,7 +23,10 @@ namespace VMSpc.DevHelpers
 
         public static void PrintLine(string logItem)
         {
-            console.AddLine(logItem);
+            if (console != null)
+            {
+                console.AddLine(logItem);
+            }
         }
         public static void PrintLine(object obj)
         {

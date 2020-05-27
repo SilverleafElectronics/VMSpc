@@ -1,0 +1,21 @@
+﻿<Window x:Class="VMSpc.UI.CustomComponents.ClearDiagnosticsBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VMSpc.UI.CustomComponents"
+        mc:Ignorable="d"
+        Title="Clear Diagnostics" Height="450" Width="600"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        >
+    <Grid>
+        <StackPanel>
+            <Button Margin="0,20,0,0" Name="ClearInactiveButton" Click="ClearInactiveButton_Click" Height="60" Width="300" FontSize="20">Clear Inactive Records</Button>
+            <Button Margin="0,20,0,0" Name="ClearAllButton" Click="ClearAllButton_Click" Height="60" Width="300" FontSize="20">Clear All</Button>
+            <Button Margin="0,20,0,0" Name="ClearFor5Button" Click="ClearFor5Button_Click" Height="60" Width="300" FontSize="20">Clear For 5 Minutes</Button>
+            <Button Margin="0,20,0,0" Name="ClearUntilResetButton" Click="ClearUntilResetButton_Click" Height="60" Width="300" FontSize="20">Clear Until Reset</Button>
+            <Button Margin="0,20,0,0" Name="CancelButton" Click="CancelButton_Click" Height="60" Width="300" FontSize="20">Cancel</Button>
+        </StackPanel>
+    </Grid>
+</Window>

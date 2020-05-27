@@ -22,6 +22,8 @@ using VMSpc.JsonFileManagers;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
 using System.Globalization;
 using VMSpc.Enums.UI;
+using VMSpc.Exceptions;
+using VMSpc.Loggers;
 
 /*
  * TODO - this class is wayyy too big. Factor out the following into helper classes:
@@ -817,7 +819,10 @@ namespace VMSpc.Panels
                 }
                 );
             }
-            catch { }
+            catch (Exception ex)
+            {
+                ErrorLogger.GenerateErrorRecord(ex);
+            }
         }
     }
 }

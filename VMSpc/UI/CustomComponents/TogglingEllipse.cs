@@ -22,7 +22,7 @@ namespace VMSpc.UI.CustomComponents
         /// The second color to be displayed in the ellipse on the ToggleInterval
         /// </summary>
         public SolidColorBrush ToggleBrush2 { get; set; }
-        private Timer ToggleTimer;
+        public SolidColorBrush SolidBrush { get; set; }
         public new double Width
         {
             get
@@ -47,15 +47,7 @@ namespace VMSpc.UI.CustomComponents
                 Ellipse.Height = value;
             }
         }
-        public int ToggleInterval 
-        {  
-            set
-            {
-                ToggleColor();
-                ToggleTimer = Constants.CREATE_TIMER(ToggleColor, value);
-                ToggleTimer.Start();
-            }
-        }
+        public bool UseToggleColor { get; set; }
         public TogglingEllipse()
         {
             Ellipse = new Ellipse()
@@ -63,27 +55,36 @@ namespace VMSpc.UI.CustomComponents
                 Width = this.Width,
                 Height = this.Height,
             };
+            UseToggleColor = true;
             Children.Add(Ellipse);
         }
 
-        private void ToggleColor()
+        public void ChangeToSolidColor()
         {
-            Application.Current.Dispatcher.Invoke(() =>
-           {
-               Ellipse.Width = Width;
-               Ellipse.Height = Height;
-               if (ToggleBrush1 != null && ToggleBrush2 != null)
-               {
-                   if (Ellipse.Fill == ToggleBrush1)
-                   {
-                       Ellipse.Fill = ToggleBrush2;
-                   }
-                   else
-                   {
-                       Ellipse.Fill = ToggleBrush1;
-                   }
-               }
-           });
+            UseToggleColor = false;
+            Ellipse.Fill = SolidBrush;
+        }
+
+        public void ChangeToToggleColor()
+        {
+            UseToggleColor = true;
+        }
+
+        public void ToggleColor()
+        {
+            Ellipse.Width = Width;
+            Ellipse.Height = Height;
+            if (ToggleBrush1 != null && ToggleBrush2 != null)
+            {
+                if (Ellipse.Fill == ToggleBrush1)
+                {
+                    Ellipse.Fill = ToggleBrush2;
+                }
+                else
+                {
+                    Ellipse.Fill = ToggleBrush1;
+                }
+            }
         }
     }
 }

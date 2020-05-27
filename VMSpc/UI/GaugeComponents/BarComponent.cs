@@ -7,7 +7,9 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using VMSpc.DevHelpers;
+using VMSpc.Exceptions;
 using VMSpc.JsonFileManagers;
+using VMSpc.Loggers;
 using VMSpc.UI.CustomComponents;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
 
@@ -81,8 +83,9 @@ namespace VMSpc.UI.GaugeComponents
                 }
                 catch (Exception ex)
                 {
-                    VMSConsole.PrintLine(ex);
-                    VMSConsole.PrintLine(startCursor);
+                    ErrorLogger.GenerateErrorRecord(ex);
+                    //VMSConsole.PrintLine(ex);
+                    //VMSConsole.PrintLine(startCursor);
                 }
             }
             previousLineNumber = cursor;

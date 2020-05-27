@@ -90,8 +90,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <CheckBox Grid.Row="0" Grid.Column="0" Name="ShowWarning" Margin="10, 5, 0, 5">Show Warning Lamp</CheckBox>
-            <CheckBox Grid.Row="0" Grid.Column="1" Name="ShowValue" Margin="10, 5, 0, 5">Show Value</CheckBox>
+            <CheckBox Grid.Row="0" Grid.Column="0" Name="ShowValue" Margin="10, 5, 0, 5">Show Value</CheckBox>
             <CheckBox Grid.Row="1" Grid.Column="0" Name="ShowGaugeName" Margin="10, 5, 0, 5">Show Gauge Name</CheckBox>
             <CheckBox Grid.Row="1" Grid.Column="1" Name="ShowUnit" Margin="10, 5, 0, 5">Show Unit</CheckBox>
             <CheckBox Grid.Row="2" Grid.Column="0" Name="UseAbbr" Margin="10, 5, 0, 5">Use Abbreviation</CheckBox>

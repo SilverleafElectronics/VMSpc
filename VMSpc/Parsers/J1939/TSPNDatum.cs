@@ -79,7 +79,7 @@ namespace VMSpc.Parsers
         public override void Parse(J1939Message message)
         {
             byte b = 0;
-            if (UpdateByte(ref b, message.rawData[byteIndex]) != 0)
+            if (UpdateByte(ref b, message.data[byteIndex]) != 0)
             {
                 b >>= byteIndex;
                 rawValue = (byte)(b & 0x03);
@@ -115,7 +115,7 @@ namespace VMSpc.Parsers
         public override void Parse(J1939Message message)
         {
             byte b = 0;
-            if (UpdateBits(ref b, message.rawData[byteIndex], bitIndex, length) != 0)
+            if (UpdateBits(ref b, message.data[byteIndex], bitIndex, length) != 0)
             {
                 rawValue = (uint)(b & bitmask[length]);
                 ConvertAndStore(message);
@@ -151,7 +151,7 @@ namespace VMSpc.Parsers
         public override void Parse(J1939Message message)
         {
             byte b = 0;
-            if (UpdateByte(ref b, message.rawData[byteIndex]) != 0)
+            if (UpdateByte(ref b, message.data[byteIndex]) != 0)
             {
                 rawValue = b;
                 ConvertAndStore(message);
@@ -199,7 +199,7 @@ namespace VMSpc.Parsers
         public override void Parse(J1939Message message)
         {
             ushort temp = 0;
-            if (UpdateWord(ref temp, message.rawData.ToArray(), byteIndex) != 0)
+            if (UpdateWord(ref temp, message.data.ToArray(), byteIndex) != 0)
             {
                 rawValue = temp;
                 ConvertAndStore(message);
@@ -217,7 +217,7 @@ namespace VMSpc.Parsers
         public override void Parse(J1939Message message)
         {
             uint temp = 0;
-            if (UpdateUint(ref temp, message.rawData.ToArray(), byteIndex) != 0)
+            if (UpdateUint(ref temp, message.data.ToArray(), byteIndex) != 0)
             {
                 rawValue = temp;
                 ConvertAndStore(message);
@@ -240,7 +240,7 @@ namespace VMSpc.Parsers
         public override void Parse(J1939Message message)
         {
             byte b = 0;
-            if (UpdateByte(ref b, message.rawData[1]) != 0)
+            if (UpdateByte(ref b, message.data[1]) != 0)
             {
                 if (b < 125)
                     rawValue = (uint)(250 - b);
@@ -265,14 +265,14 @@ namespace VMSpc.Parsers
         public override void Parse(J1939Message message)
         {
             byte b = 0;
-            if (UpdateFlag(ref b, message.rawData[3], 0) != 0)
+            if (UpdateFlag(ref b, message.data[3], 0) != 0)
             {
                 if (b == 0)
                     rawValue = 0;   //"Off"
                 else
                     rawValue = 1;   //"On"
             }
-            if (UpdateFlag(ref b, message.rawData[3], 2) != 0)
+            if (UpdateFlag(ref b, message.data[3], 2) != 0)
             {
                 rawValue = 2;   //"Set"
             }

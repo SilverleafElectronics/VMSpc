@@ -91,6 +91,7 @@
     <Compile Include="EngineDownloader.cs" />
     <Compile Include="Exceptions\CannotReadEngineFileException.cs" />
     <Compile Include="Common\Helpers\StringFormatBuilder.cs" />
+    <Compile Include="Exceptions\HandledException.cs" />
     <Compile Include="Extensions\Standard\ArrayExtensions.cs" />
     <Compile Include="Extensions\Standard\ListExtensions.cs" />
     <Compile Include="Extensions\UI\GridExtensions.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="AdvancedParsers\EngineDataParser.cs" />
     <Compile Include="AdvancedParsers\MaxTrackers.cs" />
     <Compile Include="AdvancedParsers\UIParser.cs" />
+    <Compile Include="Extensions\UI\LabelExtensions.cs" />
     <Compile Include="Parsers\CanMessage.cs" />
     <Compile Include="Communication\DataReader.cs" />
     <Compile Include="Communication\LogFileReader.cs" />
@@ -120,6 +122,9 @@
     <Compile Include="PIDValueStager.cs" />
     <Compile Include="UI\CustomComponents\AddFileDlg.xaml.cs">
       <DependentUpon>AddFileDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\CustomComponents\ClearDiagnosticsBox.xaml.cs">
+      <DependentUpon>ClearDiagnosticsBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\CustomComponents\ColorPaletteStackItem.cs" />
     <Compile Include="JsonFileManagers\JsonDefaults\ParamDataDefaults.cs" />
@@ -229,6 +234,9 @@
     <Compile Include="UI\DlgWindows\Settings\TiresDlg.xaml.cs">
       <DependentUpon>TiresDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\DlgWindows\View\DiagnosticLogViewer.xaml.cs">
+      <DependentUpon>DiagnosticLogViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\DlgWindows\VMSDialog.cs" />
     <Compile Include="UI\DlgWindows\Gauges\VPanelDlg.cs" />
     <Compile Include="Helpers\Pointer.cs" />
@@ -302,6 +310,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\CustomComponents\AddFileDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\CustomComponents\ClearDiagnosticsBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -418,6 +430,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\DlgWindows\Settings\TiresDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DlgWindows\View\DiagnosticLogViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

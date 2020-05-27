@@ -30,7 +30,7 @@ namespace VMSpc.UI.Panels
         public override void GeneratePanel()
         {
             canvas.Children.Clear();
-            tireCells = TireMap.InitializeTireCellMap(ConfigManager.Settings.Contents.tireMapType);
+            tireCells = TireMap.InitializeTireCellMap(ConfigManager.Settings.Contents.tireMapType, panelSettings.detachTowed);
             SetGridLimits();
             LayoutGrid();
             AddGridCells();
@@ -88,6 +88,9 @@ namespace VMSpc.UI.Panels
                 {
                     Width = CellWidth,
                     Height = CellHeight,
+                    ShowIndicator = panelSettings.showIcon,
+                    ShowPressure = panelSettings.showPressure,
+                    HorizontalAlignment = HorizontalAlignment.Center,
                 };
                 TireGrid.Children.Add(TireIcon);
                 Grid.SetColumn(TireIcon, cell.column);

@@ -15,44 +15,27 @@ using static VMSpc.Constants;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
 using VMSpc.Enums.Parsing;
 using System.Threading;
+using VMSpc.Common;
 
 namespace VMSpc.Communication
 {
-    public class VMSComm
+    public class CommunicationManager : ISingleton
     {
         //Data readers
         private DataReader dataReader;
+        public static CommunicationManager Instance { get; private set; }
 
-        public ulong messageCount;
-        public ulong badMessageCount;
-        public string BadMessageCount { get { return ("" + badMessageCount); } }
+        static CommunicationManager() { }
 
-        public string logDataQueue;
-        public string LogRecordingFile
+        public CommunicationManager()
         {
-            get
-            {
-                return ConfigManager.Settings.Contents.rawLogFilePath;
-            }
-            set
-            {
-                ConfigManager.Settings.Contents.rawLogFilePath = value;
-            }
-        }
-        public bool LogRecordingEnabled;
-        public byte LogType;
-
-
-        public VMSComm()
-        {
-            messageCount = badMessageCount = 0;
-
-            LogRecordingEnabled = false;
-            LogType = LOGTYPE_RAWLOG;
-            logDataQueue = "";
-
-            ValidateDataReader();
             CreateDataReader();
+            StartComm();
+        }
+
+        public static void Initialize()
+        {
+            Instance = new CommunicationManager();
         }
 
         /// <summary>
@@ -73,12 +56,10 @@ namespace VMSpc.Communication
             dataReader.SendMessage(message);
         }
 
-        ~VMSComm()
+        ~CommunicationManager()
         {
             StopComm();
         }
-
-        #region Common Logic
 
         private void ValidateDataReader()
         {
@@ -106,9 +87,21 @@ namespace VMSpc.Communication
             }
         }
 
+        public void ChangeDataReader(JibType jibType)
+        {
+            if (jibType != ConfigManager.Settings.Contents.jibType)
+            {
+                ConfigManager.Settings.Contents.jibType = jibType;
+                StopComm();
+                CreateDataReader();
+                StartComm();
+            }
+        }
+
         /// <summary>   Initializes all communications activity. Begins the InitializeDataReader() thread and sends messages to the JIB to keep it in VMS mode  </summary>
         public void StartComm()
         {
+            //TODO - maybe not necessary to spin up a new thread for this, since all data 
             //dataReaderThread = new Thread(dataReader.InitDataReader);
             //dataReaderThread.Start();
             dataReader?.InitDataReader();
@@ -124,8 +117,11 @@ namespace VMSpc.Communication
             }
         }
 
-        #endregion //Common Logic
-
-
+        public void RestartComm()
+        {
+            StopComm();
+            CreateDataReader();
+            StartComm();
+        }
     }
 }

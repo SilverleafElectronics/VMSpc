@@ -18,6 +18,7 @@ using VMSpc.Communication;
 using VMSpc.JsonFileManagers;
 using VMSpc.UI.CustomComponents;
 using VMSpc.Loggers;
+using VMSpc.Exceptions;
 
 namespace VMSpc.UI.DlgWindows.Advanced
 {
@@ -26,12 +27,10 @@ namespace VMSpc.UI.DlgWindows.Advanced
     /// </summary>
     public partial class RawLogDlg : VMSDialog
     {
-        private VMSComm commreader;
         private static bool LogRecordingEnabled = false;
         private SettingsContents Settings = ConfigurationManager.ConfigManager.Settings.Contents;
-        public RawLogDlg(VMSComm commreader)
+        public RawLogDlg()
         {
-            this.commreader = commreader;
             Owner = Application.Current.MainWindow;
             InitializeComponent();
             SetLogButtonText();
@@ -40,17 +39,17 @@ namespace VMSpc.UI.DlgWindows.Advanced
 
         private void UseRaw_Click(object sender, RoutedEventArgs e)
         {
-            commreader.LogType = LOGTYPE_RAWLOG;
+            //commreader.LogType = LOGTYPE_RAWLOG;
         }
 
         private void UseParseReady_Click(object sender, RoutedEventArgs e)
         {
-            commreader.LogType = LOGTYPE_PARSEREADY;
+            //commreader.LogType = LOGTYPE_PARSEREADY;
         }
 
         private void UseFullData_Click(object sender, RoutedEventArgs e)
         {
-            commreader.LogType = LOGTYPE_FULL;
+            //commreader.LogType = LOGTYPE_FULL;
         }
 
         private void ChangeLogFile_Click(object sender, RoutedEventArgs e)
@@ -111,9 +110,13 @@ namespace VMSpc.UI.DlgWindows.Advanced
                 catch (IOException)
                 {
                     LogRecordingEnabled = false;
-                    MessageBox.Show($"The file {commreader.LogRecordingFile} cannot be written to. It is either being used by a different process, or it does not exist.\n" +
+                    MessageBox.Show($"The file {Settings.rawLogFilePath} cannot be written to. It is either being used by a different process, or it does not exist.\n" +
                         $"Verify that it exists by clicking the Change Log File button and viewing the available Raw Log files.\n" +
                         $"To verify that it is not being used by VMSpc, go to Advanced->Communications and check that it is not in use by the Log Player");
+                }
+                catch (Exception ex)
+                {
+                    ErrorLogger.GenerateErrorRecord(ex);
                 }
             }
             SetLogButtonText();

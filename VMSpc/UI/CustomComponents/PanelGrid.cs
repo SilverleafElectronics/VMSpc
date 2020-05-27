@@ -24,6 +24,8 @@ using VMSpc.Enums.UI;
 using VMSpc.UI.Panels;
 using VMSpc.UI.Managers.Alarms;
 using VMSpc.Common;
+using VMSpc.Exceptions;
+using VMSpc.Loggers;
 
 namespace VMSpc.UI.CustomComponents
 {
@@ -280,8 +282,13 @@ namespace VMSpc.UI.CustomComponents
                     }
                 }
             }
-            catch
+            catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException ex)
             {
+                //do nothing - figure out how to do this without throwing this exception...
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.GenerateErrorRecord(ex);
                 return null;
             }
             return null;
@@ -335,10 +342,15 @@ namespace VMSpc.UI.CustomComponents
                 }
                 return (selectedChild != null);
             }
-            catch
+            catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException ex)
             {
-                return false;
+                //do nothing - figure out how to do this without throwing this exception...
             }
+            catch (Exception ex)
+            {
+                ErrorLogger.GenerateErrorRecord(ex);
+            }
+            return false;
         }
 
         private void SetZIndices()

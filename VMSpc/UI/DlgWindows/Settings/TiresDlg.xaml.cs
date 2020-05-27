@@ -15,6 +15,7 @@ using VMSpc.AdvancedParsers.Tires;
 using VMSpc.UI.CustomComponents;
 using VMSpc.Enums.UI;
 using VMSpc.JsonFileManagers;
+using VMSpc.Enums.Parsing;
 
 namespace VMSpc.UI.DlgWindows.Settings
 {
@@ -24,6 +25,7 @@ namespace VMSpc.UI.DlgWindows.Settings
     public partial class TiresDlg : VMSDialog
     {
         SettingsContents Settings = ConfigurationManager.ConfigManager.Settings.Contents;
+        public TpmsType tpmsType;
         public TiresDlg()
         {
             InitializeComponent();
@@ -53,11 +55,19 @@ namespace VMSpc.UI.DlgWindows.Settings
                     radioButton.IsChecked = true;
                 }
             }
+            tpmsType = Settings.tpmsType;
+            foreach (RadioButton radioButton in TPMSSelection.Children)
+            {
+                if (radioButton.Content.ToString().Equals(tpmsType.ToString()))
+                {
+                    radioButton.IsChecked = true;
+                }
+            }
         }
 
-        private ushort GetSelectedTire()
+        private byte GetSelectedTire()
         {
-            return ((VMSListBoxItem)TireSensorList.SelectedItem).ID;
+            return (byte)((VMSListBoxItem)TireSensorList.SelectedItem).ID;
         }
 
         private void OkayButton_Click(object sender, RoutedEventArgs e)
@@ -69,6 +79,7 @@ namespace VMSpc.UI.DlgWindows.Settings
                     Settings.tireMapType = (TireMapType)Enum.Parse(typeof(TireMapType), radioButton.Content.ToString());
                 }
             }
+            Settings.tpmsType = tpmsType;
             DialogResult = true;
             Close();
         }
@@ -80,17 +91,36 @@ namespace VMSpc.UI.DlgWindows.Settings
 
         private void LearnButton_Click(object sender, RoutedEventArgs e)
         {
-            //TireManager.Instance.LearnTire(GetSelectedTire());
+            var instance = GetSelectedTire();
+            TireManager.Instance.LearnTire(instance);
+            MessageBox.Show($"Learning Tire {instance + 1}");
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            //TireManager.Instance.ClearTire(GetSelectedTire());
+            var instance = GetSelectedTire();
+            TireManager.Instance.ClearTire(instance);
+            MessageBox.Show($"Clearing Tire {instance + 1}");
         }
 
         private void AbortLearnButton_Click(object sender, RoutedEventArgs e)
         {
             TireManager.Instance.AbortLearn();
+        }
+
+        private void SelectTST_Click(object sender, RoutedEventArgs e)
+        {
+            tpmsType = TpmsType.TST;
+        }
+
+        private void SelectPPro_Click(object sender, RoutedEventArgs e)
+        {
+            tpmsType = TpmsType.PPRO;
+        }
+
+        private void SelectNone_Click(object sender, RoutedEventArgs e)
+        {
+            tpmsType = TpmsType.NONE;
         }
     }
 }

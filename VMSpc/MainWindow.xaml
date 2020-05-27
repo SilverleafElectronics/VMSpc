@@ -19,7 +19,7 @@
         <CommandBinding Command="self:MainCommands.NewTextPanel" CanExecute="NewTextPanelCommand_CanExecute" Executed="NewTextPanelCommand_Executed" />
         <CommandBinding Command="self:MainCommands.NewImagePanel" CanExecute="NewImagePanel_CanExecute" Executed="NewImagePanel_Executed" />
         <CommandBinding Command="self:MainCommands.NewDiagnosticPanel" CanExecute="NewDiagnosticPanel_CanExecute" Executed="NewDiagnosticPanel_Executed" />
-        <!--<CommandBinding Command="self:MainCommands.NewTirePanel" CanExecute="NewTirePanel_CanExecute" Executed="NewTirePanel_Executed" />-->
+        <CommandBinding Command="self:MainCommands.NewTirePanel" CanExecute="NewTirePanel_CanExecute" Executed="NewTirePanel_Executed" />
         <CommandBinding Command="self:MainCommands.NewTransmissionIndicator" CanExecute="NewTransmissionIndicator_CanExecute" Executed="NewTransmissionIndicator_Executed" />
         <CommandBinding Command="self:MainCommands.NewTankMinder" CanExecute="NewTankMinder_CanExecute" Executed="NewTankMinder_Executed" />
         <CommandBinding Command="self:MainCommands.CommSettings" CanExecute="CommSettingsCommand_CanExecute" Executed="CommSettingsCommand_Executed" />
@@ -60,21 +60,21 @@
                     <MenuItem Command="self:MainCommands.AttachGauge" />
                     <!--<MenuItem Command="self:MainCommands.DeleteGauge" />LEAVECOMMENTED-->
                 </MenuItem>
-                <MenuItem Header="_Advanced">
-                    <MenuItem Header="_Communications" Command="self:MainCommands.CommSettings" />
-                    <MenuItem Header="_Change Engine" Command="self:MainCommands.ChangeEngine" />
-                    <MenuItem Header="_Raw Log" Command="self:MainCommands.RawLog" />
-                    <MenuItem Header="_Message Tester" Command="self:MainCommands.MessageTester" />
-                    <MenuItem Command="self:MainCommands.ToggleClipping" Name="ClipToggle" />
-                    <MenuItem Command="self:MainCommands.ParameterEditor" />
-                </MenuItem>
                 <MenuItem Header="_Settings">
                     <MenuItem Header="_Color Palette" Command="self:MainCommands.ColorPalette" />
                     <MenuItem Header="_Tires" Command="self:MainCommands.Tires" />
+                    <MenuItem Header="_Change Engine" Command="self:MainCommands.ChangeEngine" />
+                    <MenuItem Command="self:MainCommands.ToggleClipping" Name="ClipToggle" />
+                    <MenuItem Command="self:MainCommands.ParameterEditor" />
                 </MenuItem>
                 <MenuItem Header="_View">
                     <MenuItem Header="_Maintenance" />
                     <MenuItem Header="_View Diagnostics" Command="self:MainCommands.ViewDiagnostics" />
+                </MenuItem>
+                <MenuItem Header="_Advanced">
+                    <MenuItem Header="_Communications" Command="self:MainCommands.CommSettings" />
+                    <MenuItem Header="_Raw Log" Command="self:MainCommands.RawLog" />
+                    <MenuItem Header="_Message Tester" Command="self:MainCommands.MessageTester" />
                 </MenuItem>
                 <MenuItem Header="_Help">
                     <MenuItem Command="self:MainCommands.About" />

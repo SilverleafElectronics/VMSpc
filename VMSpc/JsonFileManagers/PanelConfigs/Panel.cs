@@ -192,7 +192,7 @@ namespace VMSpc.JsonFileManagers
     {
         public bool
             showIcon,
-            showValue,
+            showPressure,
             detachTowed;
         public TireMapType
             tireMapType;

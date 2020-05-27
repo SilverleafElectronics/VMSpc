@@ -10,6 +10,7 @@ using VMSpc.UI.DlgWindows;
 using VMSpc.UI.DlgWindows.Advanced;
 using VMSpc.UI.CustomComponents;
 using VMSpc.UI.DlgWindows.Settings;
+using VMSpc.UI.DlgWindows.View;
 //using VMSpc.UI.DlgWindows.Gauges;
 //using VMSpc.UI.DlgWindows.Help;
 //using VMSpc.UI.DlgWindows.Settings;
@@ -21,7 +22,6 @@ namespace VMSpc
     /// </summary>
     public partial class MainWindow : Window
     {
-        public VMSComm commreader;
         //PanelGrid panelGrid;
         public bool forceClose;
 
@@ -44,7 +44,6 @@ namespace VMSpc
 #endif
             GeneratePanels();
             Application.Current.MainWindow = this;
-            InitializeComm();
             var contents = ConfigManager.Settings.Contents;
             
             if (contents.WindowLeft > SystemParameters.VirtualScreenWidth)
@@ -174,19 +173,6 @@ namespace VMSpc
             ContentGrid.ProcessMouseRelease();
         }
 
-        public void InitializeComm()
-        {
-            CloseComm();
-            commreader = new VMSComm();
-            commreader.StartComm();
-        }
-
-        public void CloseComm()
-        {
-            if (NOT_NULL(commreader))
-                commreader.StopComm();
-        }
-
         private void GeneratePanels()
         {
             ContentGrid.InitPanels(this);
@@ -211,7 +197,6 @@ namespace VMSpc
         {
             if (!forceClose)
                 SaveConfig();
-            CloseComm();
 #if DEBUG
             debugConsole.Close();
 #endif
@@ -387,9 +372,8 @@ namespace VMSpc
 
         private void CommSettingsCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            CommDlg commdlg = new CommDlg(commreader);
-            if (ShowVMSDlg(commdlg))
-                InitializeComm();
+            CommDlg commdlg = new CommDlg();
+            ShowVMSDlg(commdlg);
         }
 
         private void ChangeEngine_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -429,11 +413,8 @@ namespace VMSpc
 
         private void RawLogCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var rawlogdlg = new RawLogDlg(commreader);
-            if (ShowVMSDlg(rawlogdlg))
-            {
-                InitializeComm();
-            }
+            var rawlogdlg = new RawLogDlg();
+            ShowVMSDlg(rawlogdlg);
         }
 
         private void MessageTester_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -444,10 +425,7 @@ namespace VMSpc
         private void MessageTester_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var messageTesterDlg = new MessageTester();
-            if (ShowVMSDlg(messageTesterDlg))
-            {
-                InitializeComm();
-            }
+            ShowVMSDlg(messageTesterDlg);
         }
 
         private void DeleteGaugeCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -515,10 +493,8 @@ namespace VMSpc
         private void ParameterEditor_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var dlg = new ParameterEditorDlg();
-            if (ShowVMSDlg(dlg))
-            {
-                GeneratePanels();
-            }
+            ShowVMSDlg(dlg);
+            GeneratePanels();
         }
 
         private void Tires_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -542,7 +518,12 @@ namespace VMSpc
 
         private void ViewDiagnostics_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-
+            var dlg = new DiagnosticLogViewer()
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            };
+            dlg.ShowDialog();
         }
 
         private void Layouts_CanExecute(object sender, CanExecuteRoutedEventArgs e)

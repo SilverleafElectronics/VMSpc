@@ -100,8 +100,19 @@
             </Grid>
         </Grid>
         <Grid Grid.Row="1">
-            <GroupBox Header="Tire Layout" Grid.Row="1"   Margin="5, 20, 5, 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Column="0" Header="Tire Layout" Margin="5, 20, 5, 0">
                 <StackPanel Name="TireLayout"></StackPanel>
+            </GroupBox>
+            <GroupBox Grid.Column="1" Header="TPMS Type" Margin="5,20,5,0">
+                <StackPanel Name="TPMSSelection">
+                    <RadioButton Name="SelectNone" Click="SelectNone_Click">None</RadioButton>
+                    <RadioButton Name="SelectTST" Click="SelectTST_Click">TST</RadioButton>
+                    <RadioButton Name="SelectPPro" Click="SelectPPro_Click">Pressure Pro</RadioButton>
+                </StackPanel>
             </GroupBox>
         </Grid>
     </Grid>

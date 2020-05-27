@@ -32,23 +32,26 @@ namespace VMSpc.Common
 
         //Simple Events - These events only carry an Event Identifier, without any instancing or other multiplexing. The event object that
         //gets published with these can have an associated value item (e.g., NEW_COMM_DATA_EVENT), but usually does not.
+
+        public const ulong EVENT_BASE_MASK = 0xFF00000000000000;
+
         #region Simple Events
 
-        public static ulong GUI_RESET_EVENT => 0xFE00000000000001;
-        public static ulong NEW_COMM_DATA_EVENT => 0xFE00000000000002;
-        public static ulong COMM_DATA_ERROR_EVENT => 0xFE00000000000003;
+        public const ulong GUI_RESET_EVENT = 0xFE00000000000001;
+        public const ulong NEW_COMM_DATA_EVENT = 0xFE00000000000002;
+        public const ulong COMM_DATA_ERROR_EVENT = 0xFE00000000000003;
 
 
         #endregion Simple Events
 
         //Instanced Events - These base events only carry an Event Identifier and an instance. 
         #region Instanced Event Bases
-        public static ulong CURRENT_MPG_EVENT => 0xFD00000100000000;
-        public static ulong DISTANCE_REMAINING_EVENT => 0xFD00000200000000;
-        public static ulong FUEL_READING_EVENT => 0xFD00000300000000;
-        public static ulong DISTANCE_TRAVELLED_EVENT => 0xFD00000400000000;
-        public static ulong HOURS_EVENT => 0xFD00000500000000;
-        public static ulong AVERAGE_SPEED_EVENT => 0xFD00000600000000;
+        public const ulong CURRENT_MPG_EVENT = 0xFD00000100000000;
+        public const ulong DISTANCE_REMAINING_EVENT = 0xFD00000200000000;
+        public const ulong FUEL_READING_EVENT = 0xFD00000300000000;
+        public const ulong DISTANCE_TRAVELLED_EVENT = 0xFD00000400000000;
+        public const ulong HOURS_EVENT = 0xFD00000500000000;
+        public const ulong AVERAGE_SPEED_EVENT = 0xFD00000600000000;
 
         #endregion Instanced Event Bases
 
@@ -56,19 +59,19 @@ namespace VMSpc.Common
         //The MSByte in these events must be in the range 1-128 (0x01 - 0x80)
         #region Complex Event Bases
 
-        public static ulong PID_BASE => 0x0100000000000000;
-        public static ulong DIAGNOSTIC_BASE => 0x0200000000000000;
-        public static ulong TIRE_BASE => 0x0300000000000000;
-        public static ulong ALARM_BASE => 0x0400000000000000;
+        public const ulong PID_BASE = 0x0100000000000000;
+        public const ulong DIAGNOSTIC_BASE = 0x0200000000000000;
+        public const ulong TIRE_BASE = 0x0300000000000000;
+        public const ulong ALARM_BASE = 0x0400000000000000;
         
         /// <summary>
         /// Data published for use by UI Elements. This should always be OR'd with a PID in the LSWord
         /// </summary>
-        public static ulong PARSED_DATA_EVENT => 0x0500000000000000;
+        public const ulong PARSED_DATA_EVENT = 0x0500000000000000;
         /// <summary>
         /// Data published for use by Advanced J1939 Parsers. Byte 0 = 0x06; Byte 1 = Source Address (optional. subscribing to 0xFF SA will catch all); Bytes 2-8 = PGN, Bytes 7-15 are unused
         /// </summary>
-        public static ulong J1939_RAW_DATA_EVENT => 0x0600000000000000;
+        public const ulong J1939_RAW_DATA_EVENT = 0x0600000000000000;
         /// <summary>
         /// /Returns a J1939_RAW_DATA_EVENT with the specified PGN and SourceAddress applied. Leaving the SourceAdress at the default 0xFF will catch all Source Addresses
         /// </summary>

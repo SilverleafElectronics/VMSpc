@@ -4,9 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows;
 
 namespace VMSpc.Extensions.UI
 {
@@ -16,11 +16,12 @@ namespace VMSpc.Extensions.UI
         /// Scales the given textblock to the maximum possible font size for the bounding area. An optional font size seed can 
         /// be provided for performance. Note this will automatically pad text for you by subtracting from the bounding area's height or width.
         /// </summary>
-        /// 
         public static void ScaleText(this TextBlock textBlock, double maxWidth, double maxHeight, int maxCharacters=0)
         {
+            textBlock.FontSize = 12;
             if (string.IsNullOrEmpty(textBlock.Text) && maxCharacters == 0)
                 return;
+            //textBlock.FontSize = CalculateSeed(textBlock);
             string originalText = textBlock.Text;
             if (maxCharacters > 0)
             {
@@ -59,16 +60,27 @@ namespace VMSpc.Extensions.UI
         }
 
         /// <summary>
-        /// Guesses at the maximum allowed size by dividing the 
+        /// TODO
         /// </summary>
-        /// <param name="textBlock"></param>
         /// <returns></returns>
-        //public static Size CalculateSeedSize(TextBlock textBlock)
+        //public static double CalculateSeed(TextBlock textBlock, double maxWidth, double maxHeight)
         //{
-        //
+        //    var originalText = textBlock.Text;
+        //    textBlock.Text = "W";
+        //    var size = new Size(10, 10);
+        //    while (textBlock.FontSize > 2 && (size.Width > maxWidth || size.Height > maxHeight))
+        //    {
+        //        textBlock.FontSize--;
+        //        size = CalculateStringSize(textBlock);
+        //    }
+        //    while (size.Width < (maxWidth) && size.Height < (maxHeight))
+        //    {
+        //        textBlock.FontSize++;
+        //        size = CalculateStringSize(textBlock);
+        //    }
+        //    textBlock.FontSize--;
+        //    textBlock.Text = originalText;
         //}
-        //
-        //public static Size CalculateStringSize(string text, )
 
         public static Size CalculateStringSize(TextBlock textBlock)
         {

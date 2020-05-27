@@ -7,13 +7,65 @@
         xmlns:local="clr-namespace:VMSpc.UI.DlgWindows.Advanced"
         xmlns:parent ="clr-namespace:VMSpc.UI.DlgWindows"
         mc:Ignorable="d"
-        Title="Message Tester" Height="450" Width="800">
+        Title="Message Tester" Height="250" Width="400">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <TextBox Name="CurrentMessage" Grid.Row="0" Height="25" Width="300" VerticalContentAlignment="Center" Cursor="IBeam" />
-        <Button Name="SendButton" Grid.Row="1" Click="SendButton_Click" Width="125" Height="25">Send</Button>
+        <ComboBox 
+            VerticalAlignment="Center" 
+            HorizontalContentAlignment="Center"
+            Width="125"
+            IsEditable="True"
+            IsReadOnly="True"
+            Text="--Message Type--"
+        >
+            <ComboBoxItem Selected="Raw_Selected" Name="Raw">Raw</ComboBoxItem>
+            <ComboBoxItem Selected="J1708_Selected" Name="J1708">J1708</ComboBoxItem>
+            <ComboBoxItem Selected="J1939_Selected" Name="J1939">J1939</ComboBoxItem>
+        </ComboBox>
+        <Grid x:Name="MessageBuildingGrid" Grid.Row="1">
+            <Grid Name="RawMessageBuilder" Visibility="Hidden">
+                <TextBox Name="CurrentMessage" Height="25" Width="300" VerticalContentAlignment="Center" Cursor="IBeam" />
+            </Grid>
+            <Grid Name="J1939MessageBuilder" Visibility="Hidden">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Label Margin="100 0 0 0" VerticalContentAlignment="Center">Address:</Label>
+                    <TextBox Name="AddressBox" Height="25" Width="50" VerticalContentAlignment="Center" Cursor="IBeam"></TextBox>
+                    <Label Margin="150 0 0 0" VerticalContentAlignment="Center">PGN:</Label>
+                    <TextBox Name="PGNBox" Height="25" Width="100" VerticalContentAlignment="Center" Cursor="IBeam"></TextBox>
+                    <CheckBox Name="UseHexCheckbox" Margin="50 0 0 0" VerticalContentAlignment="Center" Checked="UseHex_Checked" Unchecked="UseHex_Unchecked">Use Hex</CheckBox>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <Label VerticalContentAlignment="Center">Data:</Label>
+                    <Label VerticalContentAlignment="Center">Byte 0</Label>
+                    <TextBox Name="DataByte0" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <Label VerticalContentAlignment="Center">Byte 1</Label>
+                    <TextBox Name="DataByte1" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <Label VerticalContentAlignment="Center">Byte 2</Label>
+                    <TextBox Name="DataByte2" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <Label VerticalContentAlignment="Center">Byte 3</Label>
+                    <TextBox Name="DataByte3" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <Label VerticalContentAlignment="Center">Byte 4</Label>
+                    <TextBox Name="DataByte4" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <Label VerticalContentAlignment="Center">Byte 5</Label>
+                    <TextBox Name="DataByte5" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <Label VerticalContentAlignment="Center">Byte 6</Label>
+                    <TextBox Name="DataByte6" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <Label VerticalContentAlignment="Center">Byte 7</Label>
+                    <TextBox Name="DataByte7" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                </StackPanel>
+            </Grid>
+            <Grid Name="J1708MessageBuilder" Visibility="Hidden">
+                <TextBox Name="J1939DataByte1" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+            </Grid>
+        </Grid>
+        <Button Name="SendButton" Grid.Row="2" Click="SendButton_Click" Width="125" Height="25">Send</Button>
     </Grid>
 </parent:VMSDialog>

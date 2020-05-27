@@ -1,0 +1,25 @@
+﻿<Window x:Class="VMSpc.UI.DlgWindows.View.DiagnosticLogViewer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VMSpc.UI.DlgWindows.View"
+        mc:Ignorable="d"
+        Title="Diagnostic Log Viewer" Height="450" Width="800">
+    <Grid>
+        <DataGrid Name="DG_DiagnosticLogViewer"
+                  AutoGenerateColumns="False"
+                  Width="610"
+                  Height="400"
+                  ItemsSource="{Binding}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Source" Binding="{Binding Source}" Width="50"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="50"/>
+                <DataGridTextColumn Header="MID" Binding="{Binding MID}" Width="50"/>
+                <DataGridTextColumn Header="Component" Binding="{Binding Component}" Width="200"/>
+                <DataGridTextColumn Header="Mode" Binding="{Binding Mode}" Width="150"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="100" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

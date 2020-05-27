@@ -48,7 +48,7 @@ namespace VMSpc.UI.GaugeComponents
 
         public SolidColorBrush GetFillBrush()
         {
-            if (currentValue > parameter.GaugeMax || currentValue < parameter.GaugeMin)
+            if (currentValue < parameter.GaugeMin)
                 return (SolidColorBrush)WarningCircle.Stroke;   //don't change the stroke if the value is invalid
             if (currentValue < parameter.LowRed)
                 return RedBrush;

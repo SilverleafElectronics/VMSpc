@@ -65,16 +65,7 @@ namespace VMSpc.AdvancedParsers
             {
                 var message = new J1708DiagnosticMessage(RawData);
                 RawData = RawData.SubList(message.MessageLength);
-                var identicalMessage = GetStoredDiagnosticMessage(message.ID, message.Fmi);
-                if (identicalMessage == null)
-                {
-                    ActiveDiagnosticMessages.Add(message);
-                    PublishEvent(message);
-                }
-                else
-                {
-                    //identicalMessage.
-                }
+                AddAndPublish(message);
                 count = RawData.Count;
             }
         }
@@ -82,11 +73,21 @@ namespace VMSpc.AdvancedParsers
         public void ProcessJ1939Diagnostic(List<byte> RawData)
         {
             var message = new J1939DiagnosticMessage(RawData);
-            if (IsNewMessage(message))
+            AddAndPublish(message);
+        }
+
+        private void AddAndPublish(DiagnosticMessage message)
+        {
+            var identicalMessage = GetStoredDiagnosticMessage(message.ID, message.Fmi);
+            if (identicalMessage == null)
             {
                 ActiveDiagnosticMessages.Add(message);
-                PublishEvent(message);
             }
+            else
+            {
+                identicalMessage.TimeStamp = DateTime.Now;
+            }
+            PublishEvent(message);
         }
 
         /// <summary>
@@ -130,7 +131,7 @@ namespace VMSpc.AdvancedParsers
     {
         public uint ID { get; protected set; }
         public byte Mid { get; set; }
-        public DateTime TimeStamp { get; protected set; }
+        public DateTime TimeStamp { get; set; }
         public byte Fmi { get; protected set; }
         public virtual string SourceString => DiagnosticStrings.CodeTypeAsString(Mid);
         public abstract string TypeString { get; }
@@ -138,7 +139,15 @@ namespace VMSpc.AdvancedParsers
         public string MidString => Mid.ToString();
         public abstract string Component { get; }
         public string FmiString => DiagnosticStrings.GetModeString(Fmi);
+        /// <summary>
+        /// Indicates whether or not this record has been acknowledged. This should only be set or used
+        /// by UI classes
+        /// </summary>
         public bool Acknowledged { get; set; } = false;
+        /// <summary>
+        /// Indicates whether or not this record is older than 5 minutes.
+        /// </summary>
+        public bool IsOldRecord => (TimeStamp < DateTime.Now.AddMinutes(-1));
 
         public DiagnosticMessage()
         {

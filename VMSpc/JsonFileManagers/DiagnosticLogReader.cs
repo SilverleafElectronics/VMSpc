@@ -10,12 +10,12 @@ namespace VMSpc.JsonFileManagers
 {
     public class DiagnosticLogContents : IJsonContents
     {
-        public List<DiagnosticMessage> DiagnosticRecords { get; set; }
+        public List<DiagnosticLogRecord> DiagnosticRecords { get; set; }
     }
 
     public class DiagnosticLogReader : JsonFileReader<DiagnosticLogContents>
     {
-        public DiagnosticLogReader() : base("\\Logs\\Diagnostics.json")
+        public DiagnosticLogReader() : base("\\logs\\Diagnostics.json")
         {
 
         }
@@ -24,9 +24,18 @@ namespace VMSpc.JsonFileManagers
         {
             return new DiagnosticLogContents()
             { 
-                DiagnosticRecords = new List<DiagnosticMessage>()
+                DiagnosticRecords = new List<DiagnosticLogRecord>()
             };
-
         }
+    }
+
+    public class DiagnosticLogRecord
+    {
+        public string Source { get; set; }
+        public string Type { get; set; }
+        public string MID { get; set; }
+        public string Component { get; set; }
+        public string Mode { get; set; }
+        public string Date { get; set; }
     }
 }

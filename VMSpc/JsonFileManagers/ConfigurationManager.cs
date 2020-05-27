@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using VMSpc.Exceptions;
+using VMSpc.Loggers;
 
 namespace VMSpc.JsonFileManagers
 {
@@ -50,6 +52,10 @@ namespace VMSpc.JsonFileManagers
             {
 
             }
+            catch (Exception ex)
+            {
+                ErrorLogger.GenerateErrorRecord(ex);
+            }
         }
 
         /// <summary>
@@ -63,7 +69,7 @@ namespace VMSpc.JsonFileManagers
             FileOpener.CreateDirectory("\\configuration\\tankminders");
             FileOpener.CreateDirectory("\\history_files");
             FileOpener.CreateDirectory("\\engines");
-            FileOpener.CreateDirectory("\\Logs");
+            FileOpener.CreateDirectory("\\logs");
             if (!FileOpener.DirectoryExists("\\rawlogs"))
             {
                 FileOpener.CreateDirectory("\\rawlogs");
@@ -109,6 +115,7 @@ namespace VMSpc.JsonFileManagers
             Meters.SaveJson();
             ParamData.SaveJson();
             ColorPalettes.SaveJson();
+            DiagnosticLogReader.SaveJson();
         }
     }
 }

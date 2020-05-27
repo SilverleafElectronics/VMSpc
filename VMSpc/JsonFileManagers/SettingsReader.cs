@@ -98,7 +98,7 @@ namespace VMSpc.JsonFileManagers
                 engineModel = EngineModel.NONE,
                 tpmsType = TpmsType.NONE,
                 globalParseBehavior = ParseBehavior.PARSE_ALL,
-                jibType = JibType.USB,
+                jibType = JibType.LOGPLAYER,
                 tireMapType = TireMapType.SIX_WHEEL,
             };
         }

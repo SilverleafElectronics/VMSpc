@@ -10,7 +10,12 @@ namespace VMSpc.Communication
     public abstract class OutgoingMessage
     {
         public DataBusType DataBusType;
+        /// <summary>
+        /// Customizable prefix character that gets sent out on USB connections. Defaults to the default values for J1708('J') and J1939('R');
+        /// </summary>
+        public char USBPrefix { get; set; }
         public abstract byte[] ToByteArray();
+        public abstract string ToString(bool useUSBPrefix);
     }
     public class OutgoingJ1708Message : OutgoingMessage
     {
@@ -22,6 +27,7 @@ namespace VMSpc.Communication
         public OutgoingJ1708Message()
         {
             DataBusType = DataBusType.J1708;
+            USBPrefix = 'J';
         }
         public void GenerateChecksum()
         {
@@ -44,6 +50,11 @@ namespace VMSpc.Communication
             message[length - 1] = CheckSum;
             return message;
         }
+
+        public override string ToString(bool useUSBPrefix)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class OutgoingJ1939Message : OutgoingMessage
@@ -56,11 +67,28 @@ namespace VMSpc.Communication
         {
             DataBusType = DataBusType.J1939;
             Data = new byte[] { 0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF };
+            USBPrefix = 'R';
         }
 
         public override byte[] ToByteArray()
         {
             throw new NotImplementedException();
+        }
+
+        public override string ToString(bool useUSBPrefix = false)
+        {
+            StringBuilder builder = new StringBuilder();
+            if (useUSBPrefix)
+            {
+                builder.Append(USBPrefix);
+            }
+            builder.Append(string.Format("{0:X2}", SA));
+            builder.Append(string.Format("{0:X6}", PGN));
+            foreach (var value in Data)
+            {
+                builder.Append(string.Format("{0:X2}", value));
+            }
+            return builder.ToString();
         }
     }
 }

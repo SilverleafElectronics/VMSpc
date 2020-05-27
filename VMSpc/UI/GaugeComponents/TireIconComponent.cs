@@ -29,6 +29,8 @@ namespace VMSpc.UI.GaugeComponents
             currentPressure,
             lastPressure;
         private readonly int tireIndex;
+        public bool ShowIndicator { get; set; }
+        public bool ShowPressure { get; set; }
         public TireIconComponent(int index) 
             : base()
         {
@@ -41,9 +43,17 @@ namespace VMSpc.UI.GaugeComponents
         }
         public override void Draw()
         {
-            AddTireIndicator();
-            AddTirePressureIndicator();
+            if (ShowIndicator)
+                AddTireIndicator();
+            if (ShowPressure)
+                AddTirePressureIndicator();
             Update();
+        }
+
+        public override void Update()
+        {
+            UpdateIndicator();
+            UpdatePressure();
         }
 
         public void AddTireIndicator()
@@ -82,12 +92,6 @@ namespace VMSpc.UI.GaugeComponents
             border.Child = tirePressureIndicator;
             Children.Add(border);
             tirePressureIndicator.ScaleText(border.Width, border.Height, 3);
-        }
-
-        public override void Update()
-        {
-            UpdateIndicator();
-            UpdatePressure();
         }
 
         private void UpdateIndicator()

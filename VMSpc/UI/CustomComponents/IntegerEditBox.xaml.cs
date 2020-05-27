@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VMSpc.DevHelpers;
+using VMSpc.Exceptions;
+using VMSpc.Loggers;
 
 namespace VMSpc.UI.CustomComponents
 {
@@ -61,8 +63,9 @@ namespace VMSpc.UI.CustomComponents
                 {
                     CurrentValue = value;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    ErrorLogger.GenerateErrorRecord(ex);
                 }
             }
         }

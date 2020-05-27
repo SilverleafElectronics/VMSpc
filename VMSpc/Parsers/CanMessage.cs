@@ -23,7 +23,6 @@ namespace VMSpc.Parsers
         public DateTime timeReceived { get; private set; }
         public DateTime timeParsed { get; private set; }
         public string rawMessage { get; private set; }
-        public List<byte> rawData { get; private set; }
         /// <summary>
         /// If true, the data can be published as is. Otherwise, additional parsing is necessary.
         /// </summary>
@@ -35,7 +34,6 @@ namespace VMSpc.Parsers
 
         public CanMessage(string message, VMSDataSource VMSDataSource, DateTime timeReceived)
         {
-            rawData = new List<byte>();
             rawMessage = message.Substring(0, message.Length - 2);  //removes the checksum from the end of the message
             messageLength = rawMessage.Length; 
             this.VMSDataSource = VMSDataSource;
@@ -64,6 +62,11 @@ namespace VMSpc.Parsers
             ExtractMessage();
         }
 
+        public static bool IsValidMessage(string message)
+        {
+            return true;
+        }
+
         /// <summary>
         /// Extracts the address, pgn, and array of data bytes from the message and stores the results in the J1939Message instance
         /// </summary>
@@ -71,9 +74,9 @@ namespace VMSpc.Parsers
         {
             //J1939 Message comes in the format "R[SA:2 (index 1-2)][PGN:6 (index 3-8)][Data:16 (index 9-24)][cr][lf]"
             messageType = J1939;
-            address = Convert.ToByte(rawMessage.Substring(0, 2), 16);
-            pgn = Convert.ToUInt32(rawMessage.Substring(2, 6), 16);
-            string dataSection = rawMessage.Substring(8, 16);
+            address = Convert.ToByte(rawMessage.Substring(0, 2), 16);   //Message byte 0: SA
+            pgn = Convert.ToUInt32(rawMessage.Substring(2, 6), 16);     //Message bytes 2-6: PGN
+            string dataSection = rawMessage.Substring(8);           //Message bytes 7 - end: data section
             bool dataStored = BYTE_STRING_TO_BYTE_ARRAY(data, dataSection, dataSection.Length);
             if (!dataStored)
                 messageType = INVALID_CAN_MESSAGE;
@@ -130,6 +133,11 @@ namespace VMSpc.Parsers
             : base(message, VMSDataSource.J1708, timeReceived)
         {
             ExtractMessage();
+        }
+
+        public static bool IsValidMessage(string message)
+        {
+            return true;
         }
 
         /// <summary>

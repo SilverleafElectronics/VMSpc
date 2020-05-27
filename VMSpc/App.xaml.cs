@@ -16,6 +16,8 @@ using VMSpc.Common;
 using VMSpc.AdvancedParsers;
 using VMSpc.AdvancedParsers.Tires;
 using VMSpc.Loggers;
+using VMSpc.Communication;
+using VMSpc.Exceptions;
 
 namespace VMSpc
 {
@@ -62,6 +64,7 @@ namespace VMSpc
             DiagnosticsParser.Initialize();
             CanMessageHandler.Initialize();
             ConfigManager.LoadConfiguration();
+            DiagnosticLogger.Initialize();
             RawLogger.Initialize();
             _PIDValueStager = new PIDValueStager();
             _EngineDataParser = new EngineDataParser();
@@ -81,6 +84,7 @@ namespace VMSpc
             //Odometer.Activate();
             //ParamData.Activate();
             TireManager.Initialize();
+            CommunicationManager.Initialize();
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)

@@ -11,66 +11,89 @@ namespace VMSpc.UI.TireMaps
 {
     public static class TireMap
     {
-        public static List<TireCell> InitializeTireCellMap(TireMapType tireMapType)
+        public static List<TireCell> InitializeTireCellMap(TireMapType tireMapType, bool towVehicleDetached)
         {
             List<TireCell> tireCells = new List<TireCell>();
             switch (tireMapType)
             {
                 case TireMapType.SIX_WHEEL:
-                    return new List<TireCell>()
-                    {
-                        new TireCell(0, 0, 0),
-                        new TireCell(1, 0, 3),
-                        new TireCell(2, 1, 0),
-                        new TireCell(3, 1, 1),
-                        new TireCell(4, 1, 2),
-                        new TireCell(5, 1, 3),
-                    };
+                    tireCells.AddRange(
+                        new List<TireCell>()
+                        {
+                            new TireCell(0, 0, 0),
+                            new TireCell(1, 0, 3),
+                            new TireCell(2, 1, 0),
+                            new TireCell(3, 1, 1),
+                            new TireCell(4, 1, 2),
+                            new TireCell(5, 1, 3),
+                        });
+                    break;
                 case TireMapType.EIGHT_WHEEL:
-                    return new List<TireCell>()
-                    {
-                        new TireCell(0, 0, 0),
-                        new TireCell(1, 0, 3),
-                        new TireCell(2, 1, 0),
-                        new TireCell(3, 1, 1),
-                        new TireCell(4, 1, 2),
-                        new TireCell(5, 1, 3),
-                        new TireCell(7, 2, 0),
-                        new TireCell(8, 2, 3),
-                    };
+                    tireCells.AddRange(
+                        new List<TireCell>()
+                        {
+                            new TireCell(0, 0, 0),
+                            new TireCell(1, 0, 3),
+                            new TireCell(2, 1, 0),
+                            new TireCell(3, 1, 1),
+                            new TireCell(4, 1, 2),
+                            new TireCell(5, 1, 3),
+                            new TireCell(7, 2, 0),
+                            new TireCell(8, 2, 3),
+                        });
+                    break;
                 case TireMapType.SIX_PLUS_4:
-                    return new List<TireCell>()
+                    tireCells.AddRange(
+                        new List<TireCell>()
+                        {
+                            new TireCell(0, 0, 0),
+                            new TireCell(1, 0, 3),
+                            new TireCell(2, 1, 0),
+                            new TireCell(3, 1, 1),
+                            new TireCell(4, 1, 2),
+                            new TireCell(5, 1, 3),
+                        });
+                    if (!towVehicleDetached)
                     {
-                        new TireCell(0, 0, 0),
-                        new TireCell(1, 0, 3),
-                        new TireCell(2, 1, 0),
-                        new TireCell(3, 1, 1),
-                        new TireCell(4, 1, 2),
-                        new TireCell(5, 1, 3),
-                        new TireCell(6, 2, 1),
-                        new TireCell(7, 2, 2),
-                        new TireCell(8, 3, 1),
-                        new TireCell(9, 3, 2),
-                    };
+                        tireCells.AddRange(
+                            new List<TireCell>()
+                            {
+                                new TireCell(6, 2, 1),
+                                new TireCell(7, 2, 2),
+                                new TireCell(8, 3, 1),
+                                new TireCell(9, 3, 2),
+                            });
+                    }
+                    break;
                 case TireMapType.EIGHT_PLUS_4:
-                    return new List<TireCell>()
+                    tireCells.AddRange( 
+                        new List<TireCell>()
+                        {
+                            new TireCell(0, 0, 0),
+                            new TireCell(1, 0, 3),
+                            new TireCell(2, 1, 0),
+                            new TireCell(3, 1, 1),
+                            new TireCell(4, 1, 2),
+                            new TireCell(5, 1, 3),
+                            new TireCell(7, 2, 0),
+                            new TireCell(8, 2, 3),
+                        });
+                    if (!towVehicleDetached)
                     {
-                        new TireCell(0, 0, 0),
-                        new TireCell(1, 0, 3),
-                        new TireCell(2, 1, 0),
-                        new TireCell(3, 1, 1),
-                        new TireCell(4, 1, 2),
-                        new TireCell(5, 1, 3),
-                        new TireCell(7, 2, 0),
-                        new TireCell(8, 2, 3),
-                        new TireCell(9, 3, 1),
-                        new TireCell(10, 3, 2),
-                        new TireCell(11, 4, 1),
-                        new TireCell(12, 4, 2),
-                    };
+                        tireCells.AddRange(
+                            new List<TireCell>
+                            {
+                                new TireCell(9, 3, 1),
+                                new TireCell(10, 3, 2),
+                                new TireCell(11, 4, 1),
+                                new TireCell(12, 4, 2),
+                            });
+                    }
+                    break;
                 default:
-                    return new List<TireCell>() { };
+                    break;
             }
+            return tireCells;
         }
     }
 

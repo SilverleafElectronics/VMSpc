@@ -34,7 +34,9 @@ namespace VMSpc.JsonFileManagers
         public double Multiplier;
         public PidValue J1708Value;
         public PidValue J1939Value;
+        [JsonIgnore]
         public double LastValue; //(PresenterList[Pid].datum.seen) ? PresenterList[Pid].datum.value * Multiplier + Offset : DUB_NODATA;
+        [JsonIgnore]
         public double LastMetricValue; //=> (PresenterList[Pid].datum.seen) ? PresenterList[Pid].datum.valueMetric : DUB_NODATA;
     }
     public class ParameterContents : IJsonContents

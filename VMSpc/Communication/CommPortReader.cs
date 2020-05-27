@@ -14,6 +14,8 @@ using System.Collections.Concurrent;
 using VMSpc.JsonFileManagers;
 using VMSpc.Enums.Parsing;
 using VMSpc.Extensions.Standard;
+using VMSpc.Exceptions;
+using VMSpc.Loggers;
 
 namespace VMSpc.Communication
 {
@@ -38,7 +40,7 @@ namespace VMSpc.Communication
             messagesToSend = new ConcurrentQueue<string>();
             dataReceivedHandler = new SerialDataReceivedEventHandler(HandleCommPortData);
             quietlyTryReconnect = 0;
-            quietReconnectTimer = CREATE_TIMER(TryReconnect, 3000);
+            quietReconnectTimer = CREATE_TIMER(TryReconnect, 10000);
             quietReconnectTimer.Stop();
         }
 
@@ -62,7 +64,7 @@ namespace VMSpc.Communication
                 quietlyTryReconnect = 0;
                 base.InitDataReader();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 ushort newPort = FindVmsPort();
                 if (newPort == comPort && quietlyTryReconnect == 1)
@@ -80,6 +82,7 @@ namespace VMSpc.Communication
                 }
                 else
                     ChangeComPort(newPort);
+                ErrorLogger.GenerateErrorRecord(ex);
             }
         }
 
@@ -100,8 +103,9 @@ namespace VMSpc.Communication
                             OnDataReceived(message);
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        ErrorLogger.GenerateErrorRecord(ex);
                     }
                 }));
                 
@@ -126,7 +130,10 @@ namespace VMSpc.Communication
                     portReader = null;
                 }
             }
-            catch { } //do something useful here
+            catch (Exception ex)
+            {
+                ErrorLogger.GenerateErrorRecord(ex);
+            }
         }
         public override void SendMessage(OutgoingMessage message)
         {
@@ -148,6 +155,7 @@ namespace VMSpc.Communication
                     SendMessage(messageBuilder.ToString());
                     break;
                 case DataBusType.J1939:
+                    SendMessage(message.ToString(true) + "\n\r");
                     break;
             }
         }
@@ -163,7 +171,10 @@ namespace VMSpc.Communication
         private void PopMessageQueue()
         {
             messagesToSend.TryDequeue(out string message);
-            WriteToPort(message);
+            if (message != null)
+            {
+                WriteToPort(message);
+            }
         }
 
         /// <summary>

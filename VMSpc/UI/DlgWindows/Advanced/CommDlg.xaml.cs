@@ -29,14 +29,13 @@ namespace VMSpc.UI.DlgWindows
     /// </summary>
     public partial class CommDlg : VMSDialog
     {
-        private VMSComm commreader;
         public int testSelection;
+        private SettingsContents Settings = ConfigManager.Settings.Contents;
 
         //private int dataReaderType;
         
-        public CommDlg(VMSComm commreader) : base()
+        public CommDlg() : base()
         {
-            this.commreader = commreader;
             InitializeComponent();
             PopulateComboBox<JibType>(CommSelection);
             PopulateComboBox<ParseBehavior>(ParsingBehavior);
@@ -46,14 +45,15 @@ namespace VMSpc.UI.DlgWindows
         protected override void ApplyBindings()
         {
             base.ApplyBindings();
+            //TODO
             //CreateBinding("MessageCount", commreader, BindingMode.OneWay, GoodPacketCount, Label.ContentProperty);
             //CreateBinding("BadMessageCount", commreader, BindingMode.OneWay, BadPacketCount, Label.ContentProperty);
             //CreateBinding(GoodPacketCount, "Content", commreader, "MessageCount", ONE_WAY, true);
 
-            LogPlayerFileName.Text = ConfigManager.Settings.Contents.jibPlayerFilePath;
-            CommSelection.SelectedIndex = (int)ConfigManager.Settings.Contents.jibType;
-            PortSelection.SelectedIndex = ConfigManager.Settings.Contents.comPort - 1;
-            ParsingBehavior.SelectedIndex = (int)ConfigManager.Settings.Contents.globalParseBehavior;
+            LogPlayerFileName.Text = Settings.jibPlayerFilePath;
+            CommSelection.SelectedIndex = (int)Settings.jibType;
+            PortSelection.SelectedIndex = Settings.comPort - 1;
+            ParsingBehavior.SelectedIndex = (int)Settings.globalParseBehavior;
         }
 
         private void ChangeLogPlayerFile_Click(object sender, RoutedEventArgs e)
@@ -84,16 +84,31 @@ namespace VMSpc.UI.DlgWindows
 
         private void RestartComm_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Owner).InitializeComm();
+            //((MainWindow)Owner).InitializeComm();
+            //TODO
+            CommunicationManager.Instance.RestartComm();
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            ConfigManager.Settings.Contents.jibPlayerFilePath = LogPlayerFileName.Text;
-            ConfigManager.Settings.Contents.globalParseBehavior = (ParseBehavior)ParsingBehavior.SelectedIndex;
-            ConfigManager.Settings.Contents.comPort = (ushort)(PortSelection.SelectedIndex + 1);
-            ConfigManager.Settings.Contents.jibType = (JibType)CommSelection.SelectedIndex;
+            bool shouldRestart = false;
+            if (
+                Settings.jibType != (JibType)CommSelection.SelectedIndex ||
+                Settings.comPort != (ushort)(PortSelection.SelectedIndex + 1) ||
+                Settings.jibPlayerFilePath != LogPlayerFileName.Text
+                )
+            {
+                shouldRestart = true;
+            }
+            Settings.jibPlayerFilePath = LogPlayerFileName.Text;
+            Settings.globalParseBehavior = (ParseBehavior)ParsingBehavior.SelectedIndex;
+            Settings.comPort = (ushort)(PortSelection.SelectedIndex + 1);
+            Settings.jibType = (JibType)CommSelection.SelectedIndex;
             DialogResult = true;
+            if (shouldRestart)
+            {
+                CommunicationManager.Instance.RestartComm();
+            }
             Close();
         }
     }

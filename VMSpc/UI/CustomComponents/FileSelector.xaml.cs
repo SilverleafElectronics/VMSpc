@@ -14,7 +14,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using VMSpc.DevHelpers;
+using VMSpc.Exceptions;
 using VMSpc.JsonFileManagers;
+using VMSpc.Loggers;
 
 namespace VMSpc.UI.CustomComponents
 {
@@ -186,6 +188,10 @@ namespace VMSpc.UI.CustomComponents
                     {
                         hasInvalidFiles = true;
                         invalidFiles.Add(FileOpener.GetFileName(filename));
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorLogger.GenerateErrorRecord(ex);
                     }
                 }
                 if (hasInvalidFiles)

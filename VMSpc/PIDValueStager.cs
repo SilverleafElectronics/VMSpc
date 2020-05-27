@@ -49,19 +49,11 @@ namespace VMSpc
                         {
                             UpdateWithJ1708(segment);
                         }
-                        else
-                        {
-                            PublishUnparsedData(segment);
-                        }
                         break;
                     case VMSDataSource.J1939:
                         if (segment.ParseStatus == ParseStatus.Parsed)
                         {
                             UpdateWithJ1939(segment);
-                        }
-                        else
-                        {
-                            PublishUnparsedData(segment);
                         }
                         break;
                 }
@@ -96,7 +88,7 @@ namespace VMSpc
                     case ParseBehavior.PARSE_ALL:
                         UpdateAndPublish(Parameter.J1939Value, segment);
                         break;
-                    case ParseBehavior.PRIORITIZE_1708:
+                    case ParseBehavior.PRIORITIZE_1708: //Waits until the J1708 Value for this PID is over a minute old
                         if (Parameter.J1708Value.TimeReceived < DateTime.Now.AddMinutes(-1))
                         {
                             UpdateAndPublish(Parameter.J1939Value, segment);
@@ -112,8 +104,8 @@ namespace VMSpc
                 if (pidValue == null)
                     pidValue = new PidValue();
                 pidValue.RawValue = segment.RawValue;
-                pidValue.StandardValue = segment.StandardValue;
-                pidValue.MetricValue = segment.MetricValue;
+                pidValue.StandardValue = segment.StandardValue * Parameter.Multiplier + Parameter.Offset;
+                pidValue.MetricValue = segment.MetricValue * Parameter.Multiplier + Parameter.Offset;
                 pidValue.TimeReceived = segment.TimeReceived;
                 Parameter.LastValue = pidValue.StandardValue;
                 Parameter.LastMetricValue = pidValue.MetricValue;
@@ -123,22 +115,6 @@ namespace VMSpc
                 };
                 RaiseVMSEvent?.Invoke(this, e);
                 //VMSConsole.PrintLine("Time to parse: " + (segment.TimeParsed - segment.TimeReceived));
-            }
-
-            public void PublishUnparsedData(CanMessageSegment segment)
-            {
-                VMSRawDataEventArgs e;
-                switch (segment.DataSource)
-                {
-                    case VMSDataSource.J1708:
-                        e = new VMSJ1708RawDataEventArgs(segment as J1708MessageSegment);
-                        RaiseVMSEvent?.Invoke(this, e);
-                        break;
-                    case VMSDataSource.J1939:
-                        e = new VMSJ1939RawDataEventArgs(segment as J1939MessageSegment);
-                        RaiseVMSEvent?.Invoke(this, e);
-                        break;
-                }
             }
         }
 

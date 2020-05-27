@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using VMSpc.Exceptions;
+using VMSpc.Loggers;
 
 namespace VMSpc.DevHelpers
 {
@@ -37,10 +39,7 @@ namespace VMSpc.DevHelpers
             }
             catch (Exception ex)
             {
-                if (ex == null)
-                    return;
-                else
-                    return;
+                ErrorLogger.GenerateErrorRecord(ex);
             }
         }
     }
