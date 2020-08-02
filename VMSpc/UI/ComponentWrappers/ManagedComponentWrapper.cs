@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using VMSpc.Extensions.UI;
 using VMSpc.UI.CustomComponents;
@@ -14,10 +15,10 @@ namespace VMSpc.UI.ComponentWrappers
     {
         private StackPanel
             parentStack;
-        private TextBlock
+        private Label
             titleBlock,
             unitTextBlock;
-        private ManagedComponent 
+        private ManagedComponent
             managedComponent;
         public string
             title,
@@ -25,13 +26,30 @@ namespace VMSpc.UI.ComponentWrappers
         public bool
             showTitle,
             showUnit;
-        public Orientation 
+        public Orientation
             orientation;
         private ulong
             eventID;
         private byte
             publisherInstance;
         private const int BorderDimension = 2;
+        public double FontSize
+        {
+            get => titleBlock.FontSize;
+            set => titleBlock.FontSize = unitTextBlock.FontSize = managedComponent.FontSize = value;
+        }
+        private HorizontalAlignment horizontalContentAlignment;
+        public HorizontalAlignment HorizontalContentAlignment
+        {
+            get => horizontalContentAlignment;
+            set
+            {
+                horizontalContentAlignment = value;
+                titleBlock.HorizontalContentAlignment =
+                unitTextBlock.HorizontalContentAlignment =
+                managedComponent.HorizontalContentAlignment = value;
+            }
+        }
         public ManagedComponentWrapper(ulong eventID, byte publisherInstance)
             : base()
         {
@@ -49,21 +67,28 @@ namespace VMSpc.UI.ComponentWrappers
                 Orientation = this.orientation,
             };
             Children.Add(parentStack);
-            if (showTitle)
-                AddTitleText();
+            AddTitleText();
             AddValueText();
-            if (showUnit)
-                AddUnitText();
-            UIHelpers.BalanceTextblocks(titleBlock, unitTextBlock, managedComponent.valueText);
+            AddUnitText();
+            double min = UIHelpers.Min(titleBlock.FontSize, unitTextBlock.FontSize, managedComponent.FontSize);
+            FontSize = min;
         }
 
         protected void AddTitleText()
         {
-            titleBlock = new TextBlock();
+            titleBlock = new Label()
+            {
+                FontWeight = FontWeights.Bold,
+            };
+            if (!showTitle)
+            {
+                titleBlock.FontSize = 1000;
+                return;
+            }
             int denominator = 2;
             if (showUnit)
                 denominator++;
-            titleBlock.Text = title;
+            titleBlock.Content = title;
             titleBlock.Width = ((orientation == Orientation.Horizontal) ? (parentStack.Width / denominator) : parentStack.Width) - (BorderDimension * 2);
             titleBlock.Height = ((orientation == Orientation.Vertical) ? (parentStack.Height / denominator) : parentStack.Height) - (BorderDimension * 2);
             //Border border = new Border();
@@ -75,18 +100,26 @@ namespace VMSpc.UI.ComponentWrappers
 
         protected void AddUnitText()
         {
-            unitTextBlock = new TextBlock();
+            unitTextBlock = new Label()
+            {
+                FontWeight = FontWeights.Bold,
+            };
+            if (!showUnit)
+            {
+                unitTextBlock.FontSize = 1000;
+                return;
+            }
             int denominator = 2;
             if (showTitle)
                 denominator++;
-            unitTextBlock.Text = unitText;
+            unitTextBlock.Content = unitText;
             unitTextBlock.Width = ((orientation == Orientation.Horizontal) ? (parentStack.Width / denominator) : parentStack.Width ) - (BorderDimension * 2);
             unitTextBlock.Height = ((orientation == Orientation.Vertical) ? (parentStack.Height / denominator) : parentStack.Height) - (BorderDimension * 2);
             //Border border = new Border();
             //border.Child = unitTextBlock;
             //parentStack.Children.Add(border);
             parentStack.Children.Add(unitTextBlock);
-            unitTextBlock.ScaleText();
+            unitTextBlock.ScaleText(5);
         }
 
         protected void AddValueText()

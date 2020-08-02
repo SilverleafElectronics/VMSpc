@@ -27,9 +27,11 @@ namespace VMSpc.UI.DlgWindows
         protected OdometerDataFileReader OdometerDataFileReader;
         protected double CurrentDistance => ChassisParameters.Instance.CurrentMiles - OdometerReader.Contents.StartMiles;
         protected double CurrentHours => ChassisParameters.Instance.CurrentEngineHours - OdometerReader.Contents.StartHours;
-        protected double CurrentFuel => ChassisParameters.Instance.CurrentFuel - OdometerReader.Contents.StartGallons;
+        protected double CurrentFuel => ChassisParameters.Instance.CurrentFuelGallons - OdometerReader.Contents.StartGallons;
         protected double CurrentSpeed => (CurrentHours != 0) ? (CurrentDistance / CurrentHours) : 0;
         protected double CurrentMPG => (CurrentFuel != 0) ? (CurrentDistance / CurrentFuel) : 0;
+        protected override int DefaultPanelHeight => 300;
+        protected override int DefaultPanelWidth => 600;
         public OdometerDlg(OdometerSettings panelSettings)
             :base(panelSettings)
         {
@@ -175,8 +177,8 @@ namespace VMSpc.UI.DlgWindows
             panelSettings.showMPG = (bool)ShowEconomyCheckbox.IsChecked;
             panelSettings.alignment = GetAlignment();
             panelSettings.orientation = GetOrientation();
-            panelSettings.backgroundColor = BackgroundColor;
-            panelSettings.borderColor = BorderColor;
+            panelSettings.BackgroundColor = BackgroundColor;
+            panelSettings.BorderColor = BorderColor;
             DialogResult = true;
             Close();
         }
@@ -187,11 +189,11 @@ namespace VMSpc.UI.DlgWindows
             {
                 return HorizontalAlignment.Left;
             }
-            if ((bool)LeftAlignmentRadio.IsChecked)
+            else if ((bool)CenterAlignmentRadio.IsChecked)
             {
                 return HorizontalAlignment.Center;
             }
-            if ((bool)LeftAlignmentRadio.IsChecked)
+            else  if ((bool)RightAlignmentRadio.IsChecked)
             {
                 return HorizontalAlignment.Right;
             }

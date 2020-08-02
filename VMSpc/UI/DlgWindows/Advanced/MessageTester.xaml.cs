@@ -114,15 +114,59 @@ namespace VMSpc.UI.DlgWindows.Advanced
 
         private string BuildJ1708Message()
         {
-            var message = new StringBuilder('J');
+            var message = new StringBuilder();
+            message.Append('J');
             return message.ToString();
         }
 
         private string BuildJ1939Message()
         {
-            var message = new StringBuilder('R');
-
+            var message = new StringBuilder();
+            message.Append('R');
+            string sourceAddress = GetDataByte(AddressBox);
+            if (!string.IsNullOrEmpty(sourceAddress))
+            {
+                message.Append(sourceAddress);
+            }
+            string pgn = string.Format("{0:X6}", Constants.BinConvert(PGNBox.Text));
+            message.Append(pgn);
+            foreach (var dataByteBox in GetByTagName<TextBox>("J1939DataByte"))
+            {
+                string dataByte = GetDataByte(dataByteBox);
+                if (!string.IsNullOrEmpty(dataByte))
+                {
+                    message.Append(dataByte);
+                }
+                else
+                {
+                    return null;
+                }
+            }
             return message.ToString();
+        }
+
+        private string GetDataByte(TextBox dataByteBox)
+        {
+            byte dataByte = 255;
+            if ((bool)UseHexCheckbox.IsChecked)
+            {
+                try
+                {
+                    dataByte = Constants.BinConvert(dataByteBox.Text[0], dataByteBox.Text[1]);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                if (!byte.TryParse(dataByteBox.Text, out dataByte))
+                {
+                    return null;
+                }
+            }
+            return string.Format("{0:X2}", dataByte);
         }
 
         private void Raw_Selected(object sender, RoutedEventArgs e)

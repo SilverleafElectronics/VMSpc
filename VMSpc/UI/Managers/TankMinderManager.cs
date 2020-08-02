@@ -14,8 +14,8 @@ namespace VMSpc.UI.Managers
         private TankMinderSettings 
             tankSettings;
         private double
-            startGallons,
-            startMiles,
+            startFuel,
+            startDistance,
             currentFuelmeter,
             currentOdometer;
         private double
@@ -30,16 +30,17 @@ namespace VMSpc.UI.Managers
         {
             this.tankSettings = tankSettings;
             tankMinderReader = new TankMinderReader(tankSettings.fileName);
-            startGallons = tankMinderReader.Contents.StartGallons;
-            startMiles = tankMinderReader.Contents.StartMiles;
-            currentFuelmeter = startGallons;
-            currentOdometer = startMiles;
+            startFuel = (!tankSettings.showInMetric) ? tankMinderReader.Contents.StartGallons : tankMinderReader.Contents.StartLiters;
+            startDistance = (!tankSettings.showInMetric) ? tankMinderReader.Contents.StartMiles : tankMinderReader.Contents.StartKilometers;
+            currentFuelmeter = startFuel;
+            currentOdometer = startDistance;
+            UpdateValues();
         }
 
         protected override void UpdateValues()
         {
-            currentFuelmeter = ChassisParameters.Instance.CurrentFuel;
-            currentOdometer = ChassisParameters.Instance.CurrentMiles;
+            currentFuelmeter = (!tankSettings.showInMetric) ? ChassisParameters.Instance.CurrentFuelGallons : ChassisParameters.Instance.CurrentFuelLiters;
+            currentOdometer = (!tankSettings.showInMetric) ? ChassisParameters.Instance.CurrentMiles : ChassisParameters.Instance.CurrentKilometers;
             UpdateFuel();
             UpdateRecentMPG();
             UpdateMilesToEmpty();
@@ -47,11 +48,7 @@ namespace VMSpc.UI.Managers
 
         private void UpdateFuel()
         {
-            currentFuel = tankSettings.tankSize - currentFuelmeter + startGallons;
-            if (tankSettings.showInMetric)
-            {
-                currentFuel = (currentFuel * 3.78541);
-            }
+            currentFuel = tankSettings.tankSize - currentFuelmeter + startFuel;
             PublishEvent(EventIDs.FUEL_READING_EVENT, currentFuel);
             lastFuel = currentFuel;
         }
@@ -60,11 +57,14 @@ namespace VMSpc.UI.Managers
         {
             if (tankSettings.useRollingMPG || (currentFuelmeter < 1.0))
             {
-                currentDistanceByFuel = ConfigManager.ParamData.GetParam((ushort)((tankSettings.showInMetric) ? 602 : 502)).LastValue;
+                currentDistanceByFuel = PIDValueStager.Instance.GetParameter((ushort)((tankSettings.showInMetric) ? 602 : 502)).LastValue;
             }
             else
             {
-                currentDistanceByFuel = (currentOdometer - startMiles) / (currentFuelmeter - startGallons);
+                if ((currentFuelmeter - startFuel) == 0)
+                    currentDistanceByFuel = 0;
+                else
+                    currentDistanceByFuel = (currentOdometer - startDistance) / (currentFuelmeter - startFuel);
             }
             PublishEvent(EventIDs.CURRENT_MPG_EVENT, currentDistanceByFuel);
             lastDistanceByFuel = currentDistanceByFuel;

@@ -17,6 +17,7 @@ namespace VMSpc.JsonFileManagers
     /// </summary>
     public sealed class ConfigurationManager
     {
+        public ColorReader ColorReader;
         public SettingsReader Settings;
         public ScreenReader Screen;
         public ParamDataReader ParamData;
@@ -24,6 +25,7 @@ namespace VMSpc.JsonFileManagers
         public ColorPalettesReader ColorPalettes;
         public AlarmsReader AlarmsReader;
         public DiagnosticLogReader DiagnosticLogReader;
+        public MaintenanceTrackerReader MaintenanceTrackerReader;
 
         static ConfigurationManager() { }
         private ConfigurationManager() { }
@@ -40,6 +42,7 @@ namespace VMSpc.JsonFileManagers
             {
                 CreateDirectories();
                 VerifyEngineDirectory();
+                ColorReader = new ColorReader();
                 Settings = new SettingsReader();
                 Screen = new ScreenReader(Settings.Contents.screenFilePath);
                 Meters = new MeterReader(Settings.Contents.meterFilePath);
@@ -47,6 +50,7 @@ namespace VMSpc.JsonFileManagers
                 ColorPalettes = new ColorPalettesReader();
                 AlarmsReader = new AlarmsReader();
                 DiagnosticLogReader = new DiagnosticLogReader();
+                MaintenanceTrackerReader = new MaintenanceTrackerReader();
             }
             catch (UnauthorizedAccessException)
             {
@@ -112,10 +116,12 @@ namespace VMSpc.JsonFileManagers
         {
             Settings.SaveJson();
             Screen.SaveJson();
+            ColorReader.SaveJson();
             Meters.SaveJson();
             ParamData.SaveJson();
             ColorPalettes.SaveJson();
             DiagnosticLogReader.SaveJson();
+            MaintenanceTrackerReader.SaveJson();
         }
     }
 }

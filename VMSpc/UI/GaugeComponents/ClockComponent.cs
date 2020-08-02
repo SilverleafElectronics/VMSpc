@@ -26,16 +26,19 @@ namespace VMSpc.UI.GaugeComponents
         {
             this.useMilitaryTime = useMilitaryTime;
             //VerticalContentAlignment = VerticalAlignment.Center;
-            ClockTimer = Constants.CREATE_TIMER(UpdateClock, 250);
+            ClockTimer = Constants.CREATE_TIMER(UpdateClock, 250, Enums.UI.DispatchType.OnMainThread);
             ClockTimer.Start();
             Enable();
         }
+
         public void Enable()
         {
             if (!TimerEnabled)
             {
                 textIsScaled = false;
                 TimerEnabled = true;
+                Constants.DestroyTimer(ClockTimer);
+                Constants.CREATE_TIMER(UpdateClock, 250, Enums.UI.DispatchType.OnMainThread);
                 ClockTimer.Start();
             }
         }
@@ -44,7 +47,7 @@ namespace VMSpc.UI.GaugeComponents
             if (TimerEnabled)
             {
                 TimerEnabled = false;
-                ClockTimer.Stop();
+                Constants.DestroyTimer(ClockTimer);
             }
         }
 

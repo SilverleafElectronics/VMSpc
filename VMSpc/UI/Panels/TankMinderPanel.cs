@@ -126,13 +126,25 @@ namespace VMSpc.UI.Panels
         /// </summary>
         protected void Draw()
         {
+            double maxFontSize = double.MaxValue;
             foreach (var component in managedComponentStack.Children)
             {
                 var managedComponentWrapper = (component as ManagedComponentWrapper);
                 if (managedComponentWrapper != null)
                 {
                     managedComponentWrapper.Draw();
+                    if (managedComponentWrapper.FontSize < maxFontSize)
+                    {
+                        maxFontSize = managedComponentWrapper.FontSize;
+                    }
                 }
+            }
+            foreach (var component in managedComponentStack.Children)
+            {
+                var managedComponentWrapper = (component as ManagedComponentWrapper);
+                if (managedComponentWrapper != null)
+                    managedComponentWrapper.FontSize = maxFontSize;
+                managedComponentWrapper.HorizontalContentAlignment = panelSettings.alignment;
             }
         }
     }

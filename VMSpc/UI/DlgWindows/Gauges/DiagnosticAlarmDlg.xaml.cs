@@ -25,6 +25,8 @@ namespace VMSpc.UI.DlgWindows
     {
         protected new DiagnosticGaugeSettings panelSettings;
         protected Color WarningColor;
+        protected override int DefaultPanelWidth => 650;
+        protected override int DefaultPanelHeight => 150;
         public DiagnosticAlarmDlg(DiagnosticGaugeSettings panelSettings)
             :base(panelSettings)
         {
@@ -36,8 +38,8 @@ namespace VMSpc.UI.DlgWindows
         {
             base.ApplyBindings();
             WarningColor = panelSettings.WarningColor;
-            BackgroundColor = panelSettings.backgroundColor;
-            BorderColor = panelSettings.borderColor;
+            BackgroundColor = panelSettings.BackgroundColor;
+            BorderColor = panelSettings.BorderColor;
             UseGlobalColor.IsChecked = panelSettings.useGlobalColorPalette;
             UseMilitaryTime.IsChecked = panelSettings.useMilitaryTime;
             SetColorRects();
@@ -64,8 +66,8 @@ namespace VMSpc.UI.DlgWindows
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            panelSettings.backgroundColor = BackgroundColor;
-            panelSettings.borderColor = BorderColor;
+            panelSettings.BackgroundColor = BackgroundColor;
+            panelSettings.BorderColor = BorderColor;
             panelSettings.WarningColor = WarningColor;
             panelSettings.useGlobalColorPalette = (bool)UseGlobalColor.IsChecked;
             panelSettings.useMilitaryTime = (bool)UseMilitaryTime.IsChecked;
@@ -91,8 +93,8 @@ namespace VMSpc.UI.DlgWindows
 
         private void UseGlobalColor_Unchecked(object sender, RoutedEventArgs e)
         {
-            BackgroundColor = panelSettings.backgroundColor;
-            BorderColor = panelSettings.borderColor;
+            BackgroundColor = panelSettings.BackgroundColor;
+            BorderColor = panelSettings.BorderColor;
             WarningColor = panelSettings.WarningColor;
             SetColorRects();
         }

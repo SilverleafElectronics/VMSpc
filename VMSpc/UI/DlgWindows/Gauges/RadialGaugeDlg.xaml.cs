@@ -55,7 +55,6 @@ namespace VMSpc.UI.DlgWindows
         protected override void ApplyBindings()
         {
             base.ApplyBindings();
-
             UseAbbr.IsChecked = panelSettings.showAbbreviation;
             ShowGraph.IsChecked = panelSettings.showGraph;
             ShowGaugeName.IsChecked = panelSettings.showName;
@@ -63,8 +62,8 @@ namespace VMSpc.UI.DlgWindows
             ShowMetric.IsChecked = panelSettings.showInMetric;
             ShowValue.IsChecked = panelSettings.showValue;
             UseGlobalColor.IsChecked = panelSettings.useGlobalColorPalette;
-            BackgroundColor = panelSettings.backgroundColor;
-            BorderColor = panelSettings.borderColor;
+            BackgroundColor = panelSettings.BackgroundColor;
+            BorderColor = panelSettings.BorderColor;
         }
 
         protected void AddParameterChoices()
@@ -83,7 +82,14 @@ namespace VMSpc.UI.DlgWindows
 
         protected void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            panelSettings.pid = ((VMSListBoxItem)GaugeTypes.SelectedItem).ID;
+            if (GaugeTypes.SelectedItem != null)
+            {
+                panelSettings.pid = (GaugeTypes.SelectedItem as VMSListBoxItem).ID;
+            }
+            else
+            {
+                panelSettings.pid = (GaugeTypes.Items[0] as VMSListBoxItem).ID;
+            }
             panelSettings.showAbbreviation = (bool)UseAbbr.IsChecked;
             panelSettings.showGraph = (bool)ShowGraph.IsChecked;
             panelSettings.showInMetric = (bool)ShowMetric.IsChecked;
@@ -91,8 +97,8 @@ namespace VMSpc.UI.DlgWindows
             panelSettings.showUnit = (bool)ShowUnit.IsChecked;
             panelSettings.showValue = (bool)ShowValue.IsChecked;
             panelSettings.useGlobalColorPalette = (bool)UseGlobalColor.IsChecked;
-            panelSettings.backgroundColor = BackgroundColor;
-            panelSettings.borderColor = BorderColor;
+            panelSettings.BackgroundColor = BackgroundColor;
+            panelSettings.BorderColor = BorderColor;
             DialogResult = true;
             Close();
         }
@@ -115,7 +121,7 @@ namespace VMSpc.UI.DlgWindows
 
         private void ChangeBackgroundColorButton_Click(object sender, RoutedEventArgs e)
         {
-            BackgroundColor = panelSettings.backgroundColor;
+            BackgroundColor = panelSettings.BackgroundColor;
             if (ChangeColor(ref BackgroundColor))
             {
                 panelSettings.useGlobalColorPalette = false;
@@ -125,7 +131,7 @@ namespace VMSpc.UI.DlgWindows
 
         private void ChangeBorderColorButton_Click(object sender, RoutedEventArgs e)
         {
-            BorderColor = panelSettings.borderColor;
+            BorderColor = panelSettings.BorderColor;
             ChangeColor(ref BorderColor);
         }
 

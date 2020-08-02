@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Title="Tire Settings" Height="700" Width="800">
+        Title="Tire Settings" Height="525" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="375" />
@@ -65,22 +65,22 @@
                             </Setter>
                         </Style>
                     </ListBox.Resources>
-                    <vs:VMSListBoxItem Margin="5 5 0 0" ID="0"> 1. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="1"> 2. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="2"> 3. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="3"> 4. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="4"> 5. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="5"> 6. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="6"> 7. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="7"> 8. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="8"> 9. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="9">10. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="10">11. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="11">12. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="12">13. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="13">14. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="14">15. No Sensor Assigned</vs:VMSListBoxItem>
-                    <vs:VMSListBoxItem Margin="5 1 0 0" ID="15">16. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 5 0 0" Tag="TireStatusDescriptor" ID="0"> 1. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="1"> 2. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="2"> 3. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="3"> 4. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="4"> 5. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="5"> 6. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="6"> 7. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="7"> 8. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="8"> 9. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="9">10. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="10">11. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="11">12. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="12">13. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="13">14. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="14">15. No Sensor Assigned</vs:VMSListBoxItem>
+                    <vs:VMSListBoxItem Margin="5 1 0 0" Tag="TireStatusDescriptor" ID="15">16. No Sensor Assigned</vs:VMSListBoxItem>
                 </ListBox>
             </Border>
             <Grid Grid.Column="1">
@@ -97,6 +97,7 @@
                 <Button x:Name="LearnButton" Grid.Row="2" Click="LearnButton_Click" Height="25" Width="125">Learn</Button>
                 <Button x:Name="AbortLearnButton" Grid.Row="3" Click="AbortLearnButton_Click" Height="25" Width="125">Abort Learning</Button>
                 <Button x:Name="ClearButton" Grid.Row="4" Click="ClearButton_Click" Height="25" Width="125">Clear</Button>
+                <Button x:Name="TSTSettingsButton" Grid.Row="5" Click="TSTSettingsButton_Click" Height="25" Width="125" Visibility="Hidden">TST Settings</Button>
             </Grid>
         </Grid>
         <Grid Grid.Row="1">
@@ -105,14 +106,14 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <GroupBox Grid.Column="0" Header="Tire Layout" Margin="5, 20, 5, 0">
-                <StackPanel Name="TireLayout"></StackPanel>
+                <UniformGrid Name="TireLayout" Rows="4"></UniformGrid>
             </GroupBox>
             <GroupBox Grid.Column="1" Header="TPMS Type" Margin="5,20,5,0">
-                <StackPanel Name="TPMSSelection">
+                <UniformGrid Name="TPMSSelection" Rows="3">
                     <RadioButton Name="SelectNone" Click="SelectNone_Click">None</RadioButton>
                     <RadioButton Name="SelectTST" Click="SelectTST_Click">TST</RadioButton>
                     <RadioButton Name="SelectPPro" Click="SelectPPro_Click">Pressure Pro</RadioButton>
-                </StackPanel>
+                </UniformGrid>
             </GroupBox>
         </Grid>
     </Grid>

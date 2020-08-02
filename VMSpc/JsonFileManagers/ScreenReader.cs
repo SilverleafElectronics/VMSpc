@@ -11,9 +11,18 @@ namespace VMSpc.JsonFileManagers
     {
         public Color
             TextColor;
-
         public string
             WallPaperFileName;
+        public DateTime
+            DayStartTime,
+            NightStartTime;
+        public bool
+            UseDayNightTimer,
+            OnDayPalette;
+        public int
+            dayColorPaletteId,
+            nightColorPaletteId;
+        public int selectedColorPaletteId => (OnDayPalette) ? dayColorPaletteId : nightColorPaletteId;
 
         public List<PanelSettings> PanelList;
     }
@@ -53,7 +62,10 @@ namespace VMSpc.JsonFileManagers
                 WallPaperFileName = null,
                 PanelList = new List<PanelSettings>()
                 {
-                }
+                },
+                UseDayNightTimer = false,
+                DayStartTime = DateTime.Parse("08:00:00AM"),
+                NightStartTime = DateTime.Parse("06:00:00PM"),
             };
         }
 

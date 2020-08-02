@@ -27,8 +27,9 @@ namespace VMSpc.JsonFileManagers
             lockAllGauges;
         public ushort
             rollingBufferSize,
-            ipPort,
             comPort;
+        public int
+            ipPort;
         public string
             screenFilePath,
             meterFilePath,
@@ -49,7 +50,8 @@ namespace VMSpc.JsonFileManagers
         public OdometerType
             odometerType;
         public int
-            selectedColorPaletteId;
+            selectedColorPaletteId
+        { get; set; }
         public double
             WindowHeight,
             WindowWidth,
@@ -67,7 +69,6 @@ namespace VMSpc.JsonFileManagers
         {
             return new SettingsContents()
             {
-                selectedColorPaletteId = 1,
                 lockAllGauges = false,
                 autoRestartFlag = true,
                 showSplashScreen = false,
@@ -96,9 +97,9 @@ namespace VMSpc.JsonFileManagers
                 meterFilePath = "\\configuration\\odometer.json",
 
                 engineModel = EngineModel.NONE,
-                tpmsType = TpmsType.NONE,
+                tpmsType = TpmsType.None,
                 globalParseBehavior = ParseBehavior.PARSE_ALL,
-                jibType = JibType.LOGPLAYER,
+                jibType = JibType.USB,
                 tireMapType = TireMapType.SIX_WHEEL,
             };
         }

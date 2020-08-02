@@ -31,10 +31,14 @@
         <CommandBinding Command="self:MainCommands.DeleteGauge" CanExecute="DeleteGaugeCommand_CanExecute" Executed="DeleteGaugeCommand_Executed" />
         <CommandBinding Command="self:MainCommands.AttachGauge" CanExecute="AttachGaugeCommand_CanExecute" Executed="AttachGaugeCommand_Executed" />
         <CommandBinding Command="self:MainCommands.ColorPalette" CanExecute="ColorPalette_CanExecute" Executed="ColorPalette_Executed" />
+        <CommandBinding Command="self:MainCommands.ColorPaletteManager" CanExecute="ColorPaletteManager_CanExecute" Executed="ColorPaletteManager_Executed" />
         <CommandBinding Command="self:MainCommands.Tires" CanExecute="Tires_CanExecute" Executed="Tires_Executed" />
         <CommandBinding Command="self:MainCommands.ParameterEditor" CanExecute="ParameterEditor_CanExecute" Executed="ParameterEditor_Executed" />
         <CommandBinding Command="self:MainCommands.ViewDiagnostics" CanExecute="ViewDiagnostics_CanExecute" Executed="ViewDiagnostics_Executed" />
+        <CommandBinding Command="self:MainCommands.Maintenance" CanExecute="Maintenance_CanExecute" Executed="Maintenance_Executed" />
         <CommandBinding Command="self:MainCommands.Layouts" CanExecute="Layouts_CanExecute" Executed="Layouts_Executed" />
+        <CommandBinding Command="self:MainCommands.ToggleDayNight" CanExecute="ToggleDayNightCommand_CanExecute" Executed="ToggleDayNightCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.FullScreen" CanExecute="FullScreen_CanExecute" Executed="FullScreen_Executed" />
     </Window.CommandBindings>
     <Grid>
         <DockPanel Name="DockMenu" Height="Auto" Width="Auto">
@@ -61,14 +65,18 @@
                     <!--<MenuItem Command="self:MainCommands.DeleteGauge" />LEAVECOMMENTED-->
                 </MenuItem>
                 <MenuItem Header="_Settings">
-                    <MenuItem Header="_Color Palette" Command="self:MainCommands.ColorPalette" />
                     <MenuItem Header="_Tires" Command="self:MainCommands.Tires" />
                     <MenuItem Header="_Change Engine" Command="self:MainCommands.ChangeEngine" />
                     <MenuItem Command="self:MainCommands.ToggleClipping" Name="ClipToggle" />
                     <MenuItem Command="self:MainCommands.ParameterEditor" />
+                    <MenuItem Header="_Color Settings">
+                        <MenuItem Header="_Color Palette" Command="self:MainCommands.ColorPalette" />
+                        <MenuItem Header="_Color Palette Manager" Command="self:MainCommands.ColorPaletteManager" />
+                        <MenuItem Command="self:MainCommands.ToggleDayNight" Name="DayNightToggle"/>
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem Header="_View">
-                    <MenuItem Header="_Maintenance" />
+                    <MenuItem Header="_Maintenance" Command="self:MainCommands.Maintenance" />
                     <MenuItem Header="_View Diagnostics" Command="self:MainCommands.ViewDiagnostics" />
                 </MenuItem>
                 <MenuItem Header="_Advanced">
@@ -79,6 +87,7 @@
                 <MenuItem Header="_Help">
                     <MenuItem Command="self:MainCommands.About" />
                 </MenuItem>
+                <MenuItem Header="_Full Screen" Command="self:MainCommands.FullScreen" />
             </Menu>
         </DockPanel>
         <cs:PanelGrid x:Name="ContentGrid" Width="Auto" Height="Auto" Margin="5,18,5,5">

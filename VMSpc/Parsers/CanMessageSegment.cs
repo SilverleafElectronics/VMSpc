@@ -20,6 +20,33 @@ namespace VMSpc.Parsers
         public DateTime TimeReceived;
         public DateTime TimeParsed;
         public ParseStatus ParseStatus;
+
+        public CanMessageSegment DeepCopy()
+        {
+            CanMessageSegment segment;
+            switch (DataSource)
+            {
+                case VMSDataSource.J1708:
+                    segment = new J1708MessageSegment(RawMessageSegment, 0);
+                    break;
+                case VMSDataSource.J1939:
+                    segment = new J1939MessageSegment();
+                    break;
+                default:
+                    return null;
+            }
+            segment.DataSource = this.DataSource;
+            segment.Pid = this.Pid;
+            segment.RawMessageSegment = this.RawMessageSegment;
+            segment.RawValue = this.RawValue;
+            segment.RawData = this.RawData;
+            segment.StandardValue = this.StandardValue;
+            segment.MetricValue = this.MetricValue;
+            segment.TimeReceived = this.TimeReceived;
+            segment.TimeParsed = this.TimeParsed;
+            segment.ParseStatus = this.ParseStatus;
+            return segment;
+        }
     }
 
     public class J1708MessageSegment : CanMessageSegment
@@ -112,6 +139,23 @@ namespace VMSpc.Parsers
         public J1939MessageSegment()
         {
             DataSource = VMSDataSource.J1939;
+        }
+    }
+
+    public class InferredMessageSegment : CanMessageSegment
+    {
+        public InferredMessageSegment() : base()
+        {
+            DataSource = VMSDataSource.Inferred;
+        }
+
+        public InferredMessageSegment(ushort pid, double standardValue) : base()
+        {
+            DataSource = VMSDataSource.Inferred;
+            this.Pid = pid;
+            StandardValue = MetricValue = standardValue;
+            TimeReceived = DateTime.Now;
+            TimeParsed = DateTime.Now;
         }
     }
 }

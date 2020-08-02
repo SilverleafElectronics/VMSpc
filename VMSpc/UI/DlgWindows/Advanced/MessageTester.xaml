@@ -45,21 +45,21 @@
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <Label VerticalContentAlignment="Center">Data:</Label>
                     <Label VerticalContentAlignment="Center">Byte 0</Label>
-                    <TextBox Name="DataByte0" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <TextBox Name="DataByte0" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF" Tag="J1939DataByte"></TextBox>
                     <Label VerticalContentAlignment="Center">Byte 1</Label>
-                    <TextBox Name="DataByte1" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <TextBox Name="DataByte1" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF" Tag="J1939DataByte"></TextBox>
                     <Label VerticalContentAlignment="Center">Byte 2</Label>
-                    <TextBox Name="DataByte2" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <TextBox Name="DataByte2" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF" Tag="J1939DataByte"></TextBox>
                     <Label VerticalContentAlignment="Center">Byte 3</Label>
-                    <TextBox Name="DataByte3" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <TextBox Name="DataByte3" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF" Tag="J1939DataByte"></TextBox>
                     <Label VerticalContentAlignment="Center">Byte 4</Label>
-                    <TextBox Name="DataByte4" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <TextBox Name="DataByte4" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF" Tag="J1939DataByte"></TextBox>
                     <Label VerticalContentAlignment="Center">Byte 5</Label>
-                    <TextBox Name="DataByte5" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <TextBox Name="DataByte5" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF" Tag="J1939DataByte"></TextBox>
                     <Label VerticalContentAlignment="Center">Byte 6</Label>
-                    <TextBox Name="DataByte6" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <TextBox Name="DataByte6" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF" Tag="J1939DataByte"></TextBox>
                     <Label VerticalContentAlignment="Center">Byte 7</Label>
-                    <TextBox Name="DataByte7" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF"></TextBox>
+                    <TextBox Name="DataByte7" Height="25" Width="30" VerticalContentAlignment="Center" Cursor="IBeam" Text="FF" Tag="J1939DataByte"></TextBox>
                 </StackPanel>
             </Grid>
             <Grid Name="J1708MessageBuilder" Visibility="Hidden">

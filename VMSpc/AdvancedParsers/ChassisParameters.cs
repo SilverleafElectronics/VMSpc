@@ -21,16 +21,23 @@ namespace VMSpc.AdvancedParsers
             get => Meters.Odometer;
             private set => Meters.Odometer = value;
         }
-        public double CurrentFuel
+        public double CurrentKilometers => CurrentMiles * 1.60934;
+        public double CurrentFuelGallons
         {
             get => Meters.Fuelmeter;
             private set => Meters.Fuelmeter = value;
         }
+        public double CurrentFuelLiters => CurrentFuelGallons * 3.78541;
         public double CurrentEngineHours
         {
             get => Meters.Hourmeter;
             private set => Meters.Hourmeter = value;
         }
+        public double AverageSpeed => CurrentMiles / CurrentEngineHours;
+        public double RollingMPG => CurrentMiles / CurrentFuelGallons;
+        public double RollingLitersPer100k => RollingMPG * 235.214583;
+        public double RecentMPG => CurrentMiles / CurrentFuelGallons;
+        public double RecentLitersPer100k => RecentMPG * 235.214583;
         public string RangeSelected { get; private set; } = "?";
         public string RangeAttained { get; private set; } = "?";
         static ChassisParameters() { }
@@ -50,8 +57,9 @@ namespace VMSpc.AdvancedParsers
             EventBridge.Instance.AddEventPublisher(this);
 
             CurrentMiles = Meters.Odometer;
-            CurrentFuel = Meters.Fuelmeter;
+            CurrentFuelGallons = Meters.Fuelmeter;
             CurrentEngineHours = Meters.Hourmeter;
+            PublishMeters();
         }
 
         public static void Initialize()
@@ -99,6 +107,11 @@ namespace VMSpc.AdvancedParsers
             RaiseVMSEvent?.Invoke(this, e);
         }
 
+        private void PublishEvent(ushort pid, double value)
+        {
+            PublishEvent(new VMSParsedDataEventArgs(pid, new InferredMessageSegment(pid, value)));
+        }
+
         /// <summary>
         /// Parses partially parsed message segments. The databus shouldn't matter, since J1939
         /// assigns a PID on partially parsed datum
@@ -118,9 +131,9 @@ namespace VMSpc.AdvancedParsers
                     }
                     break;
                 case PIDWrapper.totalFuel:
-                    if (segment.StandardValue > CurrentFuel && segment.StandardValue < 25000)
+                    if (segment.StandardValue > CurrentFuelGallons && segment.StandardValue < 25000)
                     {
-                        CurrentFuel = segment.StandardValue;
+                        CurrentFuelGallons = segment.StandardValue;
                         parsingCompleted = true;
                     }
                     break;
@@ -186,9 +199,21 @@ namespace VMSpc.AdvancedParsers
         /// </summary>
         private void PublishMeters()
         {
-            PublishEvent(new VMSPidValueEventArgs(EventIDs.PID_BASE | OdometerPid, CurrentMiles));
-            PublishEvent(new VMSPidValueEventArgs(EventIDs.PID_BASE | PIDWrapper.totalFuel, CurrentFuel));
-            PublishEvent(new VMSPidValueEventArgs(EventIDs.PID_BASE | PIDWrapper.engineHours, CurrentEngineHours));
+            PublishEvent(OdometerPid, CurrentMiles);
+            PublishEvent(PIDWrapper.totalFuel, CurrentFuelGallons);
+            PublishEvent(PIDWrapper.engineHours, CurrentEngineHours);
+            if (
+                !((double.IsNaN(CurrentMiles)) || (CurrentMiles < 0)) &&
+                !((double.IsNaN(CurrentFuelGallons)) || (CurrentFuelGallons < 0)) &&
+                !((double.IsNaN(CurrentEngineHours)) || (CurrentEngineHours < 0))
+                )
+            {
+                PublishEvent(9, RollingMPG);
+                PublishEvent(502, RecentMPG);
+                PublishEvent(601, RollingLitersPer100k);
+                PublishEvent(602, RecentLitersPer100k);
+                PublishEvent(512, AverageSpeed);
+            }
         }
     }
 }

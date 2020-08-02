@@ -28,7 +28,7 @@ namespace VMSpc.Panels
         public override void GeneratePanel()
         {
             canvas.Children.Clear();
-            canvas.Background = new SolidColorBrush(panelSettings.backgroundColor);
+            canvas.Background = new SolidColorBrush(panelSettings.BackgroundColor);
             barGauge = new BarGauge(panelSettings)
             {
                 Width = canvas.Width,

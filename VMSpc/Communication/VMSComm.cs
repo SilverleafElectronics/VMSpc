@@ -44,7 +44,20 @@ namespace VMSpc.Communication
         /// <param name="message"></param>
         public void SendMessage(OutgoingMessage message)
         {
-            dataReader.SendMessage(message);
+            dataReader?.SendMessage(message);
+        }
+
+        /// <summary>
+        /// Sends a message after the specified millisecondDelay. Note that there is no guarantee on the millisecond precision, which depends on the
+        /// implementation of the datareader's sending mechanism.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="millisecondDelay"></param>
+        public void SendDelayedMessage(OutgoingMessage message, int millisecondDelay)
+        {
+            var timer = Constants.CREATE_TIMER(() => SendMessage(message), millisecondDelay, Enums.UI.DispatchType.OnMainThread);
+            timer.AutoReset = false;
+            timer.Start();
         }
 
         /// <summary>
@@ -53,7 +66,20 @@ namespace VMSpc.Communication
         /// <param name="message"></param>
         public void SendMessage(string message)
         {
-            dataReader.SendMessage(message);
+            dataReader?.SendMessage(message);
+        }
+
+        /// <summary>
+        /// Sends a message after the specified millisecondDelay. Note that there is no guarantee on the millisecond precision, which depends on the
+        /// implementation of the datareader's sending mechanism.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="millisecondDelay"></param>
+        public void SendDelayedMessage(string message, int millisecondDelay)
+        {
+            var timer = Constants.CREATE_TIMER(() => SendMessage(message), millisecondDelay, Enums.UI.DispatchType.OnMainThread);
+            timer.AutoReset = false;
+            timer.Start();
         }
 
         ~CommunicationManager()
@@ -71,13 +97,13 @@ namespace VMSpc.Communication
             switch(ConfigManager.Settings.Contents.jibType)
             {
                 case JibType.SERIAL:
-                    dataReader = new SerialPortReader();
+                    dataReader = new RS232Reader(ConfigManager.Settings.Contents.comPort);
                     break;
                 case JibType.USB:
-                    dataReader = new CommPortReader(ConfigManager.Settings.Contents.comPort);
+                    dataReader = new USBReader(ConfigManager.Settings.Contents.comPort);
                     break;
                 case JibType.WIFI:
-                    dataReader = new WifiSocketReader();
+                    dataReader = new WifiSocketReader(ConfigManager.Settings.Contents.ipAddress, ConfigManager.Settings.Contents.ipPort);
                     break;
                 case JibType.LOGPLAYER:
                     dataReader = new LogFileReader(ConfigManager.Settings.Contents.jibPlayerFilePath);

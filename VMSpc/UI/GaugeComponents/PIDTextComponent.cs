@@ -54,13 +54,12 @@ namespace VMSpc.UI.GaugeComponents
             panel.Height = this.Height;
             textBlock.Width = Width;
             textBlock.Height = Height;
-            textBlock.Text = "No Data";
-            textBlock.ScaleText();
+            Update();
         }
 
         public override void Update()
         {
-            if (currentValue != STALE_DATA && !double.IsNaN(currentValue))
+            if (IsCurrentValueValid())
             {
                 string unitText = string.Empty;
                 if (gaugeSettings.showUnit)
@@ -78,6 +77,7 @@ namespace VMSpc.UI.GaugeComponents
             else
             {
                 textBlock.Text = "No Data";
+                textBlock.ScaleText();
             }
         }
 

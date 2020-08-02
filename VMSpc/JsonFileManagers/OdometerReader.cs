@@ -27,7 +27,7 @@ namespace VMSpc.JsonFileManagers
         protected override OdometerContents GetDefaultContents()
         {
             var miles = ChassisParameters.Instance.CurrentMiles;
-            var gallons = ChassisParameters.Instance.CurrentFuel;
+            var gallons = ChassisParameters.Instance.CurrentFuelGallons;
             var hours = ChassisParameters.Instance.CurrentEngineHours;
             return new OdometerContents()
             {

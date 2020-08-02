@@ -29,11 +29,21 @@ namespace VMSpc.UI.GaugeComponents
         protected static double
             STALE_DATA = double.NaN,
             VOID_DATA = double.MaxValue;
-        public TextBlock valueText;
+        public Label valueText;
         protected ulong
             eventID;
         protected byte
             publisherInstance;
+        public double FontSize
+        {
+            get => valueText.FontSize;
+            set => valueText.FontSize = value;
+        }
+        public HorizontalAlignment HorizontalContentAlignment
+        {
+            get => valueText.HorizontalContentAlignment;
+            set => valueText.HorizontalContentAlignment = value;
+        }
         public ManagedComponent(ulong eventID, byte publisherInstance)
             :base()
         {
@@ -59,14 +69,15 @@ namespace VMSpc.UI.GaugeComponents
         public override void Draw()
         {
             Children.Clear();
-            valueText = new TextBlock()
+            valueText = new Label()
             {
-                Text = "No Data",
+                Content = "No Data",
                 Width = this.Width,
                 Height = this.Height,
+                FontWeight = FontWeights.Bold,
             };
             Children.Add(valueText);
-            lastLength = valueText.Text.Length;
+            lastLength = valueText.Content.ToString().Length;
             valueText.ScaleText();
         }
 
@@ -74,13 +85,13 @@ namespace VMSpc.UI.GaugeComponents
         {
             if (currentValue == STALE_DATA || currentValue == VOID_DATA)
             {
-                valueText.Text = "No Data";
+                valueText.Content = "No Data";
             }
             else
             {
-                valueText.Text = string.Format("{0:0.##}", currentValue);
+                valueText.Content = string.Format("{0:0.##}", currentValue);
             }
-            lastLength = valueText.Text.Length;
+            lastLength = valueText.Content.ToString().Length;
         }
 
         protected override void HandleNewData(VMSEventArgs e)
@@ -99,7 +110,6 @@ namespace VMSpc.UI.GaugeComponents
             if (!updating)
             {
                 //HandleNewData() is called asynchronously each time a new data event is raised,
-                //
                 while (cachedValue != VOID_DATA)
                 {
                     updating = true;

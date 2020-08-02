@@ -34,7 +34,7 @@ namespace VMSpc.UI.Panels
         public override void GeneratePanel()
         {
             canvas.Children.Clear();
-            canvas.Background = new SolidColorBrush(panelSettings.backgroundColor);
+            canvas.Background = new SolidColorBrush(panelSettings.BackgroundColor);
             GearDisplay = new StackPanel()
             {
                 Width = canvas.Width,
@@ -56,7 +56,7 @@ namespace VMSpc.UI.Panels
                 Width = (panelSettings.showAttained) ? (canvas.Width / 2) : canvas.Width,
                 Text = "?",
                 TextAlignment = panelSettings.alignment.ToHorizontalAlignment(),
-                Foreground = new SolidColorBrush(panelSettings.valueTextColor),
+                Foreground = new SolidColorBrush(panelSettings.ValueTextColor),
             };
             GearDisplay.Children.Add(GearSelectedBlock);
             GearSelectedBlock.ScaleText(2);
@@ -70,7 +70,7 @@ namespace VMSpc.UI.Panels
                 Width = (panelSettings.showSelected) ? (canvas.Width / 2) : canvas.Width,
                 Text = "?",
                 TextAlignment = panelSettings.alignment.ToHorizontalAlignment(),
-                Foreground = new SolidColorBrush(panelSettings.valueTextColor),
+                Foreground = new SolidColorBrush(panelSettings.ValueTextColor),
             };
             GearDisplay.Children.Add(GearAttainedBlock);
             GearAttainedBlock.ScaleText(2);

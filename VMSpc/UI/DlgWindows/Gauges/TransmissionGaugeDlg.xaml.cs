@@ -66,9 +66,9 @@ namespace VMSpc.UI.DlgWindows
             panelSettings.showSelected = (bool)ShowSelected_checkbox.IsChecked;
             panelSettings.showAttained = (bool)ShowAttained_checkbox.IsChecked;
             panelSettings.useGlobalColorPalette = (bool)UseGlobalColor.IsChecked;
-            panelSettings.backgroundColor = BackgroundColor;
-            panelSettings.borderColor = BorderColor;
-            panelSettings.valueTextColor = ValueTextColor;
+            panelSettings.BackgroundColor = BackgroundColor;
+            panelSettings.BorderColor = BorderColor;
+            panelSettings.ValueTextColor = ValueTextColor;
             DialogResult = true;
             Close();
         }

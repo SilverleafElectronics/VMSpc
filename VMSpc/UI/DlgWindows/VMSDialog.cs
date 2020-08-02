@@ -115,6 +115,56 @@ namespace VMSpc.UI.DlgWindows
                 }
             }
         }
+
+        /// <summary>
+        /// Returns all children of the specified dependencyObject. Performs the search recursively, using the specified dependencyObject as the root element.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tagName"></param>
+        /// <param name="dependencyObject"></param>
+        /// <returns></returns>
+        protected static IEnumerable<ControlType> GetByTagName<ControlType>(string tagName, DependencyObject dependencyObject) where ControlType : Control
+        {
+            return FindVisualChildren<ControlType>(dependencyObject).Where(x => (x.Tag != null) && (x.Tag.ToString() == tagName));
+        }
+
+        /// <summary>
+        /// Returns all children carrying the specified tagName. Performs the search recursively, using the calling VMSDialog Window as the root element.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tagName"></param>
+        /// <returns></returns>
+        protected IEnumerable<ControlType> GetByTagName<ControlType>(string tagName) where ControlType : Control
+        {
+            return GetByTagName<ControlType>(tagName, this);
+        }
+
+        /// <summary>
+        /// Recursively returns all child elements of the provided dependencyObject
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dependencyObject"></param>
+        /// <returns></returns>
+        //Source: https://stackoverflow.com/questions/974598/find-all-controls-in-wpf-window-by-type
+        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject dependencyObject) where T : DependencyObject
+        {
+            if (dependencyObject != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(dependencyObject); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(dependencyObject, i);
+                    if (child != null && child is T)
+                    {
+                        yield return (T)child;
+                    }
+
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        yield return childOfChild;
+                    }
+                }
+            }
+        }
     }
 
     public abstract class DlgBind

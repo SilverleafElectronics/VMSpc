@@ -49,6 +49,10 @@ namespace VMSpc.UI.GaugeComponents
             if (parameter == null || parameter.Pid != this.pid)
             {
                 parameter = ConfigurationManager.ConfigManager.ParamData.GetParam(pid);
+                if (parameter.Seen)
+                {
+                    currentValue = parameter.LastValue;
+                }
             }
         }
 
@@ -102,6 +106,11 @@ namespace VMSpc.UI.GaugeComponents
         public override void Disable()
         {
             enabled = false;
+        }
+
+        protected bool IsCurrentValueValid()
+        {
+            return (currentValue != STALE_DATA && !double.IsNaN(currentValue));
         }
 
         protected override void HandleNewData(VMSEventArgs e)

@@ -59,15 +59,5 @@ namespace VMSpc.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap SilverleafIcon {
-            get {
-                object obj = ResourceManager.GetObject("SilverleafIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

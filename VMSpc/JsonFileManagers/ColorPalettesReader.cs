@@ -56,6 +56,7 @@ namespace VMSpc.JsonFileManagers
 
     public class ColorPalettesReader : JsonFileReader<ColorPalettesContents>
     {
+        private ScreenContents Screen => ConfigurationManager.ConfigManager.Screen.Contents;
         public ColorPalettesReader() : base("\\configuration\\colorPalettes.json")
         {
         }
@@ -87,10 +88,10 @@ namespace VMSpc.JsonFileManagers
         {
             foreach (var palette in Contents.ColorPaletteList)
             {
-                if (palette.Id == ConfigurationManager.ConfigManager.Settings.Contents.selectedColorPaletteId)
+                if (palette.Id == Screen.selectedColorPaletteId)
                     return palette;
             }
-            return null;
+            return Contents.ColorPaletteList[0];
         }
 
         public void AddNewPalette(ColorPalette palette)

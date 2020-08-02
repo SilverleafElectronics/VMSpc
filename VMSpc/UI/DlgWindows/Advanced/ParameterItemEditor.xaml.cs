@@ -70,6 +70,7 @@ namespace VMSpc.UI.DlgWindows.Advanced
             LowYellowLineEditBox.Text = parameter.LowYellow.ToString();
             HighYellowLineEditBox.Text = parameter.HighYellow.ToString();
             PIDEditBox.Text = parameter.Pid.ToString();
+            NumDecimalsTextbox.Text = FormatConverter.ConvertFormatToDecimalPositions(parameter.Format).ToString();
         }
 
         private bool IsValidStringField(TextBox field)
@@ -158,6 +159,9 @@ namespace VMSpc.UI.DlgWindows.Advanced
                 return "Low Yellow Line must have a numeric value";
             if (!HighYellowIsValid())
                 return "High Yellow Line must have a numeric value greater than Low Yellow Line";
+            //var result = 
+            if (!int.TryParse(NumDecimalsTextbox.Text, out int result) || result < 0)
+                return "Decimal Positions is not in the correct format. Please enter a whole number greater than or equal to 0";
             return GetPIDValidatorMessage();
         }
 
@@ -175,6 +179,7 @@ namespace VMSpc.UI.DlgWindows.Advanced
             parameter.HighRed = double.Parse(HighRedLineEditBox.Text);
             parameter.LowYellow = double.Parse(LowYellowLineEditBox.Text);
             parameter.HighYellow = double.Parse(HighYellowLineEditBox.Text);
+            parameter.Format = FormatConverter.ConvertDecimalPositionsToFormat(int.Parse(NumDecimalsTextbox.Text));
             var pid = ushort.Parse(PIDEditBox.Text);
             if (pid != parameter.Pid)
             {
@@ -218,4 +223,39 @@ namespace VMSpc.UI.DlgWindows.Advanced
             }
         }
     }
+
+    public static class FormatConverter
+    { 
+        public static int ConvertFormatToDecimalPositions(string format)
+        {
+            if (!format.Contains("#"))
+            {
+                return 0;
+            }
+            else
+            {
+                return format.Count(x => x == '#');
+            }
+        }
+
+        public static string ConvertDecimalPositionsToFormat(int numberOfDecimals)
+        {
+            if (numberOfDecimals == 0)
+            {
+                return "{0:0}";
+            }
+            else
+            {
+                string format = "{0:0.";
+                for (int i = 0; i < numberOfDecimals; i++)
+                {
+                    format += "#";
+                }
+                format += "}";
+                return format;
+            }
+        }
+    }
 }
+
+

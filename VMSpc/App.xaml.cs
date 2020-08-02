@@ -66,7 +66,7 @@ namespace VMSpc
             ConfigManager.LoadConfiguration();
             DiagnosticLogger.Initialize();
             RawLogger.Initialize();
-            _PIDValueStager = new PIDValueStager();
+            PIDValueStager.Initialize();
             _EngineDataParser = new EngineDataParser();
             _Acceleration = new Acceleration();
             _Trackers = new Trackers();
@@ -85,6 +85,7 @@ namespace VMSpc
             //ParamData.Activate();
             TireManager.Initialize();
             CommunicationManager.Initialize();
+            DayNightManager.Initialize();
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)

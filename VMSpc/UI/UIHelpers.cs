@@ -23,5 +23,24 @@ namespace VMSpc.UI
                     block.FontSize = min;
             }
         }
+
+        /// <summary>
+        /// Returns the Minimum of any number of doubles. Placed here because this is currently only used
+        /// for comparing font sizes.
+        /// </summary>
+        /// <param name="sizes"></param>
+        /// <returns></returns>
+        public static double Min(params double[] values)
+        {
+            double max = double.MaxValue;
+            foreach (var value in values)
+            {
+                if (value < max)
+                {
+                    max = value;
+                }
+            }
+            return max;
+        }
     }
 }

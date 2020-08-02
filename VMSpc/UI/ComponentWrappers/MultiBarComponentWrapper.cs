@@ -54,7 +54,7 @@ namespace VMSpc.UI.ComponentWrappers
                 Width = ContentPanel.Width,
                 Height = GetGaugeHeight() - 2,
                 Orientation = Orientation.Vertical,
-                EmptyColor = new SolidColorBrush(gaugeSettings.backgroundColor),
+                EmptyColor = new SolidColorBrush(gaugeSettings.BackgroundColor),
                 SolidValueColor = new SolidColorBrush(GraphColor)
             };
             ContentPanel.Children.Add(barGraph);

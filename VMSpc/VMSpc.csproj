@@ -3,19 +3,38 @@
   <Import Project="..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <LangVersion>8.0</LangVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CF06B3E2-32B9-466F-9E67-7BA0084ED432}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>VMSpc</RootNamespace>
     <AssemblyName>VMSpc</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\SilverLeaf\VMSpc\dev\Packaging\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>5.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -30,19 +49,44 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>embedded</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>14818D9C7CB1EBEE59F23F9FD4697B51901207D5</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>VMSpc_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ColorPickerWPF, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ColorPickerWPF.1.0.9\lib\net461\ColorPickerWPF.dll</HintPath>
+    </Reference>
     <Reference Include="Costura, Version=4.1.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
       <HintPath>..\packages\Costura.Fody.4.1.0\lib\net40\Costura.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAPICodePack-Core.1.1.0.0\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -50,6 +94,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
@@ -67,6 +112,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WriteableBitmapEx.Wpf, Version=1.5.0.0, Culture=neutral, PublicKeyToken=50375ca6144f1c69, processorArchitecture=MSIL">
+      <HintPath>..\packages\WriteableBitmapEx.1.5.1.0\lib\net40\WriteableBitmapEx.Wpf.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -84,16 +132,19 @@
     <Compile Include="Common\EventIDs.cs" />
     <Compile Include="Common\Events.cs" />
     <Compile Include="Common\Helpers\ApplicationControl.cs" />
+    <Compile Include="Common\InAppTaskScheduler.cs" />
     <Compile Include="Common\ISingleton.cs" />
     <Compile Include="Common\PGN.cs" />
     <Compile Include="Common\RVCUpdaters.cs" />
     <Compile Include="Communication\OutgoingJ1708Message.cs" />
+    <Compile Include="DayNightManager.cs" />
     <Compile Include="EngineDownloader.cs" />
     <Compile Include="Exceptions\CannotReadEngineFileException.cs" />
     <Compile Include="Common\Helpers\StringFormatBuilder.cs" />
     <Compile Include="Exceptions\HandledException.cs" />
     <Compile Include="Extensions\Standard\ArrayExtensions.cs" />
     <Compile Include="Extensions\Standard\ListExtensions.cs" />
+    <Compile Include="Extensions\Standard\StringExtensions.cs" />
     <Compile Include="Extensions\UI\GridExtensions.cs" />
     <Compile Include="AdvancedParsers\Acceleration.cs" />
     <Compile Include="AdvancedParsers\DiagnosticsParser.cs" />
@@ -101,13 +152,16 @@
     <Compile Include="AdvancedParsers\MaxTrackers.cs" />
     <Compile Include="AdvancedParsers\UIParser.cs" />
     <Compile Include="Extensions\UI\LabelExtensions.cs" />
+    <Compile Include="JsonFileManagers\ColorReader.cs" />
+    <Compile Include="JsonFileManagers\MaintenanceTrackerReader.cs" />
+    <Compile Include="MainWindowRoutedEvents.cs" />
     <Compile Include="Parsers\CanMessage.cs" />
     <Compile Include="Communication\DataReader.cs" />
     <Compile Include="Communication\LogFileReader.cs" />
     <Compile Include="Parsers\CanMessageSegment.cs" />
     <Compile Include="Parsers\MessageExtractor.cs" />
-    <Compile Include="Communication\SerialPortReader.cs" />
-    <Compile Include="Communication\CommPortReader.cs" />
+    <Compile Include="Communication\RS232Reader.cs" />
+    <Compile Include="Communication\USBReader.cs" />
     <Compile Include="Communication\WifiSocketReader.cs" />
     <Compile Include="EngineSpec.cs" />
     <Compile Include="Extensions\UI\EnumExtensions.cs" />
@@ -126,6 +180,9 @@
     <Compile Include="UI\CustomComponents\ClearDiagnosticsBox.xaml.cs">
       <DependentUpon>ClearDiagnosticsBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\CustomComponents\ColorEditor.xaml.cs">
+      <DependentUpon>ColorEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\CustomComponents\ColorPaletteStackItem.cs" />
     <Compile Include="JsonFileManagers\JsonDefaults\ParamDataDefaults.cs" />
     <Compile Include="JsonFileManagers\AlarmsReader.cs" />
@@ -134,12 +191,6 @@
     <Compile Include="JsonFileManagers\ParamDataReader.cs" />
     <Compile Include="JsonFileManagers\TankMinderReader.cs" />
     <Compile Include="Parsers\IDataBus.cs" />
-    <Compile Include="Parsers\SpecialParsers\TireParsers\ITireParser.cs" />
-    <Compile Include="Parsers\SpecialParsers\TireParsers\PProTire.cs" />
-    <Compile Include="Parsers\SpecialParsers\TireParsers\PressureProParser.cs" />
-    <Compile Include="Parsers\SpecialParsers\TireParsers\Tire.cs" />
-    <Compile Include="Parsers\SpecialParsers\TireParsers\TireParser.cs" />
-    <Compile Include="Parsers\SpecialParsers\TireParsers\TSTTire.cs" />
     <Compile Include="UI\ComponentWrappers\HorizontalBarWrapper.cs" />
     <Compile Include="UI\ComponentWrappers\ManagedComponentWrapper.cs" />
     <Compile Include="UI\ComponentWrappers\MultiBarComponentWrapper.cs" />
@@ -198,6 +249,9 @@
     <Compile Include="UI\DlgWindows\Gauges\ImagePanelDlg.xaml.cs">
       <DependentUpon>ImagePanelDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\DlgWindows\Settings\DayNightDlg.xaml.cs">
+      <DependentUpon>DayNightDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\DlgWindows\Settings\Messages.xaml.cs">
       <DependentUpon>Messages.xaml</DependentUpon>
     </Compile>
@@ -234,8 +288,20 @@
     <Compile Include="UI\DlgWindows\Settings\TiresDlg.xaml.cs">
       <DependentUpon>TiresDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\DlgWindows\Settings\TSTSettings.xaml.cs">
+      <DependentUpon>TSTSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\DlgWindows\View\DiagnosticLogViewer.xaml.cs">
       <DependentUpon>DiagnosticLogViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DlgWindows\View\EditCompletedItem.xaml.cs">
+      <DependentUpon>EditCompletedItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DlgWindows\View\EditMaintenanceItemDlg.xaml.cs">
+      <DependentUpon>EditMaintenanceItemDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DlgWindows\View\MaintenanceDlg.xaml.cs">
+      <DependentUpon>MaintenanceDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\DlgWindows\VMSDialog.cs" />
     <Compile Include="UI\DlgWindows\Gauges\VPanelDlg.cs" />
@@ -317,6 +383,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\CustomComponents\ColorEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\CustomComponents\ColorPicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -370,6 +440,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\DlgWindows\Gauges\ImagePanelDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DlgWindows\Settings\DayNightDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -433,7 +507,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\DlgWindows\Settings\TSTSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\DlgWindows\View\DiagnosticLogViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DlgWindows\View\EditCompletedItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DlgWindows\View\EditMaintenanceItemDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DlgWindows\View\MaintenanceDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -482,13 +572,25 @@
   <ItemGroup>
     <Resource Include="favicon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Fody.6.0.0\build\Fody.targets" Condition="Exists('..\packages\Fody.6.0.0\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Fody.6.0.0\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.0.0\build\Fody.targets'))" />
     <Error Condition="!Exists('..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\Fody.6.2.0\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.2.0\build\Fody.targets'))" />
   </Target>
+  <Import Project="..\packages\Fody.6.2.0\build\Fody.targets" Condition="Exists('..\packages\Fody.6.2.0\build\Fody.targets')" />
 </Project>

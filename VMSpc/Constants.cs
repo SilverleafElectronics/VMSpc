@@ -24,6 +24,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using VMSpc.Exceptions;
+using VMSpc.Enums.UI;
 
 //These are global constants. For global variables, see Globals.cs
 
@@ -187,6 +188,37 @@ namespace VMSpc
             return r;
         }
 
+        /// <summary>
+        /// converts a hexadecimal string representation to an unsigned integer value. Supports unsigned values up to 64 bits.
+        /// </summary>
+        /// <param name="byteString"></param>
+        /// <returns></returns>
+        public static ulong BinConvert(string byteString)
+        {
+            var trimmedString = byteString;
+            List<byte> byteArr = new List<byte>();
+            if (byteString[0] == '0' && (byteString[1] == 'x' || byteString[1] == 'X'))
+            {
+                trimmedString = trimmedString.Substring(2);
+            }
+            if (byteString.Length % 2 != 0) //if even, pop off the leftmost character first, treating it as a 4-bit value (0x0#)
+            {
+                byteArr.Add(BinConvert('0', trimmedString[0]));
+                trimmedString = trimmedString.Substring(1);
+            }
+            while (trimmedString.Length > 0)
+            {
+                byteArr.Add(BinConvert(trimmedString[0], trimmedString[1]));
+                trimmedString = trimmedString.Substring(2);
+            }
+            ulong value = 0;
+            for (int i = byteArr.Count - 1, j = 0; i >= 0; i--, j++)
+            {
+                value |= (ulong)(byteArr[i] << (j * 8));
+            }
+            return value;
+        }
+
         public static bool SetProperty<T>(ref T storage, T value, string propertyName = null)
         {
             if (storage.GetType() != value.GetType())
@@ -253,16 +285,49 @@ namespace VMSpc
         //-----------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Attaches the specified callback method and interval to a timer object. Returns the timer object
+        /// Attaches the specified callback method and interval to a timer object. Returns the timer object.
+        /// dispatchType defaults to OnSpooledThread, which here means it will execute on the timer's execution thread.
+        /// Set dispatchType to OnMainThread or OnMainThreadAsync if the callback interacts with UI elements.
         /// </summary>
         /// <returns></returns>
-        public static Timer CREATE_TIMER(Action callback, int millisecond_interval)
+        public static Timer CREATE_TIMER(Action callback, int millisecond_interval, DispatchType dispatchType = DispatchType.OnSpooledThread)
         {
             Timer timer = new Timer(millisecond_interval);
-            timer.Elapsed += (object obj, ElapsedEventArgs e) => callback();
+            switch (dispatchType)
+            {
+                case DispatchType.OnSpooledThread:
+                    timer.Elapsed += (object obj, ElapsedEventArgs e) => callback();
+                    break;
+                case DispatchType.OnMainThread:
+                    timer.Elapsed += (object obj, ElapsedEventArgs e) =>
+                    {
+                        Application.Current.Dispatcher.Invoke(() => callback());
+                    };
+                    break;
+                case DispatchType.OnMainThreadAsync:
+                    Action action = () => callback();
+                    timer.Elapsed += (object obj, ElapsedEventArgs e) =>
+                    {
+                        Application.Current.Dispatcher.BeginInvoke(action, System.Windows.Threading.DispatcherPriority.Normal);
+                    };
+                    break;
+            }
             timer.AutoReset = true;
             timer.Enabled = true;
             return timer;
+        }
+
+        public static void DestroyTimer(Timer timer)
+        {
+            try
+            {
+                timer?.Stop();
+                timer?.Close();
+                timer = null;
+            }
+            catch 
+            {
+            }
         }
 
         /// <summary> returns the passed value if valid (!= DUB_NODATA). Otherwise, returns 0 </summary>

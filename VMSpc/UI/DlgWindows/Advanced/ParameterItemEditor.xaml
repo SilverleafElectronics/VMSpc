@@ -7,13 +7,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VMSpc.UI.DlgWindows.Advanced"
         mc:Ignorable="d"
-        Title="ParameterItemEditor" Height="600" Width="800">
+        Title="ParameterItemEditor" Height="675" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="75" />
             <RowDefinition Height="75" />
             <RowDefinition Height="75" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="100" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
@@ -236,6 +237,20 @@
                     />
                 </Grid>
             </Grid>
+        </Grid>
+        <Grid Grid.Row="4">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0 0 40 0">
+                    Decimal Positions
+                </Label>
+                <TextBox 
+                    x:Name="NumDecimalsTextbox"
+                    Height="25" 
+                    Width="100" 
+                    HorizontalAlignment="Left"
+                    VerticalContentAlignment="Center"
+             />
+            </StackPanel>
         </Grid>
         <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>

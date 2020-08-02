@@ -79,8 +79,8 @@ namespace VMSpc.UI.DlgWindows
             ShowValue.IsChecked = panelSettings.showValue;
             ShowWarning.IsChecked = panelSettings.showSpot;
             UseGlobalColor.IsChecked = panelSettings.useGlobalColorPalette;
-            BackgroundColor = panelSettings.backgroundColor;
-            BorderColor = panelSettings.borderColor;
+            BackgroundColor = panelSettings.BackgroundColor;
+            BorderColor = panelSettings.BorderColor;
             ScanSpeed.Value = panelSettings.scanSpeed / 1000;
         }
 
@@ -108,8 +108,8 @@ namespace VMSpc.UI.DlgWindows
             panelSettings.showUnit = (bool)ShowUnit.IsChecked;
             panelSettings.showValue = (bool)ShowValue.IsChecked;
             panelSettings.showSpot = (bool)ShowWarning.IsChecked;
-            panelSettings.backgroundColor = BackgroundColor;
-            panelSettings.borderColor = BorderColor;
+            panelSettings.BackgroundColor = BackgroundColor;
+            panelSettings.BorderColor = BorderColor;
             panelSettings.scanSpeed = (ushort)(ScanSpeed.Value * 1000);
             panelSettings.useGlobalColorPalette = (bool)UseGlobalColor.IsChecked;
             panelSettings.pidList.Clear();
@@ -131,7 +131,7 @@ namespace VMSpc.UI.DlgWindows
 
         private void ChangeBackgroundColorButton_Click(object sender, RoutedEventArgs e)
         {
-            BackgroundColor = panelSettings.backgroundColor;
+            BackgroundColor = panelSettings.BackgroundColor;
             if (ChangeColor(ref BackgroundColor))
             {
                 panelSettings.useGlobalColorPalette = false;
@@ -141,7 +141,7 @@ namespace VMSpc.UI.DlgWindows
 
         private void ChangeBorderColorButton_Click(object sender, RoutedEventArgs e)
         {
-            BorderColor = panelSettings.borderColor;
+            BorderColor = panelSettings.BorderColor;
             ChangeColor(ref BorderColor);
         }
 

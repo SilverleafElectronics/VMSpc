@@ -32,6 +32,9 @@ namespace VMSpc.UI.DlgWindows
         /// </summary>
         protected Color ValueTextColor;
 
+        protected virtual int DefaultPanelWidth => 300;
+        protected virtual int DefaultPanelHeight => 300;
+
         
         public VPanelDlg(PanelSettings panelSettings) : base()
         {
@@ -48,16 +51,16 @@ namespace VMSpc.UI.DlgWindows
             
             panelSettings.panelCoordinates.topLeftX = 0;
             panelSettings.panelCoordinates.topLeftY = 0;
-            panelSettings.panelCoordinates.bottomRightX = 300;
-            panelSettings.panelCoordinates.bottomRightY = 300;
+            panelSettings.panelCoordinates.bottomRightX = DefaultPanelWidth;
+            panelSettings.panelCoordinates.bottomRightY = DefaultPanelHeight;
             panelSettings.parentPanelNumber = 0;
             panelSettings.showInMetric = false;
             panelSettings.alignment = System.Windows.HorizontalAlignment.Left;
             panelSettings.useGlobalColorPalette = true;
-            panelSettings.borderColor = BorderColor = Colors.Black;
-            panelSettings.backgroundColor = BackgroundColor = ConfigManager.ColorPalettes.GetSelectedPalette().GaugeBackground;
-            panelSettings.captionColor = TextColor = ConfigManager.ColorPalettes.GetSelectedPalette().Captions;
-            panelSettings.valueTextColor = ValueTextColor = ConfigManager.ColorPalettes.GetSelectedPalette().GaugeText;
+            panelSettings.BorderColor = BorderColor = Colors.Black;
+            panelSettings.BackgroundColor = BackgroundColor = ConfigManager.ColorPalettes.GetSelectedPalette().GaugeBackground;
+            panelSettings.CaptionColor = TextColor = ConfigManager.ColorPalettes.GetSelectedPalette().Captions;
+            panelSettings.ValueTextColor = ValueTextColor = ConfigManager.ColorPalettes.GetSelectedPalette().GaugeText;
 
             ApplyGlobalColorPalette();
 
@@ -67,10 +70,10 @@ namespace VMSpc.UI.DlgWindows
         protected override void ApplyBindings()
         {
             base.ApplyBindings();
-            BackgroundColor = panelSettings.backgroundColor;
-            BorderColor = panelSettings.borderColor;
-            TextColor = panelSettings.captionColor;
-            ValueTextColor = panelSettings.valueTextColor;
+            BackgroundColor = panelSettings.BackgroundColor;
+            BorderColor = panelSettings.BorderColor;
+            TextColor = panelSettings.CaptionColor;
+            ValueTextColor = panelSettings.ValueTextColor;
         }
 
         protected virtual void ApplyGlobalColorPalette()
@@ -83,10 +86,10 @@ namespace VMSpc.UI.DlgWindows
 
         protected virtual void RevertGlobalColorPalette()
         {
-            BackgroundColor = panelSettings.backgroundColor;
-            BorderColor = panelSettings.borderColor;
-            TextColor = panelSettings.captionColor;
-            ValueTextColor = panelSettings.valueTextColor;
+            BackgroundColor = panelSettings.BackgroundColor;
+            BorderColor = panelSettings.BorderColor;
+            TextColor = panelSettings.CaptionColor;
+            ValueTextColor = panelSettings.ValueTextColor;
         }
 
         /*

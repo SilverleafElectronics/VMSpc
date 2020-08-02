@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VMSpc.Common;
+using VMSpc.Parsers;
 
 namespace VMSpc.AdvancedParsers
 {
@@ -15,9 +16,6 @@ namespace VMSpc.AdvancedParsers
         private MaxTracker MaxManifoldTemp = new MaxTracker(506, 105, 2000, 12000, 999.9);
         private MaxTracker MaxRPMs = new MaxTracker(507, 190, 2000, 12000, 9999.9);
         private MaxTracker MaxSpeed = new MaxTracker(508, 84, 2000, 12000, 199.9);
-
-        //private AverageTracker AverageEconomy = new AverageTracker(511, 245, 250);
-        //private AverageTracker AverageSpeed = new AverageTracker(512, 245, 247);
     }
 
     public abstract class Tracker : AdvancedParser, IEventPublisher
@@ -26,6 +24,8 @@ namespace VMSpc.AdvancedParsers
         protected double TrackedMetricValue = double.NaN;
         protected ushort TrackedValuePID;
         protected ushort PublishedPID;
+        protected double Value;
+        protected double MetricValue;
 
         public Tracker(ushort PublishedPID, ushort TrackedValuePID)
         {
@@ -41,6 +41,21 @@ namespace VMSpc.AdvancedParsers
         {
             RaiseVMSEvent?.Invoke(this, e);
         }
+
+        protected void PublishValues()
+        {
+            var segment = new InferredMessageSegment()
+            {
+                Pid = PublishedPID,
+                ParseStatus = Enums.Parsing.ParseStatus.Parsed,
+                TimeParsed = DateTime.Now,
+                TimeReceived = DateTime.Now,
+                StandardValue = Value,
+                MetricValue = Value,
+            };
+            var e = new VMSParsedDataEventArgs(PublishedPID, segment);
+            PublishEvent(e);
+        }
     }
 
     public class MaxTracker : Tracker, IEventConsumer
@@ -50,8 +65,6 @@ namespace VMSpc.AdvancedParsers
         private ulong TimeSpan;
         private int BufferSize, Left, Right;
         uint counter;
-        private double Value;
-        private double MetricValue;
 
         public MaxTracker(ushort PublishedPID, ushort TrackedValuePID, int BufferSize, ulong TimeSpan, double MaxValue = 999999.9)
             :base(PublishedPID, TrackedValuePID)
@@ -105,13 +118,6 @@ namespace VMSpc.AdvancedParsers
                     Constants.SafeIndexAdd(ref Right, -1, BufferSize);
         }
 
-        public void PublishValues()
-        {
-            var e = new VMSPidValueEventArgs(EventIDs.PID_BASE | PublishedPID, Value);
-            PublishEvent(e);
-        }
-        
-
         protected struct TimeValuePair
         {
             public ulong time;
@@ -126,8 +132,6 @@ namespace VMSpc.AdvancedParsers
         public ushort SecondTrackedValuePID;
         private double SecondTrackedValue = double.NaN;
         private double SecondTrackedMetricValue = double.NaN;
-        private double value;
-        private double metricValue;
         public AverageTracker(ushort PublishedPID, ushort TrackedValuePID, ushort SecondTrackedValuePID)
             :base(PublishedPID, TrackedValuePID)
         {
@@ -139,7 +143,9 @@ namespace VMSpc.AdvancedParsers
 
         public void ConsumeEvent(VMSEventArgs e)
         {
-            var segment = (e as VMSPidValueEventArgs).segment;
+            var segment = (e as VMSParsedDataEventArgs).messageSegment;
+            if (segment == null)
+                return;
             if (segment.Pid == TrackedValuePID)
             {
                 TrackedValue = segment.StandardValue;
@@ -153,10 +159,9 @@ namespace VMSpc.AdvancedParsers
 
             if (!double.IsNaN(TrackedValue) && !double.IsNaN(SecondTrackedValue) && SecondTrackedValue != 0)
             {
-                value = (TrackedValue / SecondTrackedMetricValue);
-                metricValue = (TrackedMetricValue / SecondTrackedMetricValue);
-                var newEvent = new VMSPidValueEventArgs(EventIDs.PID_BASE | PublishedPID, value);
-                PublishEvent(newEvent);
+                Value = (TrackedValue / SecondTrackedMetricValue);
+                MetricValue = (TrackedMetricValue / SecondTrackedMetricValue);
+                PublishValues();
             }
         }
     }

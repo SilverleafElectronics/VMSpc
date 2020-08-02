@@ -23,7 +23,8 @@ namespace VMSpc.JsonFileManagers
         private static string GetBaseDirectory()
         {
             var exeLocation = System.Reflection.Assembly.GetEntryAssembly().Location;
-            var indexOf = exeLocation.IndexOf("VMSpc.exe") - 1;//-1 to remove the \\
+            var indexOf = exeLocation.IndexOf(Path.GetFileName(exeLocation)) - 1;//-1 to remove the \\
+//            var indexOf = exeLocation.IndexOf(".exe") - 1;//-1 to remove the \\
             var withoutExeName = exeLocation.Substring(0, indexOf);
             return withoutExeName;
         }

@@ -7,7 +7,6 @@ using VMSpc.Communication;
 using VMSpc.DevHelpers;
 using static VMSpc.Parsers.PIDWrapper;
 using static VMSpc.Constants;
-using static VMSpc.Parsers.TireParsers.PressureProParser;
 using VMSpc.Enums.Parsing;
 
 namespace VMSpc.Parsers
@@ -22,7 +21,6 @@ namespace VMSpc.Parsers
         public J1708Parser()
         {
             J1708ParseMethodMap = new Dictionary<ushort, J1708ParsingHelper>();
-            PproParser.SetDataBuse(this);
             DefineParsers();
         }
 

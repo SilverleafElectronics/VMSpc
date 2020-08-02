@@ -39,11 +39,15 @@ namespace VMSpc.UI.GaugeComponents
                 Fill = GreenBrush
             };
             Children.Add(WarningCircle);
+            Update();
         }
 
         public override void Update()
         {
-            WarningCircle.Fill = GetFillBrush();
+            if (IsCurrentValueValid())
+            {
+                WarningCircle.Fill = GetFillBrush();
+            }
         }
 
         public SolidColorBrush GetFillBrush()

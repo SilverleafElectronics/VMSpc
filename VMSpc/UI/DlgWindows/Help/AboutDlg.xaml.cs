@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,9 +25,14 @@ namespace VMSpc.UI.DlgWindows
             InitializeComponent();
             version.Text = "VMSpc Version: " + About.version;
             copyright.Text = "Copyright (C) 2002-" + DateTime.Now.Year.ToString() + " SilverLeaf Electronics, Inc.";
-            moreInfo.Text = "Please visit our web forum at www.silverleafelectronics.com.";
             phone.Text = "Phone: 888-741-0259";
-            address.Text = "Mail: 2490 Ferry St. SW, Albany, OR 9732";
+            address.Text = "Mail: 2490 Ferry St. SW, Albany, OR 97321";
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }

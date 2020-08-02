@@ -85,7 +85,7 @@ namespace VMSpc.UI.Managers
 
         private void UpdateFuel()
         {
-            currentFuel = ChassisParameters.Instance.CurrentFuel - startFuel;
+            currentFuel = ChassisParameters.Instance.CurrentFuelGallons - startFuel;
             if (odometerSettings.showInMetric)
             {
                 currentFuel = (currentFuel * 3.78541);

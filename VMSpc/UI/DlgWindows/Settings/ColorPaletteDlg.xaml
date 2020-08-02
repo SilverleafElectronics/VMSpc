@@ -7,21 +7,104 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Title="Color Palette Selector" Height="600" Width="750">
+        Title="Color Palette Selector" Height="650" Width="750">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
             <RowDefinition Height="400" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" BorderThickness="2" BorderBrush="LightGray" Height="400" Width="600">
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <StackPanel Width="650" VerticalAlignment="Center" Orientation="Horizontal">
+                    <CheckBox 
+                        x:Name="UseDayNightCheckBox" 
+                        Checked="UseDayNightCheckBox_Checked" 
+                        Unchecked="UseDayNightCheckBox_Unchecked"
+                        VerticalContentAlignment="Center"
+                        Height="35">Use Day/Night Timer</CheckBox>
+                    <StackPanel Orientation="Horizontal" Name="DayNightTimerSettings" Visibility="Hidden">
+                        <Label Name="DayStartLabel" VerticalContentAlignment="Center" Height="35" Margin="10 0 0 0">Day Start Time:</Label>
+                        <TextBox Name="DayStartHourBox" 
+                                 VerticalAlignment="Center" 
+                                 VerticalContentAlignment="Center" 
+                                 PreviewTextInput="PreviewTimeTextInput" 
+                                 Height="25" 
+                                 Width="25" 
+                                 MaxLength="2"/>
+                        <Label VerticalContentAlignment="Center">:</Label>
+                        <TextBox Name="DayStartMinuteBox" 
+                                 VerticalAlignment="Center" 
+                                 VerticalContentAlignment="Center" 
+                                 PreviewTextInput="PreviewTimeTextInput" 
+                                 Height="25" 
+                                 Width="25" 
+                                 MaxLength="2"/>
+                        <Label VerticalContentAlignment="Center">:</Label>
+                        <TextBox Name="DayStartSecondBox" 
+                                 VerticalAlignment="Center" 
+                                 VerticalContentAlignment="Center" 
+                                 PreviewTextInput="PreviewTimeTextInput" 
+                                 Height="25" 
+                                 Width="25"
+                                 MaxLength="2"/>
+                        <ComboBox Name="DayStartAMPM" Width="45" Height="25" Margin="5 0 0 0" VerticalContentAlignment="Center">
+                            <ComboBoxItem Tag="AM">AM</ComboBoxItem>
+                            <ComboBoxItem Tag="PM">PM</ComboBoxItem>
+                        </ComboBox>
+                        <Label Name="NightStartLabel" VerticalContentAlignment="Center" Height="35" Margin="10 0 0 0">Night Start Time:</Label>
+                        <TextBox Name="NightStartHourBox" 
+                                 VerticalAlignment="Center" 
+                                 VerticalContentAlignment="Center" 
+                                 PreviewTextInput="PreviewTimeTextInput" 
+                                 Height="25" 
+                                 Width="25"
+                                 MaxLength="2"/>
+                        <Label VerticalContentAlignment="Center">:</Label>
+                        <TextBox Name="NightStartMinuteBox" 
+                                 VerticalAlignment="Center" 
+                                 VerticalContentAlignment="Center" 
+                                 PreviewTextInput="PreviewTimeTextInput" 
+                                 Height="25" 
+                                 Width="25"
+                                 MaxLength="2"/>
+                        <Label VerticalContentAlignment="Center">:</Label>
+                        <TextBox Name="NightStartSecondBox" 
+                                 VerticalAlignment="Center" 
+                                 VerticalContentAlignment="Center" 
+                                 Height="25" 
+                                 PreviewTextInput="PreviewTimeTextInput" 
+                                 Width="25"
+                                 MaxLength="2"/>
+                        <ComboBox Name="NightStartAMPM" Width="45" Height="25" Margin="5 0 0 0" VerticalContentAlignment="Center">
+                            <ComboBoxItem Tag="AM">AM</ComboBoxItem>
+                            <ComboBoxItem Tag="PM">PM</ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1">
+                <ComboBox Name="TimeSelector" Width="65" Height="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                    <ComboBoxItem Name="DayTimeSelector"   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Selected="DayTimeSelector_Selected">Day</ComboBoxItem>
+                    <ComboBoxItem Name="NightTimeSelector" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Selected="NightTimeSelector_Selected">Night</ComboBoxItem>
+                </ComboBox>
+            </Grid>
+        </Grid>
+        <Border Grid.Row="1" BorderThickness="2" BorderBrush="LightGray" Height="400" Width="600">
         <ScrollViewer>
             <StackPanel Name="DisplayedColorPalettes">
             </StackPanel>
         </ScrollViewer>
         </Border>
-        <Button Grid.Row="1" Width="150" Height="30" Name="AddNewPaletteButton" Click="AddNewPaletteButton_Click">Add New Palette</Button>
         <Grid Grid.Row="2">
+            <Button Width="150" Height="30" Name="AddNewPaletteButton" Click="AddNewPaletteButton_Click">Add New Palette</Button>
+        </Grid>
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />

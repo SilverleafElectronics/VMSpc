@@ -13,11 +13,18 @@ using VMSpc.DevHelpers;
 namespace VMSpc
 {
     /// <summary>
+    /// <para>
     /// Catches values published by the CanMessageHandler and stores the values in the associated parameter. Publishes the parsed values
     /// for use by the GUI. If the value is not a recognized parameter, it will be stored for use by the PID Sniffer (only applicable
     /// to J1708; there's no way to determine the intended parameter ID of an unknown J1939 message segment).
+    /// </para>
+    /// <para>
+    /// For interacting with Advanced Parsers: Advanced Parsers catch values submitted from here, either through fully or partially
+    /// parsed data. Advanced Parsers parse this data, and if they are meant to submit a PID value, they route the parsed data
+    /// back here for storage. Advanced parsers should publish this VMSParsedDataEvent using an InferredMessageSegment.
+    /// </para>
     /// </summary>
-    public class PIDValueStager
+    public class PIDValueStager : IEventConsumer, ISingleton
     {
         public class ParameterWrapper : IEventConsumer, IEventPublisher
         {
@@ -54,6 +61,12 @@ namespace VMSpc
                         if (segment.ParseStatus == ParseStatus.Parsed)
                         {
                             UpdateWithJ1939(segment);
+                        }
+                        break;
+                    case VMSDataSource.Inferred:
+                        if (segment.ParseStatus == ParseStatus.Parsed)
+                        {
+                            UpdateWithInferred(segment);
                         }
                         break;
                 }
@@ -99,6 +112,11 @@ namespace VMSpc
                 }
             }
 
+            public void UpdateWithInferred(CanMessageSegment segment)
+            {
+                UpdateAndPublish(Parameter.J1939Value, segment);
+            }
+
             public void UpdateAndPublish(PidValue pidValue, CanMessageSegment segment)
             {
                 if (pidValue == null)
@@ -109,6 +127,7 @@ namespace VMSpc
                 pidValue.TimeReceived = segment.TimeReceived;
                 Parameter.LastValue = pidValue.StandardValue;
                 Parameter.LastMetricValue = pidValue.MetricValue;
+                Parameter.Seen = true;
                 var e = new VMSPidValueEventArgs(EventIDs.PID_BASE | Parameter.Pid, Parameter.LastValue)
                 {
                     segment = segment,
@@ -118,29 +137,101 @@ namespace VMSpc
             }
         }
 
-        private List<ParameterWrapper> ParameterWrappers;
+        static PIDValueStager() { }
+        public static PIDValueStager Instance;
 
-        public PIDValueStager()
+        public static void Initialize()
+        {
+            Instance = new PIDValueStager();
+        }
+
+        private List<ParameterWrapper> ParameterWrappers;
+        private List<ushort> RecognizedPIDs;
+
+        private PIDValueStager()
+        {
+            AddParameters();
+            //Subscribe to the generic PARSED_DATA_EVENT. This stager catches all PIDs to use unrecognized ones in the PIDSniffer
+            EventBridge.Instance.SubscribeToEvent(this, EventIDs.PARSED_DATA_EVENT | 0xFFFF);
+        }
+
+        public void Reset()
+        {
+            foreach (var wrapper in ParameterWrappers)
+            {
+                EventBridge.Instance.UnsubscribeFromAllEvents(wrapper);
+                EventBridge.Instance.RemoveEventPublisher(wrapper);
+            }
+            AddParameters();
+        }
+
+        public JParameter GetParameter(ushort pid)
+        {
+            foreach (var wrapper in ParameterWrappers)
+            {
+                if (wrapper.Parameter.Pid == pid)
+                {
+                    return wrapper.Parameter;
+                }
+            }
+            return null;
+        }
+
+        private void AddParameters()
         {
             ParameterWrappers = new List<ParameterWrapper>();
+            RecognizedPIDs = new List<ushort>();
             foreach (var param in ConfigManager.ParamData.Contents.Parameters)
             {
                 ParameterWrappers.Add(new ParameterWrapper(param));
+                RecognizedPIDs.Add(param.Pid);
             }
-            //Add all parameters that don't exist in the Parameter List. This allows us to publish all values, regardless of parameter assignment
-            for (ushort i = 0; i < 65530; i++)
+            RecognizedPIDs.Sort();
+        }
+
+        /// <summary>
+        /// Parses all ParsedDataEvents, regardless of whether or not they are recognized. Because of this constraint, we keep the RecognizedPIDs List sorted
+        /// so that we can perform a binary search at each event consumption.
+        /// </summary>
+        /// <param name="e"></param>
+        public void ConsumeEvent(VMSEventArgs e)
+        {
+            var ev = (e as VMSParsedDataEventArgs);
+            if (ev != null && ev.messageSegment != null)
             {
-                if (ConfigManager.ParamData.GetParam(i) == null)
+                var pid = ev.messageSegment.Pid;
+                var index = RecognizedPIDs.BinarySearch(pid);
+                if (index < -1)
                 {
-                    ParameterWrappers.Add(
-                        new ParameterWrapper(
-                            new JParameter() { 
-                                Pid = i
-                            }
-                            )
-                        );
+                    //List.BinarySearch() returns the bitwise complement of the next largest element's index
+                    //in the list when the value isn't found. This means that we can take the complement again
+                    //for the insertion to avoid sorting every time a new value is added.
+                    AddUnrecognizedParameter(~index, pid);
                 }
             }
+        }
+
+        private void AddUnrecognizedParameter(int index, ushort pid)
+        {
+            JParameter param = new JParameter()
+            {
+                Pid = pid,
+                LowRed = 0,
+                LowYellow = 0,
+                HighRed = 0,
+                HighYellow = 0,
+                GaugeMin = 0,
+                GaugeMax = 100,
+                Abbreviation = "UNKNOWN",
+                ParamName = $"Unrecognized Pid: {pid}",
+                Multiplier = 1,
+                Offset = 0,
+                Unit = "UNKNOWN",
+                MetricUnit = "UNKOWN",
+            };
+            RecognizedPIDs.Insert(index, pid);
+            ParameterWrappers.Add(new ParameterWrapper(param));
+            ConfigManager.ParamData.AddParam(param);
         }
     }
 }

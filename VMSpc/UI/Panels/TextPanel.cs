@@ -33,7 +33,7 @@ namespace VMSpc.UI.Panels
             }
             else
             {
-                canvas.Background = new SolidColorBrush(panelSettings.backgroundColor);
+                canvas.Background = new SolidColorBrush(panelSettings.BackgroundColor);
             }
             textBlock = new TextBlock()
             {
@@ -41,7 +41,7 @@ namespace VMSpc.UI.Panels
                 Height = canvas.Height,
                 Text = panelSettings.text,
                 TextAlignment = panelSettings.alignment.ToHorizontalAlignment(),
-                Foreground = new SolidColorBrush(panelSettings.captionColor),
+                Foreground = new SolidColorBrush(panelSettings.CaptionColor),
                 //TextWrapping = TextWrapping.Wrap,//(panelSettings.wrapText) ? TextWrapping.Wrap : TextWrapping.NoWrap,
             };
             canvas.Children.Add(textBlock);

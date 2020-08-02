@@ -42,9 +42,9 @@ namespace VMSpc.UI.DlgWindows
         {
             ((RadioButton)RadioAlignment.Children[(int)panelSettings.alignment]).IsChecked = true;
             TextEditor.Text = panelSettings.text;
-            BackgroundColor = panelSettings.backgroundColor;
-            BorderColor = panelSettings.borderColor;
-            TextColor = panelSettings.captionColor;
+            BackgroundColor = panelSettings.BackgroundColor;
+            BorderColor = panelSettings.BorderColor;
+            TextColor = panelSettings.CaptionColor;
             UseGlobalColor.IsChecked = panelSettings.useGlobalColorPalette;
         }
 
@@ -61,7 +61,7 @@ namespace VMSpc.UI.DlgWindows
 
         private void ChangeBackgroundColorButton_Click(object sender, RoutedEventArgs e)
         {
-            BackgroundColor = panelSettings.backgroundColor;
+            BackgroundColor = panelSettings.BackgroundColor;
             if (ChangeColor(ref BackgroundColor))
             {
                 panelSettings.useGlobalColorPalette = false;
@@ -71,7 +71,7 @@ namespace VMSpc.UI.DlgWindows
 
         private void ChangeBorderColorButton_Click(object sender, RoutedEventArgs e)
         {
-            BorderColor = panelSettings.borderColor;
+            BorderColor = panelSettings.BorderColor;
             if (ChangeColor(ref BorderColor))
             {
                 panelSettings.useGlobalColorPalette = false;
@@ -81,7 +81,7 @@ namespace VMSpc.UI.DlgWindows
 
         private void ChangeTextColorButton_Click(object sender, RoutedEventArgs e)
         {
-            TextColor = panelSettings.captionColor;
+            TextColor = panelSettings.CaptionColor;
             if (ChangeColor(ref TextColor))
             {
                 panelSettings.useGlobalColorPalette = false;
@@ -94,9 +94,9 @@ namespace VMSpc.UI.DlgWindows
             foreach (RadioButton button in RadioAlignment.Children)
                 if (button.IsChecked == true) panelSettings.alignment = (HorizontalAlignment)Convert.ToInt16(button.Tag);    //TODO: SimpleGaugeDlg:1
             panelSettings.text = TextEditor.Text;
-            panelSettings.backgroundColor = BackgroundColor;
-            panelSettings.borderColor = BorderColor;
-            panelSettings.captionColor = TextColor;
+            panelSettings.BackgroundColor = BackgroundColor;
+            panelSettings.BorderColor = BorderColor;
+            panelSettings.CaptionColor = TextColor;
             panelSettings.useGlobalColorPalette = (bool)UseGlobalColor.IsChecked;
             DialogResult = true;
             Close();

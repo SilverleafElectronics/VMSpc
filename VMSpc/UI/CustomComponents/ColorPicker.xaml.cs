@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Linq.Expressions;
 //using System.Drawing;
 using VMSpc.Extensions.UI;
+using static VMSpc.JsonFileManagers.ConfigurationManager;
 
 namespace VMSpc.UI.CustomComponents
 {
@@ -30,11 +31,12 @@ namespace VMSpc.UI.CustomComponents
             Name,
             RGB
         };
+        public Dictionary<string, Color> ColorDictionary;
         public Color SelectedColor { get; internal set; }
+        public string SelectedColorName { get; set; }
         private SolidColorBrush NormalBackground;
         private SolidColorBrush HighlightedBackground;
         private StackPanel SelectedElement;
-        public Dictionary<string, Color> ColorDictionary;
         private SortByType sortByType;
 
         public ColorPicker(Color SelectedColor)
@@ -47,30 +49,14 @@ namespace VMSpc.UI.CustomComponents
 
         private void GenerateColorGrid()
         {
-            if (ColorDictionary == null)
-            {
-                CreateColorDictionary();
-            }
+            ColorDictionary = ConfigManager.ColorReader.Contents.ColorDictionary;
             SortDictionaryByColor();
             AddDictionaryToGrid();
         }
 
-        private void CreateColorDictionary() 
+        private void Reset()
         {
-            ColorDictionary = new Dictionary<string, Color>();
-
-            //reflect over all properties in Colors, and
-            //add them to the ColorDictionary
-            Type type = typeof(Colors);
-            foreach (var p in type.GetProperties())
-            {
-                if (p.PropertyType.Name == "Color")
-                {
-                    string colorName = p.Name;
-                    Color colorValue = (Color)p.GetValue(null);
-                    ColorDictionary.Add(colorName, colorValue);
-                }
-            }
+            GenerateColorGrid();
         }
 
         private void SortDictionaryByColor()
@@ -201,6 +187,11 @@ namespace VMSpc.UI.CustomComponents
             ColorPickerGrid.Children.Add(block);
             Grid.SetColumn(block, column);
             Grid.SetRow(block, row);
+            Border border = new Border()
+            { 
+                BorderBrush = new SolidColorBrush(Colors.Black),
+                BorderThickness = new Thickness(2),
+            };
             Rectangle rectangle = new Rectangle()
             {
                 Fill = new SolidColorBrush(color),
@@ -208,15 +199,16 @@ namespace VMSpc.UI.CustomComponents
                 Height = 40,
                 VerticalAlignment = VerticalAlignment.Center,
             };
+            border.Child = rectangle;
             TextBlock textBlock = new TextBlock()
             {
                 Text = colorName,
                 Height = 40,
-                Width = 200,
+                Width = 350,
                 VerticalAlignment = VerticalAlignment.Center,
             };
             block.Children.Add(textBlock);
-            block.Children.Add(rectangle);
+            block.Children.Add(border);
             textBlock.ScaleText();
             if (color.Equals(SelectedColor))
             {
@@ -225,12 +217,12 @@ namespace VMSpc.UI.CustomComponents
             block.Background = (block == SelectedElement) ? HighlightedBackground : NormalBackground;
             block.MouseDown += (object obj, MouseButtonEventArgs args) =>
             {
-                SwapSelectedBlock(block, color);
+                SwapSelectedBlock(block, colorName, color);
             };
             return block;
         }
 
-        private void SwapSelectedBlock(StackPanel newBlock, Color color)
+        private void SwapSelectedBlock(StackPanel newBlock, string colorName, Color color)
         {
             if (SelectedElement != null)
             {
@@ -238,6 +230,7 @@ namespace VMSpc.UI.CustomComponents
             }
             SelectedElement = newBlock;
             SelectedElement.Background = HighlightedBackground;
+            SelectedColorName = colorName;
             SelectedColor = color;
         }
 
@@ -277,6 +270,82 @@ namespace VMSpc.UI.CustomComponents
         private void SortOrderSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             GenerateColorGrid();
+        }
+
+        private void EditColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(SelectedColorName))
+            {
+                var dlg = new ColorEditor(SelectedColorName, SelectedColor)
+                { 
+                    Owner = this
+                };
+                if ((bool)dlg.ShowDialog() && !string.IsNullOrEmpty(dlg.ColorName))
+                {
+                    if (ConfigManager.ColorReader.Contents.ColorDictionary.ContainsKey(dlg.ColorName))
+                    {
+                        MessageBox.Show($"{dlg.ColorName} already exists in your color palette.");
+                    }
+                    else
+                    {
+                        ConfigManager.ColorReader.Contents.ColorDictionary.Remove(SelectedColorName);
+                        ConfigManager.ColorReader.Contents.ColorDictionary.Add(dlg.ColorName, dlg.Color);
+                        SelectedColorName = dlg.ColorName;
+                        SelectedColor = dlg.Color;
+                    }
+                }
+            }
+            Reset();
+        }
+
+        private void CreateColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new ColorEditor("New Color", Colors.White)
+            { 
+                Owner = this
+            };
+            if ((bool)dlg.ShowDialog())
+            {
+                if (!string.IsNullOrEmpty(dlg.ColorName))
+                {
+                    if (ConfigManager.ColorReader.Contents.ColorDictionary.ContainsKey(dlg.ColorName))
+                    {
+                        bool confirm = MessageBox.Show($"The color {dlg.ColorName} is already defined. Do you want to replace it?",
+                            $"Replace {dlg.ColorName}",
+                            MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+                        if (confirm)
+                        {
+                            ConfigManager.ColorReader.Contents.ColorDictionary[dlg.ColorName] = dlg.Color;
+                        }
+                    }
+                    else
+                    {
+                        ConfigManager.ColorReader.Contents.ColorDictionary.Add(dlg.ColorName, dlg.Color);
+                    }
+                    SelectedColorName = dlg.ColorName;
+                    SelectedColor = dlg.Color;
+                }
+            }
+            Reset();
+        }
+
+        private void DeleteColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            ColorDictionary = ConfigManager.ColorReader.Contents.ColorDictionary;
+            if (!string.IsNullOrEmpty(SelectedColorName) && ColorDictionary.ContainsKey(SelectedColorName))
+            {
+                var confirm = MessageBox.Show($"Are you sure you want to delete {SelectedColorName}? This action is not reversible.",
+                    $"Delete {SelectedColorName}",
+                    MessageBoxButton.YesNo
+                    ) == MessageBoxResult.Yes;
+                if (confirm)
+                {
+                    ColorDictionary.Remove(SelectedColorName);
+                    SelectedColorName = null;
+                    
+                }
+            }
+            Reset();
         }
     }
 }

@@ -26,6 +26,27 @@ namespace VMSpc.Enums.UI
         TIRE_GAUGE = 14,
     };
 
+    /// <summary>
+    /// Specifies calling behavior for callbacks passed to any constructs that spool new threads, e.g., timers and events
+    /// </summary>
+    public enum DispatchType
+    {
+        /// <summary>
+        /// Specifies that the callback will be invoked on the newly-spooled execution thread.
+        /// </summary>
+        OnSpooledThread = 0,
+        /// <summary>
+        /// Specifies that the callback will be invoked on the main UI execution thread. This should be used
+        /// if the callback interacts with UI elements and should do so synchronously.
+        /// </summary>
+        OnMainThread,
+        /// <summary>
+        /// Specifies that the callback will be invoked on the main UI execution thread asynchronously. This should
+        /// be used if the callback interacts with UI elements and should do so asynchronously.
+        /// </summary>
+        OnMainThreadAsync,
+    };
+
     public enum TireMapType
     {
         [Description("6 Wheel")]
@@ -92,4 +113,13 @@ namespace VMSpc.Enums.UI
         HORIZONTAL = 0,
         VERTICAL = 1
     }
+
+    public enum TaskSchedulePeriodType
+    { 
+        ByDay,
+        ByHour,
+        ByQuarterHour,
+        ByMinute,
+    }
+
 }

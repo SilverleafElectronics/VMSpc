@@ -150,7 +150,7 @@ namespace VMSpc.Panels
             border = new Border()
             {
                 BorderThickness = new Thickness(BorderThickness),
-                BorderBrush = new SolidColorBrush(panelSettings.borderColor),
+                BorderBrush = new SolidColorBrush(panelSettings.BorderColor),
             };
             canvas = new VMSCanvas();
             ApplyBorderDimensions();
@@ -188,7 +188,7 @@ namespace VMSpc.Panels
 
         public virtual void Init()
         {
-            canvas.Background = new SolidColorBrush(panelSettings.backgroundColor);
+            canvas.Background = new SolidColorBrush(panelSettings.BackgroundColor);
         }
 
         ~VPanel()
@@ -273,7 +273,7 @@ namespace VMSpc.Panels
 
         public void UnHighlight()
         {
-            border.BorderBrush = new SolidColorBrush(panelSettings.borderColor);
+            border.BorderBrush = new SolidColorBrush(panelSettings.BorderColor);
         }
 
 

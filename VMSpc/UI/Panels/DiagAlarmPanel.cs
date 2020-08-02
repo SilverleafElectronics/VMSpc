@@ -76,7 +76,7 @@ namespace VMSpc.UI.Panels
         {
             canvas.Children.Clear();
             RecordEntries.Clear();
-            OkColor = new SolidColorBrush(panelSettings.backgroundColor);
+            OkColor = new SolidColorBrush(panelSettings.BackgroundColor);
             WarningColor = new SolidColorBrush(panelSettings.WarningColor);
             numDisplayedRecords = 0;
             inWarningMode = false;

@@ -59,7 +59,7 @@ namespace VMSpc.UI.Panels
             {
                 Width = canvas.Width,
                 Height = canvas.Height,
-                Background = new SolidColorBrush(panelSettings.backgroundColor),
+                Background = new SolidColorBrush(panelSettings.BackgroundColor),
             };
             for (int i = 0; i <= MaxTireRow; i++)
             {

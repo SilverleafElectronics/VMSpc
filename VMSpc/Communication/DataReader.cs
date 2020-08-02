@@ -14,6 +14,7 @@ namespace VMSpc.Communication
         public Timer keepJibAwakeTimer;
         public ulong messagesReceived;
         public ulong lastMessageCount;
+        protected const int MaxBufferSize = 4096;
 
         public event EventHandler<VMSEventArgs> RaiseVMSEvent;
 
@@ -36,7 +37,7 @@ namespace VMSpc.Communication
         public abstract void SendMessage(OutgoingMessage message);
         public abstract void SendMessage(string message);
 
-        protected void KeepJibAwake()
+        protected virtual void KeepJibAwake()
         {
             SendMessage("V");
         }

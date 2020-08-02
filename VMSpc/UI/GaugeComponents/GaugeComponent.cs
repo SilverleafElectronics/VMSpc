@@ -8,6 +8,8 @@ using VMSpc.Common;
 using VMSpc.DevHelpers;
 using VMSpc.Exceptions;
 using VMSpc.Loggers;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace VMSpc.UI.GaugeComponents
 {
@@ -17,7 +19,8 @@ namespace VMSpc.UI.GaugeComponents
         {
             try
             {
-                HandleNewData(e);
+                Action action = () => HandleNewData(e);
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, action);
             }
             catch (Exception ex)
             {

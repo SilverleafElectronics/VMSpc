@@ -1,0 +1,268 @@
+﻿<local:VMSDialog x:Class="VMSpc.UI.DlgWindows.Settings.TSTSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VMSpc.UI.DlgWindows"
+        mc:Ignorable="d"
+        xmlns:vs="clr-namespace:VMSpc.UI.CustomComponents"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Title="TST Settings" Height="450" Width="450">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Name="TargetPSIGrid" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel HorizontalAlignment="Left" Margin="20 0 0 0" Orientation="Horizontal">
+                <Label Grid.Column="0" 
+                   VerticalContentAlignment="Center"
+                   >
+                    Target PSI Axle
+                </Label>
+                <ComboBox 
+                    Height="25" 
+                    Width="40"
+                    VerticalContentAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    Name="SelectedAxleBox"
+                    SelectionChanged="SelectedAxleBox_SelectionChanged"
+                />
+            </StackPanel>
+            <StackPanel
+                Grid.Column="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Margin="0 0 20 0"
+                >
+                <TextBox
+                    Width="75"
+                    Height="25"
+                    VerticalContentAlignment="Center"
+                    Name="TargetPSIBox"
+                    Tag="ConfigItem"
+                    >
+                    
+                </TextBox>
+                <Button
+                    Width="50"
+                    Height="25"
+                    Name="TargetPSISendButton"
+                    Click="TargetPSISendButton_Click"
+                    >
+                    Send
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid Name="UnderPressureGrid" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" 
+                   HorizontalAlignment="Left" 
+                   VerticalContentAlignment="Center"
+                   Margin="20 0 0 0">
+                Under Pressure Percent:
+            </Label>
+            <StackPanel
+                Grid.Column="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Margin="0 0 20 0"
+                >
+                <TextBox
+                    Width="75"
+                    Height="25"
+                    VerticalContentAlignment="Center"
+                    Name="UnderPressurePctBox"
+                    Tag="ConfigItem"
+                    >
+                </TextBox>
+                <Button
+                    Width="50"
+                    Height="25"
+                    Name="UnderPressurePctSendButton"
+                    Click="UnderPressurePctSendButton_Click"
+                    >
+                    Send
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid Name="ExtremeUnderPressureGrid" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" 
+                   HorizontalAlignment="Left" 
+                   VerticalContentAlignment="Center"
+                   Margin="20 0 0 0">
+                Extreme Under Pressure Percent:
+            </Label>
+            <StackPanel
+                Grid.Column="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Margin="0 0 20 0"
+                >
+                <TextBox
+                    Width="75"
+                    Height="25"
+                    VerticalContentAlignment="Center"
+                    Name="ExtremeUnderPressureBox"
+                    Tag="ConfigItem"
+                    >
+                </TextBox>
+                <Button
+                    Width="50"
+                    Height="25"
+                    Name="ExtremeUnderPressureSendButton"
+                    Click="ExtremeUnderPressureSendButton_Click"
+                    >
+                    Send
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid Name="OverPressureGrid" Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" 
+                   HorizontalAlignment="Left" 
+                   VerticalContentAlignment="Center"
+                   Margin="20 0 0 0">
+                Over Pressure Percent:
+            </Label>
+            <StackPanel
+                Grid.Column="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Margin="0 0 20 0"
+                >
+                <TextBox
+                    Width="75"
+                    Height="25"
+                    VerticalContentAlignment="Center"
+                    Name="OverPressureBox"
+                    >
+                </TextBox>
+                <Button
+                    Width="50"
+                    Height="25"
+                    Name="OverPressureSendButton"
+                    Click="OverPressureSendButton_Click"
+                    >
+                    Send
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid Name="OverTemperatureGrid" Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0"  
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Left" 
+                        Margin="20 0 0 0"
+                        >
+                <Label VerticalContentAlignment="Center">
+                    Over Temperature
+                </Label>
+                <ComboBox Name="OverTempUnitType" 
+                          Width="90" 
+                          Height="25" 
+                          SelectedIndex="0"
+                          VerticalContentAlignment="Center"
+                          HorizontalContentAlignment="Center"
+                          >
+                    <ComboBoxItem>Fahrenheit</ComboBoxItem>
+                    <ComboBoxItem>Celsius</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel
+                Grid.Column="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Margin="0 0 20 0"
+                >
+                <TextBox
+                    Width="75"
+                    Height="25"
+                    VerticalContentAlignment="Center"
+                    Name="OverTemperatureBox"
+                    >
+                </TextBox>
+                <Button
+                    Width="50"
+                    Height="25"
+                    Name="OverTemperatureSendButton"
+                    Click="OverTemperatureSendButton_Click"
+                    >
+                    Send
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid Name="TSTCommStatusGrid" Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" 
+                   HorizontalAlignment="Left" 
+                   VerticalContentAlignment="Center"
+                   Margin="20 0 0 0">
+                TST Communication Status:
+            </Label>
+            <StackPanel
+                Grid.Column="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Margin="0 0 20 0"
+                >
+                <TextBox
+                    Width="125"
+                    Height="25"
+                    IsReadOnly="True"
+                    Background="LightGray"
+                    Name="TSTCommStatusBox"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    >
+                </TextBox>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="6">
+            <Button Name="ResetDefaultsButton" 
+                    Click="ResetDefaultsButton_Click" 
+                    Height="25" 
+                    Width="125">
+                Reset Defaults
+            </Button>
+        </Grid>
+        <Grid Grid.Row="7">
+            <Button x:Name="CloseButton" Click="CloseButton_Click" Height="25" Width="75">
+                Close
+            </Button>
+        </Grid>
+    </Grid>
+</local:VMSDialog>

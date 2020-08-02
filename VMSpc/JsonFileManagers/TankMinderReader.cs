@@ -25,7 +25,7 @@ namespace VMSpc.JsonFileManagers
         protected override TankMinderContents GetDefaultContents()
         {
             var miles = ChassisParameters.Instance.CurrentMiles;
-            var gallons = ChassisParameters.Instance.CurrentFuel;
+            var gallons = ChassisParameters.Instance.CurrentFuelGallons;
             return new TankMinderContents()
             {
                 StartMiles = miles,

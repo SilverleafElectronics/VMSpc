@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +35,9 @@ namespace VMSpc.JsonFileManagers
         public double Multiplier;
         public PidValue J1708Value;
         public PidValue J1939Value;
+        [DefaultValue(false)]
+        [JsonIgnore]
+        public bool Seen;
         [JsonIgnore]
         public double LastValue; //(PresenterList[Pid].datum.seen) ? PresenterList[Pid].datum.value * Multiplier + Offset : DUB_NODATA;
         [JsonIgnore]
@@ -71,7 +75,7 @@ namespace VMSpc.JsonFileManagers
 
         public void AddParam(JParameter parameter)
         {
-            //TODO
+            Contents.Parameters.Add(parameter);
         }
 
         public void ProcessUpdates(JParameter parameter)

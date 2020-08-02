@@ -40,19 +40,24 @@ namespace VMSpc.Enums.Parsing
     public enum TpmsType
     {
         [Description("None")]
-        NONE = 0,
+        None = 0,
         [Description("TST")]
         TST = 1,
         [Description("Pressure Pro")]
-        PPRO = 2
+        PressurePro = 2
     };
     public enum TireStatus
     {
-        NO_REPORT = 0,
-        OK = 1,
-        ALERT = 2,
-        WARNING = 3,
-        NO_SENSOR_ASSIGNED = 4,
+        [Description("None")]
+        None = 0,
+        [Description("No Data")]
+        NoData = 1,
+        [Description("Okay")]
+        Okay = 2,
+        [Description("Warning")]
+        Warning = 3,
+        [Description("Alert")]
+        Alert = 4,
     }
     public enum ParseBehavior
     {
@@ -102,6 +107,7 @@ namespace VMSpc.Enums.Parsing
         None,
         J1708,
         J1939,
+        Inferred,
     }
 }
 

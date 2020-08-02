@@ -8,6 +8,7 @@ using VMSpc.UI.TireMaps;
 using VMSpc.Enums.UI;
 using System.Windows.Controls;
 using System.Windows;
+using Newtonsoft.Json;
 
 namespace VMSpc.JsonFileManagers
 {
@@ -36,14 +37,41 @@ namespace VMSpc.JsonFileManagers
 
     public abstract class PanelSettings
     {
+        private static ColorPalette ColorPalette => ConfigurationManager.ConfigManager.ColorPalettes.GetSelectedPalette();
+
         public ulong
             number;
         public PanelType
             panelId;
-        public Color
-            backgroundColor,
-            captionColor,
-            valueTextColor;
+        [JsonProperty]
+        private Color backgroundColor;
+        [JsonProperty]
+        private Color borderColor;
+        [JsonProperty]
+        private Color captionColor;
+        [JsonProperty]
+        private Color valueTextColor;
+
+        public Color BackgroundColor
+        {
+            get => (useGlobalColorPalette) ? ColorPalette.GaugeBackground : backgroundColor;
+            set => backgroundColor = value;
+        }
+        public Color BorderColor
+        {
+            get => (useGlobalColorPalette) ? Colors.Black : borderColor;
+            set => borderColor = value;
+        }
+        public Color CaptionColor
+        {
+            get => (useGlobalColorPalette) ? ColorPalette.Captions : captionColor;
+            set => captionColor = value;
+        }
+        public Color ValueTextColor
+        {
+            get => (useGlobalColorPalette) ? ColorPalette.GaugeText : valueTextColor;
+            set => valueTextColor = value;
+        }
         public ulong
             parentPanelNumber;
         public bool
@@ -53,7 +81,7 @@ namespace VMSpc.JsonFileManagers
             alignment;
         public PanelCoordinates
             panelCoordinates;
-        public Color borderColor;
+        
         public PanelSettings(PanelType panelId) { /*this.panelId = panelId*/ }
     }
 
@@ -167,7 +195,7 @@ namespace VMSpc.JsonFileManagers
     {
         public ushort
             pid;
-        public SimpleGaugeSettings(PanelType panelId = PanelType.SIMPLE_GAUGE) : base(panelId) { }
+        public SimpleGaugeSettings() : base(PanelType.SIMPLE_GAUGE) { }
     }
 
     public class RadialGaugeSettings : SimpleGaugeSettings
@@ -175,7 +203,9 @@ namespace VMSpc.JsonFileManagers
         public Color
             gaugeColor, // color of the radial dial's background
             fillColor; // color of the radial dial's value fill
-        public RadialGaugeSettings() : base(PanelType.RADIAL_GAUGE) { }
+        public RadialGaugeSettings() : base() 
+        {
+        }
     }
 
     public class ScanGaugeSettings : GaugeSettings

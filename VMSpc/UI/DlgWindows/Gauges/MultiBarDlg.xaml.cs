@@ -67,8 +67,8 @@ namespace VMSpc.UI.DlgWindows
             ShowMetric.IsChecked = panelSettings.showInMetric;
             ShowValue.IsChecked = panelSettings.showValue;
             UseGlobalColor.IsChecked = panelSettings.useGlobalColorPalette;
-            BackgroundColor = panelSettings.backgroundColor;
-            BorderColor = panelSettings.borderColor;
+            BackgroundColor = panelSettings.BackgroundColor;
+            BorderColor = panelSettings.BorderColor;
             UseGlobalColor.IsChecked = panelSettings.useGlobalColorPalette;
         }
 
@@ -94,8 +94,8 @@ namespace VMSpc.UI.DlgWindows
             panelSettings.showName = (bool)ShowGaugeName.IsChecked;
             panelSettings.showUnit = (bool)ShowUnit.IsChecked;
             panelSettings.showValue = (bool)ShowValue.IsChecked;
-            panelSettings.backgroundColor = BackgroundColor;
-            panelSettings.borderColor = BorderColor;
+            panelSettings.BackgroundColor = BackgroundColor;
+            panelSettings.BorderColor = BorderColor;
             panelSettings.useGlobalColorPalette = (bool)UseGlobalColor.IsChecked;
             panelSettings.pidList.Clear();
             foreach (VMSListBoxItem item in GaugeTypes.SelectedItems)
@@ -121,7 +121,7 @@ namespace VMSpc.UI.DlgWindows
 
         protected void ChangeBackgroundColorButton_Click(object sender, RoutedEventArgs e)
         {
-            BackgroundColor = panelSettings.backgroundColor;
+            BackgroundColor = panelSettings.BackgroundColor;
             if (ChangeColor(ref BackgroundColor))
             {
                 panelSettings.useGlobalColorPalette = false;
@@ -131,7 +131,7 @@ namespace VMSpc.UI.DlgWindows
 
         protected void ChangeBorderColorButton_Click(object sender, RoutedEventArgs e)
         {
-            BorderColor = panelSettings.borderColor;
+            BorderColor = panelSettings.BorderColor;
             ChangeColor(ref BorderColor);
         }
 

@@ -56,39 +56,43 @@ namespace VMSpc.UI.GaugeComponents
             GaugeLines.Clear();
             previousLineNumber = 0;
             AddLinesByColor();
+            Update();
         }
 
         public override void Update()
         {
-            int cursor = previousLineNumber;
-            int target = ValueToLineIndex(currentValue);
-            bool increment = (target > cursor);
-            if (cursor > numLines)
-                cursor = GaugeLines.Count;
-            int startCursor = cursor;
-            while (cursor != target)
+            if (IsCurrentValueValid())
             {
-                try
+                int cursor = previousLineNumber;
+                int target = ValueToLineIndex(currentValue);
+                bool increment = (target > cursor);
+                if (cursor > numLines)
+                    cursor = GaugeLines.Count;
+                int startCursor = cursor;
+                while (cursor != target)
                 {
-                    if (increment)
+                    try
                     {
-                        GaugeLines[cursor].UseValueColor();
-                        cursor++;
+                        if (increment)
+                        {
+                            GaugeLines[cursor].UseValueColor();
+                            cursor++;
+                        }
+                        else
+                        {
+                            GaugeLines[cursor].UseEmptyColor();
+                            cursor--;
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        GaugeLines[cursor].UseEmptyColor();
-                        cursor--;
+                        ErrorLogger.GenerateErrorRecord(ex);
+                        //VMSConsole.PrintLine(ex);
+                        //VMSConsole.PrintLine(startCursor);
                     }
                 }
-                catch (Exception ex)
-                {
-                    ErrorLogger.GenerateErrorRecord(ex);
-                    //VMSConsole.PrintLine(ex);
-                    //VMSConsole.PrintLine(startCursor);
-                }
+                previousLineNumber = cursor;
             }
-            previousLineNumber = cursor;
         }
 
         /// <summary>

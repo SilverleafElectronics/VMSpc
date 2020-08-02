@@ -16,12 +16,12 @@ namespace VMSpc.UI.Panels
 {
     class RadialGauge : VPanel
     {
-        protected new SimpleGaugeSettings panelSettings;
+        protected new RadialGaugeSettings panelSettings;
         protected RadialComponent radialComponent;
         protected PIDTextComponent valueBlock;
         protected TextBlock titleText;
         protected JParameter parameter;
-        public RadialGauge(MainWindow mainWindow, SimpleGaugeSettings panelSettings)
+        public RadialGauge(MainWindow mainWindow, RadialGaugeSettings panelSettings)
             : base(mainWindow, panelSettings)
         {
             this.panelSettings = panelSettings;
@@ -37,7 +37,7 @@ namespace VMSpc.UI.Panels
             }
             else
             {
-                canvas.Background = new SolidColorBrush(panelSettings.backgroundColor);
+                canvas.Background = new SolidColorBrush(panelSettings.BackgroundColor);
             }
             AddGaugeComponent();
             if (panelSettings.showName)

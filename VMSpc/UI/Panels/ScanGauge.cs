@@ -43,7 +43,7 @@ namespace VMSpc.UI.Panels
             SimpleGaugeSlider.Clear();
             canvas.Children.Clear();
             CurrentSimpleSliderIndex = 0;
-            canvas.Background = new SolidColorBrush(panelSettings.backgroundColor);
+            canvas.Background = new SolidColorBrush(panelSettings.BackgroundColor);
             foreach (var pid in panelSettings.pidList)
             {
                 AddGaugeCanvas(pid);

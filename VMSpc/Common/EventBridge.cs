@@ -120,6 +120,14 @@ namespace VMSpc.Common
             publisher.RaiseVMSEvent += HandleVMSEvent;
         }
 
+        public void RemoveEventPublisher(IEventPublisher publisher)
+        {
+            if (publisher != null)
+            {
+                publisher.RaiseVMSEvent -= HandleVMSEvent;
+            }
+        }
+
         public static ulong GetInstancedEvent(ulong eventID, byte instance) => (eventID | ((ulong)instance << 16));
     }
 }

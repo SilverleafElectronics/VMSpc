@@ -58,6 +58,7 @@ namespace VMSpc.UI.GaugeComponents
                 numLines++;
             }
             PreviousLineNumber = 0;
+            Update();
         }
 
         private double GetLineSeparationFactor()
@@ -69,23 +70,26 @@ namespace VMSpc.UI.GaugeComponents
 
         public override void Update()
         {
-            int cursor = PreviousLineNumber;
-            int target = ValueToLineIndex(currentValue);
-            bool increment = (target > cursor);
-            while (cursor != target)
+            if (IsCurrentValueValid())
             {
-                if (increment)
+                int cursor = PreviousLineNumber;
+                int target = ValueToLineIndex(currentValue);
+                bool increment = (target > cursor);
+                while (cursor != target)
                 {
-                    GaugeLines[cursor].UseValueColor();
-                    cursor++;
+                    if (increment)
+                    {
+                        GaugeLines[cursor].UseValueColor();
+                        cursor++;
+                    }
+                    else
+                    {
+                        GaugeLines[cursor].UseEmptyColor();
+                        cursor--;
+                    }
                 }
-                else
-                {
-                    GaugeLines[cursor].UseEmptyColor();
-                    cursor--;
-                }
+                PreviousLineNumber = cursor;
             }
-            PreviousLineNumber = cursor;
         }
 
         private int ValueToLineIndex(double value)

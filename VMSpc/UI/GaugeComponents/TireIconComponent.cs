@@ -34,12 +34,12 @@ namespace VMSpc.UI.GaugeComponents
         public TireIconComponent(int index) 
             : base()
         {
-            currentStatus = TireStatus.NO_SENSOR_ASSIGNED;
-            lastStatus = TireStatus.NO_REPORT;
+            currentStatus = TireStatus.None;
+            lastStatus = TireStatus.NoData;
             currentPressure = 0;
             lastPressure = -1;
             tireIndex = index;
-            SubscribeToEvent(EventIDs.TIRE_BASE | (uint)tireIndex);
+            SubscribeToEvent(EventIDs.TIRE_BASE | (ushort)tireIndex);
         }
         public override void Draw()
         {
@@ -48,6 +48,17 @@ namespace VMSpc.UI.GaugeComponents
             if (ShowPressure)
                 AddTirePressureIndicator();
             Update();
+        }
+
+        protected override void HandleNewData(VMSEventArgs e)
+        {
+            var dataEvent = (e as TireEventArgs);
+            if (dataEvent != null)
+            {
+                currentPressure = dataEvent.tire.DisplayPressure;
+                currentStatus = dataEvent.tire.TireStatus;
+                Update();
+            }
         }
 
         public override void Update()
@@ -100,17 +111,17 @@ namespace VMSpc.UI.GaugeComponents
             {
                 switch (currentStatus)
                 {
-                    case TireStatus.ALERT:
+                    case TireStatus.Alert:
                         tireIndicator.Fill = AlertColor;
                         break;
-                    case TireStatus.WARNING:
+                    case TireStatus.Warning:
                         tireIndicator.Fill = WarningColor;
                         break;
-                    case TireStatus.OK:
+                    case TireStatus.Okay:
                         tireIndicator.Fill = OkColor;
                         break;
-                    case TireStatus.NO_REPORT:
-                    case TireStatus.NO_SENSOR_ASSIGNED:
+                    case TireStatus.NoData:
+                    case TireStatus.None:
                         tireIndicator.Fill = NoDataColor;
                         break;
                 }
@@ -123,17 +134,6 @@ namespace VMSpc.UI.GaugeComponents
             {
                 tirePressureIndicator.Text = $"{currentPressure}";
                 lastPressure = currentPressure;
-            }
-        }
-
-        protected override void HandleNewData(VMSEventArgs e)
-        {
-            var dataEvent = (e as TireEventArgs);
-            if (dataEvent != null)
-            {
-                currentPressure = dataEvent.tire.DisplayPressure;
-                currentStatus = dataEvent.tire.Status;
-                Update();
             }
         }
 

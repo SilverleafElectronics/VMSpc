@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using VMSpc.DevHelpers;
+using VMSpc.JsonFileManagers;
 using VMSpc.UI.CustomComponents;
 using static VMSpc.JsonFileManagers.ConfigurationManager;
 
@@ -66,8 +67,23 @@ namespace VMSpc.UI.DlgWindows.Advanced
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if ((GaugeTypes.SelectedItem) != null)
+            {
+                var parameter = ConfigManager.ParamData.GetParam(((VMSListBoxItem)GaugeTypes.SelectedItem).ID);
+                if (ConfirmDelete(parameter))
+                {
+                    ConfigManager.ParamData.Contents.Parameters.Remove(parameter);
+                    AddParameterChoices();
+                    PIDValueStager.Instance.Reset();
+                }
+            }
         }
+        private bool ConfirmDelete(JParameter parameter)
+        {
+            var result = MessageBox.Show($"Are you sure you want to delete the parameter {parameter.ParamName} at PID {parameter.Pid}? This action cannot be undone.", "Confirm Delete", MessageBoxButton.YesNo);
+            return (result == MessageBoxResult.Yes);
+        }
+
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();

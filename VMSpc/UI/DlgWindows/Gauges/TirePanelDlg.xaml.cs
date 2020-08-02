@@ -56,8 +56,8 @@ namespace VMSpc.UI.DlgWindows
             ShowTireIconCheckbox.IsChecked = panelSettings.showIcon;
             DetachTowVehicleCheckbox.IsChecked = panelSettings.detachTowed;
             UseGlobalColor.IsChecked = panelSettings.useGlobalColorPalette;
-            BackgroundColor = panelSettings.backgroundColor;
-            BorderColor = panelSettings.borderColor;
+            BackgroundColor = panelSettings.BackgroundColor;
+            BorderColor = panelSettings.BorderColor;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -72,7 +72,7 @@ namespace VMSpc.UI.DlgWindows
 
         private void BackgroundColorButton_Click(object sender, RoutedEventArgs e)
         {
-            BackgroundColor = panelSettings.backgroundColor;
+            BackgroundColor = panelSettings.BackgroundColor;
             if (ChangeColor(ref BackgroundColor))
             {
                 panelSettings.useGlobalColorPalette = false;
@@ -82,7 +82,7 @@ namespace VMSpc.UI.DlgWindows
 
         private void BorderColorButton_Click(object sender, RoutedEventArgs e)
         {
-            BorderColor = panelSettings.borderColor;
+            BorderColor = panelSettings.BorderColor;
             if (ChangeColor(ref BorderColor))
             {
                 panelSettings.useGlobalColorPalette = false;
@@ -92,8 +92,8 @@ namespace VMSpc.UI.DlgWindows
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            panelSettings.backgroundColor = BackgroundColor;
-            panelSettings.borderColor = BorderColor;
+            panelSettings.BackgroundColor = BackgroundColor;
+            panelSettings.BorderColor = BorderColor;
             panelSettings.showPressure = (bool)ShowPressureCheckbox.IsChecked;
             panelSettings.showIcon = (bool)ShowTireIconCheckbox.IsChecked;
             panelSettings.detachTowed = (bool)DetachTowVehicleCheckbox.IsChecked;

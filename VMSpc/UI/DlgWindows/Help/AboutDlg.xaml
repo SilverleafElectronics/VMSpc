@@ -12,7 +12,9 @@
     <StackPanel>
         <TextBlock Margin="10" Name="version"    />
         <TextBlock Margin="10" Name="copyright"  />
-        <TextBlock Margin="10" Name="moreInfo"   />
+        <TextBlock Margin="10" Name="moreInfo">
+            Please visit our web forum at <Hyperlink NavigateUri="https://www.silverleafelectronics.com" RequestNavigate="Hyperlink_RequestNavigate" Cursor="Hand">www.silverleafelectronics.com</Hyperlink>.
+        </TextBlock>
         <TextBlock Margin="10" Name="phone"      />
         <TextBlock Margin="10" Name="address"    />
     </StackPanel>

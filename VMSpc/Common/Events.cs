@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using VMSpc.Enums.Parsing;
 using VMSpc.JsonFileManagers;
 using VMSpc.Parsers;
-using VMSpc.Parsers.SpecialParsers.TireParsers;
 using VMSpc.AdvancedParsers;
+using VMSpc.AdvancedParsers.Tires;
 
 namespace VMSpc.Common
 {
@@ -43,7 +43,7 @@ namespace VMSpc.Common
     /// <summary>
     /// 
     /// </summary>
-    public abstract class VMSEventArgs : EventArgs
+    public class VMSEventArgs : EventArgs
     {
         public ulong eventID;
         public VMSEventArgs(ulong eventID)
@@ -52,7 +52,7 @@ namespace VMSpc.Common
         }
         /// <summary>
         /// Returns a generic verison of the event. Override this when an event's eventID has optional multiplexing elements (such
-        /// as instancing, Source Address, etc).
+        /// as instancing, Source Address, MID, etc).
         /// </summary>
         /// <returns></returns>
         public virtual ulong GetGenericID()
@@ -133,6 +133,10 @@ namespace VMSpc.Common
             :base(EventIDs.PARSED_DATA_EVENT | pid)
         {
             this.messageSegment = messageSegment;
+        }
+        public override ulong GetGenericID()
+        {
+            return EventIDs.PARSED_DATA_EVENT | 0xFFFF;
         }
     }
 
@@ -218,7 +222,7 @@ namespace VMSpc.Common
     {
         public Tire tire;
         public TireEventArgs(Tire tire)
-            : base(EventIDs.TIRE_BASE | (ushort)tire.Index)
+            : base(EventIDs.TIRE_BASE | tire.index)
         {
             this.tire = tire;
         }

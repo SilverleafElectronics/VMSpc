@@ -36,7 +36,7 @@ namespace VMSpc.UI.Panels
             }
             else
             {
-                canvas.Background = new SolidColorBrush(panelSettings.backgroundColor);
+                canvas.Background = new SolidColorBrush(panelSettings.BackgroundColor);
             }
             multiBarStack = new StackPanel()
             {
