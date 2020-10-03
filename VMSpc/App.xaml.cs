@@ -18,6 +18,7 @@ using VMSpc.AdvancedParsers.Tires;
 using VMSpc.Loggers;
 using VMSpc.Communication;
 using VMSpc.Exceptions;
+using System.Management;
 
 namespace VMSpc
 {
@@ -26,7 +27,6 @@ namespace VMSpc
      *  - constructs the VMSComm reader object
      *  - constructs the engine manager (which constructs all engine component parser objects)
      *  - constructs the panel manager (which constructs all sub-panel UI component objects)
-     *  - displays the splashscreen, if enabled
      */
     public partial class App : Application
     {
@@ -90,11 +90,40 @@ namespace VMSpc
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            VerifyDriverInstallation();
             AddAccessPermissions();
-            ShowSplashScreen();
             ActivateStaticClasses();
             VMSpcStart();
             AddGlobalEventHandlers();
+        }
+
+        private void VerifyDriverInstallation()
+        {
+            if (!DriversAreInstalled())
+            {
+                var result = MessageBox.Show("The required drivers for VMSpc are not installed. Do you want to install them now? This will require an " +
+                    "internet connection if the installation file is not already available", "Install Drivers", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (DriverInstaller.InstallDrivers() && DriversAreInstalled())
+                    {
+                        MessageBox.Show("Drivers successfully installed");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Drivers failed to install. Please see instructions on our website or contact support");
+                    }
+                }
+            }
+        }
+
+        private bool DriversAreInstalled()
+        {
+            SelectQuery query = new SelectQuery("Win32_SystemDriver");
+            //query.Condition = "Name = 'FTDIBUS'";
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+            var drivers = searcher.Get();
+            return (drivers.Count > 0);
         }
 
         private void AddAccessPermissions()
@@ -114,27 +143,7 @@ namespace VMSpc
 
         private void Initialize()
         {
-            //configuration = new Configuration();
-            //commreader = new VMSComm();
-            //enginemanager = new EngineManager();
-            //panelmanager = new PanelManager();
             appstart = DateTime.Now;
-        }
-
-        private void ShowSplashScreen()
-        {
-            /*
-            if (false) //CHANGEME - to if (SettingsManager.showSplashScreen == true)
-            {
-                SplashScreen splashScreen = new SplashScreen("./Resources/silverleaf_300x200.bmp");
-                splashScreen.Show(true);
-                //keep splash screen up for at least 3 seconds
-                long now = DateTime.Now.Ticks;
-                long elapsed = (now - startcounter) / 10000;
-                if (elapsed < 3000)
-                    System.Threading.Thread.Sleep((int)(3000 - elapsed));
-            }
-            */
         }
 
         private void VMSpcStart()
@@ -145,7 +154,7 @@ namespace VMSpc
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            if (!ShowingException)  //If an exception causes a cascade of accompanying exceptions in other threads (shouldn't happen), only allow the first one to show
+            if (!ShowingException)  //In case an exception causes a cascade of accompanying exceptions in other threads (shouldn't happen), only allow the first one to show
             {
                 ShowingException = true;
                 ExceptionWindow exceptionWindow = new ExceptionWindow(e);

@@ -208,7 +208,13 @@ namespace VMSpc.Communication
         private ushort FindVmsPort()
         {
             ushort newPort = comPort;
-            foreach (var portString in GetComPortList())
+            var comPortList = GetComPortList();
+            if (comPortList == null)
+            {
+                MessageBox.Show("Cannot detect COM ports on your machine. Automatic USB port detection will not work");
+                return comPort;
+            }
+            foreach (var portString in comPortList)
             {
                 if (portString.Contains("VMSpc Virtual Serial Port") && portString.Contains("(COM"))
                 {

@@ -424,6 +424,16 @@ namespace VMSpc
                 WindowStyle = WindowStyle.SingleBorderWindow;
             }
         }
+
+        private void TakeSnapshot_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void TakeSnapshot_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Snapshotter.ZipConfiguration();
+        }
     }
 
     public static class MainCommands
@@ -606,6 +616,11 @@ namespace VMSpc
                 new KeyGesture(Key.F11),
                 new KeyGesture(Key.Escape)
             }
-            );
+        );
+        public static readonly RoutedUICommand TakeSnapshot = new RoutedUICommand(
+            "Take Snapshot",
+            "TakeSnapshot",
+            typeof(MainCommands)
+        );
     }
 }

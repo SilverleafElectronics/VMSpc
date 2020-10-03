@@ -8,6 +8,6 @@ namespace VMSpc
 {
     public static class About
     {
-        public const string version = "5.0.5";
+        public const string version = "5.0.9";
     }
 }

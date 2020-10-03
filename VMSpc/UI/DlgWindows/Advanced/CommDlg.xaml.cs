@@ -37,6 +37,7 @@ namespace VMSpc.UI.DlgWindows
         public CommDlg() : base()
         {
             InitializeComponent();
+            AddCommPorts();
             PopulateComboBox<JibType>(CommSelection);
             PopulateComboBox<ParseBehavior>(ParsingBehavior);
             ApplyBindings();
@@ -80,6 +81,18 @@ namespace VMSpc.UI.DlgWindows
             {
                 LogPlayerFileName.Text = dlg.FileName;
             }*/
+        }
+
+        private void AddCommPorts()
+        {
+            for (int i = 1; i < 257; i++)
+            {
+                var boxItem = new ComboBoxItem()
+                {
+                    Content = i.ToString(),
+                };
+                PortSelection.Items.Add(boxItem);
+            }
         }
 
         private void RestartComm_Click(object sender, RoutedEventArgs e)

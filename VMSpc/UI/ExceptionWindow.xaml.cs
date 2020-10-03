@@ -53,125 +53,19 @@ namespace VMSpc.UI
 
         private void ZipButton_Click(object sender, RoutedEventArgs e)
         {
-            ProcessZip();
-        }
-
-        private void ProcessZip()
-        {
-            string directoryPath;
-            if (ShouldSaveToDesktop())
-            {
-                directoryPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            }
-            else
-            {
-                directoryPath = GetDesiredDirectory();
-            }
-
-            if (!string.IsNullOrEmpty(directoryPath))
-            {
-                try
-                {
-                    CreateSnapshot(directoryPath);
-                }
-                catch
-                {
-                    ProcessRetry(directoryPath);
-                }
-            }
-            else
-            {
-                ProcessRetry("Empty Path");
-            }
+            CreateErrorFile();
+            Snapshotter.ZipConfiguration();
             Close();
         }
 
-        private void CreateSnapshot(string destinationDirectory)
+        private void CreateErrorFile()
         {
-            var zipFileName = $"VMSSnapshot_{Environment.UserName}_{DateTime.Now.ToString("yyyyMMddHHmmss")}.zip";
-            var zipPath = destinationDirectory + "\\" + zipFileName;
-            if (File.Exists(zipPath))
-            {
-                File.Delete(zipPath);
-            }
-            ZipFile.CreateFromDirectory(Constants.BaseDirectory, zipPath);
-            using (var archive = ZipFile.Open(zipPath, ZipArchiveMode.Update))
-            {
-                List<ZipArchiveEntry> entriesToDelete = new List<ZipArchiveEntry>();
-                foreach (var entry in archive.Entries)
-                {
-                    if (entry.FullName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
-                    {
-                        entriesToDelete.Add(entry);
-                    }
-                }
-                for (int i = 0; i < entriesToDelete.Count(); i++)
-                {
-                    entriesToDelete[i].Delete();
-                }
-            }
-            AddErrorFileToSnapshot(zipPath);
-            MessageBox.Show($"Successfully created the snapshot \"{zipFileName}\", which is placed in \"{destinationDirectory}\"");
-        }
-
-        /// <summary>
-        /// Creates an error file, copies the file to the zip archive, then deletes the original error file.
-        /// </summary>
-        /// <param name="zipPath"></param>
-        private void AddErrorFileToSnapshot(string zipPath)
-        {
-            var errorFilePath = Constants.BaseDirectory + "\\SnapshotErrorFile.txt";
+            var errorFilePath = Constants.BaseDirectory + "\\configuration\\SnapshotErrorFile.txt";
             if (File.Exists(errorFilePath))
             {
                 File.Delete(errorFilePath);
             }
             File.WriteAllText(errorFilePath, exception.Exception.ToString());
-            using (var archive = ZipFile.Open(zipPath, ZipArchiveMode.Update))
-            {
-                archive.CreateEntryFromFile(errorFilePath, "SnapshotErrorFile.txt");
-            }
-            if (File.Exists(errorFilePath))
-            {
-                File.Delete(errorFilePath);
-            }
-        }
-
-        private void ProcessRetry(string attemptedDirectory)
-        {
-            var result = MessageBox.Show($"Failed to save the snapshot to the directory: {attemptedDirectory}. The path may be invalid, or VMSpc may not have permission to access the specified directory. " +
-                $" Do you want to try again?", "Retry", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
-                ProcessZip();
-
-        }
-
-        private bool ShouldSaveToDesktop()
-        {
-            var result = MessageBox.Show("Do you want to save the zip file to your Desktop? If you select 'No', a file explorer will allow you to choose " +
-                "the file location. Note that you cannot save this file to your VMSpc base directory.", "Save to Desktop", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private string GetDesiredDirectory()
-        {
-            var dialog = new CommonOpenFileDialog()
-            {
-                IsFolderPicker = true,
-                InitialDirectory = System.IO.Path.GetPathRoot(Environment.SystemDirectory),
-            };
-            CommonFileDialogResult result = dialog.ShowDialog();
-            if (result == CommonFileDialogResult.Ok)
-            {
-                return dialog.FileName;
-            }
-            else
-            {
-                return string.Empty;
-            }
         }
     }
 }

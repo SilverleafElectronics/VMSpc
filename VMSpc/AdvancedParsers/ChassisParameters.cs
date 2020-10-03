@@ -54,6 +54,10 @@ namespace VMSpc.AdvancedParsers
 
             EventBridge.Instance.SubscribeToEvent(this, EventIDs.Get_J1708RawDataEvent(PIDWrapper.rangeSelected));
             EventBridge.Instance.SubscribeToEvent(this, EventIDs.Get_J1708RawDataEvent(PIDWrapper.rangeAttained));
+
+            EventBridge.Instance.SubscribeToEvent(this, EventIDs.Get_J1939RawDataEvent(0x0F005));   //Gear selected/attained
+
+
             EventBridge.Instance.AddEventPublisher(this);
 
             CurrentMiles = Meters.Odometer;
@@ -185,13 +189,44 @@ namespace VMSpc.AdvancedParsers
 
         private void ParseJ1939RawData(J1939MessageSegment segment)
         {
-
+            switch (segment.PGN)
+            {
+                case 0x0F005:
+                    if (segment.RawData[5] < 250)
+                        RangeSelected = Convert.ToChar(segment.RawData[5]).ToString();
+                    if (segment.RawData[3] < 125)
+                        RangeAttained = "R";
+                    else if (segment.RawData[3] == 125)
+                        RangeAttained = "N";
+                    else if (segment.RawData[3] < 135)
+                        RangeAttained = Convert.ToChar(segment.RawData[3] - 125).ToString() + "0";
+                    else if (segment.RawData[3] < 161)
+                        RangeAttained = Convert.ToChar(segment.RawData[3] - 135).ToString() + "a";
+                    else if (segment.RawData[3] == 251)
+                        RangeAttained = "P";
+                    SetTransmissionData(segment);
+                    break;
+            }
         }
 
         private void SetTransmissionData(CanMessageSegment segment)
         {
             double transmissionMode = 0;
-            RaiseVMSEvent?.Invoke(this, new VMSPidValueEventArgs(EventIDs.PID_BASE | 13, transmissionMode));
+            switch (segment.RawData[4])
+            {
+                case 16:
+                case 21:
+                case 32:
+                    transmissionMode = 1;
+                    break;
+                case 5:
+                case 26:
+                case 31:
+                    transmissionMode = 2;
+                    break;
+            }
+            if (transmissionMode != 0)
+                RaiseVMSEvent?.Invoke(this, new VMSPidValueEventArgs(EventIDs.PID_BASE | 13, transmissionMode));
         }
 
         /// <summary>

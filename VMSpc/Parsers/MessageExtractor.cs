@@ -37,7 +37,14 @@ namespace VMSpc.Parsers
 
         public void ConsumeEvent(VMSEventArgs e)
         {
-            HandleMessage((e as VMSCommDataEventArgs));
+            try
+            {
+                HandleMessage((e as VMSCommDataEventArgs));
+            }
+            catch (Exception ex)
+            {
+                throw new RawDataParsingException((e as VMSCommDataEventArgs), ex);
+            }
         }
 
         private void HandleMessage(VMSCommDataEventArgs e)
@@ -56,7 +63,6 @@ namespace VMSpc.Parsers
                         ProcessJ1939Data(message, e);
                         break;
                     case VMSDataSource.None:
-
                         break;
                 }
             }

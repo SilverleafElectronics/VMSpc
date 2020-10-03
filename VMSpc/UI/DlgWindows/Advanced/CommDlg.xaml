@@ -58,16 +58,6 @@
                         </Style.Triggers>
                     </Style>
                 </ComboBox.Style>
-                <ComboBoxItem>COM1</ComboBoxItem>
-                <ComboBoxItem>COM2</ComboBoxItem>
-                <ComboBoxItem>COM3</ComboBoxItem>
-                <ComboBoxItem>COM4</ComboBoxItem>
-                <ComboBoxItem>COM5</ComboBoxItem>
-                <ComboBoxItem>COM6</ComboBoxItem>
-                <ComboBoxItem>COM7</ComboBoxItem>
-                <ComboBoxItem>COM8</ComboBoxItem>
-                <ComboBoxItem>COM9</ComboBoxItem>
-                <ComboBoxItem>COM10</ComboBoxItem>
             </ComboBox>
             <Label Grid.Row="4" HorizontalAlignment="Left">Auto Restart:</Label>
             <Label Grid.Row="5" HorizontalAlignment="Left">Byte Count:</Label>

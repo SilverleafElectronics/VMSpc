@@ -39,6 +39,7 @@
         <CommandBinding Command="self:MainCommands.Layouts" CanExecute="Layouts_CanExecute" Executed="Layouts_Executed" />
         <CommandBinding Command="self:MainCommands.ToggleDayNight" CanExecute="ToggleDayNightCommand_CanExecute" Executed="ToggleDayNightCommand_Executed" />
         <CommandBinding Command="self:MainCommands.FullScreen" CanExecute="FullScreen_CanExecute" Executed="FullScreen_Executed" />
+        <CommandBinding Command="self:MainCommands.TakeSnapshot" CanExecute="TakeSnapshot_CanExecute" Executed="TakeSnapshot_Executed" />
     </Window.CommandBindings>
     <Grid>
         <DockPanel Name="DockMenu" Height="Auto" Width="Auto">
@@ -83,6 +84,7 @@
                     <MenuItem Header="_Communications" Command="self:MainCommands.CommSettings" />
                     <MenuItem Header="_Raw Log" Command="self:MainCommands.RawLog" />
                     <MenuItem Header="_Message Tester" Command="self:MainCommands.MessageTester" />
+                    <MenuItem Header="_Take Snapshot" Command="self:MainCommands.TakeSnapshot" />
                 </MenuItem>
                 <MenuItem Header="_Help">
                     <MenuItem Command="self:MainCommands.About" />

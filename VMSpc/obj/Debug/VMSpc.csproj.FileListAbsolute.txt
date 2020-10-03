@@ -366,3 +366,7 @@ C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\View\EditMaintenance
 C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\View\EditCompletedItem.baml
 C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\View\EditMaintenanceItemDlg.baml
 C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\VMSpc.csprojAssemblyReference.cache
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\bin\Debug\VMSpc.exe.manifest
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\bin\Debug\VMSpc.application
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\VMSpc.exe.manifest
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\VMSpc.application

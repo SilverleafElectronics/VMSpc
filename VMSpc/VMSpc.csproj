@@ -137,7 +137,10 @@
     <Compile Include="Common\PGN.cs" />
     <Compile Include="Common\RVCUpdaters.cs" />
     <Compile Include="Communication\OutgoingJ1708Message.cs" />
+    <Compile Include="Exceptions\RawDataParsingException.cs" />
+    <Compile Include="Snapshotter.cs" />
     <Compile Include="DayNightManager.cs" />
+    <Compile Include="DriverInstaller.cs" />
     <Compile Include="EngineDownloader.cs" />
     <Compile Include="Exceptions\CannotReadEngineFileException.cs" />
     <Compile Include="Common\Helpers\StringFormatBuilder.cs" />
