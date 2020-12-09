@@ -160,22 +160,19 @@ namespace VMSpc.Parsers
 
         protected override void ConvertAndStore(J1939Message message)
         {
-            if (rawValue > lastRawValue)
+            if (recipNum != 0.0)
             {
-                if (recipNum != 0.0)
-                {
-                    value = rawValue * scale + offset;
-                    valueMetric = (recipNum / value); //right now only instant mpg recent and rolling mpg use this
-                    value = valueMetric; //this only applies to gauges using L/100Km
-                }
-                else
-                {
-                    value = rawValue * scale + offset;
-                    valueMetric = rawValue * metricScale + metricOffset;
-                }
-                base.ConvertAndStore(message);
-                lastRawValue = rawValue;
+                value = rawValue * scale + offset;
+                valueMetric = (recipNum / value); //right now only instant mpg recent and rolling mpg use this
+                value = valueMetric; //this only applies to gauges using L/100Km
             }
+            else
+            {
+                value = rawValue * scale + offset;
+                valueMetric = rawValue * metricScale + metricOffset;
+            }
+            base.ConvertAndStore(message);
+            lastRawValue = rawValue;
         }
     }
     #endregion //TSPNByte

@@ -13,6 +13,7 @@ using VMSpc.UI.DlgWindows.Settings;
 using VMSpc.UI.DlgWindows.View;
 using System.Windows.Media;
 using VMSpc.Common;
+using VMSpc.Common.DriverInterface;
 
 namespace VMSpc
 {
@@ -406,6 +407,26 @@ namespace VMSpc
             }
         }
 
+        private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            ConfigManager.Screen.SaveConfiguration();
+        }
+
+        private void SaveAs_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+
         private void FullScreen_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -433,6 +454,51 @@ namespace VMSpc
         private void TakeSnapshot_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             Snapshotter.ZipConfiguration();
+        }
+
+        private void CheckDrivers_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void CheckDrivers_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var driverDetails = PnPutilInterface.GetVMSpcDrivers();
+            if (driverDetails != null && driverDetails.Count > 0)
+            {
+                if (driverDetails.Count == 2)
+                {
+                    MessageBox.Show($"All VMSpc drivers are installed, including {driverDetails[0].Class} and {driverDetails[1].Class}");
+                }
+                else if (driverDetails.Count == 1)
+                {
+                    MessageBox.Show($"Only one VMSpc driver is installed: {driverDetails[0].Class}. Select the \"Install Drivers\" option to install the other driver");
+                }
+            }
+            else
+            {
+                MessageBox.Show($"No VMSpc drivers are installed. Select the \"Install Drivers\" option");
+            }
+        }
+
+        private void InstallDrivers_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void InstallDrivers_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            DriverInstaller.InstallDrivers();
+        }
+
+        private void DeleteDrivers_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void DeleteDrivers_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            PnPutilInterface.DeleteDrivers();
         }
     }
 
@@ -509,7 +575,7 @@ namespace VMSpc
             typeof(MainCommands)
         );
         public static readonly RoutedUICommand About = new RoutedUICommand(
-            "About VMSpc...",
+            "About VMSpc",
             "About",
             typeof(MainCommands)
         );
@@ -590,11 +656,23 @@ namespace VMSpc
             "Maintenance",
             "Maintenance",
             typeof(MainCommands)
-            );
+        );
 
         public static readonly RoutedUICommand Layouts = new RoutedUICommand(
             "Layouts",
             "Layouts",
+            typeof(MainCommands)
+        );
+
+        public static readonly RoutedUICommand Save = new RoutedUICommand(
+            "Save",
+            "Save",
+            typeof(MainCommands)
+        );
+
+        public static readonly RoutedUICommand SaveAs = new RoutedUICommand(
+            "Save As",
+            "SaveAs",
             typeof(MainCommands)
         );
 
@@ -620,6 +698,21 @@ namespace VMSpc
         public static readonly RoutedUICommand TakeSnapshot = new RoutedUICommand(
             "Take Snapshot",
             "TakeSnapshot",
+            typeof(MainCommands)
+        );
+        public static readonly RoutedUICommand CheckDrivers = new RoutedUICommand(
+            "Check Drivers",
+            "TakeSnapshot",
+            typeof(MainCommands)
+        );
+        public static readonly RoutedUICommand InstallDrivers = new RoutedUICommand(
+            "Install Drivers",
+            "InstallDrivers",
+            typeof(MainCommands)
+        );
+        public static readonly RoutedUICommand DeleteDrivers = new RoutedUICommand(
+            "Delete Drivers",
+            "DeleteDrivers",
             typeof(MainCommands)
         );
     }

@@ -89,7 +89,7 @@ namespace VMSpc.UI.DlgWindows.Settings
                 }
                 else
                 {
-                    var tire = TireManager.Instance.Tires[i];
+                    Tire tire = TireManager.Instance.Tires[i];
                     descriptor.Content = $"{i + 1}. {tire.TireStatusString()}";
                     switch (tire.TireStatus)
                     {

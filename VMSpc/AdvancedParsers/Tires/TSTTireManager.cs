@@ -24,8 +24,21 @@ namespace VMSpc.AdvancedParsers.Tires
         public byte pressureStatus = 7;
         public byte extendedPressure = 0;
 
-        public override double DisplayPressure => pressure * 0.580150951 + extendedPressure * 148.5186;
-        public override double DisplayTemperature => temperature * 1.8d - 40d;
+        public override double DisplayPressure => (pressure * 0.580150951) + (extendedPressure * 148.5186);
+        public override double DisplayTemperature => (temperature * 0.05625) - 459.4;
+        //public override string TireStatusString()
+        //{
+        //    switch (TireStatus)
+        //    {
+        //        case TireStatus.Warning:
+        //        case TireStatus.Alert:
+        //        case TireStatus.Okay:
+        //            return
+        //                $"Pressure: {DisplayPressure:F2} PSI   Temperature:  {DisplayTemperature:F2} Deg    ";
+        //        default:
+        //            return base.TireStatusString();
+        //    }
+        //}
     }
 
     public class TSTTireManager : TireManager
@@ -68,9 +81,12 @@ namespace VMSpc.AdvancedParsers.Tires
 
         private void InitializeTires()
         {
-            for (int i = 0; i < MAX_TIRE_POSITIONS; i++)
+            for (ushort i = 0; i < MAX_TIRE_POSITIONS; i++)
             {
-                Tires[i] = new TSTTire();
+                Tires[i] = new TSTTire()
+                {
+                    index = i,
+                };
             }
         }
 
@@ -164,7 +180,10 @@ namespace VMSpc.AdvancedParsers.Tires
             message.Data[6] = 0x55;
             message.Data[7] = 0x49;
             if (PendingPosition < MAX_TIRE_POSITIONS)
+            {
                 Tires[PendingPosition].sensorReporting = false;
+                Tires[PendingPosition].TireStatus = TireStatus.None;
+            }
             PendingPosition = 0xFF;
             CommunicationManager.Instance.SendMessage(message);
             RequestConfiguration();
@@ -184,6 +203,7 @@ namespace VMSpc.AdvancedParsers.Tires
             message.Data[7] = (byte)'I';
 
             Tires[instance].sensorReporting = false;
+            Tires[instance].TireStatus = TireStatus.None;
             CommunicationManager.Instance.SendMessage(message);
         }
 

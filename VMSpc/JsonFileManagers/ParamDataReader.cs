@@ -29,6 +29,7 @@ namespace VMSpc.JsonFileManagers
         public double LowRed;
         public double HighYellow;
         public double HighRed;
+        [DefaultValue("{0:0.#}")]
         public string Format;
         public byte DecimalCount;
         public double Offset;

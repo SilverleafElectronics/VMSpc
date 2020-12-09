@@ -51,6 +51,7 @@ namespace VMSpc.UI.DlgWindows.Advanced
                 LowRed = 0,
                 HighRed = 0,
                 Pid = 0,
+                Format = "{0:0.#}",
             };
         }
 

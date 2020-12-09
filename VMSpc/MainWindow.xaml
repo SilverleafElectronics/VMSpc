@@ -40,6 +40,9 @@
         <CommandBinding Command="self:MainCommands.ToggleDayNight" CanExecute="ToggleDayNightCommand_CanExecute" Executed="ToggleDayNightCommand_Executed" />
         <CommandBinding Command="self:MainCommands.FullScreen" CanExecute="FullScreen_CanExecute" Executed="FullScreen_Executed" />
         <CommandBinding Command="self:MainCommands.TakeSnapshot" CanExecute="TakeSnapshot_CanExecute" Executed="TakeSnapshot_Executed" />
+        <CommandBinding Command="self:MainCommands.CheckDrivers" CanExecute="CheckDrivers_CanExecute" Executed="CheckDrivers_Executed" />
+        <CommandBinding Command="self:MainCommands.InstallDrivers" CanExecute="InstallDrivers_CanExecute" Executed="InstallDrivers_Executed" />
+        <CommandBinding Command="self:MainCommands.DeleteDrivers" CanExecute="DeleteDrivers_CanExecute" Executed="DeleteDrivers_Executed" />
     </Window.CommandBindings>
     <Grid>
         <DockPanel Name="DockMenu" Height="Auto" Width="Auto">
@@ -85,6 +88,11 @@
                     <MenuItem Header="_Raw Log" Command="self:MainCommands.RawLog" />
                     <MenuItem Header="_Message Tester" Command="self:MainCommands.MessageTester" />
                     <MenuItem Header="_Take Snapshot" Command="self:MainCommands.TakeSnapshot" />
+                    <MenuItem Header="_Drivers">
+                        <MenuItem Header="_Check Drivers" Command="self:MainCommands.CheckDrivers" />
+                        <MenuItem Header="_Install Drivers" Command="self:MainCommands.InstallDrivers" />
+                        <MenuItem Header="_Delete Drivers" Command="self:MainCommands.DeleteDrivers" />
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem Header="_Help">
                     <MenuItem Command="self:MainCommands.About" />

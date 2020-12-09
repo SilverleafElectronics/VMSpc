@@ -10,6 +10,7 @@ using System.Windows;
 using VMSpc.Enums.Parsing;
 using VMSpc.Extensions.UI;
 using VMSpc.Common;
+using VMSpc.AdvancedParsers.Tires;
 
 namespace VMSpc.UI.GaugeComponents
 {
@@ -52,11 +53,11 @@ namespace VMSpc.UI.GaugeComponents
 
         protected override void HandleNewData(VMSEventArgs e)
         {
-            var dataEvent = (e as TireEventArgs);
-            if (dataEvent != null)
+            Tire tire = (e as TireEventArgs)?.tire;
+            if (tire != null && tire.index == tireIndex)
             {
-                currentPressure = dataEvent.tire.DisplayPressure;
-                currentStatus = dataEvent.tire.TireStatus;
+                currentPressure = tire.DisplayPressure;
+                currentStatus = tire.TireStatus;
                 Update();
             }
         }
@@ -132,7 +133,7 @@ namespace VMSpc.UI.GaugeComponents
         {
             if ((tirePressureIndicator != null) && (currentPressure != lastPressure))
             {
-                tirePressureIndicator.Text = $"{currentPressure}";
+                tirePressureIndicator.Text = string.Format("{0:N0}", currentPressure);
                 lastPressure = currentPressure;
             }
         }

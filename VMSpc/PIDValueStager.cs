@@ -228,6 +228,7 @@ namespace VMSpc
                 Offset = 0,
                 Unit = "UNKNOWN",
                 MetricUnit = "UNKOWN",
+                Format = "{0:0.#}",
             };
             RecognizedPIDs.Insert(index, pid);
             ParameterWrappers.Add(new ParameterWrapper(param));

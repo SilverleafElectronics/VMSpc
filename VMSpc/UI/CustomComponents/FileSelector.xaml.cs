@@ -40,6 +40,7 @@ namespace VMSpc.UI.CustomComponents
         /// Allows the user to import files into this directory from anywhere in their filesystem
         /// </summary>
         public bool AllowImports { get; set; } = false;
+        public bool AllowDeletes { get; set; } = false;
         /// <summary>
         /// Filter that is applied to the OpenFileDialogue when the Import button is
         /// clicked. Only applies if AllowImports is true

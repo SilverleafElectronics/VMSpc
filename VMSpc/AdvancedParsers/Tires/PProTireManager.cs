@@ -46,9 +46,12 @@ namespace VMSpc.AdvancedParsers.Tires
                 EventBridge.Instance.SubscribeToEvent(this, EventIDs.Get_J1708RawDataEvent(241, i));
                 EventBridge.Instance.SubscribeToEvent(this, EventIDs.Get_J1708RawDataEvent(254, i));
             }
-            for (int i = 0; i < MAX_TIRES; i++)
+            for (ushort i = 0; i < MAX_TIRES; i++)
             {
-                Tires[i] = new PProTire();
+                Tires[i] = new PProTire()
+                {
+                    index = i,
+                };
             }
         }
 

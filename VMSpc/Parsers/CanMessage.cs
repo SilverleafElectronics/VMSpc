@@ -72,12 +72,20 @@ namespace VMSpc.Parsers
         /// </summary>
         public override void ExtractMessage()
         {
-            //J1939 Message comes in the format "R[SA:2 (index 1-2)][PGN:6 (index 3-8)][Data:16 (index 9-24)][cr][lf]"
-            messageType = J1939;
-            address = Convert.ToByte(rawMessage.Substring(0, 2), 16);   //Message byte 0: SA
-            pgn = Convert.ToUInt32(rawMessage.Substring(2, 6), 16);     //Message bytes 2-6: PGN
-            string dataSection = rawMessage.Substring(8);           //Message bytes 7 - end: data section
-            bool dataStored = BYTE_STRING_TO_BYTE_ARRAY(data, dataSection, dataSection.Length);
+            bool dataStored;
+            try
+            {
+                //J1939 Message comes in the format "R[SA:2 (index 1-2)][PGN:6 (index 3-8)][Data:16 (index 9-24)][cr][lf]"
+                messageType = J1939;
+                address = Convert.ToByte(rawMessage.Substring(0, 2), 16);   //Message byte 0: SA
+                pgn = Convert.ToUInt32(rawMessage.Substring(2, 6), 16);     //Message bytes 2-6: PGN
+                string dataSection = rawMessage.Substring(8);           //Message bytes 7 - end: data section
+                dataStored = BYTE_STRING_TO_BYTE_ARRAY(data, dataSection, dataSection.Length);
+            }
+            catch (Exception ex)
+            {
+                dataStored = false;
+            }
             if (!dataStored)
                 messageType = INVALID_CAN_MESSAGE;
         }
@@ -169,39 +177,11 @@ namespace VMSpc.Parsers
         public override string ToString()
         {
             return string.Empty;
-            /*
-            string message = (messageType == J1708) ? "\nJ1708 Message:\n" : "\nINVALID J1708 MESSAGE\n";
-            foreach (var pidItem in data)
-            {
-                int tabCount = 6 - ((pidItem.Key.PidToString().Length + 1) / 4);
-                string tabs = "";
-                for (int i = 0; i < tabCount; i++) tabs += "\t";
-                message += ("\t" + pidItem.Key.PidToString() + ":" + tabs + "[" + BitConverter.ToString(pidItem.Value).Replace('-', ',') + "]\n");
-            }
-            return message;
-            */
         }
 
         public override string ToParsedString(object parser)
         {
             return string.Empty;
-            /*
-            try
-            {
-                J1708Parser j1708 = (J1708Parser)parser;
-                j1708.Parse(this);
-                string message = "J1708 Parsed Message\n";
-                foreach (var pidItem in data)
-                {
-                    message += PresenterList[pidItem.Key].ToString() + "\n";
-                }
-                return message;
-            }
-            catch (Exception ex)
-            {
-                return "Error: " + ex.ToString();
-            }
-            */
         }
     }
     #endregion J1708Message

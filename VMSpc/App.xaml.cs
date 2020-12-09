@@ -13,6 +13,7 @@ using VMSpc.UI;
 using VMSpc.JsonFileManagers;
 using System.Security.Permissions;
 using VMSpc.Common;
+using VMSpc.Common.DriverInterface;
 using VMSpc.AdvancedParsers;
 using VMSpc.AdvancedParsers.Tires;
 using VMSpc.Loggers;
@@ -90,13 +91,15 @@ namespace VMSpc
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            VerifyDriverInstallation();
+            //VerifyDriverInstallation();
             AddAccessPermissions();
             ActivateStaticClasses();
             VMSpcStart();
             AddGlobalEventHandlers();
         }
 
+        //delete the driver: pnputil -f -d oem81.inf
+        //show all drivers:  pnputil -e
         private void VerifyDriverInstallation()
         {
             if (!DriversAreInstalled())
