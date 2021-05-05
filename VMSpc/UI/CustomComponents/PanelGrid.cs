@@ -150,6 +150,7 @@ namespace VMSpc.UI.CustomComponents
                 case PanelType.HISTOGRAM:
                     break;
                 case PanelType.CLOCK:
+                    panel = new Clock(mainWindow, (ClockSettings)panelSettings);
                     break;
                 case PanelType.IMAGE:
                     panel = new ImagePanel(mainWindow, (PictureSettings)panelSettings);
@@ -467,7 +468,7 @@ namespace VMSpc.UI.CustomComponents
         {
             foreach (var panel in PanelList)
                 panel.SaveSettings();
-            Screen.SaveConfiguration();
+            //Screen.SaveConfiguration();
         }
     }
 }

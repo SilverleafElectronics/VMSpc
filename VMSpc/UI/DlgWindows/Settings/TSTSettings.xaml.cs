@@ -59,10 +59,10 @@ namespace VMSpc.UI.DlgWindows.Settings
 
         private void OnTimer()
         {
-            UpdateFields();
             timerCount++;
+            UpdateFields();
             //Request configuration every 20 seconds, if active
-            if (timerCount >= 20)
+            if (timerCount >= 5)
             {
                 timerCount = 0;
                 if (TSTManager.IsActive)
@@ -76,7 +76,7 @@ namespace VMSpc.UI.DlgWindows.Settings
         {
             if (UserIsEditing)
                 return;
-            TargetPSIBox.Text = TSTManager.targetPsi[selectedAxle].ToString();
+            TargetPSIBox.Text = TSTManager.TargetPsi(selectedAxle).ToString();
             UnderPressurePctBox.Text = TSTManager.UnderPressureThreshold.ToString();
             ExtremeUnderPressureBox.Text = TSTManager.ExtremeUnderPressureThreshold.ToString();
             OverPressureBox.Text = TSTManager.OverPressureThreshold.ToString();
@@ -127,7 +127,7 @@ namespace VMSpc.UI.DlgWindows.Settings
             double newValue;
             if (double.TryParse(UnderPressurePctBox.Text, out newValue))
             {
-                TSTManager.ConfigureTargetPSI(selectedAxle, newValue);
+                TSTManager.ConfigureUnderPressure(newValue);
             }
             else
             {
@@ -140,7 +140,7 @@ namespace VMSpc.UI.DlgWindows.Settings
             double newValue;
             if (double.TryParse(ExtremeUnderPressureBox.Text, out newValue))
             {
-                TSTManager.ConfigureTargetPSI(selectedAxle, newValue);
+                TSTManager.ConfigureExtremeUnderPressure(newValue);
             }
             else
             {
@@ -153,7 +153,7 @@ namespace VMSpc.UI.DlgWindows.Settings
             double newValue;
             if (double.TryParse(OverPressureBox.Text, out newValue))
             {
-                TSTManager.ConfigureTargetPSI(selectedAxle, newValue);
+                TSTManager.ConfigureOverPressure(newValue);
             }
             else
             {
@@ -170,7 +170,7 @@ namespace VMSpc.UI.DlgWindows.Settings
                 {
                     newValue = (newValue * (9 / 5)) + 32;   //Convert to Fahrenheit
                 }
-                TSTManager.ConfigureTargetPSI(selectedAxle, newValue);
+                TSTManager.ConfigureOverTemperature(newValue);
             }
             else
             {

@@ -55,9 +55,23 @@ namespace VMSpc.JsonFileManagers
             SaveJson();
         }
 
+        public void SaveConfigurationAs(string newFilePath)
+        {
+            SaveJsonToFile(newFilePath);
+        }
+
         public void SaveJson()
         {
             using (StreamWriter sw = GetStreamWriter())
+            {
+                string json = JsonConvert.SerializeObject(Contents, Formatting.Indented, serializerSettings);
+                sw.Write(json);
+            }
+        }
+
+        public void SaveJsonToFile(string newFilePath)
+        {
+            using (StreamWriter sw = GetStreamWriter(newFilePath))
             {
                 string json = JsonConvert.SerializeObject(Contents, Formatting.Indented, serializerSettings);
                 sw.Write(json);

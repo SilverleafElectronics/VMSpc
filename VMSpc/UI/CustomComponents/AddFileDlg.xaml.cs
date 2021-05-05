@@ -33,6 +33,7 @@ namespace VMSpc.UI.CustomComponents
             FileNameText.Text = FileName;
             ExtensionText.Text = Extension;
             base.OnActivated(e);
+            Keyboard.Focus(FileNameText);
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

@@ -61,7 +61,7 @@ namespace VMSpc.AdvancedParsers.Tires
         private byte overPressureThreshold;
         private byte overTemperatureThreshold;
         private byte extremeUnderPressureThreshold;
-        public double TargetPsi(int axle) => (axle < MAX_AXLES) ? (targetPsi[axle] * 1.160301902) : 0;
+        public double TargetPsi(int axle) => (axle < MAX_AXLES) ? Math.Ceiling((targetPsi[axle] * 1.160301902)) : 0;
         public double UnderPressureThreshold => underPressureThreshold * 0.5d;
         public double ExtremeUnderPressureThreshold => extremeUnderPressureThreshold * 0.5d;
         public double OverPressureThreshold => overPressureThreshold * 0.5d;
@@ -99,6 +99,30 @@ namespace VMSpc.AdvancedParsers.Tires
             }
         }
 
+        public void RequestConfiguration()
+        {
+            OutgoingJ1939Message message = new OutgoingJ1939Message()
+            {
+                USBPrefix = 'T',
+                SA = 0x33,
+                PGN = 0xEA33,
+            };
+            message.Data[0] = 0x43;
+            message.Data[1] = 0xFC;
+            message.Data[2] = 0x00;
+            CommunicationManager.Instance.SendMessage(message);
+            OutgoingJ1939Message message2 = new OutgoingJ1939Message()
+            {
+                USBPrefix = 'T',
+                SA = 0x33,
+                PGN = 0xEA33,
+            };
+            message2.Data[0] = 0xB9;
+            message2.Data[1] = 0xFD;
+            message2.Data[2] = 0x00;
+            CommunicationManager.Instance.SendMessage(message2);
+        }
+
         public void ConfigureTargetPSI(int axle, double newValue)
         {
             byte dataAxle = (byte)axle;
@@ -108,7 +132,7 @@ namespace VMSpc.AdvancedParsers.Tires
                 {
                     USBPrefix = 'T',
                     SA = 0x33,
-                    PGN = 0xAE00,
+                    PGN = 0xAE33,
                 };
                 message.Data[0] = (byte)(dataAxle << 4);
                 message.Data[1] = (byte)(newValue / 1.160301902);
@@ -136,7 +160,7 @@ namespace VMSpc.AdvancedParsers.Tires
 
         public void ConfigureOverTemperature(double newValue)
         {
-            byte value = (byte)((newValue / 1.8) + 40);
+            byte value = (byte)Math.Ceiling(((newValue + 40) / 1.8));
             ConfigureTireThreshholds(6, value);
         }
 
@@ -147,8 +171,9 @@ namespace VMSpc.AdvancedParsers.Tires
             {
                 USBPrefix = 'T',
                 SA = 0x33,
-                PGN = 0x8200,
+                PGN = 0x8233,
             };
+            message.Data[0] = 0xEE; //all axles
             message.Data[3] = 40;
             message.Data[4] = 60;
             message.Data[5] = 40;
@@ -162,8 +187,9 @@ namespace VMSpc.AdvancedParsers.Tires
             {
                 USBPrefix = 'T',
                 SA = 0x33,
-                PGN = 0x8200,
+                PGN = 0x8233,
             };
+            message.Data[0] = 0xEE; //all axles
             message.Data[byteIndex] = value;
             CommunicationManager.Instance.SendMessage(message);
         }
@@ -204,30 +230,6 @@ namespace VMSpc.AdvancedParsers.Tires
 
             Tires[instance].sensorReporting = false;
             Tires[instance].TireStatus = TireStatus.None;
-            CommunicationManager.Instance.SendMessage(message);
-        }
-
-        public void RequestConfiguration()
-        {
-            OutgoingJ1939Message message = new OutgoingJ1939Message()
-            {
-                USBPrefix = 'T',
-                SA = 0x33,
-                PGN = 0xEA33,
-            };
-            message.Data[0] = 0x43;
-            message.Data[1] = 0xFC;
-            message.Data[2] = 0x00;
-            CommunicationManager.Instance.SendMessage(message);
-            OutgoingJ1939Message message2 = new OutgoingJ1939Message()
-            {
-                USBPrefix = 'T',
-                SA = 0x33,
-                PGN = 0xEA33,
-            };
-            message2.Data[0] = 0xB9;
-            message2.Data[1] = 0xFD;
-            message2.Data[2] = 0x00;
             CommunicationManager.Instance.SendMessage(message);
         }
 

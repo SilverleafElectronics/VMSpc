@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "VMSpc"
-#define MyAppVersion "5.0.5"
+#define MyAppVersion "5.0.13"
 #define MyAppPublisher "SilverLeaf Electronics, Inc"
 #define MyAppURL "https://silverleafelectronics.com"
 #define MyAppExeName "VMSpc.exe"
@@ -10,7 +10,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{5C620275-E6BF-4D10-8E4D-BB0A22F8E117}
+AppId={{595B7574-3DCE-436E-A249-5D370A4EC026}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -18,7 +18,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName=C:\VMSpc\5.0.5
+DefaultDirName=C:\VMSpc\5.0.13
 DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest

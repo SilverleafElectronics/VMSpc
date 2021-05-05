@@ -140,10 +140,6 @@ namespace VMSpc.UI.DlgWindows.Advanced
                 return "Gauge Name must not be empty";
             if (!IsValidStringField(GaugeAbbreviationEditBox))
                 return "Gauge Abbreviation must not be empty";
-            if (!IsValidStringField(UnitEditBox))
-                return "Unit must not be empty";
-            if (!IsValidStringField(MetricUnitEditBox))
-                return "Metric Unit must not be empty";
             if (!IsValidDoubleField(ValueOffsetEditBox))
                 return "Unit must have a numeric value";
             if (!IsValidDoubleField(ValueMultiplierEditBox))
@@ -229,7 +225,7 @@ namespace VMSpc.UI.DlgWindows.Advanced
     { 
         public static int ConvertFormatToDecimalPositions(string format)
         {
-            if (!format.Contains("#"))
+            if (format == null || !format.Contains("#"))
             {
                 return 0;
             }

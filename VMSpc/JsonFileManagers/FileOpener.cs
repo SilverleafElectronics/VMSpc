@@ -136,8 +136,13 @@ namespace VMSpc.JsonFileManagers
             return new StreamWriter(absoluteFilepath);
         }
 
+        public StreamWriter GetStreamWriter(string relativeFilePath)
+        {
+            return new StreamWriter(BaseDirectory + relativeFilePath);
+        }
+
         /// <summary>
-        /// Wrapper for File.WriteAllText. Creates a file, write Content to the file, and then closes the file. 
+        /// Wrapper for File.WriteAllText. Creates a file, writes Content to the file, and then closes the file. 
         /// If the file already exists, it will be overwritten with the specified Content.
         /// </summary>
         public static void WriteAllText(string relativePath, string Content)

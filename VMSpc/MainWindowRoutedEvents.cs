@@ -90,6 +90,18 @@ namespace VMSpc
             InitiateNewGaugeDlg(dlgWindow, panelSettings);
         }
 
+        private void NewClockCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void NewClockCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            ClockSettings panelSettings = new ClockSettings();
+            ClockDlg dlgWindow = new ClockDlg(panelSettings);
+            InitiateNewGaugeDlg(dlgWindow, panelSettings);
+        }
+
         private void NewTextPanelCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -272,7 +284,7 @@ namespace VMSpc
         private void ToggleClippingCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             ConfigManager.Settings.Contents.useClipping = !(ConfigManager.Settings.Contents.useClipping);
-            ClipToggle.Header = (ConfigManager.Settings.Contents.useClipping) ? "Disable Clipping" : "Enable Clipping";
+            ClipToggle.Header = (ConfigManager.Settings.Contents.useClipping) ? "Disable Snapping" : "Enable Snapping";
         }
 
         private void ToggleDayNightCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -400,7 +412,7 @@ namespace VMSpc
             if ((bool)dlg.ShowDialog())
             {
                 ConfigManager.Settings.Contents.screenFilePath = dlg.ResultFilePath;
-                ConfigManager.Screen.SaveConfiguration();
+                //ConfigManager.Screen.SaveConfiguration();
                 ConfigManager.Screen.Reload(dlg.ResultFilePath);
                 ContentGrid.InitPanels(this);
                 //Common.Helpers.ApplicationControl.Restart();
@@ -424,7 +436,21 @@ namespace VMSpc
 
         private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-
+            var dlg = new FileSelector("\\configuration\\screens", ConfigManager.Settings.Contents.screenFilePath, "scr.json")
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                ExcludeLockedFiles = true,
+                AllowNewFiles = true,
+                NewFilesExtension = ".scr.json",
+                AllowImports = false,
+            };
+            if ((bool)dlg.ShowDialog())
+            {
+                ConfigManager.Screen.SaveConfigurationAs(dlg.ResultFilePath);
+                ConfigManager.Settings.Contents.screenFilePath = dlg.ResultFilePath;
+                ContentGrid.InitPanels(this);
+            }
         }
 
         private void FullScreen_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -532,6 +558,11 @@ namespace VMSpc
         public static readonly RoutedUICommand NewOdometer = new RoutedUICommand(
             "New Odometer",
             "NewOdometer",
+            typeof(MainCommands)
+        );
+        public static readonly RoutedUICommand NewClock = new RoutedUICommand(
+            "New Clock",
+            "NewClock",
             typeof(MainCommands)
         );
         public static readonly RoutedUICommand NewTextPanel = new RoutedUICommand(

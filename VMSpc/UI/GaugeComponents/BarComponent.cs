@@ -103,15 +103,20 @@ namespace VMSpc.UI.GaugeComponents
             numLines = (int)((Orientation == Orientation.Horizontal) ? Width : Height);
             var ColorDelimiterIndex = 0;
             for (int i = 0; i < numLines; i++)
-            {
+            { 
                 if (SolidValueColor == null) //adds lines on a red-yellow-green scheme
                 {
-                    while ((LineIndexToValue(i) >= MaxColorBorders[ColorDelimiterIndex].MaxValue) || (MaxColorBorders[ColorDelimiterIndex].MaxValue == 0))
+                    bool colorsExhausted = false; //prevents overrunning MaxColorBorders when all red/yellow/green values are the same
+                    while (
+                            ((LineIndexToValue(i) >= MaxColorBorders[ColorDelimiterIndex].MaxValue) || (MaxColorBorders[ColorDelimiterIndex].MaxValue == 0))
+                            && (!colorsExhausted)
+                        )
                     {
-                        if (ColorDelimiterIndex < MaxColorBorders.Length)
+                        if (ColorDelimiterIndex < MaxColorBorders.Length - 1)
                         {
                             ColorDelimiterIndex++;
                         }
+                        colorsExhausted = (ColorDelimiterIndex == MaxColorBorders.Length - 1);
                     }
                     AddLine(i, MaxColorBorders[ColorDelimiterIndex].Brush);
                 }

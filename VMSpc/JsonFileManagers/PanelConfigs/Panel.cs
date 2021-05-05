@@ -89,6 +89,7 @@ namespace VMSpc.JsonFileManagers
     {
         public bool
             showDate,
+            showAmPm,
             useMilitaryTime;
         public ClockSettings() : base(PanelType.CLOCK) { }
     }

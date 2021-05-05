@@ -16,6 +16,7 @@
         <CommandBinding Command="self:MainCommands.NewRadialGauge" CanExecute="NewRadialGaugeCommand_CanExecute" Executed="NewRadialGaugeCommand_Executed" />
         <CommandBinding Command="self:MainCommands.NewMultiBar" CanExecute="NewMultiBarCommand_CanExecute" Executed="NewMultiBarCommand_Executed" />
         <CommandBinding Command="self:MainCommands.NewOdometer" CanExecute="NewOdometerCommand_CanExecute" Executed="NewOdometerCommand_Executed" />
+        <CommandBinding Command="self:MainCommands.NewClock" CanExecute="NewClockCommand_CanExecute" Executed="NewClockCommand_Executed" />
         <CommandBinding Command="self:MainCommands.NewTextPanel" CanExecute="NewTextPanelCommand_CanExecute" Executed="NewTextPanelCommand_Executed" />
         <CommandBinding Command="self:MainCommands.NewImagePanel" CanExecute="NewImagePanel_CanExecute" Executed="NewImagePanel_Executed" />
         <CommandBinding Command="self:MainCommands.NewDiagnosticPanel" CanExecute="NewDiagnosticPanel_CanExecute" Executed="NewDiagnosticPanel_Executed" />
@@ -37,6 +38,8 @@
         <CommandBinding Command="self:MainCommands.ViewDiagnostics" CanExecute="ViewDiagnostics_CanExecute" Executed="ViewDiagnostics_Executed" />
         <CommandBinding Command="self:MainCommands.Maintenance" CanExecute="Maintenance_CanExecute" Executed="Maintenance_Executed" />
         <CommandBinding Command="self:MainCommands.Layouts" CanExecute="Layouts_CanExecute" Executed="Layouts_Executed" />
+        <CommandBinding Command="self:MainCommands.Save" CanExecute="Save_CanExecute" Executed="Save_Executed" />
+        <CommandBinding Command="self:MainCommands.SaveAs" CanExecute="SaveAs_CanExecute" Executed="SaveAs_Executed" />
         <CommandBinding Command="self:MainCommands.ToggleDayNight" CanExecute="ToggleDayNightCommand_CanExecute" Executed="ToggleDayNightCommand_Executed" />
         <CommandBinding Command="self:MainCommands.FullScreen" CanExecute="FullScreen_CanExecute" Executed="FullScreen_Executed" />
         <CommandBinding Command="self:MainCommands.TakeSnapshot" CanExecute="TakeSnapshot_CanExecute" Executed="TakeSnapshot_Executed" />
@@ -49,6 +52,8 @@
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
                     <MenuItem Command="self:MainCommands.Layouts"/>
+                    <MenuItem Command="self:MainCommands.Save"/>
+                    <MenuItem Command="self:MainCommands.SaveAs" />
                     <Separator />
                     <MenuItem Header="_Exit" Command="Close" />
                 </MenuItem>
@@ -58,6 +63,7 @@
                     <MenuItem Command="self:MainCommands.NewRadialGauge" />
                     <MenuItem Command="self:MainCommands.NewMultiBar" />
                     <MenuItem Command="self:MainCommands.NewOdometer" />
+                    <MenuItem Command="self:MainCommands.NewClock" />
                     <MenuItem Command="self:MainCommands.NewTextPanel" />
                     <MenuItem Command="self:MainCommands.NewImagePanel" />
                     <MenuItem Command="self:MainCommands.NewDiagnosticPanel" />

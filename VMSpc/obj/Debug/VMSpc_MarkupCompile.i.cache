@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\App.xaml
-38-1097787819
+391780667860
 
-175-192139699
-25-1762602182
-DevHelpers\DebugConsole.xaml;UI\CustomComponents\AddFileDlg.xaml;UI\CustomComponents\ClearDiagnosticsBox.xaml;UI\CustomComponents\ColorEditor.xaml;UI\CustomComponents\ColorPicker.xaml;UI\CustomComponents\DashedBorder.xaml;UI\CustomComponents\FileSelector.xaml;UI\CustomComponents\IntegerEditBox.xaml;UI\CustomComponents\OdometerDataViewer.xaml;UI\DlgWindows\Advanced\MessageTester.xaml;UI\DlgWindows\Advanced\ParameterItemEditor.xaml;UI\DlgWindows\Help\AboutDlg.xaml;UI\DlgWindows\Advanced\ParameterEditorDlg.xaml;UI\DlgWindows\Settings\ColorPaletteDlg.xaml;UI\DlgWindows\Settings\ColorPalettePicker.xaml;UI\DlgWindows\Advanced\CommDlg.xaml;UI\DlgWindows\Gauges\DiagnosticAlarmDlg.xaml;UI\DlgWindows\Gauges\ImagePanelDlg.xaml;UI\DlgWindows\Settings\DayNightDlg.xaml;UI\DlgWindows\Settings\Messages.xaml;UI\DlgWindows\Gauges\MultiBarDlg.xaml;UI\DlgWindows\Gauges\OdometerDlg.xaml;UI\DlgWindows\Gauges\RadialGaugeDlg.xaml;UI\DlgWindows\Advanced\RawLogDlg.xaml;UI\DlgWindows\Gauges\ScanGaugeDlg.xaml;UI\DlgWindows\Gauges\SimpleGaugeDlg.xaml;MainWindow.xaml;UI\DlgWindows\Gauges\TankMinderDlg.xaml;UI\DlgWindows\Gauges\TextPanelDlg.xaml;UI\DlgWindows\Gauges\TirePanelDlg.xaml;UI\DlgWindows\Gauges\TransmissionGaugeDlg.xaml;UI\DlgWindows\Settings\TiresDlg.xaml;UI\DlgWindows\Settings\TSTSettings.xaml;UI\DlgWindows\View\DiagnosticLogViewer.xaml;UI\DlgWindows\View\EditCompletedItem.xaml;UI\DlgWindows\View\EditMaintenanceItemDlg.xaml;UI\DlgWindows\View\MaintenanceDlg.xaml;UI\ExceptionWindow.xaml;
+181717920221
+25531582452
+DevHelpers\DebugConsole.xaml;UI\CustomComponents\AddFileDlg.xaml;UI\CustomComponents\ClearDiagnosticsBox.xaml;UI\CustomComponents\ColorEditor.xaml;UI\CustomComponents\ColorPicker.xaml;UI\CustomComponents\DashedBorder.xaml;UI\CustomComponents\FileSelector.xaml;UI\CustomComponents\IntegerEditBox.xaml;UI\CustomComponents\OdometerDataViewer.xaml;UI\DlgWindows\Advanced\MessageTester.xaml;UI\DlgWindows\Advanced\ParameterItemEditor.xaml;UI\DlgWindows\Gauges\ClockDlg.xaml;UI\DlgWindows\Help\AboutDlg.xaml;UI\DlgWindows\Advanced\ParameterEditorDlg.xaml;UI\DlgWindows\Settings\ColorPaletteDlg.xaml;UI\DlgWindows\Settings\ColorPalettePicker.xaml;UI\DlgWindows\Advanced\CommDlg.xaml;UI\DlgWindows\Gauges\DiagnosticAlarmDlg.xaml;UI\DlgWindows\Gauges\ImagePanelDlg.xaml;UI\DlgWindows\Settings\DayNightDlg.xaml;UI\DlgWindows\Settings\Messages.xaml;UI\DlgWindows\Gauges\MultiBarDlg.xaml;UI\DlgWindows\Gauges\OdometerDlg.xaml;UI\DlgWindows\Gauges\RadialGaugeDlg.xaml;UI\DlgWindows\Advanced\RawLogDlg.xaml;UI\DlgWindows\Gauges\ScanGaugeDlg.xaml;UI\DlgWindows\Gauges\SimpleGaugeDlg.xaml;MainWindow.xaml;UI\DlgWindows\Gauges\TankMinderDlg.xaml;UI\DlgWindows\Gauges\TextPanelDlg.xaml;UI\DlgWindows\Gauges\TirePanelDlg.xaml;UI\DlgWindows\Gauges\TransmissionGaugeDlg.xaml;UI\DlgWindows\Settings\TiresDlg.xaml;UI\DlgWindows\Settings\TSTSettings.xaml;UI\DlgWindows\View\DiagnosticLogViewer.xaml;UI\DlgWindows\View\EditCompletedItem.xaml;UI\DlgWindows\View\EditMaintenanceItemDlg.xaml;UI\DlgWindows\View\MaintenanceDlg.xaml;UI\ExceptionWindow.xaml;
 
-False
+True
 

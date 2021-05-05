@@ -216,6 +216,7 @@ namespace VMSpc.UI.CustomComponents
                 Owner = this,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
             };
+            bool added = false;
             if ((bool)addFileDlg.ShowDialog())
             {
                 if (!string.IsNullOrEmpty(addFileDlg.FileName))
@@ -224,6 +225,7 @@ namespace VMSpc.UI.CustomComponents
                     if (!DisplayedfileNames.Contains(newFile))
                     {
                         FileOpener.WriteAllText(RelativeDirectoryPath + "\\" + newFile, string.Empty);
+                        added = true;
                     }
                     else
                     {
@@ -236,6 +238,19 @@ namespace VMSpc.UI.CustomComponents
                 }
             }
             AddFileRows();
+            if (added)
+            {
+                foreach (var item in DisplayedFiles.Items)
+                {
+                    if ((item as ListBoxItem) != null)
+                    {
+                        if ((item as ListBoxItem).Content.ToString() == (addFileDlg.FileName + addFileDlg.Extension))
+                        {
+                            (item as ListBoxItem).IsSelected = true;
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -20,11 +20,15 @@ namespace VMSpc.UI.GaugeComponents
         private DateTime lastDrawnTime;
         private bool textIsScaled;
         public bool useMilitaryTime { get; set; }
+        public bool showAmPm { get; set; }
+        public bool showDate { get; set; }
         private bool TimerEnabled { get; set; }
 
-        public ClockComponent(bool useMilitaryTime) : base()
+        public ClockComponent(bool useMilitaryTime, bool showAmPm=false, bool showDate=false) : base()
         {
             this.useMilitaryTime = useMilitaryTime;
+            this.showAmPm = showAmPm;
+            this.showDate = showDate;
             //VerticalContentAlignment = VerticalAlignment.Center;
             ClockTimer = Constants.CREATE_TIMER(UpdateClock, 250, Enums.UI.DispatchType.OnMainThread);
             ClockTimer.Start();
@@ -68,12 +72,17 @@ namespace VMSpc.UI.GaugeComponents
         {
             if (!useMilitaryTime)
             {
-                Text = currentTime.ToString("hh:mm:ss tt", CultureInfo.InvariantCulture);
+                if (showAmPm)
+                    Text = currentTime.ToString("hh:mm:ss tt", CultureInfo.InvariantCulture);
+                else
+                    Text = currentTime.ToString("hh:mm:ss", CultureInfo.InvariantCulture);
             }
             else
             {
                 Text = currentTime.ToString("HH:mm:ss");
             }
+            if (showDate)
+                Text += currentTime.ToString(" MM/dd/yyyy");
             if (!textIsScaled)
             {
                 this.ScaleText();

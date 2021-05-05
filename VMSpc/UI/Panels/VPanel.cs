@@ -216,7 +216,7 @@ namespace VMSpc.Panels
                 if (result == true)
                 {
                     Refresh();
-                    ConfigManager.Screen.SaveConfiguration();
+                    //ConfigManager.Screen.SaveConfiguration();
                 }
             }
         }
@@ -229,7 +229,7 @@ namespace VMSpc.Panels
         public void LoseChild(VPanel panel)
         {
             ChildPanels.Remove(this);
-        }
+        } 
 
         public void BecomeChild(VPanel panel)
         {

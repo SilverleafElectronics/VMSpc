@@ -21,7 +21,7 @@
                          Width="500"
                          >FileName
                 </TextBox>
-                <TextBox Name="ExtensionText" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" />
+                <TextBox Name="ExtensionText" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" IsReadOnly="True"/>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1">

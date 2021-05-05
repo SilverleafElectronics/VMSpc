@@ -161,6 +161,7 @@
                     Height="25"
                     VerticalContentAlignment="Center"
                     Name="OverPressureBox"
+                    Tag="ConfigItem"
                     >
                 </TextBox>
                 <Button
@@ -209,6 +210,7 @@
                     Height="25"
                     VerticalContentAlignment="Center"
                     Name="OverTemperatureBox"
+                    Tag="ConfigItem"
                     >
                 </TextBox>
                 <Button
