@@ -18,7 +18,7 @@ namespace VMSpc.Parsers
     {
         public event EventHandler<VMSEventArgs> RaiseVMSEvent;
         private readonly J1708Parser _J1708Parser;
-        private J1939Parser _J1939Parser;
+        private readonly J1939Parser _J1939Parser;
 
         public static CanMessageHandler Instance { get; private set; }
         static CanMessageHandler() {}
@@ -51,37 +51,17 @@ namespace VMSpc.Parsers
         {
             var message = RemoveControlCharacters(e.message);
             var type = GetMessageType(message);
-            if (IsValidMessage(type, message))
-            {
-                message = message.Substring(1); //remove the type indicator from the message ('J', 'R', or 'I')
-                switch (type)
-                {
-                    case VMSDataSource.J1708:
-                        ProcessJ1708Data(message, e);
-                        break;
-                    case VMSDataSource.J1939:
-                        ProcessJ1939Data(message, e);
-                        break;
-                    case VMSDataSource.None:
-                        break;
-                }
-            }
-        }
-
-        private bool IsValidMessage(VMSDataSource type, string message)
-        {
-            if (type == VMSDataSource.None || string.IsNullOrEmpty(message) || string.IsNullOrWhiteSpace(message))
-            {
-                return false;
-            }
+            message = message.Substring(1); //remove the type indicator from the message ('J', 'R', or 'I')
             switch (type)
             {
                 case VMSDataSource.J1708:
-                    return J1708Message.IsValidMessage(message);
+                    ProcessJ1708Data(message, e);
+                    break;
                 case VMSDataSource.J1939:
-                    return J1939Message.IsValidMessage(message);
-                default:
-                    return false;
+                    ProcessJ1939Data(message, e);
+                    break;
+                case VMSDataSource.None:
+                    break;
             }
         }
 
@@ -95,9 +75,17 @@ namespace VMSpc.Parsers
         {
             try
             {
-                var CanMessage = new J1708Message(rawMessage, e.timeStamp);
-                _J1708Parser.Parse(CanMessage);
-                PublishNewDataEvent(CanMessage);
+                var canMessage = new J1708Message(rawMessage, e.timeStamp);
+                if (canMessage.IsValidMessage())
+                {
+                    canMessage.ExtractMessage();
+                    _J1708Parser.Parse(canMessage);
+                    PublishNewDataEvent(canMessage);
+                }
+                else
+                {
+
+                }
             }
             catch (Exception ex)
             {   //Todo - trim this down to only invoke CommDataErrorEvent on specific exceptions (ie, from CanMesssage or parser)
@@ -117,8 +105,12 @@ namespace VMSpc.Parsers
             try
             {
                 var canMessage = new J1939Message(rawMessage, e.timeStamp);
-                _J1939Parser.Parse(canMessage);
-                PublishNewDataEvent(canMessage);
+                if (canMessage.IsValidMessage())
+                {
+                    canMessage.ExtractMessage();
+                    _J1939Parser.Parse(canMessage);
+                    PublishNewDataEvent(canMessage);
+                }
             }
             catch (Exception ex)
             {

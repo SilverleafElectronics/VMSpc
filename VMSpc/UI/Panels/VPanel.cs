@@ -387,9 +387,44 @@ namespace VMSpc.Panels
         public void ResizeTop(double newTop)
         {
             var oldBottom = Canvas.GetBottom(border);
-            Canvas.SetTop(border, newTop);
-            Height = oldBottom - newTop;
+            var newHeight = (oldBottom - newTop);
+            if ((newHeight > 30) || (newHeight > Height))
+            {
+                Canvas.SetTop(border, newTop);
+                Height = newHeight;
+            }
         }
+
+        public void ResizeRight(double newRight)
+        {
+            var newWidth = (newRight - Canvas.GetLeft(border));
+            if ((newWidth > 30) || (newWidth > Width))
+            {
+                Width = newWidth;
+                Canvas.SetRight(border, (Canvas.GetLeft(canvas) + border.Width));
+            }
+        }
+
+        public void ResizeBottom(double newBottom)
+        {
+            var newHeight = (newBottom - Canvas.GetTop(border));
+            if ((newHeight > 30) || (newHeight > Height))
+            {
+                Height = newHeight;
+            }
+        }
+
+        public void ResizeLeft(double newLeft)
+        {
+            var oldRight = Canvas.GetRight(border);
+            var newWidth = (oldRight - newLeft);
+            if ((newWidth > 30) || (newWidth > Width))
+            {
+                Canvas.SetLeft(border, newLeft);
+                Width = newWidth;// (newWidth < 30) ? 30 : (newWidth);
+            }
+        }
+
 
         public void IncrementTop()
         {
@@ -409,12 +444,6 @@ namespace VMSpc.Panels
             AdjustChildren(AdjustmentFor.Resizing);
         }
 
-        public void ResizeRight(double newRight)
-        {
-            Width = (newRight - Canvas.GetLeft(border));
-            Canvas.SetRight(border, (Canvas.GetLeft(canvas) + border.Width));
-        }
-
         public void IncrementRight()
         {
             Width++;
@@ -431,11 +460,6 @@ namespace VMSpc.Panels
             AdjustChildren(AdjustmentFor.Resizing);
         }
 
-        public void ResizeBottom(double newBottom)
-        {
-            Height = (newBottom - Canvas.GetTop(border));
-        }
-
         public void IncrementBottom()
         {
             Height++;
@@ -450,13 +474,6 @@ namespace VMSpc.Panels
             ApplyCanvasDimensions();
             AdjustParentPadding();
             AdjustChildren(AdjustmentFor.Resizing);
-        }
-
-        public void ResizeLeft(double newLeft)
-        {
-            var oldRight = Canvas.GetRight(border);
-            Canvas.SetLeft(border, newLeft);
-            Width = oldRight - newLeft;
         }
 
         public void IncrementLeft()

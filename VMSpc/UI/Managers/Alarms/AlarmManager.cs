@@ -14,7 +14,7 @@ namespace VMSpc.UI.Managers.Alarms
         public static void LoadAlarms()
         {
             ResetAlarms();
-            foreach (var alarmSetting in ConfigurationManager.ConfigManager.AlarmsReader.Contents.alarmSettingsList)
+            foreach (var alarmSetting in ConfigurationManager.ConfigManager.AlarmsReader.Contents.AlarmSettingsList)
             {
                 Alarms.Add(new Alarm(alarmSetting));
             }

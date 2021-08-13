@@ -35,6 +35,13 @@ namespace VMSpc.JsonFileManagers
         public int bottomRightY;
     }
 
+    public class TextSettings
+    {
+        public byte captionTextSize;
+        public byte valueTextSize;
+        public bool useManualFontSizing;
+    }
+
     public abstract class PanelSettings
     {
         private static ColorPalette ColorPalette => ConfigurationManager.ConfigManager.ColorPalettes.GetSelectedPalette();
@@ -81,6 +88,8 @@ namespace VMSpc.JsonFileManagers
             alignment;
         public PanelCoordinates
             panelCoordinates;
+        public TextSettings
+            textSettings;
         
         public PanelSettings(PanelType panelId) { /*this.panelId = panelId*/ }
     }
@@ -228,6 +237,14 @@ namespace VMSpc.JsonFileManagers
         public TireMapType
             tireMapType;
         public TireGaugeSettings() : base(PanelType.TIRE_GAUGE) { }
+    }
+
+    public class DayNightGaugeSettings : PanelSettings
+    {
+        public string
+            DayImageFilePath,
+            NightImageFilePath;
+        public DayNightGaugeSettings() : base(PanelType.DAYNIGHT_GAUGE) { }
     }
 }
 

@@ -122,6 +122,7 @@ namespace VMSpc.JsonFileManagers
             ColorPalettes.SaveJson();
             DiagnosticLogReader.SaveJson();
             MaintenanceTrackerReader.SaveJson();
+            AlarmsReader.SaveJson();
         }
     }
 }

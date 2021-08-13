@@ -171,6 +171,18 @@ namespace VMSpc
             InitiateNewGaugeDlg(dlgWindow, panelSettings);
         }
 
+        private void NewDayNightGauge_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void NewDayNightGauge_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            DayNightGaugeSettings panelSettings = new DayNightGaugeSettings();
+            DayNightGaugeDlg dlgWindow = new DayNightGaugeDlg(panelSettings);
+            InitiateNewGaugeDlg(dlgWindow, panelSettings);
+        }
+
         private void InitiateNewGaugeDlg(VPanelDlg dlgWindow, PanelSettings panelSettings)
         {
             dlgWindow.Owner = this;
@@ -346,6 +358,17 @@ namespace VMSpc
             var dlg = new ParameterEditorDlg();
             ShowVMSDlg(dlg);
             GeneratePanels();
+        }
+
+        private void AudibleAlarms_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void AudibleAlarms_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dlg = new AudibleAlarmsDlg();
+            ShowVMSDlg(dlg);
         }
 
         private void Tires_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -595,6 +618,11 @@ namespace VMSpc
             "NewTankMinder",
             typeof(MainCommands)
         );
+        public static readonly RoutedUICommand NewDayNightGauge = new RoutedUICommand(
+            "New Day/Night Gauge",
+            "NewDayNightGauge",
+            typeof(MainCommands)
+        );
         public static readonly RoutedUICommand CommSettings = new RoutedUICommand(
             "Communication",
             "CommSettings",
@@ -668,7 +696,7 @@ namespace VMSpc
         );
 
         public static readonly RoutedUICommand ToggleClipping = new RoutedUICommand(
-            (ConfigManager.Settings.Contents.useClipping) ? "Disable Clipping" : "Enable Clipping",
+            (ConfigManager.Settings.Contents.useClipping) ? "Disable Snapping" : "Enable Snapping",
             "ToggleClipping",
             typeof(MainCommands),
             new InputGestureCollection()
@@ -676,6 +704,12 @@ namespace VMSpc
                 new KeyGesture(Key.F5)
             }
        );
+
+        public static readonly RoutedUICommand AudibleAlarms = new RoutedUICommand(
+            "Audible Alarms",
+            "AudibleAlarms",
+            typeof(MainCommands)
+        );
 
         public static readonly RoutedUICommand ViewDiagnostics = new RoutedUICommand(
             "View Diagnostics",

@@ -138,5 +138,10 @@ namespace VMSpc.UI.DlgWindows
         {
             ApplyGlobalColorPalette();
         }
+
+        private void GaugeTypes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

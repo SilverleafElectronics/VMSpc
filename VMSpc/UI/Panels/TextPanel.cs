@@ -12,12 +12,14 @@ using static VMSpc.JsonFileManagers.ConfigurationManager;
 using VMSpc.Extensions.UI;
 using System.Windows.Media;
 using System.Windows;
+using VMSpc.UI.CustomComponents;
 
 namespace VMSpc.UI.Panels
 {
     class TextPanel : VPanel
     {
-        TextBlock textBlock;
+        GaugeTextBlock textBlock;
+        Viewbox viewbox;
         protected new TextGaugeSettings panelSettings;
         public TextPanel(MainWindow mainWindow, TextGaugeSettings panelSettings)
             :base(mainWindow, panelSettings)
@@ -35,17 +37,23 @@ namespace VMSpc.UI.Panels
             {
                 canvas.Background = new SolidColorBrush(panelSettings.BackgroundColor);
             }
-            textBlock = new TextBlock()
+            viewbox = new Viewbox()
             {
                 Width = canvas.Width,
                 Height = canvas.Height,
+                HorizontalAlignment = panelSettings.alignment,
+            };
+            textBlock = new GaugeTextBlock()
+            {
                 Text = panelSettings.text,
-                TextAlignment = panelSettings.alignment.ToHorizontalAlignment(),
                 Foreground = new SolidColorBrush(panelSettings.CaptionColor),
+                LineStackingStrategy = LineStackingStrategy.BlockLineHeight,
+                //Margin = new Thickness(0, 0, 0, 0),
                 //TextWrapping = TextWrapping.Wrap,//(panelSettings.wrapText) ? TextWrapping.Wrap : TextWrapping.NoWrap,
             };
-            canvas.Children.Add(textBlock);
-            canvas.ScaleText(textBlock);
+            viewbox.Child = textBlock;
+            canvas.Children.Add(viewbox);
+            textBlock.LineHeight = textBlock.FontSize;
         }
 
         public override void UpdatePanel()

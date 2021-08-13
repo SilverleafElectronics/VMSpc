@@ -51,7 +51,8 @@ namespace VMSpc.UI.DlgWindows.Advanced
                 LowRed = 0,
                 HighRed = 0,
                 Pid = 0,
-                Format = "{0:0.#}",
+                DecimalCount = 1,
+                //Format = "{0:0.#}",
             };
         }
 
@@ -176,7 +177,7 @@ namespace VMSpc.UI.DlgWindows.Advanced
             parameter.HighRed = double.Parse(HighRedLineEditBox.Text);
             parameter.LowYellow = double.Parse(LowYellowLineEditBox.Text);
             parameter.HighYellow = double.Parse(HighYellowLineEditBox.Text);
-            parameter.Format = FormatConverter.ConvertDecimalPositionsToFormat(int.Parse(NumDecimalsTextbox.Text));
+            parameter.DecimalCount = byte.Parse(NumDecimalsTextbox.Text);
             var pid = ushort.Parse(PIDEditBox.Text);
             if (pid != parameter.Pid)
             {

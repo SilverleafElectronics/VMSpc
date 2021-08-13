@@ -13,14 +13,14 @@
         Title="Simple Gauge Properties" Height="600" Width="350">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="2*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <ListBox Name="GaugeTypes" 
@@ -29,7 +29,7 @@
                      ScrollViewer.VerticalScrollBarVisibility="Visible"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      Grid.Column="0" 
-                     Height="100">
+                     Height="200">
                 <ListBox.Resources>
                     <Style TargetType="{x:Type vs:VMSListBoxItem}">
                         <Setter Property="Template">
@@ -75,12 +75,12 @@
                     </Style>
                 </ListBox.Resources>
             </ListBox>
-            <StackPanel Grid.Column="1" VerticalAlignment="Center" Width="100">
+            <StackPanel Grid.Column="1" VerticalAlignment="Top" Width="100" Margin="0 15 0 0">
                 <Button Name="OkButton" Click="OkButton_Click">OK</Button>
                 <Button Name="CancelButton" Click="CancelButton_Click" Margin="0,10,0,0">Cancel</Button>
             </StackPanel>
         </Grid>
-        <GroupBox Header="Text Alignment" Grid.Row="1" Height="50" VerticalAlignment="Top" Margin="5, 20, 5, 0">
+        <GroupBox Header="Text Alignment" Grid.Row="1" Height="50" VerticalAlignment="Top" Margin="5, 5, 5, 0">
             <Grid Name="RadioAlignment">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />

@@ -24,21 +24,22 @@ namespace VMSpc.JsonFileManagers
     public class AlarmSettings
     {
         public string Name;
-        public ushort Instance;
-        public List<AlarmCondition> AlarmConditions;
+        public int Instance { get; set; }
+        public AlarmCondition AlarmCondition { get; set; }
         public Color Color;
         public string Message;
+        public AlarmFrequency Frequency;
         public AudibleSettings SoundSettings;
     }
 
     public class AlarmContents : IJsonContents
     {
-        public List<AlarmSettings> alarmSettingsList;
+        public List<AlarmSettings> AlarmSettingsList;
     }
 
     public class AlarmsReader : JsonFileReader<AlarmContents>
     {
-        public AlarmsReader() : base("\\configuration\\messages.json")
+        public AlarmsReader() : base("\\configuration\\alarms.json")
         {
         }
 
@@ -46,22 +47,20 @@ namespace VMSpc.JsonFileManagers
         {
             return new AlarmContents()
             {
-                alarmSettingsList = new List<AlarmSettings>()
+                AlarmSettingsList = new List<AlarmSettings>()
                 {
                     new AlarmSettings()
                     {
-                        Instance = 1,
-                        Name = "Amb. Temp",
+                        Instance = 0,
+                        Name = "Road Speed",
                         Color = Colors.Red,
-                        Message = "Low Ambient Temperature",
-                        AlarmConditions = new List<AlarmCondition>()
+                        Message = "High Speed",
+                        AlarmCondition = 
+                        new AlarmCondition()
                         {
-                            new AlarmCondition()
-                            {
-                                Pid = 171,
-                                Comparator = ComparativeOperator.GreaterThan,
-                                TriggerValue = 0,
-                            },
+                            Pid = 84,
+                            Comparator = ComparativeOperator.GreaterThan,
+                            TriggerValue = 70,
                         },
                         SoundSettings = new AudibleSettings()
                         {
@@ -72,25 +71,30 @@ namespace VMSpc.JsonFileManagers
             };
         }
 
+        public AlarmSettings GetAlarmByInstance(int instance)
+        {
+            return Contents.AlarmSettingsList.Find(x => x.Instance == instance);
+        }
+
         public void AddAlarm(AlarmSettings alarmSettings)
         {
-            alarmSettings.Instance = (ushort)Contents.alarmSettingsList.Count;
-            Contents.alarmSettingsList.Add(alarmSettings);
+            alarmSettings.Instance = Contents.AlarmSettingsList.Count;
+            Contents.AlarmSettingsList.Add(alarmSettings);
         }
 
         public void DeleteAlarm(ushort instance)
         {
-            foreach (var alarm in Contents.alarmSettingsList)
+            foreach (var alarm in Contents.AlarmSettingsList)
             {
                 if (alarm.Instance == instance)
                 {
-                    Contents.alarmSettingsList.Remove(alarm);
+                    Contents.AlarmSettingsList.Remove(alarm);
                     break;
                 }
             }
-            for (int i = 0; i <= Contents.alarmSettingsList.Count; i++)
+            for (int i = 1; i <= Contents.AlarmSettingsList.Count; i++)
             {
-                Contents.alarmSettingsList[i + 1].Instance = (ushort)i;
+                Contents.AlarmSettingsList[i - 1].Instance = i;
             }
         }
     }

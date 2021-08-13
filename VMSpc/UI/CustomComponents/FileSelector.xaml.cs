@@ -29,7 +29,7 @@ namespace VMSpc.UI.CustomComponents
         protected string RelativeFilePath {get;set;}
         protected string RelativeDirectoryPath {get;set;}
         protected List<string> DisplayedfileNames;
-        protected string ExtensionFilter {get;set;}
+        protected List<string> AllowedExtensions {get;set;}
         public string ResultFilePath { get; set; }
         public bool ExcludeLockedFiles { get; set; } = false;
         /// <summary>
@@ -42,23 +42,36 @@ namespace VMSpc.UI.CustomComponents
         public bool AllowImports { get; set; } = false;
         public bool AllowDeletes { get; set; } = false;
         /// <summary>
-        /// Filter that is applied to the OpenFileDialogue when the Import button is
-        /// clicked. Only applies if AllowImports is true
+        /// The filter that should be used in the OpenFileDlg when importing files. See
+        /// https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.filedialog.filter?view=net-5.0#System_Windows_Forms_FileDialog_Filter
+        /// for explanation and examples of filters. This property only applies if AllowImports is true
         /// </summary>
         public string ImportFilter { get; set; }
+        /// <summary>
+        /// Optional addition to ImportFilter. The default extension that will be used when opening
+        /// an OpenFileDlg
+        /// </summary>
+        public string DefaultImportExtension { get; set; }
         /// <summary>
         /// The string extension that will automatically be added to whatever filename the
         /// user enters when adding a new file. Only applies if AllowNewFiles is true
         /// </summary>
         public string NewFilesExtension { get; set; }
 
-        public FileSelector(string RelativeDirectoryPath, string RelativeFilePath, string ExtensionFilter = "*")
+        public FileSelector(string RelativeDirectoryPath, string RelativeFilePath, params string[] AllowedExtensions)
         {
             CurrentFilepath = string.Copy(RelativeFilePath);
             DisplayedfileNames = new List<string>();
             this.RelativeDirectoryPath = RelativeDirectoryPath;
             this.RelativeFilePath = RelativeFilePath;
-            this.ExtensionFilter = ExtensionFilter;
+            if (AllowedExtensions.Length == 0)
+            {
+                this.AllowedExtensions = null;
+            }
+            else
+            {
+                this.AllowedExtensions = AllowedExtensions.ToList();
+            }
             InitializeComponent();
         }
 
@@ -131,17 +144,20 @@ namespace VMSpc.UI.CustomComponents
 
         private bool PassesFilter(string filename)
         {
-            if (ExtensionFilter.Equals("*"))
+            if (AllowedExtensions == null)
             {
                 return true;
             }
             else
             {
-                var extensionLength = ExtensionFilter.Length;
-                var fileExtension = filename.Substring(filename.Length - extensionLength).ToLower();
-                if (fileExtension.Equals(ExtensionFilter.ToLower()))
+                foreach (var extension in AllowedExtensions)
                 {
-                    return true;
+                    var extensionLength = extension.Length;
+                    var fileExtension = filename.Substring(filename.Length - extensionLength).ToLower();
+                    if (fileExtension.Equals(extension.ToLower()))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
@@ -174,6 +190,10 @@ namespace VMSpc.UI.CustomComponents
             if (!string.IsNullOrEmpty(ImportFilter))
             {
                 openFileDialog.Filter = ImportFilter;
+            }
+            if (!string.IsNullOrEmpty(DefaultImportExtension))
+            {
+                openFileDialog.DefaultExt = DefaultImportExtension;
             }
             if (openFileDialog.ShowDialog() == true)
             {

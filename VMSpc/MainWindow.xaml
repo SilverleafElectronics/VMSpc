@@ -22,6 +22,7 @@
         <CommandBinding Command="self:MainCommands.NewDiagnosticPanel" CanExecute="NewDiagnosticPanel_CanExecute" Executed="NewDiagnosticPanel_Executed" />
         <CommandBinding Command="self:MainCommands.NewTirePanel" CanExecute="NewTirePanel_CanExecute" Executed="NewTirePanel_Executed" />
         <CommandBinding Command="self:MainCommands.NewTransmissionIndicator" CanExecute="NewTransmissionIndicator_CanExecute" Executed="NewTransmissionIndicator_Executed" />
+        <CommandBinding Command="self:MainCommands.NewDayNightGauge" CanExecute="NewDayNightGauge_CanExecute" Executed="NewDayNightGauge_Executed" />
         <CommandBinding Command="self:MainCommands.NewTankMinder" CanExecute="NewTankMinder_CanExecute" Executed="NewTankMinder_Executed" />
         <CommandBinding Command="self:MainCommands.CommSettings" CanExecute="CommSettingsCommand_CanExecute" Executed="CommSettingsCommand_Executed" />
         <CommandBinding Command="self:MainCommands.ChangeEngine" CanExecute="ChangeEngine_CanExecute" Executed="ChangeEngine_Executed" />
@@ -35,6 +36,7 @@
         <CommandBinding Command="self:MainCommands.ColorPaletteManager" CanExecute="ColorPaletteManager_CanExecute" Executed="ColorPaletteManager_Executed" />
         <CommandBinding Command="self:MainCommands.Tires" CanExecute="Tires_CanExecute" Executed="Tires_Executed" />
         <CommandBinding Command="self:MainCommands.ParameterEditor" CanExecute="ParameterEditor_CanExecute" Executed="ParameterEditor_Executed" />
+        <CommandBinding Command="self:MainCommands.AudibleAlarms" CanExecute="AudibleAlarms_CanExecute" Executed="AudibleAlarms_Executed" />
         <CommandBinding Command="self:MainCommands.ViewDiagnostics" CanExecute="ViewDiagnostics_CanExecute" Executed="ViewDiagnostics_Executed" />
         <CommandBinding Command="self:MainCommands.Maintenance" CanExecute="Maintenance_CanExecute" Executed="Maintenance_Executed" />
         <CommandBinding Command="self:MainCommands.Layouts" CanExecute="Layouts_CanExecute" Executed="Layouts_Executed" />
@@ -70,11 +72,12 @@
                     <MenuItem Command="self:MainCommands.NewTirePanel" />
                     <MenuItem Command="self:MainCommands.NewTransmissionIndicator" />
                     <MenuItem Command="self:MainCommands.NewTankMinder" />
+                    <MenuItem Command="self:MainCommands.NewDayNightGauge" />
                     <MenuItem Command="self:MainCommands.DeleteGauge" />
                     <MenuItem Command="self:MainCommands.AttachGauge" />
                     <!--<MenuItem Command="self:MainCommands.DeleteGauge" />LEAVECOMMENTED-->
                 </MenuItem>
-                <MenuItem Header="_Settings">
+                <MenuItem Header="_Settings" >
                     <MenuItem Header="_Tires" Command="self:MainCommands.Tires" />
                     <MenuItem Header="_Change Engine" Command="self:MainCommands.ChangeEngine" />
                     <MenuItem Command="self:MainCommands.ToggleClipping" Name="ClipToggle" />
@@ -84,6 +87,7 @@
                         <MenuItem Header="_Color Palette Manager" Command="self:MainCommands.ColorPaletteManager" />
                         <MenuItem Command="self:MainCommands.ToggleDayNight" Name="DayNightToggle"/>
                     </MenuItem>
+                    <MenuItem Command="self:MainCommands.AudibleAlarms" />
                 </MenuItem>
                 <MenuItem Header="_View">
                     <MenuItem Header="_Maintenance" Command="self:MainCommands.Maintenance" />

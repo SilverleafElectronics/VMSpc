@@ -61,6 +61,8 @@ namespace VMSpc.Parsers
             this.Mid = Mid;
             this.RawMessageSegment = RawMessageSegment;
             BYTE_STRING_TO_BYTE_ARRAY(ref RawData, RawMessageSegment, RawMessageSegment.Length);
+            if (RawData == null || RawData.Count < 1)
+                return;
             SetPidAndRawValue();
         }
 

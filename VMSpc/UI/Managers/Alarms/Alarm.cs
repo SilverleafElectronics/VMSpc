@@ -50,10 +50,7 @@ namespace VMSpc.UI.Managers.Alarms
 
         protected void AddConditions()
         {
-            foreach (var condition in Settings.AlarmConditions)
-            {
-                alarmConditionProcessors.Add(new AlarmConditionProcessor(condition));
-            }
+            alarmConditionProcessors.Add(new AlarmConditionProcessor(Settings.AlarmCondition));
         }
 
         /// <summary>
@@ -100,7 +97,7 @@ namespace VMSpc.UI.Managers.Alarms
                         break;
                 }
             }
-            OnRaiseCustomEvent(new AlarmEventArgs(EventIDs.ALARM_BASE | Settings.Instance, Settings));
+            OnRaiseCustomEvent(new AlarmEventArgs(EventIDs.ALARM_BASE | (ushort)Settings.Instance, Settings));
         }
 
         protected void PlayAudio()

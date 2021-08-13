@@ -1,0 +1,25 @@
+﻿<my:VPanelDlg 
+        WindowStartupLocation="CenterOwner"          
+        ResizeMode="NoResize"
+        xmlns:my="clr-namespace:VMSpc.UI.DlgWindows"
+        xmlns:vs="clr-namespace:VMSpc.UI.CustomComponents"
+        x:Class="VMSpc.UI.DlgWindows.DayNightGaugeDlg"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VMSpc.UI.DlgWindows"
+        mc:Ignorable="d"
+        Title="TextPanelDlg" Height="150" Width="250">
+    <Grid>
+        <UniformGrid Rows="2">
+            <Label HorizontalAlignment="Center" VerticalAlignment="Center">
+                Create New Day/Night Gauge?
+            </Label>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="CancelButton" Click="CancelButton_Click" Height="25" Width="100">Cancel</Button>
+                <Button x:Name="OkayButton" Click="OkayButton_Click" Height="25" Width="100">Okay</Button>
+            </StackPanel>
+        </UniformGrid>
+    </Grid>
+</my:VPanelDlg>

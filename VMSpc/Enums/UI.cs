@@ -24,6 +24,7 @@ namespace VMSpc.Enums.UI
         DIAGNOSTIC_ALARM = 12,
         RADIAL_GAUGE = 13,
         TIRE_GAUGE = 14,
+        DAYNIGHT_GAUGE = 15,
     };
 
     /// <summary>

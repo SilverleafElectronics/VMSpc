@@ -29,9 +29,33 @@ namespace VMSpc.JsonFileManagers
         public double LowRed;
         public double HighYellow;
         public double HighRed;
-        [DefaultValue("{0:0.#}")]
-        public string Format;
-        public byte DecimalCount;
+        [JsonIgnore]
+        private string format { get; set; }
+        [JsonIgnore]
+        public string Format
+        {
+            get => format;
+        }
+        [JsonIgnore]
+        private byte decimalCount;
+        public byte DecimalCount
+        {
+            get => decimalCount;
+            set
+            { 
+                decimalCount = value;
+                format = "{0:0";
+                if (value > 0)
+                {
+                    format += ".";
+                    for (int i=0; i < decimalCount; i++)
+                    {
+                        format += "#";
+                    }
+                }
+                format += "}";
+            }
+        }
         public double Offset;
         public double Multiplier;
         public PidValue J1708Value;
@@ -81,17 +105,6 @@ namespace VMSpc.JsonFileManagers
 
         public void ProcessUpdates(JParameter parameter)
         {
-            if (parameter.DecimalCount > 0)
-            {
-                parameter.Format = "{0:0.";
-                for (int i = 0; i < parameter.DecimalCount; i++)
-                    parameter.Format += "#";
-                parameter.Format += "}";
-            }
-            else
-            {
-                parameter.Format = "{0: 0}";
-            }
         }
 
         public void ChangeParameterPID(JParameter parameter)

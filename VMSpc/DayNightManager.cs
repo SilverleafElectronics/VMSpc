@@ -93,6 +93,16 @@ namespace VMSpc
                 SetNight();
         }
 
+        public bool IsDay()
+        {
+            return Screen.OnDayPalette;
+        }
+
+        public bool IsNight()
+        {
+            return !Screen.OnDayPalette;
+        }
+
         public void SetDay()
         {
             Application.Current.Dispatcher.Invoke(() =>

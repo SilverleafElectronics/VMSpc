@@ -23,6 +23,7 @@ namespace VMSpc.Parsers
         public DateTime timeReceived { get; private set; }
         public DateTime timeParsed { get; private set; }
         public string rawMessage { get; private set; }
+        public string message;
         /// <summary>
         /// If true, the data can be published as is. Otherwise, additional parsing is necessary.
         /// </summary>
@@ -34,6 +35,7 @@ namespace VMSpc.Parsers
 
         public CanMessage(string message, VMSDataSource VMSDataSource, DateTime timeReceived)
         {
+            this.message = message;
             rawMessage = message.Substring(0, message.Length - 2);  //removes the checksum from the end of the message
             messageLength = rawMessage.Length; 
             this.VMSDataSource = VMSDataSource;
@@ -44,6 +46,10 @@ namespace VMSpc.Parsers
         public abstract void ExtractMessage();
         public override abstract string ToString();
         public abstract string ToParsedString(object parser);
+        public virtual bool IsValidMessage()
+        {
+            return false;
+        }
 
     }
     #endregion
@@ -154,20 +160,27 @@ namespace VMSpc.Parsers
         /// <param name="message"></param>
         public override void ExtractMessage()
         {
-            Mid = BinConvert(rawMessage[0], rawMessage[1]);
-            var trimmedMessage = rawMessage.Substring(2);   //remove the MID from the message
-            while (trimmedMessage.Length > 0)
+            try
             {
-                var segment = new J1708MessageSegment(trimmedMessage, Mid)
+                Mid = BinConvert(rawMessage[0], rawMessage[1]);
+                var trimmedMessage = rawMessage.Substring(2);   //remove the MID from the message
+                while (trimmedMessage.Length > 0)
                 {
-                    TimeReceived = this.timeReceived
-                };
-                int messageLength = segment.GetTotalMessageBytes() * 2;
-                if (messageLength >= trimmedMessage.Length)
-                    trimmedMessage = string.Empty;
-                else
-                    trimmedMessage = trimmedMessage.Substring(messageLength);
-                CanMessageSegments.Add(segment);
+                    var segment = new J1708MessageSegment(trimmedMessage, Mid)
+                    {
+                        TimeReceived = this.timeReceived
+                    };
+                    int messageLength = segment.GetTotalMessageBytes() * 2;
+                    if (messageLength >= trimmedMessage.Length)
+                        trimmedMessage = string.Empty;
+                    else
+                        trimmedMessage = trimmedMessage.Substring(messageLength);
+                    CanMessageSegments.Add(segment);
+                }
+            }
+            catch (Exception ex)
+            {
+                VMSConsole.PrintLine("Failed to parse " + message);
             }
         }
 

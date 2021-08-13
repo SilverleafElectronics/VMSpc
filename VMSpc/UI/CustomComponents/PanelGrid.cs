@@ -172,6 +172,9 @@ namespace VMSpc.UI.CustomComponents
                 case PanelType.RADIAL_GAUGE:
                     panel = new RadialGauge(mainWindow, (RadialGaugeSettings)panelSettings);
                     break;
+                case PanelType.DAYNIGHT_GAUGE:
+                    panel = new DayNightGauge(mainWindow, (DayNightGaugeSettings)panelSettings);
+                    break;
                 default:
                     break;
             }

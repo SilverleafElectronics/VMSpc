@@ -372,3 +372,11 @@ C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\VMSpc.application
 C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\Gauges\ClockDlg.g.cs
 C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\Gauges\ClockDlg.baml
 C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\VMSpc.csprojAssemblyReference.cache
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\Settings\AudibleAlarmsDlg.g.cs
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\Settings\AudibleAlarmsDlg.baml
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\Settings\EditAlarmDlg.g.cs
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\Settings\EditAlarmDlg.baml
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\Gauges\DayNightGaugeDlg.g.cs
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\DlgWindows\Gauges\DayNightGaugeDlg.baml
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\CustomComponents\TextCustomizer.g.cs
+C:\SilverLeaf\VMSpc\dev\VMSpc\VMSpc\obj\Debug\UI\CustomComponents\TextCustomizer.baml

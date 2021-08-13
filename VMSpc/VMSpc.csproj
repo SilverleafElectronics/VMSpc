@@ -70,7 +70,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ColorPickerWPF, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
@@ -216,6 +216,7 @@
     <Compile Include="UI\CustomComponents\FileSelector.xaml.cs">
       <DependentUpon>FileSelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\CustomComponents\GaugeTextBox.cs" />
     <Compile Include="UI\CustomComponents\IntegerEditBox.xaml.cs">
       <DependentUpon>IntegerEditBox.xaml</DependentUpon>
     </Compile>
@@ -223,6 +224,9 @@
       <DependentUpon>OdometerDataViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\CustomComponents\PanelGrid.cs" />
+    <Compile Include="UI\CustomComponents\TextCustomizer.xaml.cs">
+      <DependentUpon>TextCustomizer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\CustomComponents\TireGrid.cs" />
     <Compile Include="UI\CustomComponents\TogglingEllipse.cs" />
     <Compile Include="UI\CustomComponents\ValueLine.cs" />
@@ -242,11 +246,17 @@
     <Compile Include="UI\DlgWindows\Gauges\ClockDlg.xaml.cs">
       <DependentUpon>ClockDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\DlgWindows\Gauges\DayNightGaugeDlg.xaml.cs">
+      <DependentUpon>DayNightGaugeDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\DlgWindows\Help\AboutDlg.xaml.cs">
       <DependentUpon>AboutDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\DlgWindows\Advanced\ParameterEditorDlg.xaml.cs">
       <DependentUpon>ParameterEditorDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DlgWindows\Settings\AudibleAlarmsDlg.xaml.cs">
+      <DependentUpon>AudibleAlarmsDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\DlgWindows\Settings\ColorPaletteDlg.xaml.cs">
       <DependentUpon>ColorPaletteDlg.xaml</DependentUpon>
@@ -266,6 +276,9 @@
     </Compile>
     <Compile Include="UI\DlgWindows\Settings\DayNightDlg.xaml.cs">
       <DependentUpon>DayNightDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DlgWindows\Settings\EditAlarmDlg.xaml.cs">
+      <DependentUpon>EditAlarmDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\DlgWindows\Settings\Messages.xaml.cs">
       <DependentUpon>Messages.xaml</DependentUpon>
@@ -346,6 +359,7 @@
     <Compile Include="UI\Managers\OdometerManager.cs" />
     <Compile Include="UI\Managers\TankMinderManager.cs" />
     <Compile Include="UI\Panels\Clock.cs" />
+    <Compile Include="UI\Panels\DayNightGauge.cs" />
     <Compile Include="UI\Panels\MultiBar.cs" />
     <Compile Include="UI\Panels\OdometerPanel.cs" />
     <Compile Include="Parsers\J1708\J1708Parser.cs" />
@@ -423,6 +437,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\CustomComponents\TextCustomizer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\DlgWindows\Advanced\MessageTester.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -435,11 +453,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\DlgWindows\Gauges\DayNightGaugeDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\DlgWindows\Help\AboutDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\DlgWindows\Advanced\ParameterEditorDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DlgWindows\Settings\AudibleAlarmsDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -464,6 +490,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\DlgWindows\Settings\DayNightDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DlgWindows\Settings\EditAlarmDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
