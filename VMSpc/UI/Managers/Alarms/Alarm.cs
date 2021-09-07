@@ -81,7 +81,7 @@ namespace VMSpc.UI.Managers.Alarms
                 switch (Settings.SoundSettings.AlarmFrequency)
                 {
                     case AlarmFrequency.Once:
-                        if (SecondsTriggered == 1)
+                        if ((SecondsTriggered == 1))
                             PlayAudio();
                         break;
                     case AlarmFrequency.EveryFifteenMinutes:
@@ -92,20 +92,49 @@ namespace VMSpc.UI.Managers.Alarms
                         if ((SecondsTriggered % 60) == 0)
                             PlayAudio();
                         break;
-                    case AlarmFrequency.EverySecond:
-                        PlayAudio();
+                    case AlarmFrequency.Continuous:
+                        PlayAudioContinuous();
                         break;
                 }
             }
             OnRaiseCustomEvent(new AlarmEventArgs(EventIDs.ALARM_BASE | (ushort)Settings.Instance, Settings));
+            SecondsTriggered++;
         }
 
         protected void PlayAudio()
         {
             if (!string.IsNullOrEmpty(Settings.SoundSettings.AudioFilePath))
             {
-                alarmSoundPlayer.Open(new Uri(Settings.SoundSettings.AudioFilePath));
-                alarmSoundPlayer.Play();
+                alarmSoundPlayer.Dispatcher.Invoke(() =>
+                {
+                    alarmSoundPlayer.Open(new Uri("." + Settings.SoundSettings.AudioFilePath, UriKind.Relative));
+                    alarmSoundPlayer.Play();
+                });
+            }
+        }
+
+        protected void PlayAudioContinuous()
+        {
+            if (!string.IsNullOrEmpty(Settings.SoundSettings.AudioFilePath))
+            {
+                alarmSoundPlayer.Dispatcher.Invoke(() =>
+                {
+                    alarmSoundPlayer.Open(new Uri("." + Settings.SoundSettings.AudioFilePath, UriKind.Relative));
+                    alarmSoundPlayer.Play();
+                    alarmSoundPlayer.MediaEnded += AlarmSoundPlayer_MediaEnded;
+                });
+            }
+        }
+
+        private void AlarmSoundPlayer_MediaEnded(object sender, EventArgs e)
+        {
+            if (IsTriggered)
+            {
+                alarmSoundPlayer.Dispatcher.Invoke(() =>
+                {
+                    alarmSoundPlayer?.Stop();
+                    alarmSoundPlayer.Play();
+                });
             }
         }
 
@@ -113,6 +142,8 @@ namespace VMSpc.UI.Managers.Alarms
         {
             IsTriggered = false;
             SecondsTriggered = 0;
+            alarmSoundPlayer.MediaEnded -= AlarmSoundPlayer_MediaEnded;
+            alarmSoundPlayer?.Stop();
         }
 
         protected internal class AlarmConditionProcessor : IEventConsumer

@@ -42,8 +42,8 @@ namespace VMSpc.Parsers
 
         private void StandardConverter(CanMessageSegment segment, J1708ParsingHelper conversionStruct)
         {
-            var standardValue = segment.RawValue * conversionStruct.standardMultiplier + conversionStruct.standardOffset;
-            var metricValue = standardValue * conversionStruct.metricMultiplier + conversionStruct.metricOffset;
+            var standardValue = (segment.RawValue * conversionStruct.standardMultiplier) + conversionStruct.standardOffset;
+            var metricValue = (standardValue * conversionStruct.metricMultiplier) + conversionStruct.metricOffset;
             segment.StandardValue = standardValue;
             segment.MetricValue = metricValue;
             conversionStruct.lastValue = standardValue;

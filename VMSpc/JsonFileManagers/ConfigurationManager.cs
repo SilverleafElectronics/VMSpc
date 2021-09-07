@@ -74,6 +74,7 @@ namespace VMSpc.JsonFileManagers
             FileOpener.CreateDirectory("\\history_files");
             FileOpener.CreateDirectory("\\engines");
             FileOpener.CreateDirectory("\\logs");
+            FileOpener.CreateDirectory("\\audio");
             if (!FileOpener.DirectoryExists("\\rawlogs"))
             {
                 FileOpener.CreateDirectory("\\rawlogs");

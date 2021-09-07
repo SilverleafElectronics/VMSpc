@@ -307,6 +307,8 @@ namespace VMSpc.AdvancedParsers.Tires
                         UpdateBits(ref currentTire.pressureStatus, data[7], 5, 3);
                         UpdateFlag(ref currentTire.enableStatus, data[4], 0);
 
+                        currentTire.TireStatus = TireStatus.Okay;
+
                         if (currentTire.leakStatus != 0)
                             currentTire.TireStatus = TireStatus.Warning;
                         if (currentTire.electricalStatus == 1 || currentTire.electricalStatus == 2)

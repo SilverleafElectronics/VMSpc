@@ -98,7 +98,7 @@ namespace VMSpc.UI.DlgWindows.Settings
                 case AlarmFrequency.EveryMinute:
                     TriggerMinute.IsChecked = true;
                     break;
-                case AlarmFrequency.EverySecond:
+                case AlarmFrequency.Continuous:
                     TriggerContinuous.IsChecked = true;
                     break;
                 case AlarmFrequency.Once:
@@ -136,7 +136,7 @@ namespace VMSpc.UI.DlgWindows.Settings
             else if ((bool)TriggerMinute.IsChecked)
                 alarmSettings.SoundSettings.AlarmFrequency = AlarmFrequency.EveryMinute;
             else if ((bool)TriggerContinuous.IsChecked)
-                alarmSettings.SoundSettings.AlarmFrequency = AlarmFrequency.EverySecond;
+                alarmSettings.SoundSettings.AlarmFrequency = AlarmFrequency.Continuous;
             alarmSettings.AlarmCondition.TriggerValue = triggerValue;
             alarmSettings.Name = AlarmNameBox.Text;
             alarmSettings.SoundSettings.AudioFilePath = SoundFile.Text;

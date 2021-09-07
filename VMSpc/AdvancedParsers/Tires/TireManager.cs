@@ -29,7 +29,7 @@ namespace VMSpc.AdvancedParsers.Tires
                 case TireStatus.Warning:
                 case TireStatus.Alert:
                 case TireStatus.Okay:
-                    return $"Pressure: {DisplayPressure:F2} PSI   Temperature:  {DisplayTemperature:F2} Deg    ";
+                    return $"Pressure: {DisplayPressure:D} PSI   Temperature:  {DisplayTemperature:D} Deg    ";
                 case TireStatus.None:
                 default:
                     return "No Sensor Assigned";

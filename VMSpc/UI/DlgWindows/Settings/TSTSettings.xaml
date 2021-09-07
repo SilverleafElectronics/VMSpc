@@ -193,6 +193,7 @@
                           SelectedIndex="0"
                           VerticalContentAlignment="Center"
                           HorizontalContentAlignment="Center"
+                          SelectionChanged="OverTempUnitType_SelectionChanged"
                           >
                     <ComboBoxItem>Fahrenheit</ComboBoxItem>
                     <ComboBoxItem>Celsius</ComboBoxItem>

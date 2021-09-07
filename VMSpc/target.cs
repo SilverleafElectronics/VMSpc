@@ -8,7 +8,7 @@ namespace VMSpc
 {
     public static class About
     {
-        public const string version = "5.0.15";
+        public const string version = "5.0.17";
     }
 }
 
@@ -30,8 +30,12 @@ namespace VMSpc
  *      -   Added Clock
  * 5.0.15:
  *      -   Fixed TST configuration options
- * 
- * 
+ * 5.0.16
+ *      -   Fixed Metric conversion in TST Configuration screen
+ *      -   Modified CanMessage so that only J1708 message trims the last byte (for checksum)
+ *      -   Corrected the zip code
+ * 5.0.17
+ *      -   Fixed Audio Alarms
  * 
  * 
  * 

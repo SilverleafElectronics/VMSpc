@@ -57,6 +57,7 @@ namespace VMSpc.UI.GaugeComponents
             if (tire != null && tire.index == tireIndex)
             {
                 currentPressure = tire.DisplayPressure;
+                lastStatus = currentStatus;
                 currentStatus = tire.TireStatus;
                 Update();
             }

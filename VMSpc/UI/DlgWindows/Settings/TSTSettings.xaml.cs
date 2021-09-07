@@ -27,9 +27,11 @@ namespace VMSpc.UI.DlgWindows.Settings
         private static TSTTireManager TSTManager => (TireManager.Instance as TSTTireManager);
         private IEnumerable<TextBox> ConfigItems;
         private int timerCount;
+        private bool useMetric;
         public TSTSettings()
         {
             InitializeComponent();
+            useMetric = false;
             InitializeExtras();
             ApplyBindings();
             timerCount = 0;
@@ -80,8 +82,11 @@ namespace VMSpc.UI.DlgWindows.Settings
             UnderPressurePctBox.Text = TSTManager.UnderPressureThreshold.ToString();
             ExtremeUnderPressureBox.Text = TSTManager.ExtremeUnderPressureThreshold.ToString();
             OverPressureBox.Text = TSTManager.OverPressureThreshold.ToString();
-            OverTemperatureBox.Text = TSTManager.OverTemperatureThreshold.ToString();
-            TSTCommStatusBox.Text = (TSTManager.IsActive) ? "Connected" : "No Communication";
+            OverTemperatureBox.Text = ((int)(useMetric
+                ? TSTManager.OverTemperatureThreshold
+                : ((TSTManager.OverPressureThreshold - 32) * (5 / 9))
+                )).ToString();
+            TSTCommStatusBox.Text = TSTManager.IsActive ? "Connected" : "No Communication";
         }
 
         private bool TextboxIsFocused()
@@ -166,7 +171,7 @@ namespace VMSpc.UI.DlgWindows.Settings
             double newValue;
             if (double.TryParse(OverTemperatureBox.Text, out newValue))
             {
-                if (OverTempUnitType.SelectedIndex == 1)    //If Celsius is selected
+                if (useMetric)    //If Celsius is selected
                 {
                     newValue = (newValue * (9 / 5)) + 32;   //Convert to Fahrenheit
                 }
@@ -193,6 +198,12 @@ namespace VMSpc.UI.DlgWindows.Settings
         {
             UpdateTimer?.Stop();
             Close();
+        }
+
+        private void OverTempUnitType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            useMetric = (((e.AddedItems[0] as ComboBoxItem).Content as string) == "Fahrenheit") ? false : true;
+            UpdateFields();
         }
     }
 }

@@ -99,7 +99,7 @@ namespace VMSpc.Enums.UI
         Once,
         EveryFifteenMinutes,
         EveryMinute,
-        EverySecond,
+        Continuous,
     };
 
     public enum UIPosition

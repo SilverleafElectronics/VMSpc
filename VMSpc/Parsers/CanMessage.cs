@@ -22,7 +22,7 @@ namespace VMSpc.Parsers
         public byte messageType { get; set; }
         public DateTime timeReceived { get; private set; }
         public DateTime timeParsed { get; private set; }
-        public string rawMessage { get; private set; }
+        public string rawMessage { get; protected set; }
         public string message;
         /// <summary>
         /// If true, the data can be published as is. Otherwise, additional parsing is necessary.
@@ -36,8 +36,8 @@ namespace VMSpc.Parsers
         public CanMessage(string message, VMSDataSource VMSDataSource, DateTime timeReceived)
         {
             this.message = message;
-            rawMessage = message.Substring(0, message.Length - 2);  //removes the checksum from the end of the message
-            messageLength = rawMessage.Length; 
+            rawMessage = message;
+            messageLength = rawMessage.Length;
             this.VMSDataSource = VMSDataSource;
             CanMessageSegments = new List<CanMessageSegment>();
             this.timeReceived = timeReceived;
@@ -48,7 +48,7 @@ namespace VMSpc.Parsers
         public abstract string ToParsedString(object parser);
         public virtual bool IsValidMessage()
         {
-            return false;
+            return true;
         }
 
     }
@@ -162,6 +162,7 @@ namespace VMSpc.Parsers
         {
             try
             {
+                rawMessage = rawMessage.Substring(0, message.Length - 2);  //removes the checksum from the end of the message
                 Mid = BinConvert(rawMessage[0], rawMessage[1]);
                 var trimmedMessage = rawMessage.Substring(2);   //remove the MID from the message
                 while (trimmedMessage.Length > 0)
